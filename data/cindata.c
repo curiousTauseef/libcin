@@ -9,19 +9,9 @@
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <sys/time.h>
+#include <arpa/inet.h>
 
 #include <pthread.h>
-#include <arpa/inet.h>
-///#include <netinet/in.h>
-//#include <netpacket/packet.h>
-//#include <net/ethernet.h>
-//#include <net/if.h>
-//#include <arpa/inet.h>
-//#include <linux/filter.h>
-//#include <time.h>
-//#include <sys/time.h>
-//#include <sys/resource.h>
-//#include <sched.h>
 
 #include "cin.h"
 #include "fifo.h"
