@@ -2,6 +2,7 @@
 CC=gcc
 CFLAGS=-Wall -Ofast -g -D__DEBUG__ --pic
 #CFLAGS+=-D__PROFILE__
+CFLAGS+=-D__AFFINITY__
 LDFLAGS=-L. 
 LDLIBS=-lpthread -lrt
 
