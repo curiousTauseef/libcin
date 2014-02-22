@@ -11,6 +11,9 @@
 
 void int_handler(int dummy){
   cin_data_stop_threads();
+  fprintf(stderr, "\n");
+  cin_data_show_stats();
+  fprintf(stderr, "\n\n");
   exit(0);
 }
 
@@ -25,48 +28,73 @@ int main(int argc, char *argv[]){
   uint16_t *p;
   FILE *fp = NULL;
   char filename[256];
-  int tiff_output = 1;
-
-  /*   */
   struct cin_port port;
 
   uint16_t buffer[CIN_DATA_FRAME_WIDTH * CIN_DATA_FRAME_HEIGHT];
   uint16_t frame_number;
 
-  while((c = getopt(argc, argv, "hr")) != -1){
+  char *output_path = NULL;
+  int show_monitor = 0;
+  int tiff_output = 1;
+  int chunk_size = 1;
+
+  while((c = getopt(argc, argv, "hrmd:c")) != -1){
     switch(c){
-      case 'h':
-        fprintf(stderr,"cindump : Dump data from CIN\n\n");
-        fprintf(stderr,"\t -r : Write files in raw (uint16_t format)\n");
-        fprintf(stderr,"\n");
-        exit(1);
       case 'r':
         tiff_output =0;
+        break;
+      case 'm':
+        show_monitor = 1;
+        break;
+      case 'd':
+        output_path = optarg;
+        break;
+      case 'c':
+        chunk_size = atoi(optarg);
+        break;
+      case 'h':
+      default:
+        fprintf(stderr,"cindump : Dump data from CIN\n\n");
+        fprintf(stderr,"\t -r : Write files in raw (uint16_t format)\n");
+        fprintf(stderr,"\t -m : Show status monitor\n");
+        fprintf(stderr,"\t -d : Specify output directory\n");
+        fprintf(stderr,"\t -c : Chunk size (for raw format)\n");
+        fprintf(stderr,"\n");
+        exit(1);
         break;
     }
   }
 
   fprintf(stderr, "\n\n\n\n");
 
-  if(cin_init_data_port(&port, NULL, 0, NULL, 0, 1000)){
+  if(cin_init_data_port(&port, "10.0.5.55", 0, NULL, 0, 1000)){
     exit(1);
   }
 
   /* Start the main routine */
-  if(cin_data_init(CIN_DATA_MODE_PUSH_PULL, 2000, 2000)){
+  if(cin_data_init(CIN_DATA_MODE_PUSH_PULL, 20000, 2000)){
     exit(1);
   }
 
   signal(SIGINT, int_handler);
 
-  cin_data_start_monitor_output();
+  sleep(15);
+
+  if(show_monitor){
+    cin_data_start_monitor_output();
+  } 
 
   while(1){
     // Load the buffer
     cin_data_load_frame(buffer, &frame_number);
 
     if(tiff_output){
-      sprintf(filename, "frame%08d.tif", frame_number);
+      if(output_path){
+        sprintf(filename, "%s/frame%08d.tif", output_path, frame_number);
+      } else {
+        sprintf(filename, "frame%08d.tif", frame_number);
+      }
+
       tfp = TIFFOpen(filename, "w");
 
       TIFFSetField(tfp, TIFFTAG_IMAGEWIDTH, CIN_DATA_FRAME_WIDTH);
@@ -85,11 +113,15 @@ int main(int argc, char *argv[]){
       TIFFClose(tfp);
 
     } else {
-      if(!fp || !(frame_number % 100)){
+      if(!fp || !(frame_number % chunk_size)){
         if(fp){
           fclose(fp);
         }
-        sprintf(filename, "frame%08d.bin", frame_number);
+        if(output_path){
+          sprintf(filename, "%s/frame%08d.bin", output_path, frame_number);
+        } else {
+          sprintf(filename, "frame%08d.bin", frame_number);
+        }
         fp = fopen(filename, "w");
       }
       fwrite(buffer, sizeof(uint16_t),
@@ -100,7 +132,9 @@ int main(int argc, char *argv[]){
 
   cin_data_wait_for_threads();
 
-  fprintf(stderr, "\n\n\n\n");
+  cin_data_show_stats();
+
+  fprintf(stderr, "\n\n");
 
   return(0);
 }

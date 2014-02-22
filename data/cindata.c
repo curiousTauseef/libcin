@@ -4,24 +4,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>  // For getpid()
+#include <syscall.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <sys/time.h>
+#include <arpa/inet.h>
 
 #include <pthread.h>
-#include <arpa/inet.h>
-///#include <netinet/in.h>
-//#include <netpacket/packet.h>
-//#include <net/ethernet.h>
-//#include <net/if.h>
-//#include <arpa/inet.h>
-//#include <linux/filter.h>
-//#include <time.h>
-//#include <sys/time.h>
-//#include <sys/resource.h>
-//#include <sched.h>
 
 #include "cin.h"
 #include "fifo.h"
@@ -254,7 +245,7 @@ int cin_data_init(int mode,
   }
 
   cin_data_proc_t *descramble2 = malloc(sizeof(cin_data_proc_t));
-  cin_data_proc_t *writer = malloc(sizeof(cin_data_proc_t));
+  //cin_data_proc_t *writer = malloc(sizeof(cin_data_proc_t));
 
   if(mode & CIN_DATA_MODE_DBL_BUFFER_COPY){
     descramble2->input_get = (void*)&fifo_get_tail;
@@ -477,6 +468,9 @@ void *cin_data_assembler_thread(void *args){
 
   cin_data_proc_t *proc = (cin_data_proc_t*)args;
 
+  int sid = syscall(SYS_gettid);
+  DEBUG_PRINT("Starting assembler thread ppid = %d\n", sid);
+
   while(1){
 
     /* Get a packet from the fifo */
@@ -617,32 +611,50 @@ void *cin_data_assembler_thread(void *args){
 }
 
 void *cin_data_monitor_thread(void){
-  //fprintf(stderr, "\033[?25l");
-  double f = 0;
+  double framerate, datarate;
 
   unsigned int last_frame = 0;
+
+  unsigned long int n = 0; // Note this will rollover .. then this breaks!
+
+  int sid = syscall(SYS_gettid);
+  DEBUG_PRINT("Starting monitor thread ppid = %d\n", sid);
 
   while(1){
 
     if((unsigned int)thread_data.last_frame != last_frame){
       // Compute framerate
 
-      f  = (double)thread_data.framerate.tv_usec * 1e-6;
-      f += (double)thread_data.framerate.tv_sec; 
-      if(f == 0){
-        f = 0;
+      framerate  =  (double)thread_data.framerate.tv_usec * 1e-6;
+      framerate  += (double)thread_data.framerate.tv_sec; 
+      if(framerate == 0){
+        framerate = 0;
       } else {
-        f = 1 / f;
+        framerate = 1 / framerate;
       }
     } else {
-      f = 0; // we are idle 
+      framerate = 0; 
     }
+
+    datarate = framerate * CIN_DATA_FRAME_WIDTH * CIN_DATA_FRAME_HEIGHT * sizeof(uint16_t);
+    datarate = datarate / (1024 * 1024); // Convert to Mb.s^-1
 
     pthread_mutex_lock(&thread_data.stats_mutex);
 
     last_frame = (int)thread_data.last_frame;
     thread_data.stats.last_frame = last_frame;
-    thread_data.stats.framerate = f;
+
+    thread_data.stats.framerate = framerate;
+    thread_data.stats.datarate = datarate;
+    if(n == 0){
+      thread_data.stats.av_framerate = framerate;
+      thread_data.stats.av_datarate = datarate;
+    } else {
+      thread_data.stats.av_datarate =  ((n * thread_data.stats.av_datarate + datarate) / (n + 1));
+      thread_data.stats.av_framerate = ((n * thread_data.stats.av_framerate + framerate) / (n + 1));
+    }
+    n++;
+
     thread_data.stats.packet_percent_full = fifo_percent_full(thread_data.packet_fifo);
     thread_data.stats.frame_percent_full = fifo_percent_full(thread_data.frame_fifo);
     thread_data.stats.image_percent_full = fifo_percent_full(thread_data.image_fifo);
@@ -664,6 +676,8 @@ void *cin_data_monitor_output_thread(void){
    /* Output to screen monitored values */
   struct cin_data_stats stats;
 
+  //fprintf(stderr, "\033[?25l");
+
   while(1){
     pthread_mutex_lock(&thread_data.stats_mutex);
     stats = thread_data.stats;
@@ -678,14 +692,41 @@ void *cin_data_monitor_output_thread(void){
     fprintf(stderr, " Spool buffer %8.3f%%.\n",
             stats.image_percent_full);
     
-    fprintf(stderr, "Framerate = %6.1f s^-1 : Dropped packets %10ld : Mallformed packets %6ld\r",
-            stats.framerate, stats.dropped_packets, stats.mallformed_packets);
-    fprintf(stderr, "\033[A\033[A"); // Move up 2 lines 
+    fprintf(stderr, "Framerate = %6.1f s^-1 : Data Rate %10.3f Mb.s^-1\n",
+            stats.framerate, stats.datarate);
+    fprintf(stderr, "Dropped packets %10ld : Mallformed packets %6ld\r",
+            stats.dropped_packets, stats.mallformed_packets);
+    fprintf(stderr, "\033[A\033[A\033[A"); // Move up 3 lines 
 
     usleep(CIN_DATA_MONITOR_UPDATE);
   }
 
   pthread_exit(NULL);
+}
+
+void cin_data_show_stats(void){
+  cin_data_stats_t stats;
+  
+  pthread_mutex_lock(&thread_data.stats_mutex);
+  stats = thread_data.stats;
+  pthread_mutex_unlock(&thread_data.stats_mutex);
+
+  fprintf(stderr, "Last frame %-12d\n", stats.last_frame);
+
+  fprintf(stderr, "Packet buffer %8.3f%%.", 
+          stats.packet_percent_full);
+  fprintf(stderr, " Image buffer %8.3f%%.",
+          stats.frame_percent_full);
+  fprintf(stderr, " Spool buffer %8.3f%%.\n",
+          stats.image_percent_full);
+  
+  fprintf(stderr, "Framerate = %6.1f s^-1 : Data Rate %10.3f Mb.s^-1\n",
+          stats.framerate, stats.datarate);
+  fprintf(stderr, "Av. framerate = %6.1f s^-1 : Av. data Rate %10.3f Mb.s^-1\n",
+          stats.av_framerate, stats.av_datarate);
+  fprintf(stderr, "Dropped packets %10ld : Mallformed packets %6ld\n",
+          stats.dropped_packets, stats.mallformed_packets);
+  
 }
 
 void *cin_data_listen_thread(void *args){
@@ -697,6 +738,9 @@ void *cin_data_listen_thread(void *args){
   /* Send a packet to initialize the CIN */
 
   cin_data_write(thread_data.dp, dummy, sizeof(dummy));
+
+  int sid = syscall(SYS_gettid);
+  DEBUG_PRINT("Starting listener thread ppid = %d\n", sid);
 
   while(1){
     /* Get the next element in the fifo */
@@ -720,9 +764,11 @@ void *cin_data_listen_thread(void *args){
 
 void* cin_data_descramble_thread(void *args){
   /* This routine gets the next frame and descrambles is */
-  struct cin_data_frame *frame = NULL;
-  struct cin_data_frame *image = NULL;
+
+#ifdef __PROFILE__
   struct timespec start, end;
+#endif
+
   int i;
   uint32_t *dsmap = (uint32_t*)descramble_map_forward;
   uint32_t *dsmap_p;
@@ -730,6 +776,12 @@ void* cin_data_descramble_thread(void *args){
 
   cin_data_proc_t *proc = (cin_data_proc_t*)args;
 
+  struct cin_data_frame *frame = NULL;
+  struct cin_data_frame *image = NULL;
+  
+  int sid = syscall(SYS_gettid);
+  DEBUG_PRINT("Starting descrambler thread ppid = %d\n", sid);
+  
   while(1){
     // Get a frame 
     

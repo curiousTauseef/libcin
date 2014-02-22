@@ -99,11 +99,14 @@ typedef struct cin_data_frame {
   struct timeval timestamp;
 } cin_data_frame_t;
 
-struct cin_data_stats {
+typedef struct cin_data_stats {
   // Frame data
 
   int last_frame;
   double framerate;
+  double datarate;
+  double av_datarate;
+  double av_framerate;
 
   // FIFO data
   
@@ -118,7 +121,7 @@ struct cin_data_stats {
 
   long int dropped_packets;
   long int mallformed_packets;
-};
+} cin_data_stats_t;
 
 /* -------------------------------------------------------------------------------
  *
@@ -177,6 +180,7 @@ struct cin_data_frame* cin_data_get_buffered_frame(void);
 void cin_data_release_buffered_frame(void);
 
 struct cin_data_stats cin_data_get_stats(void);
+void cin_data_show_stats(void);
 
 int cin_data_load_frame(uint16_t *buffer, uint16_t *frame_num);
 
