@@ -33,7 +33,8 @@ extern "C" {
 #define CIN_DATA_DATA_MASK           0x1FFF
 #define CIN_DATA_PACKET_LEN          8184
 #define CIN_DATA_MAX_PACKETS         542
-#define CIN_DATA_FRAME_HEIGHT        1924
+//#define CIN_DATA_FRAME_HEIGHT        1924
+#define CIN_DATA_FRAME_HEIGHT        1950
 #define CIN_DATA_FRAME_WIDTH         1152
 #define CIN_DATA_RCVBUF              100  // Mb 
 
