@@ -67,7 +67,7 @@ int main(int argc, char *argv[]){
 
   fprintf(stderr, "\n\n\n\n");
 
-  if(cin_init_data_port(&port, "10.0.5.55", 0, NULL, 0, 1000)){
+  if(cin_init_data_port(&port, NULL, 0, NULL, 0, 1000)){
     exit(1);
   }
 
