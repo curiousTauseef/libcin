@@ -562,7 +562,8 @@ void *cin_data_assembler_thread(void *args){
     if(skipped){
       thread_data.dropped_packets += skipped;
       DEBUG_PRINT("Skipped %d packets from frame %d\n", skipped, this_frame);
-      
+     
+      // Encode skipped packets into the data
       int i;
       frame_p = frame->data;
       frame_p += (last_packet + last_packet_msb + 1) * CIN_DATA_PACKET_LEN / 2;
@@ -693,29 +694,12 @@ void *cin_data_monitor_thread(void){
 
 void *cin_data_monitor_output_thread(void){
    /* Output to screen monitored values */
-  struct cin_data_stats stats;
 
   //fprintf(stderr, "\033[?25l");
 
   while(1){
-    pthread_mutex_lock(&thread_data.stats_mutex);
-    stats = thread_data.stats;
-    pthread_mutex_unlock(&thread_data.stats_mutex);
-
-    fprintf(stderr, "Last frame %-12d\n", stats.last_frame);
-
-    fprintf(stderr, "Packet buffer %8.3f%%.", 
-            stats.packet_percent_full);
-    fprintf(stderr, " Image buffer %8.3f%%.",
-            stats.frame_percent_full);
-    fprintf(stderr, " Spool buffer %8.3f%%.\n",
-            stats.image_percent_full);
-    
-    fprintf(stderr, "Framerate = %6.1f s^-1 : Data Rate %10.3f Mb.s^-1\n",
-            stats.framerate, stats.datarate);
-    fprintf(stderr, "Dropped packets %10ld : Mallformed packets %6ld\r",
-            stats.dropped_packets, stats.mallformed_packets);
-    fprintf(stderr, "\033[A\033[A\033[A"); // Move up 3 lines 
+    cin_data_show_stats();
+    fprintf(stderr, "\033[A\033[A\033[A\033[A\033[A"); // Move up 5 lines 
 
     usleep(CIN_DATA_MONITOR_UPDATE);
   }
@@ -725,27 +709,34 @@ void *cin_data_monitor_output_thread(void){
 
 void cin_data_show_stats(void){
   cin_data_stats_t stats;
+  char buffer[256];
   
   pthread_mutex_lock(&thread_data.stats_mutex);
   stats = thread_data.stats;
   pthread_mutex_unlock(&thread_data.stats_mutex);
 
-  fprintf(stderr, "Last frame %-12d\n", stats.last_frame);
+  sprintf(buffer, "Last frame %-12d", stats.last_frame);
+  fprintf(stderr, "%-80s\n", buffer);
 
-  fprintf(stderr, "Packet buffer %8.3f%%.", 
+  sprintf(buffer, "Packet buffer %8.3f%%.", 
           stats.packet_percent_full);
-  fprintf(stderr, " Image buffer %8.3f%%.",
+  sprintf(buffer, "%s Image buffer %8.3f%%.",buffer,
           stats.frame_percent_full);
-  fprintf(stderr, " Spool buffer %8.3f%%.\n",
+  sprintf(buffer, "%s Spool buffer %8.3f%%.",buffer,
           stats.image_percent_full);
-  
-  fprintf(stderr, "Framerate = %6.1f s^-1 : Data Rate %10.3f Mb.s^-1\n",
+  fprintf(stderr, "%-80s\n", buffer);
+
+  sprintf(buffer, "Framerate     = %6.1f s^-1 : Data Rate     = %10.3f Mb.s^-1",
           stats.framerate, stats.datarate);
-  fprintf(stderr, "Av. framerate = %6.1f s^-1 : Av. data Rate %10.3f Mb.s^-1\n",
+  fprintf(stderr, "%-80s\n", buffer);
+
+  sprintf(buffer, "Av. framerate = %6.1f s^-1 : Av. data Rate = %10.3f Mb.s^-1",
           stats.av_framerate, stats.av_datarate);
-  fprintf(stderr, "Dropped packets %10ld : Mallformed packets %6ld\n",
+  fprintf(stderr, "%-80s\n", buffer);
+
+  sprintf(buffer, "Dropped packets %-11ld : Mallformed packets %-11ld",
           stats.dropped_packets, stats.mallformed_packets);
-  
+  fprintf(stderr, "%-80s\n", buffer);
 }
 
 void *cin_data_listen_thread(void *args){
