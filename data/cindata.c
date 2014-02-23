@@ -453,6 +453,7 @@ void *cin_data_assembler_thread(void *args){
   int last_packet = 0;
   int this_packet_msb = 0;
   int last_packet_msb = 0;
+  int last_packet_flag = 0;
   int skipped;
 
   int buffer_len;
@@ -461,7 +462,8 @@ void *cin_data_assembler_thread(void *args){
   uint16_t *frame_p;
   int i;
 
-  uint64_t header;
+  uint64_t *header;
+  uint64_t *footer;
 
   struct timeval last_frame_timestamp = {0,0};
   struct timeval this_frame_timestamp = {0,0};
@@ -495,8 +497,8 @@ void *cin_data_assembler_thread(void *args){
     }
 
     /* Next lets check the magic number of the packet */
-    header = *((uint64_t *)buffer_p) & CIN_DATA_MAGIC_PACKET_MASK; 
-    if(header != CIN_DATA_MAGIC_PACKET) {
+    header = ((uint64_t *)buffer_p); 
+    if((*header & CIN_DATA_MAGIC_PACKET_MASK) != CIN_DATA_MAGIC_PACKET) {
       /* Dump the packet and continue */
       DEBUG_COMMENT("Packet does not match magic\n");
       (*proc->input_put)(proc->input_args, proc->reader);
@@ -518,7 +520,7 @@ void *cin_data_assembler_thread(void *args){
       if(frame){
         // Note this is repeated below, but is here in
         // case we haven't pushed out the frame at the end
-        DEBUG_PRINT("Missed end of frame on %d\n", last_frame);
+        DEBUG_PRINT("Missed end of frame magic on frame %d\n", last_frame);
         frame->number = last_frame;
         frame->timestamp = last_frame_timestamp;
         thread_data.last_frame = last_frame;
@@ -531,11 +533,7 @@ void *cin_data_assembler_thread(void *args){
       frame = (cin_data_frame_t*)(*proc->output_get)(proc->output_args);
 
       /* Blank the frame */
-      frame_p = frame->data;
-      int i;
-      for(i=0;i<(CIN_DATA_FRAME_HEIGHT * CIN_DATA_FRAME_WIDTH);i++){
-        *frame_p++ = CIN_DATA_DROPPED_PACKET_VAL;
-      }
+      memset(frame->data, 0x0, CIN_DATA_FRAME_HEIGHT * CIN_DATA_FRAME_WIDTH * 2);
 
       /* Set all the last frame stuff */
       last_frame = this_frame;
@@ -564,11 +562,31 @@ void *cin_data_assembler_thread(void *args){
     if(skipped){
       thread_data.dropped_packets += skipped;
       DEBUG_PRINT("Skipped %d packets from frame %d\n", skipped, this_frame);
+      
+      int i;
+      frame_p = frame->data;
+      frame_p += (last_packet + last_packet_msb + 1) * CIN_DATA_PACKET_LEN / 2;
+      for(i=0;i<(skipped * CIN_DATA_PACKET_LEN / 2);i++){
+        *frame_p = CIN_DATA_DROPPED_PACKET_VAL;
+        frame_p++;
+      }
     }
 
-    /* Do some bounds checking */
+    // First check if this is the last packet. 
 
-    if((this_packet + this_packet_msb) < CIN_DATA_MAX_PACKETS){
+    
+    footer = ((uint64_t*)(buffer->data + (buffer->size - 8)));
+    if(*footer == CIN_DATA_TAIL_MAGIC_PACKET){
+      last_packet_flag = 1;
+      buffer_len = buffer_len - 8;
+    }
+
+    // Do some bounds checking
+    // Check if the packet number is bigger than the 
+    // frame size. If so, skip the packet. 
+
+    if((this_packet + this_packet_msb) <= 
+       (CIN_DATA_FRAME_WIDTH * CIN_DATA_FRAME_HEIGHT * 2 / CIN_DATA_PACKET_LEN)){
       // Copy the data and swap the endieness
       frame_p = frame->data;
       frame_p += (this_packet + this_packet_msb) * CIN_DATA_PACKET_LEN / 2;
@@ -584,21 +602,22 @@ void *cin_data_assembler_thread(void *args){
       continue;
     }
 
-    /* Now we are done with the packet, we can advance the fifo */
-
-    (*proc->input_put)(proc->input_args, proc->reader);
-
-    /* Now check if we have a full frame. */
-    
-    if((this_packet + this_packet_msb) == (CIN_DATA_MAX_PACKETS - 1)) {
-      // We just recieved the last packet. Push it out. 
+    if(last_packet_flag){
+      // We just recieved the last packet. 
+      // Write the frame number and timestamp
+      // and push it onto the fifo
+      
       frame->number = this_frame;
       frame->timestamp = this_frame_timestamp;
       thread_data.last_frame = this_frame;
       (*proc->output_put)(proc->output_args);
       frame = NULL;
-      //DEBUG_PRINT("Recieved frame %d\n", this_frame);
+      last_packet_flag = 0;
     }
+
+    /* Now we are done with the packet, we can advance the fifo */
+
+    (*proc->input_put)(proc->input_args, proc->reader);
 
     /* Now we can set the last packet to this packet */
 
