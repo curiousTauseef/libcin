@@ -19,25 +19,26 @@ extern "C" {
  * -------------------------------------------------------------------------------
  */
 
-#define CIN_CTL_IP                   "192.168.1.207"
-#define CIN_CTL_PORT                 49200
+#define CIN_CTL_IP                         "192.168.1.207"
+#define CIN_CTL_PORT                       49200
 
-#define CIN_DATA_IP                  "10.0.5.207"
-#define CIN_DATA_PORT                49201
-#define CIN_DATA_CTL_PORT            49203
-#define CIN_DATA_MAX_MTU             9000
-#define CIN_DATA_UDP_HEADER          8
-#define CIN_DATA_MAGIC_PACKET        0x0000F4F3F2F1F000
-#define CIN_DATA_MAGIC_PACKET_MASK   0x0000FFFFFFFFFF00
-#define CIN_DATA_TAIL_MAGIC_PACKET   0xF1F200000000F00D
-#define CIN_DATA_DROPPED_PACKET_VAL  0x2000
-#define CIN_DATA_DATA_MASK           0x1FFF
-#define CIN_DATA_PACKET_LEN          8184
-#define CIN_DATA_MAX_PACKETS         542
-//#define CIN_DATA_FRAME_HEIGHT        1924
-#define CIN_DATA_FRAME_HEIGHT        1950
-#define CIN_DATA_FRAME_WIDTH         1152
-#define CIN_DATA_RCVBUF              100  // Mb 
+#define CIN_DATA_IP                        "10.0.5.207"
+#define CIN_DATA_PORT                      49201
+#define CIN_DATA_CTL_PORT                  49203
+#define CIN_DATA_MAX_MTU                   9000
+#define CIN_DATA_UDP_HEADER                8
+#define CIN_DATA_MAGIC_PACKET              0x0000F4F3F2F1F000
+#define CIN_DATA_MAGIC_PACKET_MASK         0x0000FFFFFFFFFF00
+#define CIN_DATA_TAIL_MAGIC_PACKET         0x010DF0ADDEF2F1F0
+#define CIN_DATA_TAIL_MAGIC_PACKET_MASK    0xFFFFFFFFFFFFFFFF
+#define CIN_DATA_DROPPED_PACKET_VAL        0x2000
+#define CIN_DATA_DATA_MASK                 0x1FFF
+#define CIN_DATA_PACKET_LEN                8184
+#define CIN_DATA_MAX_PACKETS               542
+//#define CIN_DATA_FRAME_HEIGHT              1924
+#define CIN_DATA_FRAME_HEIGHT              1950
+#define CIN_DATA_FRAME_WIDTH               1152
+#define CIN_DATA_RCVBUF                    100  // Mb 
 
 /* -------------------------------------------------------------------------------
  *
