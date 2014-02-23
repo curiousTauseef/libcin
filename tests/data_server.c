@@ -140,9 +140,14 @@ int setup_packets(udp_packet **packets, int packet_size,
 
     packet_p->len = packet_len + 8;
 
-    *((uint64_t*)(packet_p->data)) = 0x0000F4F3F2F1F000;
+    *((uint64_t*)(packet_p->data)) = CIN_DATA_MAGIC_PACKET;
     *(packet_p->data) = (unsigned char)num_packets;
-    memcpy((packet_p->data + 8), stream_p, packet_len );
+    memcpy((packet_p->data + 8), stream_p, packet_len);
+    if(packet_len != packet_size){
+      *((uint64_t*)(packet_p->data + 8 + packet_len)) = CIN_DATA_TAIL_MAGIC_PACKET;
+      packet_p->len += 8;
+    } 
+
     stream_p += packet_len;
     bytes_left -= packet_len;
     num_packets++;
@@ -203,7 +208,8 @@ int start_server(udp_packet *packets, int num_packets, char* host,
   int j;
   udp_packet* packet_p;
   uint16_t frame_num = 0;
-  
+  int ndata;
+
   while(1){
     packet_p = packets;
     for(i=0;i<num_packets;i++){
@@ -212,11 +218,17 @@ int start_server(udp_packet *packets, int num_packets, char* host,
 
       /* Walk the test pattern */
       data_p = packet_p->data + 8;
-      for(j=0;j<(packet_p->len-8);j+=2){
-        (*data_p) += (char)walk;
-        data_p+=2;
+      if(i == (num_packets - 1)){
+        ndata = packet_p->len - 16;
+      } else {
+        ndata = packet_p->len - 8;
       }
 
+      for(j=0;j<ndata;j+=2){
+        (*data_p) += (char)walk;
+        data_p += 2;
+      }
+      
       sendto(s, packet_p->data, packet_p->len, 0, 
              (struct sockaddr*) &dest_addr, sizeof(dest_addr));
       packet_p++;
