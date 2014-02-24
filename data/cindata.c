@@ -180,6 +180,8 @@ int cin_data_init(int mode,
   /* For DEBUG print out the process id */
 
   DEBUG_PRINT("PID = %d\n", getpid());
+  DEBUG_PRINT("getuid = %d\n", getuid());
+  DEBUG_PRINT("geteuid = %d\n", geteuid());
 
   /* Initialize buffers */
   int rtn;
@@ -257,28 +259,8 @@ int cin_data_init(int mode,
     descramble2->output_args = (void*)thread_data.image_dbuffer;
   }
 
-  // Define attribute list
 
-  pthread_attr_t listener_sched_attr;
-  pthread_attr_init(&listener_sched_attr);  
-
-#ifdef __REALTIME__
-
-  /*
-   * Try so set the UDP listener thread to use realtime
-   * scheduling with a high priority.
-   */
-
-  struct sched_param fifo_param;
-
-  pthread_attr_setinheritsched(&listener_sched_attr, PTHREAD_EXPLICIT_SCHED);
-  pthread_attr_setschedpolicy(&listener_sched_attr, SCHED_FIFO);
-  fifo_param.sched_priority = sched_get_priority_max(SCHED_FIFO);
-  pthread_attr_setschedparam(&listener_sched_attr, &fifo_param);
-
-#endif
-
-  cin_data_thread_start(&threads[0], &listener_sched_attr,
+  cin_data_thread_start(&threads[0], NULL,
                         (void *)cin_data_listen_thread, 
                         (void *)listen);
 
@@ -328,6 +310,7 @@ int cin_data_init(int mode,
   }
 
 #endif
+
 
   return 0;
 }
@@ -584,7 +567,7 @@ void *cin_data_assembler_thread(void *args){
     skipped = (this_packet + this_packet_msb) - (last_packet + last_packet_msb + 1);
     if(skipped){
       thread_data.dropped_packets += skipped;
-      DEBUG_PRINT("Skipped %d packets from frame %d\n", skipped, this_frame);
+      //DEBUG_PRINT("Skipped %d packets from frame %d\n", skipped, this_frame);
      
       // Encode skipped packets into the data
       int i;
@@ -774,6 +757,31 @@ void *cin_data_listen_thread(void *args){
 
   int sid = syscall(SYS_gettid);
   DEBUG_PRINT("Starting listener thread ppid = %d\n", sid);
+
+
+#ifdef __REALTIME__
+
+  /*
+   * Try so set the UDP listener thread to use realtime
+   * scheduling with a high priority.
+   */
+
+  struct sched_param fifo_param;
+  fifo_param.sched_priority = sched_get_priority_max(SCHED_FIFO);
+  if(!pthread_setschedparam(pthread_self(), SCHED_FIFO, &fifo_param)){
+    DEBUG_COMMENT("Set realtime priority to UDP listener\n");
+  } else {
+    DEBUG_COMMENT("Unable to set realtime priority to UDP listener\n");
+  }
+ 
+#endif
+
+  // Release root priv.
+  if(setuid(getuid())){
+    DEBUG_COMMENT("Unable to drop root priv.\n");
+  } else {
+    DEBUG_COMMENT("Dropped root priv.\n");
+  }
 
   while(1){
     /* Get the next element in the fifo */
