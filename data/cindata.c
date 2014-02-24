@@ -257,23 +257,45 @@ int cin_data_init(int mode,
     descramble2->output_args = (void*)thread_data.image_dbuffer;
   }
 
-  cin_data_thread_start(&threads[0], 
+  // Define attribute list
+
+  pthread_attr_t listener_sched_attr;
+  pthread_attr_init(&listener_sched_attr);  
+
+#ifdef __REALTIME__
+
+  /*
+   * Try so set the UDP listener thread to use realtime
+   * scheduling with a high priority.
+   */
+
+  struct sched_param fifo_param;
+
+  pthread_attr_setinheritsched(&listener_sched_attr, PTHREAD_EXPLICIT_SCHED);
+  pthread_attr_setschedpolicy(&listener_sched_attr, SCHED_FIFO);
+  fifo_param.sched_priority = sched_get_priority_max(SCHED_FIFO);
+  pthread_attr_setschedparam(&listener_sched_attr, &fifo_param);
+
+#endif
+
+  cin_data_thread_start(&threads[0], &listener_sched_attr,
                         (void *)cin_data_listen_thread, 
                         (void *)listen);
-  cin_data_thread_start(&threads[1], 
+
+  cin_data_thread_start(&threads[1], NULL,
                         (void *)cin_data_assembler_thread, 
                         (void *)assemble);
-  cin_data_thread_start(&threads[2], 
+  cin_data_thread_start(&threads[2], NULL,
                         (void *)cin_data_descramble_thread,
                         (void *)descramble1);
-  cin_data_thread_start(&threads[3], 
+  cin_data_thread_start(&threads[3], NULL,
                         (void *)cin_data_monitor_thread, 
                         NULL);
   if((mode & CIN_DATA_MODE_WRITER) || (mode & CIN_DATA_MODE_DBL_BUFFER_COPY)){
-    cin_data_thread_start(&threads[4], 
+    cin_data_thread_start(&threads[4], NULL,
                           (void *)cin_data_descramble_thread,
                           (void *)descramble2);
-    //cin_data_thread_start(&threads[5],
+    //cin_data_thread_start(&threads[5], NULL,
     //                      (void*)cin_data_writer_thread,
     //                      (void*)writer);
   }
@@ -311,7 +333,7 @@ int cin_data_init(int mode,
 }
 
 void cin_data_start_monitor_output(void){
-    cin_data_thread_start(&threads[6], 
+    cin_data_thread_start(&threads[6], NULL,
                           (void *)cin_data_monitor_output_thread,
                           NULL);
   DEBUG_COMMENT("Starting monitor ourput\n");
@@ -395,11 +417,12 @@ int cin_data_init_buffers(int packet_buffer_len, int frame_buffer_len){
   return 0;
 }
 
-int cin_data_thread_start(cin_data_threads_t *thread, 
+int cin_data_thread_start(cin_data_threads_t *thread,
+                          pthread_attr_t *attr,
                           void *(*func) (void *), 
                           void *arg){
   int rtn;
-  rtn = pthread_create(&thread->thread_id, NULL, func, arg);
+  rtn = pthread_create(&thread->thread_id, attr, func, arg);
   if(rtn == 0){
     DEBUG_COMMENT("Started thread\n");
     thread->started = 1;

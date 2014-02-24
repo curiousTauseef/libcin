@@ -80,6 +80,7 @@ typedef struct cin_data_proc {
 /* Thread Handeling */
 
 int cin_data_thread_start(cin_data_threads_t *thread, 
+                          pthread_attr_t *attr,
                           void *(*func) (void *),
                           void *arg);
 int cin_data_init_buffers(int packet_buffer_len, int frame_buffer_len);
