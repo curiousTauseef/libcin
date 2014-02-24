@@ -1,8 +1,16 @@
 # Variables for compelation
 CC=gcc
 CFLAGS=-Wall -O3 -g -D__DEBUG__ --pic
+
+# Add code for profiling speed
 #CFLAGS+=-D__PROFILE__
-#CFLAGS+=-D__AFFINITY__
+
+# Add code for setting processor affinity
+CFLAGS+=-D__AFFINITY__
+
+# Add code for realtime UDP listener
+CFLAGS+=-D__REALTIME__
+
 LDFLAGS=-L. 
 LDLIBS=-lpthread -lrt
 
