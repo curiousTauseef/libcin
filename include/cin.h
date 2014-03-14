@@ -120,26 +120,129 @@ typedef struct cin_data_stats {
   long int image_overruns;
 
   // Packet stats
-
+  
   long int dropped_packets;
   long int mallformed_packets;
 } cin_data_stats_t;
 
-/* -------------------------------------------------------------------------------
+/* ---------------------------------------------------------------------
  *
  * CIN Control Routines
  *
- * -------------------------------------------------------------------------------
+ * ---------------------------------------------------------------------
  */
 
+/*------------------------
+ * UDP Socket
+ *------------------------*/
 int cin_init_ctl_port(struct cin_port* cp, char* ipaddr, uint16_t port);
-uint16_t cin_ctl_read(struct cin_port* cp, uint16_t reg);
-int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val);
-int cin_shutdown(struct cin_port* cp);
 
-void cin_power_up();
-void cin_power_down();
-void cin_report_power_status();
+int cin_close_ctl_port(struct cin_port* cp);
+
+/*------------------------
+ * CIN Read-Write
+ *------------------------*/
+uint16_t cin_ctl_read(struct cin_port* cp, uint16_t reg);
+
+int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val);
+	//TODO - implement write verification procedure */
+
+int cin_stream_write(struct cin_port* cp, char* val,int size);
+	//TODO - implement write verification procedure
+
+/*------------------------
+ * CIN PowerUP-PowerDown
+ *------------------------*/
+int cin_on(struct cin_port* cp);
+
+int cin_off(struct cin_port* cp);
+
+int cin_fp_on(struct cin_port* cp);
+
+int cin_fp_off(struct cin_port* cp);
+/*------------------------
+ * CIN Configuration-Status
+ *------------------------*/
+int cin_load_config(struct cin_port* cp,char *filename);
+
+int cin_load_firmware(struct cin_port* cp,struct cin_port* dcp, char *filename);
+
+int cin_set_fclk(struct cin_port* cp,uint16_t clkfreq);
+/*
+ * Input:clkfreq={125, 200, 250}(MHz)
+ */
+
+int cin_get_fclk_status(struct cin_port* cp);
+/*
+ * Return:{0-FCLK Configured, (-1)-FCLK not configured}
+ */
+
+int cin_get_cfg_fpga_status(struct cin_port* cp);
+/*
+ *Return:{0-FPGA Configured, (-1)-FPGA not configured}
+ */
+
+int cin_get_power_status(struct cin_port* cp);
+
+/*------------------------
+ * CIN Control
+ *------------------------*/
+int cin_set_bias(struct cin_port* cp,int val);
+/*
+ * Input:val={0-OFF,1-ON}
+ */
+int cin_set_clocks(struct cin_port* cp,int val);
+/*
+ * Input:val={0-OFF,1-ON}
+ */
+
+int cin_set_trigger(struct cin_port* cp,int val);
+/*
+ * Input:val={0-Internal, 1-External1, 2-External2, 3-External 1 or 2}
+ */
+
+uint16_t cin_get_trigger_status (struct cin_port* cp);
+/*
+ * Return:{0-Internal, 1-External1, 2-External2, 3-External 1 or 2}
+ */
+
+int cin_set_trigger_mode(struct cin_port* cp,int val);
+/*
+ * Input:val={0-Single, 1-Continuous, 2-Multiple}
+ */
+
+int cin_set_exposure_time(struct cin_port* cp,float e_time);
+/*
+ * Input:e_time (s)
+ */	
+
+int cin_set_trigger_delay(struct cin_port* cp,float t_time);
+/*
+ * Input:t_time (us)
+ */
+
+int cin_set_cycle_time(struct cin_port* cp,float c_time);
+/*
+ * Input:c_time (s)
+ */    
+
+int cin_trigger_start(struct cin_port* cp);
+/*
+ * Start triggers.   Looks at current mode (single, continuous
+ * or multiple) to determine which registers to set
+ */
+
+int cin_trigger_stop(struct cin_port* cp);
+/*
+ * Stops triggers
+ */
+
+int cin_set_frame_count_reset(struct cin_port* cp);
+
+/*------------------------
+ * Testing
+ *------------------------*/
+int cin_test_cfg_leds(struct cin_port* cp); //Flash configuration LEDs 	
 
 /* ---------------------------------------------------------------------
  *

@@ -9,6 +9,8 @@
 
 #include "cin.h"
 
+#define YF_LOCAL_EDITS 1
+
 void int_handler(int dummy){
   cin_data_stop_threads();
   fprintf(stderr, "\n");
@@ -67,16 +69,22 @@ int main(int argc, char *argv[]){
 
   fprintf(stderr, "\n\n\n\n");
 
+#ifdef YF_LOCAL_EDITS
+  if(cin_init_data_port(&port, "192.168.11.112", 49201, "192.168.11.112", 49203, 100)){
+#else
   if(cin_init_data_port(&port, NULL, 0, NULL, 0, 1000)){
+#endif
     exit(1);
   }
 
+  printf("port.srvaddr = %s\n", port.srvaddr);
+  
   /* Start the main routine */
   if(cin_data_init(CIN_DATA_MODE_PUSH_PULL, 20000, 2000)){
     exit(1);
   }
 
-  signal(SIGINT, int_handler);
+  signal(SIGINT, int_handler); 
 
   sleep(15);
 

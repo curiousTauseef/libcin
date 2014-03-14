@@ -345,6 +345,7 @@ int cin_data_init_buffers(int packet_buffer_len, int frame_buffer_len){
   cin_data_packet_t *p = 
     (cin_data_packet_t*)(thread_data.packet_fifo->data);
   for(i=0;i<thread_data.packet_fifo->size;i++){
+
     if(!(p->data = malloc(sizeof(char) * CIN_DATA_MAX_MTU))){
       return 1;
     }
@@ -352,7 +353,6 @@ int cin_data_init_buffers(int packet_buffer_len, int frame_buffer_len){
   }
 
   /* Frame FIFO */
-
   thread_data.frame_fifo = malloc(sizeof(fifo));
   if(fifo_init(thread_data.frame_fifo, sizeof(struct cin_data_frame), frame_buffer_len, 1)){
     return 1;
@@ -396,7 +396,6 @@ int cin_data_init_buffers(int packet_buffer_len, int frame_buffer_len){
   thread_data.image_buffer = malloc(sizeof(image_buffer_t));
   thread_data.image_buffer->data = malloc(sizeof(cin_data_frame_t));
   thread_data.image_buffer->waiting = 0;
-
   return 0;
 }
 
