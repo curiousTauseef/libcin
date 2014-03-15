@@ -11,8 +11,6 @@
 #include "cin_register_map.h"
 #include "cin_api.h"
 
-#define INFO(x) fprintf(stdout, (x) )
-
 // Cache TriggerMode
 static int m_TriggerMode = 0;
 
@@ -226,7 +224,7 @@ int cin_on(struct cin_port* cp){
 
    int _status;
 
-   INFO("  Powering ON CIN Board ........\n");
+   DEBUG_COMMENT("Powering ON CIN Board");
 
    _status=cin_ctl_write(cp,REG_PS_ENABLE, 0x000f);
    if (_status != 0)
@@ -248,7 +246,7 @@ int cin_off(struct cin_port* cp) {
 
    int _status;
      
-   INFO("  Powering OFF CIN Board ........\n");
+   DEBUG_COMMENT("Powering OFF CIN Board");
    _status=cin_ctl_write(cp,REG_PS_ENABLE, 0x0000);
    if (_status != 0)
       {goto error;}
@@ -267,7 +265,7 @@ int cin_fp_on(struct cin_port* cp){
 
    int _status;
    
-   INFO("  Powering ON CIN Front Panel Boards ........\n");
+   DEBUG_COMMENT("Powering ON CIN Front Panel Boards");
    _status=cin_ctl_write(cp,REG_PS_ENABLE, 0x003f);
    if (_status != 0)
       {goto error;}
@@ -285,7 +283,7 @@ int cin_fp_off(struct cin_port* cp){
 
    int _status;
    
-   INFO("  Powering OFF CIN Front Panel Boards ........\n");
+   DEBUG_COMMENT("Powering OFF CIN Front Panel Boards");
    _status=cin_ctl_write(cp,REG_PS_ENABLE, 0x001f);
    if (_status != 0)
       {goto error;}
@@ -309,7 +307,7 @@ int cin_load_config(struct cin_port* cp,char *filename){
 
    FILE *file = fopen ( filename, "r" );
    if (file != NULL) {  
-      fprintf(stdout,"  Loading CIN configuration %s ........\n",filename);
+      DEBUG_PRINT("Loading CIN configuration %s ........\n",filename);
 
       /* Read a line an filter out comments */     
       while(fgets(_line,sizeof _line,file)!= NULL){ 
@@ -328,7 +326,7 @@ int cin_load_config(struct cin_port* cp,char *filename){
                {goto error;}     
          }   
       }     
-      INFO("  CIN configuration loaded!\n");
+      DEBUG_COMMENT("CIN configuration loaded!\n");
       fclose(file);
    }
    else {
@@ -378,7 +376,7 @@ int cin_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filename){
    if (_status != 0)
       {goto error;} 
       
-   INFO("  CIN FPGA configuration loaded!!\n"); 
+   DEBUG_COMMENT("CIN FPGA configuration loaded!!\n"); 
    fclose(file);
    return _status;
    
@@ -419,6 +417,7 @@ error:
       return  _status;
 }
 
+// SBW: This should return status!
 int cin_get_fclk_status(struct cin_port* cp){ 
 
    uint16_t _val;
@@ -426,40 +425,40 @@ int cin_get_fclk_status(struct cin_port* cp){
    _val= cin_ctl_read(cp,REG_FCLK_I2C_DATA_WR);
 
    if((_val & 0xB000)==0xB000){
-      INFO("  FCLK Frequency = 125 MHz\n\n");
+      DEBUG_COMMENT("FCLK Frequency = 125 MHz\n");
       return 0;
    }   
    else if((_val & 0x7000)==0x7000){
-      INFO("  FCLK Frequency = 200 MHz\n\n");
+      DEBUG_COMMENT("FCLK Frequency = 200 MHz\n");
       return 0;		     
    }
    else if((_val & 0x3000)==0x3000){
-      INFO("  FCLK Frequency = 250 MHz\n\n");
+      DEBUG_COMMENT("FCLK Frequency = 250 MHz\n");
       return 0;
    }
    else{
-      perror("  Unknown FCLK Frequency\n\n"); 
+      perror("Unknown FCLK Frequency\n"); 
       return -1;
    }  
 }  
 
+// SBW : This function shoud return status!
 int cin_get_cfg_fpga_status(struct cin_port* cp){
       
    uint16_t _val;
    
-   INFO("\n****  CFG FPGA Status Registers  ****\n\n"); 
    //# get Status Registers
    _val= cin_ctl_read(cp,REG_BOARD_ID);
-   fprintf(stdout,"  CIN Board ID     :  %04X\n",_val);
+   DEBUG_PRINT("CIN Board ID     :  %04X\n",_val);
 
    _val= cin_ctl_read(cp,REG_HW_SERIAL_NUM);
-   fprintf(stdout,"  HW Serial Number :  %04X\n",_val);
+   DEBUG_PRINT("HW Serial Number :  %04X\n",_val);
 
    _val= cin_ctl_read(cp,REG_FPGA_VERSION);
-   fprintf(stdout,"  CFG FPGA Version :  %04X\n\n",_val);
+   DEBUG_PRINT("CFG FPGA Version :  %04X\n\n",_val);
 
    _val= cin_ctl_read(cp,REG_FPGA_STATUS);
-   fprintf(stdout,"  CFG FPGA Status  :  %04X\n",_val);
+   DEBUG_PRINT("CFG FPGA Status  :  %04X\n",_val);
    /*
       # FPGA Status
       # 15 == FRM DONE
@@ -475,22 +474,22 @@ int cin_get_cfg_fpga_status(struct cin_port* cp){
       return -1;   
    }
    else if((_val & 0x8000)==0x8000){
-      INFO("  ** Frame FPGA Configuration Done\n"); 
+      DEBUG_COMMENT("Frame FPGA Configuration Done\n"); 
       return 0;
    }
    else{
-      perror("  ** Frame FPGA NOT Configured\n");
+      perror("Frame FPGA NOT Configured\n");
       return -1;
    }
    if((_val & 0x0008)==0x0008){
-      INFO("  ** FP Power Supply Unlocked\n"); 
+      DEBUG_COMMENT("FP Power Supply Unlocked\n"); 
    }
    else{
-      INFO("  ** FP Power Supply Locked Off\n");
+      DEBUG_COMMENT("FP Power Supply Locked\n");
    }
 
    _val= cin_ctl_read(cp,REG_DCM_STATUS);
-   fprintf(stdout,"\n  CFG DCM Status   :  %04X\n",_val);
+   DEBUG_PRINT("CFG DCM Status   :  %04X\n",_val);
    /*
    # DCM Status
    # 15 == 0
@@ -506,23 +505,25 @@ int cin_get_cfg_fpga_status(struct cin_port* cp){
    */
    _val= cin_ctl_read(cp,REG_DCM_STATUS);
    if((_val & 0x0080)==0x0080){
-      INFO("  ** ATCA 48V Alarm\n"); 
+      DEBUG_COMMENT("  ** ATCA 48V Alarm\n"); 
    }
    else{
-      INFO("  ** ATCA 48V OK\n");
+      DEBUG_COMMENT("  ** ATCA 48V OK\n");
    }
    if((_val & 0x0001)==0x0001){
-      INFO("  ** CFG Clock DCM Locked\n"); 
+      DEBUG_COMMENT("  ** CFG Clock DCM Locked\n"); 
    }
    else{
-      INFO("  ** CFG Clock DCM NOT Locked\n");
+      DEBUG_COMMENT("  ** CFG Clock DCM NOT Locked\n");
    }
+  // SBW : THIS MUST BE AN ERROR
    if((_val != 0x0800)==0x0000){
-      INFO("  ** FP Power Supply Interlock Overide Enabled\n");  
+      DEBUG_COMMENT("  ** FP Power Supply Interlock Overide Enabled\n");  
    }
 }
 
 // YF hard coded constants :-(
+// SBW : These functions should be renamed
 static double current_calc(uint16_t val) {
    
    double _current;
@@ -554,14 +555,14 @@ int cin_get_power_status(struct cin_port* cp) {
    double _current, _voltage;
    uint16_t _val = cin_ctl_read(cp, REG_PS_ENABLE);
       
-   INFO("****  CIN Power Monitor  ****\n\n");
+   DEBUG_COMMENT("CIN Power Monitor\n");
    if(_val & 0x0001) {
       /* ADC == LT4151 */
       _val = cin_ctl_read(cp, REG_VMON_ADC1_CH1);
       _voltage = 0.025*_val;
       _val = cin_ctl_read(cp, REG_IMON_ADC1_CH0);
       _current = 0.00002*_val/0.003;
-      fprintf(stdout,"  V12P_BUS Power  : %0.2fV @ %0.2fA\n\n", _voltage, _current);
+      DEBUG_PRINT("V12P_BUS Power  : %0.2fV @ %0.2fA\n\n", _voltage, _current);
 
       /* ADC == LT2418 */
       calcVIStatus(cp, REG_VMON_ADC0_CH5, REG_IMON_ADC0_CH5,
@@ -592,7 +593,7 @@ int cin_get_power_status(struct cin_port* cp) {
       fprintf(stdout,"\n");
    }
    else {
-      fprintf(stdout,"  12V Power Supply is OFF\n");
+      DEBUG_COMMENT("12V Power Supply is OFF\n");
    }
    return 0;   
 }
@@ -606,13 +607,13 @@ int cin_set_bias(struct cin_port* cp,int val){
       _status=cin_ctl_write(cp,REG_BIASCONFIGREGISTER0_REG, 0x0001);
       if (_status != 0)
          {goto error;}
-      INFO("  Bias ON\n");
+      DEBUG_COMMENT("  Bias ON\n");
    }
    else if (val==0){
       _status=cin_ctl_write(cp,REG_BIASCONFIGREGISTER0_REG, 0x0000);
       if (_status != 0)
          {goto error;}
-      INFO("  Bias OFF\n");
+      DEBUG_COMMENT("  Bias OFF\n");
    }
    else{
       perror("Illegal Bias state: Only 0 or 1 allowed\n");
@@ -633,13 +634,13 @@ int cin_set_clocks(struct cin_port* cp,int val){
       _status=cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, 0x0001);
       if (_status != 0)
          {goto error;}
-      INFO("  Clocks ON\n");
+      DEBUG_COMMENT("  Clocks ON\n");
    }
    else if (val==0){
       _status=cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, 0x0000);
       if (_status != 0)
          {goto error;}
-      INFO("  Clocks OFF\n");
+      DEBUG_COMMENT("  Clocks OFF\n");
    }
    else{
       perror("  Illegal Clocks state: Only 0 or 1 allowed\n");
@@ -660,25 +661,25 @@ int cin_set_trigger(struct cin_port* cp,int val){
       _status=cin_ctl_write(cp,REG_TRIGGERMASK_REG, 0x0000);
       if (_status != 0)
          {goto error;}
-      INFO("  Trigger set to Internal\n");
+      DEBUG_COMMENT("  Trigger set to Internal\n");
    }
    else if (val==1){
       _status=cin_ctl_write(cp,REG_TRIGGERMASK_REG, 0x0001);
       if (_status != 0)
          {goto error;}
-      INFO("  Trigger set to External 1\n");
+      DEBUG_COMMENT("  Trigger set to External 1\n");
    }
    else if (val==2){
       _status=cin_ctl_write(cp,REG_TRIGGERMASK_REG, 0x0002);
       if (_status != 0)
          {goto error;}
-      INFO("  Trigger set to External 2\n");
+      DEBUG_COMMENT("  Trigger set to External 2\n");
    }
    else if (val==3){
       _status=cin_ctl_write(cp,REG_TRIGGERMASK_REG, 0x0003);
       if (_status != 0)
          {goto error;}
-      INFO("  Trigger set to External (1 or 2)\n");
+      DEBUG_COMMENT("  Trigger set to External (1 or 2)\n");
    }
    else{
       perror("  Illegal Trigger state: Only values 0 to 3 allowed\n");
@@ -699,19 +700,19 @@ uint16_t cin_get_trigger_status (struct cin_port* cp){
    
    if (_val == 0x0000){
       _state=0;
-      INFO("  Trigger status is Internal\n");
+      DEBUG_COMMENT("  Trigger status is Internal\n");
    }
    else if (_val == 0x0001){
       _state=1;
-      INFO("  Trigger status is External 1\n");
+      DEBUG_COMMENT("  Trigger status is External 1\n");
    }
    else if (_val == 0x0002){
       _state=2;   
-      INFO("  Trigger status is External 2\n");
+      DEBUG_COMMENT("  Trigger status is External 2\n");
    }
    else if (_val == 0x0003){
       _state=3;
-      INFO("  Trigger status is External (1 or 2)\n");
+      DEBUG_COMMENT("  Trigger status is External (1 or 2)\n");
    }
    else{
       perror("  Unknown Trigger status\n");
@@ -921,7 +922,7 @@ int cin_set_frame_count_reset(struct cin_port* cp){
    _status=cin_ctl_write(cp,REG_FRM_COMMAND, 0x0106);
    if (_status != 0){goto error;}
 
-   INFO("  Frame count set to 0\n");
+   DEBUG_COMMENT("  Frame count set to 0\n");
    return _status;
 
 error:
