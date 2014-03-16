@@ -74,6 +74,12 @@ extern "C" {
   #define DEBUG_COMMENT(...) do {}while(0)
 #endif
 
+#define ERROR_COMMENT(fmt)\
+  if(1) { fprintf(stderr, "%s:%d:%s(): " fmt, __FILE__, __LINE__, __func__);
+#define ERROR_PRINT(fmt, ...) \
+  if(1) { fprintf(stderr, "%s:%d:%s(): " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__); }
+
+
 /* ---------------------------------------------------------------------
  *
  * Global datastructures
