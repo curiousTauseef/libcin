@@ -92,8 +92,7 @@ int cin_init_ctl_port(struct cin_port* cp, char* ipaddr,
 
 int cin_close_ctl_port(struct cin_port* cp) {
 
-   if (cp->sockfd) 
-   { 
+   if(cp->sockfd){
       close(cp->sockfd); 
    }
    return 0;
@@ -106,8 +105,7 @@ int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val){
    uint32_t _valwr;
    int rc;
 
-   if (cp == NULL)
-   {
+   if(cp == NULL){
       perror("Parameter cp is NULL!");
       goto error;
    }

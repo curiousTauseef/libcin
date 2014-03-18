@@ -138,6 +138,17 @@ typedef struct cin_data_stats {
  * ---------------------------------------------------------------------
  */
 
+/* -----------------------
+ * ENUM values for config
+ */
+
+typedef enum {
+  TRIG_INTERNAL      = 0,
+  TRIG_EXTERNAL_1    = 1,
+  TRIG_EXTERNAL_2    = 2,
+  TRIG_EXTERNAL_BOTH = 3
+} cin_ctl_trigger;
+
 /*------------------------
  * UDP Socket
  *------------------------*/
