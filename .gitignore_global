@@ -8,4 +8,5 @@ core
 # ignore image files
 *.tif
 *.bin
-
+#pesky NFS files
+.nfs*
