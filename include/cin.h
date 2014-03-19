@@ -155,21 +155,21 @@ typedef enum {
 
 // DCM Status
 
-#define CIN_CTL_DCM_LOCKED      0x0001
-#define CIN_CTL_DCM_PSDONE      0x0002
-#define CIN_CTL_DCM_STATUS0     0x0004
-#define CIN_CTL_DCM_STATUS1     0x0008
-#define CIN_CTL_DCM_STATUS2     0x0010
-#define CIN_CTL_DCM_TX1_READY   0x0020
-#define CIN_CTL_DCM_TX2_READY   0x0040
-#define CIN_CTL_DCM_ATCA_ALARM  0x0080
+#define CIN_CTL_DCM_LOCKED          0x0001
+#define CIN_CTL_DCM_PSDONE          0x0002
+#define CIN_CTL_DCM_STATUS0         0x0004
+#define CIN_CTL_DCM_STATUS1         0x0008
+#define CIN_CTL_DCM_STATUS2         0x0010
+#define CIN_CTL_DCM_TX1_READY       0x0020
+#define CIN_CTL_DCM_TX2_READY       0x0040
+#define CIN_CTL_DCM_ATCA_ALARM      0x0080
 
-#define CIN_CTL_TRIG_INTERNAL        0
-#define CIN_CTL_TRIG_EXTERNAL_1      1
-#define CIN_CTL_TRIG_EXTERNAL_2      2
-#define CIN_CTL_TRIG_EXTERNAL_BOTH   3
+#define CIN_CTL_TRIG_INTERNAL       0
+#define CIN_CTL_TRIG_EXTERNAL_1     1
+#define CIN_CTL_TRIG_EXTERNAL_2     2
+#define CIN_CTL_TRIG_EXTERNAL_BOTH  3
 
-#define CIN_CTL_FOCUS_BIT       0x0002
+#define CIN_CTL_FOCUS_BIT           0x0002
 
 /* 
  * Datastructures for status readouts 

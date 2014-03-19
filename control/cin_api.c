@@ -737,290 +737,138 @@ int cin_ctl_set_focus(struct cin_port* cp, int val){
   return 0;
 }
 
-int cin_set_trigger_mode(struct cin_port* cp,int val){
+int cin_trigger_start(struct cin_port* cp, int nimages, int trigger_mode){
+  // Trigger the camera, setting the trigger mode
 
   int _status;
 
-  if (val == 1){
-      m_TriggerMode = 1;   // 1 = Single
+  // First set the trigger mode (internal / external etc.)
 
-      _status = clearFocusBit(cp);  // Clear the Focus bit
-      if (_status != 0){goto error;}
-      _status=cin_ctl_write(cp,REG_NUMBEROFEXPOSURE_REG, 0x0001);
-      if (_status != 0) {goto error;}
-   }
+  _status = cin_ctl_set_trigger(cp, trigger_mode);
+  if(_status){
+    ERROR_COMMENT("Unable to set trigger mode\n");
+    goto error;
+  }
 
-   else if (val == 0){
-      m_TriggerMode = 0;   // 0 = Continuous
+  _status  = cin_ctl_write(cp, REG_NUMBEROFEXPOSURE_REG, (uint16_t)nimages);
+  _status |= cin_ctl_write(cp, REG_FRM_COMMAND, 0x0100);
+  if(_status){
+    ERROR_COMMENT("Unable to start triggers");
+    goto error;
+  }
 
-      _status = clearFocusBit(cp);
-      if (_status != 0) {goto error;}
-      _status=cin_ctl_write(cp,REG_NUMBEROFEXPOSURE_REG, 0x0000);
-      if (_status != 0) {goto error;}
-   }
-
-   else if (val > 1){
-      m_TriggerMode = 2;   // 2 = N images
-
-      _status = clearFocusBit(cp);
-      if (_status != 0) {goto error;}
-      _status=cin_ctl_write(cp,REG_NUMBEROFEXPOSURE_REG, val);
-      if (_status != 0) {goto error;}
-   }
-
-   else{
+  if(nimages != 1){
+    _status = cin_ctl_set_focus(cp, 1);
+    if(_status){
+      ERROR_COMMENT("Unable to set focus bit.\n");
       goto error;
-   }
-   return (0);
+    }
+  }
 
-   error:
-      ERROR_COMMENT("Write error: cin_set_trigger_mode\n");
-      return (-1);
-}
- 
-int cin_trigger_start(struct cin_port* cp)
-{
-   int _status;
+  DEBUG_COMMENT("Triggers started");
+  return 0;
 
-   if (m_TriggerMode == 1){    // Single Mode
-      _status=cin_ctl_write(cp,REG_FRM_COMMAND, 0x0100);
-      if (_status != 0) {goto error;}
-   }
-
-   else{                  // Continuous or Multiple mode
-      _status=cin_ctl_write(cp,REG_FRM_COMMAND, 0x0100);
-      if (_status != 0) {goto error;}
-      _status = setFocusBit(cp);
-      if (_status != 0) {goto error;}
-   }  
-   return _status;
-
-   error:
-      ERROR_COMMENT("Write error: cin_trigger_start\n");
-      return (-1);
+error:
+  return _status;
+  
 }
       
 int cin_trigger_stop(struct cin_port* cp)
 {
-   int _status;
-   _status = clearFocusBit(cp);
-   if (_status != 0) {goto error;}
+  int _status;
+  _status  = cin_ctl_set_focus(cp, 0);
+  _status |= cin_ctl_set_trigger(cp, CIN_CTL_TRIG_INTERNAL);
+
+  if(_status){
+    ERROR_COMMENT("Error stopping triggers");
+    return _status;
+  }
+  DEBUG_COMMENT("Stopped Triggers");
+  return 0;
+}
+
+int cin_ctl_set_exposure_time(struct cin_port* cp,float ftime){
+
+  int _status;
+  uint32_t _time;
+  uint16_t _msbval,_lsbval;
+  float _fraction;
+
+  ftime=ftime 1e5;
+  _time=(uint32_t)ftime;  //Extract integer from decimal
    
-   return _status;
+  _msbval=(uint32_t)(_time>>16);
+  _lsbval=(uint32_t)(_time & 0xffff);
 
-   error:
-      ERROR_COMMENT("Write error: cin_trigger_start\n");
-      return (-1);
+  _status  = cin_ctl_write(cp,REG_EXPOSURETIMEMSB_REG,_msbval);
+  _status |= cin_ctl_write(cp,REG_EXPOSURETIMELSB_REG,_lsbval);
+  if(_status){
+    ERROR_COMMENT("Unable to set exposure time");
+    return _status;
+  }
+
+  DEBUG_PRINT("Exposure time set to %d (10this us)\n", _time);
+  return 0;
 }
 
-int cin_set_exposure_time(struct cin_port* cp,float ftime){
+int cin_ctl_set_trigger_delay(struct cin_port* cp,float ftime){  
 
-   int _status;
-   uint32_t _time, _msbval,_lsbval;
-   float _fraction;
+  int _status;
+  uint32_t _time;
+  uint16_t _msbval,_lsbval;
+  float _fraction;
 
-   fprintf(stdout,"  Exposure Time :%f s\n", ftime);
-   ftime=ftime*1000;        //Convert to ms
- 
-   ftime=ftime*100;         
-   _time=(uint32_t)ftime;  //Extract integer from decimal
-   _fraction=ftime-_time;  //Extract fraction from decimal
+  _time=(uint32_t)ftime;   //Extract integer from decimal
 
-   if(_fraction!=0){       //Check that there is no fractional value
-      ERROR_COMMENT("ERROR:Smallest precision that can be specified is .00001 s\n");
-      _status= -1;
-   }
-   else{ 
-      _msbval=(uint32_t)(_time>>16);
-      _lsbval=(uint32_t)(_time & 0xffff);
+  _msbval=(uint16_t)(_time >> 16);
+  _lsbval=(uint16_t)(_time & 0xFFFF);
 
-      _status=cin_ctl_write(cp,REG_EXPOSURETIMEMSB_REG,_msbval);
-      if (_status != 0){goto error;} 
-      _status=cin_ctl_write(cp,REG_EXPOSURETIMELSB_REG,_lsbval);
-      if (_status != 0){goto error;}
-   }
-   return _status;
+  _status  = cin_ctl_write(cp,REG_DELAYTOEXPOSUREMSB_REG,_msbval);
+  _status |= cin_ctl_write(cp,REG_DELAYTOEXPOSURELSB_REG,_lsbval);
+  if(_status){
+    ERROR_COMMENT("Unable to set trigger delay");
+    return _status;
+  }
 
-error:
-   return _status;
-}
-
-int cin_set_trigger_delay(struct cin_port* cp,float ftime){  
-
-   int _status;
-   uint32_t _time, _msbval,_lsbval;
-   float _fraction;
-
-   fprintf(stdout,"  Trigger Delay Time:%f us\n", ftime);    
-   _time=(uint32_t)ftime;   //Extract integer from decimal
-   _fraction=ftime-_time;   //Extract fraction from decimal
-
-   if(_fraction!=0){        //Check that there is no fractional value
-      ERROR_COMMENT("ERROR:Smallest precision that can be specified is 1 us\n");
-      _status= 1;
-      goto error;
-   }
-   else{ 
-      _msbval=(uint32_t)(_time>>16);
-      _lsbval=(uint32_t)(_time & 0xffff);
-
-      _status=cin_ctl_write(cp,REG_DELAYTOEXPOSUREMSB_REG,_msbval);
-      if (_status != 0){goto error;}
-      _status=cin_ctl_write(cp,REG_DELAYTOEXPOSURELSB_REG,_lsbval);
-      if (_status != 0){goto error;}
-   }
-   return _status;
-
-error:
-   return _status;
+  DEBUG_PRINT("Set trigger delay to %d\n", _time);
+  return 0;
 }
 
 int cin_ctl_set_cycle_time(struct cin_port* cp,float ftime){
 
-   int _status;
-   uint32_t _time;
-   uint16_t _msbval,_lsbval;
-   float _fraction;
+  int _status;
+  uint32_t _time;
+  uint16_t _msbval,_lsbval;
                                        
-   fprintf(stdout,"  Cycle Time:%f s\n", ftime);
-   ftime=ftime*1000;         //Convert to ms
+  ftime = ftime*1000;         //Convert to ms
+  _time = (uint32_t)ftime;    //Extract integer from decimal
 
-   _time=(uint32_t)ftime;    //Extract integer from decimal
-   _fraction=ftime-_time;    //Extract fraction from decimal
+  _msbval=(uint16_t)(_time >> 16);
+  _lsbval=(uint16_t)(_time & 0xFFFF);
 
-   if(_fraction!=0){         //Check that there is no fractional value
-      ERROR_COMMENT("ERROR:Smallest precision that can be specified is .001 s\n");
-      _status= -1;
-      goto error;
-   }   
-   else{ 
-      _msbval=(uint32_t)(_time>>16);
-      _lsbval=(uint32_t)(_time & 0xffff);
+  _status  = cin_ctl_write(cp,REG_TRIGGERREPETITIONTIMEMSB_REG,_msbval);
+  _status |= cin_ctl_write(cp,REG_TRIGGERREPETITIONTIMELSB_REG,_lsbval);
 
-      _status=cin_ctl_write(cp,REG_TRIGGERREPETITIONTIMEMSB_REG,_msbval);
-      if (_status != 0){goto error;}   
-      _status=cin_ctl_write(cp,REG_TRIGGERREPETITIONTIMELSB_REG,_lsbval);
-      if (_status != 0){goto error;}   
-   }
-   return _status;
+  if(_status){
+    ERROR_COMMENT("Unable to set cycle time");
+    return _status;
+  } 
 
-error:
-   return _status;
+  DEBUG_PRINT("Cycle time set to %d msec\n", _time);
+  return 0;
 }
 
 /******************* Frame Acquisition *************************/
-int cin_set_frame_count_reset(struct cin_port* cp){
+int cin_ctl_frame_count_reset(struct cin_port* cp){
 
-   int _status;
+  int _status;
+  _status=cin_ctl_write(cp,REG_FRM_COMMAND, CMD_RESET_FRAME_COUNT);
+  if(_status){
+    ERROR_COMMENT("Unable to reset frame counter\n");
+    return _status;
+  }
 
-   _status=cin_ctl_write(cp,REG_FRM_COMMAND, 0x0106);
-   if (_status != 0){goto error;}
-
-   DEBUG_COMMENT("  Frame count set to 0\n");
-   return _status;
-
-error:
-   return _status;
+  DEBUG_COMMENT("Frame count reset to 0\n");
+  return 0;
 }
-
-/************************ Testing *****************************/
-int cin_test_cfg_leds(struct cin_port* cp){
-/* Test Front Panel LEDs */
-
-   fprintf(stdout,"  \nFlashing CFG FP LEDs  ............\n");
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0xAAAA);
-   usleep(999999);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x5555);
-   usleep(999999);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0xFFFF);
-   usleep(999999);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x0001);
-   usleep(400000);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x0002);
-   usleep(400000);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x0004);
-   usleep(400000);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x0008);
-   usleep(400000);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x0010);
-   usleep(400000);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x0020);
-   usleep(400000);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x0040);
-   usleep(400000);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x0080);
-   usleep(400000);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x0100);
-   usleep(400000);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x0200);
-   usleep(400000);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x0400);
-   usleep(400000);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x0800);
-   usleep(400000);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x1000);
-   usleep(400000);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x2000);
-   usleep(400000);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x4000);
-   usleep(400000);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x8000);
-   usleep(400000);
-   cin_ctl_write(cp, REG_SANDBOX_REG00, 0x0000);
-   return 0;
-}
-
-/* XXX - does not appear to have any effect
-static void flashFrmLeds(CinCtlPort* cp) {
-    //Test Front Panel LEDs 
-   fprintf(stdout,"Flashing FRM FP LEDs  ............ \n");
-	 cin_ctl_write(cp, REG_FRM_SANDBOX_REG00, 0x0004);    
-   fprintf(stdout,"RED  ............ \n");
-   usleep(500000);
-   cin_ctl_write(cp, REG_FRM_SANDBOX_REG00, 0x0008);
-   fprintf(stdout,"GRN  ............ \n");
-   usleep(500000);
-   cin_ctl_write(cp, REG_FRM_SANDBOX_REG00, 0x000C);
-   fprintf(stdout,"YEL  ............ \n");
-   usleep(500000);
-   cin_ctl_write(cp, REG_FRM_SANDBOX_REG00, 0x0010);
-   fprintf(stdout,"RED  ............ \n");
-   usleep(500000);
-   cin_ctl_write(cp, REG_FRM_SANDBOX_REG00, 0x0020);
-   fprintf(stdout,"GRN  ............ \n");
-   usleep(500000);
-   cin_ctl_write(cp, REG_FRM_SANDBOX_REG00, 0x0030);
-   fprintf(stdout,"YEL  ............ \n");
-   usleep(500000);
-   cin_ctl_write(cp, REG_FRM_SANDBOX_REG00, 0x0040);
-   fprintf(stdout,"RED  ............ \n");
-   usleep(500000);
-   cin_ctl_write(cp, REG_FRM_SANDBOX_REG00, 0x0080);
-   fprintf(stdout,"GRN  ............ \n");
-   usleep(500000);
-   cin_ctl_write(cp, REG_FRM_SANDBOX_REG00, 0x00C0);
-   fprintf(stdout,"YEL  ............ \n");
-   usleep(500000);
-   cin_ctl_write(cp, REG_FRM_SANDBOX_REG00, 0x0100);
-   fprintf(stdout,"RED  ............ \n");
-   usleep(500000);
-   cin_ctl_write(cp, REG_FRM_SANDBOX_REG00, 0x0200);
-   fprintf(stdout,"GRN  ............ \n");
-   usleep(500000);
-   cin_ctl_write(cp, REG_FRM_SANDBOX_REG00, 0x0300);
-   fprintf(stdout,"YEL  ............ \n");
-   usleep(500000);
-   cin_ctl_write(cp, REG_FRM_SANDBOX_REG00, 0x0400);
-   fprintf(stdout,"RED  ............ \n");
-   usleep(500000);
-   cin_ctl_write(cp, REG_FRM_SANDBOX_REG00, 0x0800);
-   fprintf(stdout,"GRN  ............ \n");
-   usleep(500000);
-   cin_ctl_write(cp, REG_FRM_SANDBOX_REG00, 0x0C00);
-   fprintf(stdout,"YEL  ............ \n");
-   usleep(500000);
-   cin_ctl_write(cp, REG_FRM_SANDBOX_REG00, 0x0000);
-   fprintf(stdout,"All OFF  ............ \n");
-}
-*/
 
