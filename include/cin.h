@@ -21,7 +21,7 @@ extern "C" {
 
 #define CIN_CTL_IP                         "192.168.1.207"
 #define CIN_CTL_PORT                       49200
-
+#define CIN_CTL_FRMW_PORT                  49202
 #define CIN_DATA_IP                        "10.0.5.207"
 #define CIN_DATA_PORT                      49201
 #define CIN_DATA_CTL_PORT                  49203
