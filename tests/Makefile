@@ -6,7 +6,7 @@ CFLAGS+=-I../bindata -I../include
 
 .PHONY : clean
 
-all: data_server cin_test cin_power_up cin_power_down
+all: data_server 
 
 data_server: data_server.o data_server.h \
              ../bindata/descramble_map_forward.o

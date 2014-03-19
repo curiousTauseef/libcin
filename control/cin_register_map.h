@@ -17,6 +17,11 @@ extern "C" {
 #define REG_READ_ADDRESS 			0x0002
 #define REG_STREAM_TYPE 			0x0003
 
+/* FCLK Values */
+#define CMD_FCLK_125          0xB000
+#define CMD_FCLK_200          0x7000
+#define CMD_FCLK_250          0x3000
+
 /* Ethernet Interface */
 #define REG_IF_MAC0         			0x0010
 #define REG_IF_MAC1         			0x0011

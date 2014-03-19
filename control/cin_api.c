@@ -11,61 +11,45 @@
 #include "cin_register_map.h"
 #include "cin_api.h"
 
-// Cache TriggerMode
-static int m_TriggerMode = 0;
-
 /**************************** UDP Socket ******************************/
-static int cin_set_sock_timeout(struct cin_port* cp) {
 
-  if (setsockopt(cp->sockfd, SOL_SOCKET, SO_RCVTIMEO,
-     (void*)&cp->tv, sizeof(struct timeval)) < 0){
-     ERROR_COMMENT("setsockopt(timeout)");
-     return (-1);
+int cin_ctl_init_port(struct cin_port* cp, char* ipaddr, 
+                      uint16_t port) {
+  if(ipaddr == 0){ 
+    cp->srvaddr = CIN_CTL_IP; 
+  } else {
+    cp->srvaddr = strndup(ipaddr, strlen(ipaddr)); 
+  }
+   
+  if(port == 0){ 
+      cp->srvport = CIN_CTL_PORT; 
+  } else {
+     cp->srvport = port; 
   }
 
-  return 0;
-}
-
-int cin_init_ctl_port(struct cin_port* cp, char* ipaddr, 
-                      uint16_t port) 
-{
-
-   if (cp == NULL) {
-      ERROR_COMMENT("Parameter cp is NULL!");
-      return (-1);
-   }
-
-   if(ipaddr == 0){ 
-      cp->srvaddr = CIN_CTL_IP; 
-   } else {
-      cp->srvaddr = strndup(ipaddr, strlen(ipaddr)); 
-   }
-   
-   if (port == 0) { 
-      cp->srvport = CIN_CTL_PORT; 
-   } else {
-      cp->srvport = port; 
-   }
-
-   cp->sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-   if (cp->sockfd < 0) 
-   {
-      ERROR_COMMENT("CIN control port - socket() failed !!!");
+  cp->sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+  if (cp->sockfd < 0) {
+    ERROR_COMMENT("CIN control port - socket() failed !!!\n");
       // Should this return (-1) ?
-   }
+  }
 
-   int i = 1;
-   if (setsockopt(cp->sockfd, SOL_SOCKET, SO_REUSEADDR, 
-                    (void *)&i, sizeof i) < 0) {
-      ERROR_COMMENT("CIN control port - setsockopt() failed !!!");
-      return -1;
-   }
+  int i = 1;
+  if(setsockopt(cp->sockfd, SOL_SOCKET, SO_REUSEADDR, 
+                (void *)&i, sizeof i) < 0) {
+    ERROR_COMMENT("CIN control port - setsockopt() failed !!!\n");
+    return -1;
+  }
     
-   /* default timeout of 0.1s */
-   cp->tv.tv_usec = 100000;
-   cin_set_sock_timeout(cp);
+  // default timeout of 1s
+  cp->tv.tv_sec  = 1;
+  cp->tv.tv_usec = 0;
+  if(setsockopt(cp->sockfd, SOL_SOCKET, SO_RCVTIMEO,
+     (void*)&cp->tv, sizeof(struct timeval)) < 0){
+     ERROR_COMMENT("setsockopt(timeout)\n");
+     return -1;
+  }
 
-   /* initialize CIN (server) and client (us!) sockaddr structs */
+   // initialize CIN (server) and client (us!) sockaddr structs
    memset(&cp->sin_srv, 0, sizeof(struct sockaddr_in));
    memset(&cp->sin_cli, 0, sizeof(struct sockaddr_in));
    cp->sin_srv.sin_family = AF_INET;
@@ -79,12 +63,12 @@ int cin_init_ctl_port(struct cin_port* cp, char* ipaddr,
    return 0;
 }
 
-int cin_close_ctl_port(struct cin_port* cp) {
 
-   if(cp->sockfd){
-      close(cp->sockfd); 
-   }
-   return 0;
+int cin_ctl_close_port(struct cin_port* cp) {
+  if(cp->sockfd){
+    close(cp->sockfd); 
+  }
+  return 0;
 }
 
 /*************************** CIN Read/Write ***************************/
@@ -108,7 +92,6 @@ int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val){
       goto error;
    }
 
-   /*** TODO - Verify write verification procedure ***/
 
    return 0;
    
@@ -117,7 +100,7 @@ error:
    return (-1);
 }
 
-int cin_stream_write(struct cin_port* cp, char *val,int size) {
+int cin_ctl_stream_write(struct cin_port* cp, char *val,int size) {
  
    int rc;
     
@@ -144,52 +127,35 @@ error:
 
 int cin_ctl_read(struct cin_port* cp, uint16_t reg, uint16_t *val) {
     
-   int _status;
-   uint32_t buf = 0;
-   ssize_t n;
+  int _status;
+  uint32_t buf = 0;
+  ssize_t n;
 
-   if (cp == NULL)
-   {
-      ERROR_COMMENT("Parameter cp is NULL!");
-      goto error;
-   }
-   
-   _status=cin_ctl_write(cp, REG_READ_ADDRESS, reg);
-   if (_status != 0)
-   {
-      goto error;
-   }
+  _status=cin_ctl_write(cp, REG_READ_ADDRESS, reg);
+  if (_status){
+    goto error;
+  }
 
-   sleep(0.1); // YF Hard coded sleep - how to best handle this?
+  usleep(100000); // YF Hard coded sleep - how to best handle this?
 
-   _status=cin_ctl_write(cp, REG_COMMAND, CMD_READ_REG);
-   if (_status != 0){
-      goto error;
-   }
+  _status=cin_ctl_write(cp, REG_COMMAND, CMD_READ_REG);
+  if (_status != 0){
+    goto error;
+  }
 
-   /* set timeout to 1 sec */
-   //cp->tv.tv_sec = 1;
-   //cp->tv.tv_usec = 0;
-   //cin_set_sock_timeout(cp);
+  n = recvfrom(cp->sockfd, (void*)&buf, sizeof(buf), 0,
+               (struct sockaddr*)&cp->sin_cli, 
+               (socklen_t*)&cp->slen);
 
-   n = recvfrom(cp->sockfd, (void*)&buf, sizeof(buf), 0,
-         (struct sockaddr*)&cp->sin_cli, 
-         (socklen_t*)&cp->slen);
+  if (n != sizeof(buf)) {
+    goto error;
+  }
 
-   if (n != sizeof(buf)) {
-     ERROR_COMMENT(" CIN control port - recvfrom( ) failed!!");
-     return (-1);
-   }
-
-   /* reset socket timeout to 0.1s default */
-   //cp->tv.tv_sec = 0;
-   //cp->tv.tv_usec = 100000;
-   //cin_set_sock_timeout(cp);
-  val = (uint16_t)ntohl(buf);
+  *val = (uint16_t)ntohl(buf);
   return 0;
     
 error:  
-   ERROR_COMMENT("Read error");
+   ERROR_COMMENT("Read error.");
    return (-1);
 }
 
@@ -221,7 +187,7 @@ error:
    return _status;
 }
 
-int cin_off(struct cin_port* cp) {
+int cin_on(struct cin_port* cp) {
   return cin_pwr(cp, 1);
 }
 
@@ -264,7 +230,7 @@ int cin_fp_on(struct cin_port* cp){
 
 /******************* CIN Configuration/Status *************************/
 
-int cin_load_config(struct cin_port* cp,char *filename){
+int cin_ctl_load_config(struct cin_port* cp,char *filename){
 
   int _status;
   uint32_t _regul,_valul;
@@ -306,22 +272,21 @@ error:
   return -1;
 }
 
-int cin_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filename){
+int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filename){
    
-   uint32_t num_e;
-   int _status; 
-   char buffer[128];     
+  uint32_t num_e;
+  int _status; 
+  char buffer[128];     
    
-   FILE *file= fopen(filename, "rb");
+  FILE *file= fopen(filename, "rb");
 
   if(file == NULL){ 
-    goto error;
+    return -1;
   }
-
                
   DEBUG_PRINT("Loading CIN FPGA firmware %s\n",filename);
 
-  _status=cin_ctl_write(cp,REG_COMMAND,CMD_PROGRAM_FRAME); 
+  _status = cin_ctl_write(cp,REG_COMMAND,CMD_PROGRAM_FRAME); 
   if (_status != 0){
     ERROR_COMMENT("Failed to program CIN\n");
     goto error;
@@ -330,7 +295,7 @@ int cin_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filename){
   sleep(1);
       
   while ((num_e = fread(buffer,sizeof(char), sizeof(buffer), file)) != 0){    
-    _status = cin_stream_write(dcp, buffer, num_e);       
+    _status = cin_ctl_stream_write(dcp, buffer, num_e);       
     if (_status != 0){
       ERROR_COMMENT("Error writing firmware to CIN\n");
       goto error;
@@ -358,66 +323,66 @@ error:
    return _status;
 }
 
-int cin_set_fclk(struct cin_port* cp, cin_ctl_fclk clkfreq){
+int cin_ctl_set_fclk(struct cin_port* cp, int clkfreq){
 
-   int _status;
+  int _status;
    
-   fprintf(stdout,"\n****Set CIN FCLK to %uMHz****\n",clkfreq);
-   
-  if (clkfreq == FCLK_125){
-    _status = cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR,0xB000);
-  } else if (clkfreq == FCLK_200){
-    _status = cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR,0x7000);
-  } else if (clkfreq == FCLK_250){
-    _status = cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR,0x3000);
-  } 
-
-  if(_status){
-   ERROR_COMMENT("Unable to set FCLK frequency.");
-   return _status
+  if (clkfreq == CIN_CTL_FCLK_125){
+    _status = cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, CMD_FCLK_125);
+  } else if (clkfreq == CIN_CTL_FCLK_200){
+    _status = cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, CMD_FCLK_200);
+  } else if (clkfreq == CIN_CTL_FCLK_250){
+    _status = cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, CMD_FCLK_250);
+  } else {
+    ERROR_COMMENT("Invalid clkfreq.\n");
+    return -1;
   }
 
+  if(_status){
+    ERROR_COMMENT("Unable to set FCLK frequency.\n");
+    return _status;
+  }
+
+  DEBUG_PRINT("Set FCLK to %d\n", clkfreq);
   return 0;
 }
 
-int cin_get_fclk_status(struct cin_port* cp, cin_ctl_fclk *clkfreq){ 
+int cin_ctl_get_fclk(struct cin_port* cp, int *clkfreq){ 
 
   uint16_t _val;
   int _status;
 
   _status = cin_ctl_read(cp, REG_FCLK_I2C_DATA_WR, &_val);
   if(_status){
-    ERROR_COMMENT("Unable to get FCLK status.");
+    ERROR_COMMENT("Unable to get FCLK status.\n");
     return _status;
   }
 
-  if(_val & 0xB000){
+  if(_val & CIN_CTL_FCLK_125){
     DEBUG_COMMENT("FCLK Frequency = 125 MHz\n");
-    *clkfreq = FCLK_125;
+    *clkfreq = CIN_CTL_FCLK_125;
     return 0;
   } 
 
-  if(_val & 0x7000){
+  if(_val & CIN_CTL_FCLK_200){
     DEBUG_COMMENT("FCLK Frequency = 200 MHz\n");
-    *clkfreq = FCLK_200;
+    *clkfreq = CIN_CTL_FCLK_200;
     return 0;		     
   }
 
-  if(_val & 0x3000){
+  if(_val & CIN_CTL_FCLK_250){
     DEBUG_COMMENT("FCLK Frequency = 250 MHz\n");
-    *clkfreq = FCLK_250;
+    *clkfreq = CIN_CTL_FCLK_250;
     return 0;
   }
 
   ERROR_COMMENT("Recieved unknown clk. freq.\n");
   return -1;
-    
 }  
 
 int cin_ctl_get_cfg_fpga_status(struct cin_port* cp, 
                                 cin_ctl_fpga_status_t *_val){
       
-  uint16_t _val;
   int _status; 
 
   //# get Status Registers
@@ -434,11 +399,13 @@ int cin_ctl_get_cfg_fpga_status(struct cin_port* cp,
   DEBUG_PRINT("CFG FPGA Status  :  %04X\n",_val->fpga_status);
 
   if(_status){
-    ERROR_COMMENT("Unable to read FPGA status");
+    ERROR_COMMENT("Unable to read FPGA status\n");
     return -1;
   }
 
-  /*
+  return 0;
+}
+/*
       # FPGA Status
       # 15 == FRM DONE
       # 14 == NOT FRM BUSY
@@ -447,7 +414,6 @@ int cin_ctl_get_cfg_fpga_status(struct cin_port* cp,
       # 3 >>0 == FP Config Control 3 == PS Interlock
   */
   // _val= cin_ctl_read(cp,REG_FPGA_STATUS);   
-
   /*
    if(_val == 0xFFFF){
       ERROR_COMMENT("\n  ERROR:No Input\n\n");
@@ -469,19 +435,17 @@ int cin_ctl_get_cfg_fpga_status(struct cin_port* cp,
    }
   */
 
-}
-
-int cin_ctl_get_dcm_status(struct cin_port* cp, unit16_t *_val){
+int cin_ctl_get_dcm_status(struct cin_port* cp, uint16_t *_val){
   int _status;
 
-  _status = cin_ctl_read(cp, REG_DCM_STATUS, &_val);
+  _status = cin_ctl_read(cp, REG_DCM_STATUS, _val);
   if(_status){
     ERROR_COMMENT("Unable to read DCM status.\n");
     return _status;
   }
 
   DEBUG_PRINT("CFG DCM Status   :  %04X\n", *_val);
-  
+  return 0; 
 /*
    # DCM Status
    # 15 == 0
@@ -497,14 +461,12 @@ int cin_ctl_get_dcm_status(struct cin_port* cp, unit16_t *_val){
    */
 
   // SBW : THIS MUST BE AN ERROR
-   if((_val != 0x0800)==0x0000){
-      DEBUG_COMMENT("  ** FP Power Supply Interlock Overide Enabled\n");  
-   }
+  // if((_val != 0x0800)==0x0000){
+  //    DEBUG_COMMENT("  ** FP Power Supply Interlock Overide Enabled\n");  
+  // }
 }
 
-// YF hard coded constants :-(
-// SBW : These functions should be renamed
-static double cin_ctl_current_calc(uint16_t val) {
+double cin_ctl_current_calc(uint16_t val){
    
   double _current;
    
@@ -521,7 +483,7 @@ int cin_ctl_calc_vi_status(struct cin_port* cp,
                            uint16_t vreg, uint16_t ireg, double vfact,
                            cin_ctl_pwr_val_t *vi){
   uint16_t _val;
-  double _current, _voltage;
+  int _status;
 
   _status = cin_ctl_read(cp, vreg, &_val);
   if(_status){
@@ -529,7 +491,7 @@ int cin_ctl_calc_vi_status(struct cin_port* cp,
     return _status;
   }
 
-  *vi.v = vfact * _val;
+  vi->v = vfact * _val;
   
   _status = cin_ctl_read(cp, ireg, &_val);
   if(_status){
@@ -537,13 +499,13 @@ int cin_ctl_calc_vi_status(struct cin_port* cp,
     return _status;
   }
 
-  *vi.c = cin_ctl_current_calc(_val);
+  vi->i = cin_ctl_current_calc(_val);
 
   return 0;
 }
 
 int cin_ctl_get_power_status(struct cin_port* cp, 
-                             int *pwr, cin_ctl_pwr_mon_t *values) {
+                             int *pwr, cin_ctl_pwr_mon_t *values){
     
   double _current, _voltage;
   uint16_t _val;
@@ -577,27 +539,27 @@ int cin_ctl_get_power_status(struct cin_port* cp,
   values->bus_12v0.i = _current;
 
   _status  = cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH5, REG_IMON_ADC0_CH5,
-                         0.00015258, values->mgmt_3v3);
+                         0.00015258, &values->mgmt_3v3);
   _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH7, REG_IMON_ADC0_CH7,
-                         0.00015258, values->mgmt_2v5);
+                         0.00015258, &values->mgmt_2v5);
   _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH2, REG_IMON_ADC0_CH2,
-                         0.00007629, values->mgmt_1v2);
+                         0.00007629, &values->mgmt_1v2);
   _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH3, REG_IMON_ADC0_CH3,
-                         0.00007629, values->enet_1v0);
+                         0.00007629, &values->enet_1v0);
   _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH4, REG_IMON_ADC0_CH4,
-                         0.00015258, values->s3e_3v3);
+                         0.00015258, &values->s3e_3v3);
   _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH8, REG_IMON_ADC0_CH8,
-                         0.00015258, values->gen_3v3);
+                         0.00015258, &values->gen_3v3);
   _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH9, REG_IMON_ADC0_CH9,
-                         0.00015258, values->gen_2v5);
+                         0.00015258, &values->gen_2v5);
   _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CHE, REG_IMON_ADC0_CHE,
-                         0.00007629, values->v6_0v9);
+                         0.00007629, &values->v6_0v9);
   _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CHB, REG_IMON_ADC0_CHB,
-                         0.00007629, values->v6_1v0);
+                         0.00007629, &values->v6_1v0);
   _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CHD, REG_IMON_ADC0_CHD,
-                         0.00015258, values->v6_2v5);
+                         0.00015258, &values->v6_2v5);
   _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CHF, REG_IMON_ADC0_CHF,
-                         0.00030516, values->fp);
+                         0.00030516, &values->fp);
   if(_status){
     ERROR_COMMENT("Unable to read power values\n");
     return _status;
@@ -608,13 +570,13 @@ int cin_ctl_get_power_status(struct cin_port* cp,
 }
 
 void cin_ctl_display_pwr(FILE *out, cin_ctl_pwr_mon_t *values){
-  fprintf(out"CIN Power values :\n\n");
+  fprintf(out,"CIN Power values :\n\n");
   cin_ctl_display_pwr_line(out,"  V12P_BUS Power   :", values->bus_12v0);
   fprintf(out,"\n");
   cin_ctl_display_pwr_line(out,"  V3P3_MGMT Power  :", values->mgmt_3v3);
-  cin_ctl_diaplay_pwr_line(out,"  V2P5_MGMT Power  :", values->mgmt_2v5);
-  cin_ctl_diaplay_pwr_line(out,"  V1P2_MGMT Power  :", values->mgmt_1v2);
-  cin_ctl_diaplay_pwr_line(out,"  V1P0_ENET Power  :", values->enet_v10);
+  cin_ctl_display_pwr_line(out,"  V2P5_MGMT Power  :", values->mgmt_2v5);
+  cin_ctl_display_pwr_line(out,"  V1P2_MGMT Power  :", values->mgmt_1v2);
+  cin_ctl_display_pwr_line(out,"  V1P0_ENET Power  :", values->enet_1v0);
   fprintf(out,"\n");
   cin_ctl_display_pwr_line(out,"  V3P3_S3E Power   :", values->s3e_3v3);
   cin_ctl_display_pwr_line(out,"  V3P3_GEN Power   :", values->gen_3v3);
@@ -624,7 +586,7 @@ void cin_ctl_display_pwr(FILE *out, cin_ctl_pwr_mon_t *values){
   cin_ctl_display_pwr_line(out,"  V1P0_V6 Power    :", values->v6_1v0);
   cin_ctl_display_pwr_line(out,"  V2P5_V6 Power    :", values->v6_2v5);
   fprintf(out,"\n");
-  cin_ctl_display_pwr_line(out,"  V_FP Power       :", values->);
+  cin_ctl_display_pwr_line(out,"  V_FP Power       :", values->fp);
 }
 
 void cin_ctl_display_pwr_line(FILE *out,const char* msg, cin_ctl_pwr_val_t val){
@@ -633,7 +595,7 @@ void cin_ctl_display_pwr_line(FILE *out,const char* msg, cin_ctl_pwr_val_t val){
 
 /******************* CIN Control *************************/
 
-int cin_set_bias(struct cin_port* cp,int val){
+int cin_ctl_set_bias(struct cin_port* cp,int val){
 
   int _status;
    
@@ -655,7 +617,7 @@ int cin_set_bias(struct cin_port* cp,int val){
   return 0;
 }
 
-int cin_set_clocks(struct cin_port* cp,int val){
+int cin_ctl_set_clocks(struct cin_port* cp,int val){
 
   int _status;   
    
@@ -664,7 +626,7 @@ int cin_set_clocks(struct cin_port* cp,int val){
   } else if (val == 0){
     _status = cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, 0x0000);
   } else {
-    ERROR_COMMENT("  Illegal Clocks state: Only 0 or 1 allowed\n");
+    ERROR_COMMENT("Illegal Clocks state: Only 0 or 1 allowed\n");
     return -1;
   }
 
@@ -698,7 +660,7 @@ int cin_ctl_set_trigger(struct cin_port* cp,int val){
 int cin_ctl_get_trigger(struct cin_port* cp, int *val){
 
   int _status;
-  uint16_t _val,_state;
+  uint16_t _val;
   _status = cin_ctl_read(cp, REG_TRIGGERMASK_REG, &_val); 
    
   if(_status){
@@ -713,7 +675,7 @@ int cin_ctl_get_trigger(struct cin_port* cp, int *val){
 
 int cin_ctl_set_focus(struct cin_port* cp, int val){
 
-  uint16_t _val1, _val2;
+  uint16_t _val1;
   int _status;
    
   _status = cin_ctl_read(cp,REG_CLOCKCONFIGREGISTER0_REG, &_val1);
@@ -737,7 +699,7 @@ int cin_ctl_set_focus(struct cin_port* cp, int val){
   return 0;
 }
 
-int cin_trigger_start(struct cin_port* cp, int nimages, int trigger_mode){
+int cin_clt_trigger_start(struct cin_port* cp, int nimages, int trigger_mode){
   // Trigger the camera, setting the trigger mode
 
   int _status;
@@ -770,11 +732,9 @@ int cin_trigger_start(struct cin_port* cp, int nimages, int trigger_mode){
 
 error:
   return _status;
-  
 }
       
-int cin_trigger_stop(struct cin_port* cp)
-{
+int cin_ctl_trigger_stop(struct cin_port* cp){
   int _status;
   _status  = cin_ctl_set_focus(cp, 0);
   _status |= cin_ctl_set_trigger(cp, CIN_CTL_TRIG_INTERNAL);
@@ -792,13 +752,12 @@ int cin_ctl_set_exposure_time(struct cin_port* cp,float ftime){
   int _status;
   uint32_t _time;
   uint16_t _msbval,_lsbval;
-  float _fraction;
 
-  ftime=ftime 1e5;
-  _time=(uint32_t)ftime;  //Extract integer from decimal
+  ftime = ftime * 1e5;
+  _time = (uint32_t)ftime;  //Extract integer from decimal
    
-  _msbval=(uint32_t)(_time>>16);
-  _lsbval=(uint32_t)(_time & 0xffff);
+  _msbval = (uint32_t)(_time >> 16);
+  _lsbval = (uint32_t)(_time & 0xFFFF);
 
   _status  = cin_ctl_write(cp,REG_EXPOSURETIMEMSB_REG,_msbval);
   _status |= cin_ctl_write(cp,REG_EXPOSURETIMELSB_REG,_lsbval);
@@ -816,7 +775,6 @@ int cin_ctl_set_trigger_delay(struct cin_port* cp,float ftime){
   int _status;
   uint32_t _time;
   uint16_t _msbval,_lsbval;
-  float _fraction;
 
   _time=(uint32_t)ftime;   //Extract integer from decimal
 
@@ -862,7 +820,7 @@ int cin_ctl_set_cycle_time(struct cin_port* cp,float ftime){
 int cin_ctl_frame_count_reset(struct cin_port* cp){
 
   int _status;
-  _status=cin_ctl_write(cp,REG_FRM_COMMAND, CMD_RESET_FRAME_COUNT);
+  _status = cin_ctl_write(cp,REG_FRM_COMMAND, CMD_RESET_FRAME_COUNT);
   if(_status){
     ERROR_COMMENT("Unable to reset frame counter\n");
     return _status;
