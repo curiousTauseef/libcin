@@ -182,6 +182,11 @@ typedef struct cin_ctl_fpga_status {
   uint16_t fpga_status;
 } cin_ctl_fpga_status_t;
 
+typedef struct cin_ctl_pwr_val {
+  double i;
+  double v;
+} cin_ctl_pwr_val_t;
+
 typedef struct {
   cin_ctl_pwr_val_t bus_12v0;
   cin_ctl_pwr_val_t mgmt_3v3;
@@ -196,11 +201,6 @@ typedef struct {
   cin_ctl_pwr_val_t v6_2v5;
   cin_ctl_pwr_val_t fp;
 } cin_ctl_pwr_mon_t;
-
-typedef struct cin_ctl_pwr_val {
-  double i,
-  double v,
-} cin_ctl_pwr_val_t;
 
 /*------------------------
  * UDP Socket
@@ -240,7 +240,7 @@ int cin_load_config(struct cin_port* cp,char *filename);
 
 int cin_load_firmware(struct cin_port* cp,struct cin_port* dcp, char *filename);
 
-int cin_set_fclk(struct cin_port* cp, cin_ctl_fclk clkfreq);
+int cin_set_fclk(struct cin_port* cp, cin_ctl_fclk_e clkfreq);
 
 int cin_get_fclk_status(struct cin_port* cp);
 /*
