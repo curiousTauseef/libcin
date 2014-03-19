@@ -83,8 +83,8 @@ extern "C" {
 #define CMD_MON_STOP 				0x0011 /* Stop voltage and current monitor */
 #define CMD_MON_START 				0x0012 /* Start voltage and current monitor */
 
-#define REG_VMON_ADC1_CH1   			0x0040 /*	V12P_BUS Voltage Monitor */
-#define REG_IMON_ADC1_CH0   			0x0041 /*	V12P_BUS Current Monitor */
+#define REG_VMON_ADC1_CH1   		0x0040 /*	V12P_BUS Voltage Monitor */
+#define REG_IMON_ADC1_CH0 			0x0041 /*	V12P_BUS Current Monitor */
 #define REG_VMON_ADC0_CH5  			0x0042 /*	V3P3_MGMT Voltage Monitor */
 #define REG_IMON_ADC0_CH5  			0x0043 /*	V3P3_MGMT Current Monitor */
 #define REG_VMON_ADC0_CH4  			0x0044 /*	V3P3_S3E Voltage Monitor */

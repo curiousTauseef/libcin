@@ -142,24 +142,79 @@ typedef struct cin_data_stats {
  * ENUM values for config
  */
 
+
 typedef enum {
-  TRIG_INTERNAL      = 0,
-  TRIG_EXTERNAL_1    = 1,
-  TRIG_EXTERNAL_2    = 2,
-  TRIG_EXTERNAL_BOTH = 3
-} cin_ctl_trigger;
+  FCLK_125 = 0,
+  FCLK_200 = 1,
+  FCLK_250 = 2
+} cin_ctl_fclk_e;
+
+/*
+ * Macros for config
+ */
+
+// DCM Status
+
+#define CIN_CTL_DCM_LOCKED      0x0001
+#define CIN_CTL_DCM_PSDONE      0x0002
+#define CIN_CTL_DCM_STATUS0     0x0004
+#define CIN_CTL_DCM_STATUS1     0x0008
+#define CIN_CTL_DCM_STATUS2     0x0010
+#define CIN_CTL_DCM_TX1_READY   0x0020
+#define CIN_CTL_DCM_TX2_READY   0x0040
+#define CIN_CTL_DCM_ATCA_ALARM  0x0080
+
+#define CIN_CTL_TRIG_INTERNAL        0
+#define CIN_CTL_TRIG_EXTERNAL_1      1
+#define CIN_CTL_TRIG_EXTERNAL_2      2
+#define CIN_CTL_TRIG_EXTERNAL_BOTH   3
+
+#define CIN_CTL_FOCUS_BIT       0x0002
+
+/* 
+ * Datastructures for status readouts 
+ */
+
+typedef struct cin_ctl_fpga_status {
+  uint16_t board_id;
+  uint16_t serial_no;
+  uint16_t fpga_ver;
+  uint16_t fpga_status;
+} cin_ctl_fpga_status_t;
+
+typedef struct {
+  cin_ctl_pwr_val_t bus_12v0;
+  cin_ctl_pwr_val_t mgmt_3v3;
+  cin_ctl_pwr_val_t mgmt_2v5;
+  cin_ctl_pwr_val_t mgmt_1v2;
+  cin_ctl_pwr_val_t enet_1v0;
+  cin_ctl_pwr_val_t s3e_3v3; 
+  cin_ctl_pwr_val_t gen_3v3;
+  cin_ctl_pwr_val_t gen_2v5;
+  cin_ctl_pwr_val_t v6_0v9;
+  cin_ctl_pwr_val_t v6_1v0;
+  cin_ctl_pwr_val_t v6_2v5;
+  cin_ctl_pwr_val_t fp;
+} cin_ctl_pwr_mon_t;
+
+typedef struct cin_ctl_pwr_val {
+  double i,
+  double v,
+} cin_ctl_pwr_val_t;
 
 /*------------------------
  * UDP Socket
  *------------------------*/
 int cin_init_ctl_port(struct cin_port* cp, char* ipaddr, uint16_t port);
+/* Initialize the control port with ipaddress and port */
 
 int cin_close_ctl_port(struct cin_port* cp);
+/* Close the control port */
 
 /*------------------------
  * CIN Read-Write
  *------------------------*/
-uint16_t cin_ctl_read(struct cin_port* cp, uint16_t reg);
+int cin_ctl_read(struct cin_port* cp, uint16_t reg, uint16_t *val);
 
 int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val);
 	//TODO - implement write verification procedure */
@@ -170,13 +225,14 @@ int cin_stream_write(struct cin_port* cp, char* val,int size);
 /*------------------------
  * CIN PowerUP-PowerDown
  *------------------------*/
+int cin_pwr(struct cin_port *cp, int pwr);
 int cin_on(struct cin_port* cp);
-
 int cin_off(struct cin_port* cp);
 
+int cin_fp_pwr(struct cin_port* cp, int pwr);
 int cin_fp_on(struct cin_port* cp);
-
 int cin_fp_off(struct cin_port* cp);
+
 /*------------------------
  * CIN Configuration-Status
  *------------------------*/
@@ -184,22 +240,25 @@ int cin_load_config(struct cin_port* cp,char *filename);
 
 int cin_load_firmware(struct cin_port* cp,struct cin_port* dcp, char *filename);
 
-int cin_set_fclk(struct cin_port* cp,uint16_t clkfreq);
-/*
- * Input:clkfreq={125, 200, 250}(MHz)
- */
+int cin_set_fclk(struct cin_port* cp, cin_ctl_fclk clkfreq);
 
 int cin_get_fclk_status(struct cin_port* cp);
 /*
  * Return:{0-FCLK Configured, (-1)-FCLK not configured}
  */
 
-int cin_get_cfg_fpga_status(struct cin_port* cp);
+int cin_ctl_get_cfg_fpga_status(struct cin_port* cp,
+                                cin_ctl_fpga_status_t *_val);
 /*
  *Return:{0-FPGA Configured, (-1)-FPGA not configured}
  */
 
-int cin_get_power_status(struct cin_port* cp);
+int  cin_ctl_get_power_status(struct cin_port* cp, int *pwr, cin_ctl_pwr_mon_t *values);
+void cin_ctl_display_pwr(FILE *out, cin_ctl_pwr_mon_t *values);
+void cin_ctl_display_pwr_line(FILE *out,const char* msg, cin_ctl_pwr_val_t val);
+int cin_ctl_calc_vi_status(struct cin_port* cp, 
+                           uint16_t vreg, uint16_t ireg, double vfact,
+                           cin_ctl_pwr_val_t *vi);
 
 /*------------------------
  * CIN Control
