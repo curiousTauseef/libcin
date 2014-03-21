@@ -171,7 +171,7 @@ int start_server(udp_packet *packets, int num_packets, char* host,
   dest_addr.sin_family = AF_INET;
   dest_addr.sin_port   = htons(port);
   if(host == NULL){
-    inet_pton(AF_INET, "10.23.5.1", &dest_addr.sin_addr);
+    inet_pton(AF_INET, "10.23.5.255", &dest_addr.sin_addr);
   } else {
     inet_pton(AF_INET, host, &dest_addr.sin_addr);
   }
