@@ -9,8 +9,6 @@
 
 #include "cin.h"
 
-#define YF_LOCAL_EDITS 1
-
 void int_handler(int dummy){
   cin_data_stop_threads();
   fprintf(stderr, "\n");
@@ -36,7 +34,7 @@ int main(int argc, char *argv[]){
   uint16_t frame_number;
 
   char *output_path = NULL;
-  int show_monitor = 0;
+  int show_monitor = 1;
   int tiff_output = 1;
   int chunk_size = 1;
 
@@ -46,7 +44,7 @@ int main(int argc, char *argv[]){
         tiff_output =0;
         break;
       case 'm':
-        show_monitor = 1;
+        show_monitor = 0;
         break;
       case 'd':
         output_path = optarg;
@@ -58,7 +56,7 @@ int main(int argc, char *argv[]){
       default:
         fprintf(stderr,"cindump : Dump data from CIN\n\n");
         fprintf(stderr,"\t -r : Write files in raw (uint16_t format)\n");
-        fprintf(stderr,"\t -m : Show status monitor\n");
+        fprintf(stderr,"\t -m : Supress status monitor\n");
         fprintf(stderr,"\t -d : Specify output directory\n");
         fprintf(stderr,"\t -c : Chunk size (for raw format)\n");
         fprintf(stderr,"\n");
@@ -69,16 +67,10 @@ int main(int argc, char *argv[]){
 
   fprintf(stderr, "\n\n\n\n");
 
-#ifdef YF_LOCAL_EDITS
-  if(cin_init_data_port(&port, "192.168.11.112", 49201, "192.168.11.112", 49203, 100)){
-#else
   if(cin_init_data_port(&port, NULL, 0, NULL, 0, 1000)){
-#endif
     exit(1);
   }
 
-  printf("port.srvaddr = %s\n", port.srvaddr);
-  
   /* Start the main routine */
   if(cin_data_init(CIN_DATA_MODE_PUSH_PULL, 20000, 2000)){
     exit(1);
@@ -86,7 +78,7 @@ int main(int argc, char *argv[]){
 
   signal(SIGINT, int_handler); 
 
-  sleep(15);
+  sleep(5);
 
   if(show_monitor){
     cin_data_start_monitor_output();
