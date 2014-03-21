@@ -35,10 +35,23 @@ extern "C" {
 #define CIN_DATA_DATA_MASK                 0x1FFF
 #define CIN_DATA_PACKET_LEN                8184
 #define CIN_DATA_MAX_PACKETS               542
-//#define CIN_DATA_FRAME_HEIGHT              1924
-#define CIN_DATA_FRAME_HEIGHT              1950
-#define CIN_DATA_FRAME_WIDTH               1152
 #define CIN_DATA_RCVBUF                    100  // Mb 
+
+// The maximum size of the CCD chip is 960 columns by
+// 2 x 960 (1920) rows. In frame store you only read out 960 x 960
+//
+// If we overscan the columns, then you get 960 x 1.2 columns
+// which is 1152 columns. 
+// 
+// The data stream also has the stale fCRIC data in it which is 
+// 7 * 192 pixels, and appears at the beginning and end of the
+// frame. 
+// 
+#define CIN_DATA_FRAME_HEIGHT              2500
+//#define CIN_DATA_FRAME_HEIGHT              1924
+//#define CIN_DATA_FRAME_HEIGHT              1950
+//#define CIN_DATA_FRAME_WIDTH               1152
+#define CIN_DATA_FRAME_WIDTH               960
 
 /* -------------------------------------------------------------------------------
  *

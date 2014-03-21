@@ -18,7 +18,7 @@
 #include "fifo.h"
 #include "cindata.h"
 #include "mbuffer.h"
-#include "descramble_map.h"
+#include "descramble.h"
 
 /* -------------------------------------------------------------------------------
  *
@@ -519,6 +519,8 @@ void *cin_data_assembler_thread(void *args){
     this_frame  = (*buffer_p << 8) + *(buffer_p + 1);
     buffer_p += 2;
 
+    //DEBUG_PRINT("Recieved packet %d from frame %d\n", this_packet, this_frame);
+
     if(this_frame != last_frame){
       /* We have a new frame */
 
@@ -566,15 +568,23 @@ void *cin_data_assembler_thread(void *args){
     skipped = (this_packet + this_packet_msb) - (last_packet + last_packet_msb + 1);
     if(skipped){
       thread_data.dropped_packets += skipped;
-      //DEBUG_PRINT("Skipped %d packets from frame %d\n", skipped, this_frame);
+      // Do some bounds checking
+      if(((this_packet + this_packet_msb) * CIN_DATA_PACKET_LEN) <
+         (CIN_DATA_FRAME_WIDTH * CIN_DATA_FRAME_HEIGHT)){
+
+        //DEBUG_PRINT("Skipped %d packets from frame %d\n", skipped, this_frame);
      
-      // Encode skipped packets into the data
-      int i;
-      frame_p = frame->data;
-      frame_p += (last_packet + last_packet_msb + 1) * CIN_DATA_PACKET_LEN / 2;
-      for(i=0;i<(skipped * CIN_DATA_PACKET_LEN / 2);i++){
-        *frame_p = CIN_DATA_DROPPED_PACKET_VAL;
-        frame_p++;
+        // Encode skipped packets into the data
+        int i;
+        frame_p = frame->data;
+        frame_p += (last_packet + last_packet_msb + 1) * CIN_DATA_PACKET_LEN / 2;
+        for(i=0;i<(skipped * CIN_DATA_PACKET_LEN / 2);i++){
+          *frame_p = CIN_DATA_DROPPED_PACKET_VAL;
+          frame_p++;
+        }
+      } else {
+        // Out of bounds packet
+        DEBUG_COMMENT("Packet out of bounds\n");
       }
     }
 
@@ -810,8 +820,8 @@ void* cin_data_descramble_thread(void *args){
 #endif
 
   int i;
-  uint32_t *dsmap = (uint32_t*)descramble_map_forward;
-  uint32_t *dsmap_p;
+  //uint32_t *dsmap = (uint32_t*)descramble_map_forward;
+  //uint32_t *dsmap_p;
   uint16_t *data_p;
 
   cin_data_proc_t *proc = (cin_data_proc_t*)args;
@@ -821,7 +831,11 @@ void* cin_data_descramble_thread(void *args){
   
   int sid = syscall(SYS_gettid);
   DEBUG_PRINT("Starting descrambler thread ppid = %d\n", sid);
-  
+ 
+  descramble_map_t map;
+  cin_data_descramble_init(&map);
+  DEBUG_COMMENT("Initialized descramble map\n");
+
   while(1){
     // Get a frame 
     
@@ -832,11 +846,13 @@ void* cin_data_descramble_thread(void *args){
     clock_gettime(CLOCK_REALTIME, &start);
 #endif
 
-    dsmap_p = dsmap;
-    data_p  = frame->data;
-    for(i=0;i<(CIN_DATA_FRAME_HEIGHT * CIN_DATA_FRAME_WIDTH);i++){
-      image->data[*dsmap_p++] = *data_p++; 
-    }
+    //dsmap_p = dsmap;
+    //data_p  = frame->data;
+    //for(i=0;i<(CIN_DATA_FRAME_HEIGHT * CIN_DATA_FRAME_WIDTH);i++){
+    //  image->data[i] = frame->data[i];
+    //}
+
+    cin_data_descramble_frame(&map, image->data, frame->data); 
 
     image->timestamp = frame->timestamp;
     image->number = frame->number;
