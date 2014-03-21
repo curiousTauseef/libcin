@@ -6,10 +6,10 @@ CFLAGS=-Wall -O3 -g -D__DEBUG__ --pic
 #CFLAGS+=-D__PROFILE__
 
 # Add code for setting processor affinity
-CFLAGS+=-D__AFFINITY__
+#CFLAGS+=-D__AFFINITY__
 
 # Add code for realtime UDP listener
-CFLAGS+=-D__REALTIME__
+#CFLAGS+=-D__REALTIME__
 
 LDFLAGS=-L. 
 #LDFLAGS=-Wl,--no-as-needed -L.
@@ -31,15 +31,14 @@ INSTALL_PROGRAM = ${INSTALL} -m 755
 #CFLAGS+=-pg
 #LDFLAGS+=-pg
 
-SUBDIRS=bindata control data tests utils
+SUBDIRS=control data tests utils
 .PHONY :subdirs $(SUBDIRS)
 
 LIBHEADERS=control/cin_register_map.h \
-           data/descramble_block.h \
-           cin.h
+           include/cin.h
 
 LIBSOURCES=control/cin_api.c data/cindata.c data/fifo.c \
-           bindata/descramble_map_forward.c data/mbuffer.c 
+           data/mbuffer.c data/descramble.c
 
 LIBOBJECTS=$(LIBSOURCES:.c=.o)
 
