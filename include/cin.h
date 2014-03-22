@@ -43,15 +43,12 @@ extern "C" {
 // If we overscan the columns, then you get 960 x 1.2 columns
 // which is 1152 columns. 
 // 
-// The data stream also has the stale fCRIC data in it which is 
-// 7 * 192 pixels, and appears at the beginning and end of the
-// frame. 
-// 
-#define CIN_DATA_FRAME_HEIGHT              2500
-//#define CIN_DATA_FRAME_HEIGHT              1924
-//#define CIN_DATA_FRAME_HEIGHT              1950
-//#define CIN_DATA_FRAME_WIDTH               1152
+#define CIN_DATA_FRAME_HEIGHT              1920
 #define CIN_DATA_FRAME_WIDTH               960
+#define CIN_DATA_MAX_STREAM                2300000
+#define CIN_DATA_CCD_COLS               96
+#define CIN_DATA_CCD_COLS_PER_CHAN      10
+#define CIN_DATA_PIPELINE_FLUSH         1344 // 7 converts * 2 * 96 cols
 
 /* -------------------------------------------------------------------------------
  *
