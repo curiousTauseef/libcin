@@ -358,7 +358,7 @@ int cin_data_init_buffers(int packet_buffer_len, int frame_buffer_len){
     return 1;
   }
 
-  long int size = CIN_DATA_FRAME_WIDTH * CIN_DATA_FRAME_HEIGHT;
+  long int size = CIN_DATA_MAX_STREAM;
   cin_data_frame_t *q = (cin_data_frame_t*)(thread_data.frame_fifo->data);
   for(i=0;i<thread_data.frame_fifo->size;i++){
     if(!(q->data = malloc(sizeof(uint16_t) * size))){
@@ -540,7 +540,7 @@ void *cin_data_assembler_thread(void *args){
       frame = (cin_data_frame_t*)(*proc->output_get)(proc->output_args);
 
       /* Blank the frame */
-      memset(frame->data, 0x0, CIN_DATA_FRAME_HEIGHT * CIN_DATA_FRAME_WIDTH * 2);
+      memset(frame->data, 0x0, CIN_DATA_MAX_STREAM * 2);
 
       /* Set all the last frame stuff */
       last_frame = this_frame;
@@ -570,7 +570,7 @@ void *cin_data_assembler_thread(void *args){
       thread_data.dropped_packets += skipped;
       // Do some bounds checking
       if(((this_packet + this_packet_msb) * CIN_DATA_PACKET_LEN) <
-         (CIN_DATA_FRAME_WIDTH * CIN_DATA_FRAME_HEIGHT)){
+         (CIN_DATA_MAX_STREAM)){
 
         //DEBUG_PRINT("Skipped %d packets from frame %d\n", skipped, this_frame);
      
@@ -602,7 +602,7 @@ void *cin_data_assembler_thread(void *args){
     // frame size. If so, skip the packet. 
 
     if((this_packet + this_packet_msb) <= 
-       (CIN_DATA_FRAME_WIDTH * CIN_DATA_FRAME_HEIGHT * 2 / CIN_DATA_PACKET_LEN)){
+       (CIN_DATA_MAX_STREAM * 2 / CIN_DATA_PACKET_LEN)){
       // Copy the data and swap the endieness
       frame_p = frame->data;
       frame_p += (this_packet + this_packet_msb) * CIN_DATA_PACKET_LEN / 2;
@@ -671,7 +671,7 @@ void *cin_data_monitor_thread(void){
       framerate = 0; 
     }
 
-    datarate = framerate * CIN_DATA_FRAME_WIDTH * CIN_DATA_FRAME_HEIGHT * sizeof(uint16_t);
+    datarate = framerate * CIN_DATA_MAX_STREAM * sizeof(uint16_t);
     datarate = datarate / (1024 * 1024); // Convert to Mb.s^-1
 
     pthread_mutex_lock(&thread_data.stats_mutex);
@@ -815,15 +815,6 @@ void *cin_data_listen_thread(void *args){
 void* cin_data_descramble_thread(void *args){
   /* This routine gets the next frame and descrambles is */
 
-#ifdef __PROFILE__
-  struct timespec start, end;
-#endif
-
-  int i;
-  //uint32_t *dsmap = (uint32_t*)descramble_map_forward;
-  //uint32_t *dsmap_p;
-  uint16_t *data_p;
-
   cin_data_proc_t *proc = (cin_data_proc_t*)args;
 
   struct cin_data_frame *frame = NULL;
@@ -832,8 +823,13 @@ void* cin_data_descramble_thread(void *args){
   int sid = syscall(SYS_gettid);
   DEBUG_PRINT("Starting descrambler thread ppid = %d\n", sid);
  
-  descramble_map_t map;
-  cin_data_descramble_init(&map);
+  descramble_map_t *map;
+  map = malloc(sizeof(descramble_map_t));
+  if(!map){
+    pthread_exit(NULL);
+  }
+ 
+  cin_data_descramble_init(map, CIN_DATA_FRAME_HEIGHT, 0);
   DEBUG_COMMENT("Initialized descramble map\n");
 
   while(1){
@@ -842,33 +838,17 @@ void* cin_data_descramble_thread(void *args){
     frame = (cin_data_frame_t*)(*proc->input_get)(proc->input_args, proc->reader);
     image = (cin_data_frame_t*)(*proc->output_get)(proc->output_args);
 
-#ifdef __PROFILE__
-    clock_gettime(CLOCK_REALTIME, &start);
-#endif
-
-    //dsmap_p = dsmap;
-    //data_p  = frame->data;
-    //for(i=0;i<(CIN_DATA_FRAME_HEIGHT * CIN_DATA_FRAME_WIDTH);i++){
-    //  image->data[i] = frame->data[i];
-    //}
-
-    cin_data_descramble_frame(&map, image->data, frame->data); 
+    cin_data_descramble_frame(map, image->data, frame->data); 
 
     image->timestamp = frame->timestamp;
     image->number = frame->number;
   
-#ifdef __PROFILE__
-    clock_gettime(CLOCK_REALTIME, &end);
-#endif
     // Release the frame and the image
 
     (*proc->input_put)(proc->input_args, proc->reader);
     (*proc->output_put)(proc->output_args);
 
-#ifdef __PROFILE__
-    DEBUG_PRINT("descramble time = %ld\n", timespec_diff(start, end).tv_nsec);
-#endif
-}
+  }
 
   pthread_exit(NULL);
 }
