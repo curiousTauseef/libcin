@@ -829,7 +829,7 @@ void* cin_data_descramble_thread(void *args){
     pthread_exit(NULL);
   }
  
-  cin_data_descramble_init(map, CIN_DATA_FRAME_HEIGHT, 0);
+  cin_data_descramble_init(map, CIN_DATA_FRAME_HEIGHT, 2);
   DEBUG_COMMENT("Initialized descramble map\n");
 
   while(1){
