@@ -114,6 +114,8 @@ typedef struct cin_data_frame {
   uint16_t *data;
   uint16_t number;
   struct timeval timestamp;
+  int size_x;
+  int size_y;
 } cin_data_frame_t;
 
 typedef struct cin_data_stats {
