@@ -842,7 +842,9 @@ void* cin_data_descramble_thread(void *args){
 
     image->timestamp = frame->timestamp;
     image->number = frame->number;
-  
+    image->size_x = map->size_x;
+    image->size_y = map->size_y;
+
     // Release the frame and the image
 
     (*proc->input_put)(proc->input_args, proc->reader);
