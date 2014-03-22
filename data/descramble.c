@@ -74,15 +74,9 @@ int cin_data_descramble_init(descramble_map_t *map, int ccd_size_rows, int overs
       map->TopBot[map->MapCol[i]+8]=1; map->TopBot[map->MapCol[i]+12]=1;
   }
 
-  for(i=0; i<192; i++){
-    map->ChanMap[i] = map->ChanMap[i] * 10; // CCDreg
-  }
-
   int CCDreg = CIN_DATA_CCD_COLS_PER_CHAN + overscan;
   int CCDsizeX = CIN_DATA_CCD_COLS * CCDreg;
-  int CCDsizeY = ccd_size_rows;
-
-  int y, x;
+  int CCDsizeY = ccd_size_rows / 2;
 
   // Initialize the map
   map->Map = malloc(sizeof(uint32_t) * 192 * CCDsizeY * CCDreg);
@@ -90,17 +84,22 @@ int cin_data_descramble_init(descramble_map_t *map, int ccd_size_rows, int overs
     return -1;
   }
 
+  for(i=0; i<192; i++){
+    map->ChanMap[i] = map->ChanMap[i] * CCDreg;
+  }
+
   uint32_t* Map_p = map->Map;
 
+  int y, x;
   for(y = 0; y < CCDsizeY; y++){
     for(x = 0; x < CCDreg; x++){
       for(i = 0; i < 192; i++){
         uint32_t pIndex;
         uint32_t xdex = map->ChanMap[i] + (CCDreg - x - 1);
         if(map->TopBot[i] == 0 ){
-          pIndex = (xdex + y * CCDsizeX);
+          pIndex = xdex + (y * CCDsizeX);
         } else {
-          pIndex = ((CCDsizeX - xdex - 1)+(((CCDsizeY * 2) - y - 1) * CCDsizeX));
+          pIndex = (CCDsizeX - xdex - 1) + ((CCDsizeY * 2 - y - 1) * CCDsizeX);
         }
         *(Map_p++) = pIndex;
       } // i
@@ -108,7 +107,9 @@ int cin_data_descramble_init(descramble_map_t *map, int ccd_size_rows, int overs
   } // y
 
   map->size_x = CCDsizeX;
-  map->size_y = CCDsizeY;
+  map->size_y = CCDsizeY * 2;
+
+  DEBUG_PRINT("Map initialized for image of %d x %d.\n", CCDsizeX, CCDsizeY);
 
   return 0;
 }
@@ -130,6 +131,6 @@ int cin_data_descramble_frame(descramble_map_t *map, uint16_t *out, uint16_t *in
   for(i = 0;i < (map->size_x * map->size_y); i++){
     out[*(map_p++)] = *(in_p++);
   }
-
+  
   return 0;
 }
