@@ -381,9 +381,11 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
     ERROR_COMMENT("Failed to program CIN\n");
     goto error;
   }   
- 
-  int count = 0;
-  size = size / sizeof(buffer); // Number of writes
+
+  sleep(1);
+  //int count = 0;
+  //size = size / sizeof(buffer); // Number of writes
+  fprintf(stderr, "Loading Firmware ......... ");
   while ((num_e = fread(buffer,sizeof(char), sizeof(buffer), file)) != 0){    
     _status = cin_ctl_stream_write(dcp, buffer, num_e);       
     if (_status != 0){
@@ -391,37 +393,37 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
       fclose(file);
       goto error;
     }
-
-    fprintf(stderr, "Loading Firmware [");
-    int i;
-    for(i=0;i<(count * 50/ size);i++){
-      fprintf(stderr, "#");
-    }
-    for(;i<50;i++){
-      fprintf(stderr, ".");
-    }
-    fprintf(stderr, "]\r");
-    count++;
+    // int i;
+    // for(i=0;i<(count * 50/ size);i++){
+    //   fprintf(stderr, "#");
+    // }
+    // for(;i<50;i++){
+    //   fprintf(stderr, ".");
+    // }
+    // fprintf(stderr, "]\r");
+    // count++;
     usleep(2000);   /*for UDP flow control*/ 
   }
   fclose(file);
 
-  fprintf(stderr, "\n");
+  fprintf(stderr, "Done.\n");
   
-  sleep(2);
+  sleep(1);
+
+  fprintf(stderr, "Resetting Frame FPGA ..... ");
 
   _status=cin_ctl_write(cp,REG_FRM_RESET,0x0001);
   if(_status != 0){
     goto error;
   } 
- 
+  sleep(1); 
   _status=cin_ctl_write(cp,REG_FRM_RESET,0x0000);
   if(_status != 0){
     goto error;
   } 
 
-  sleep(2);
-
+  sleep(1);
+  fprintf(stderr, "Done.\n");
   return 0;
    
 error:
