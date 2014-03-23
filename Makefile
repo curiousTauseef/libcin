@@ -1,6 +1,6 @@
 include CONFIG
 
-all: bindata control data lib/libcin.a tests utils
+all: src lib/libcin.a utils
 
 # create dynamically and statically-linked libs.
 lib/libcin.a: $(LIBOBJECTS) 
@@ -18,11 +18,9 @@ $(SUBDIRS):
 clean:
 	-$(RM) -f *.o
 	-$(RM) -rf lib
-	$(MAKE) -C data clean
+	$(MAKE) -C src clean
 	$(MAKE) -C tests clean
-	$(MAKE) -C control clean
 	$(MAKE) -C utils clean
-	$(MAKE) -C bindata clean
 
 .PHONY :install
 install: all
@@ -33,4 +31,4 @@ install: all
 	$(INSTALL_DATA) lib/libcin.a $(libdir)
 	$(INSTALL_DATA) include/cin.h $(includedir)
 	$(INSTALL_PROGRAM) utils/cindump $(bindir)
-
+	$(INSTALL_PROGRAM) utils/cin_power_up $(bindir)

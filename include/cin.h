@@ -7,6 +7,7 @@
 #include <netinet/in.h>
 #include <netinet/ip.h>
 #include <sys/time.h>   // For timespec
+#include <pthread.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,8 +21,10 @@ extern "C" {
  */
 
 #define CIN_CTL_IP                         "192.168.1.207"
-#define CIN_CTL_PORT                       49200
-#define CIN_CTL_FRMW_PORT                  49202
+#define CIN_CTL_SVR_PORT                   49200
+#define CIN_CTL_CLI_PORT                   50200
+#define CIN_CTL_SVR_FRMW_PORT              49202
+#define CIN_CTL_CLI_FRMW_PORT              50202
 #define CIN_DATA_IP                        "10.0.5.207"
 #define CIN_DATA_PORT                      49201
 #define CIN_DATA_CTL_PORT                  49203
@@ -44,7 +47,7 @@ extern "C" {
 // which is 1152 columns. 
 // 
 #define CIN_DATA_FRAME_HEIGHT              1920
-#define CIN_DATA_FRAME_WIDTH               960
+#define CIN_DATA_FRAME_WIDTH               1152
 #define CIN_DATA_MAX_STREAM                2300000
 #define CIN_DATA_CCD_COLS               96
 #define CIN_DATA_CCD_COLS_PER_CHAN      10
@@ -96,6 +99,28 @@ extern "C" {
  * ---------------------------------------------------------------------
  */
 
+#define FIFO_MAX_READERS 10 
+
+typedef struct {
+  void *data;
+  void *head;
+  void *tail[FIFO_MAX_READERS];
+  void *end;
+  int readers;
+  long int size;
+  int elem_size;
+  int full;
+  long int overruns;
+  pthread_mutex_t mutex;
+  pthread_cond_t signal;
+} fifo;
+
+typedef struct {
+  struct cin_port *cp;
+  fifo ctl_fifo;
+  pthread_t thread_id;
+} cin_ctl_listener_t;
+
 struct cin_port {
     char *srvaddr;
     char *cliaddr;
@@ -108,6 +133,7 @@ struct cin_port {
     socklen_t slen; /* for recvfrom() */
     int rcvbuf; /* For setting data recieve buffer */
     int rcvbuf_rb; /* For readback */
+    cin_ctl_listener_t *listener;
 };
 
 typedef struct cin_data_frame {
@@ -205,7 +231,7 @@ typedef struct {
  * UDP Socket
  *------------------------*/
 
-int cin_ctl_init__port(struct cin_port* cp, char* ipaddr, uint16_t port);
+int cin_ctl_init_port(struct cin_port* cp, char* ipaddr, uint16_t oport, uint16_t iport);
 int cin_ctl_close_port(struct cin_port* cp);
 
 /*------------------------
@@ -238,6 +264,7 @@ int cin_ctl_set_fclk(struct cin_port* cp, int clkfreq);
 int cin_ctl_get_fclk(struct cin_port* cp, int *clkfreq);
 int cin_ctl_get_cfg_fpga_status(struct cin_port* cp,
                                 cin_ctl_fpga_status_t *_val);
+void cin_ctl_display_fpga_status(FILE *out, cin_ctl_fpga_status_t *_val);
 int cin_ctl_get_dcm_status(struct cin_port* cp, uint16_t *_val);
 
 /* Power status */
@@ -260,12 +287,22 @@ int cin_ctl_set_clocks(struct cin_port* cp,int val);
 int cin_ctl_set_trigger(struct cin_port* cp,int val);
 int cin_ctl_get_trigger(struct cin_port* cp, int *val);
 int cin_ctl_set_focus(struct cin_port* cp, int val);
-int cin_clt_trigger_start(struct cin_port* cp, int nimages, int trigger_mode);
-int cin_ctl_trigger_stop(struct cin_port* cp);
+int cin_ctl_get_focus(struct cin_port* cp, int *val);
+int cin_ctl_int_trigger_start(struct cin_port* cp, int nimages);
+int cin_ctl_int_trigger_stop(struct cin_port* cp);
+int cin_ctl_ext_trigger_start(struct cin_port* cp, int trigger_mode);
+int cin_ctl_ext_trigger_stop(struct cin_port* cp);
 int cin_ctl_set_exposure_time(struct cin_port* cp,float e_time);
 int cin_ctl_set_trigger_delay(struct cin_port* cp,float t_time);
 int cin_ctl_set_cycle_time(struct cin_port* cp,float ftime);
 int cin_ctl_set_frame_count_reset(struct cin_port* cp);
+
+/*------------------------
+ * CIN TCP/IP Settings
+ *------------------------*/
+
+int cin_ctl_set_fabric_address(struct cin_port* cp, char *ip);
+int cin_ctl_set_address(struct cin_port* cp, char *ip, uint16_t reg0, uint16_t reg1);
 
 /* ---------------------------------------------------------------------
  *

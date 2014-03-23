@@ -6,20 +6,20 @@ CFLAGS+=-I../include
 
 .PHONY : clean
 
-all: cindump.o cindump make_descramble_map
+all: cindump.o cindump cin_power_up.o cin_power_up
 
-cindump.o: cindump.c
+cindump.o: cindump.c ../include/cin.h
+
+cin_power_up.o: cin_power_up.c ../include/cin.h
 
 cindump: cindump.o ../lib/libcin.a
 	$(CC) $(LDFLAGS) cindump.o -o $@ $(LDLIBS) 
 
-make_descramble_map.o : make_descramble_map.c
-
-make_descramble_map: make_descramble_map.o
-	$(CC) make_descramble_map.o -o $@ 
+cin_power_up: cin_power_up.o ../lib/libcin.a
+	$(CC) $(LDFLAGS) cin_power_up.o -o $@ $(LDLIBS) 
 
 clean:
 	rm -f *.o
 	rm -f cindump
-
+	rm -f cin_power_up
 
