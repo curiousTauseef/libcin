@@ -9,7 +9,7 @@
 
 #include "cin.h"
 #include "cin_register_map.h"
-#include "cincontrol.h"
+#include "control.h"
 #include "fifo.h"
 
 /**************************** UDP Socket ******************************/
@@ -402,7 +402,7 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
     }
     fprintf(stderr, "]\r");
     count++;
-    usleep(500);   /*for UDP flow control*/ 
+    usleep(2000);   /*for UDP flow control*/ 
   }
   fclose(file);
 
@@ -516,7 +516,17 @@ void cin_ctl_display_fpga_status(FILE *out, cin_ctl_fpga_status_t *_val){
   fprintf(out, "  Board ID         : %04X\n", _val->board_id);
   fprintf(out, "  Serial Number    : %04X\n", _val->serial_no);
   fprintf(out, "  CFG FPGA Ver.    : %04X\n", _val->fpga_ver);
-  fprintf(out, "  CFG FPGA Status  : %04X\n", _val->fpga_status);
+  fprintf(out, "  CFG FPGA Status  : %04X\n\n", _val->fpga_status);
+  if(_val->fpga_status & CIN_CTL_FPGA_STS_CFG){
+    fprintf(out, "  ** Frame FPGA Configuration Done\n");
+  } else {
+    fprintf(out, "  ** Frame FPGA NOT CONFIGURED!\n");
+  }
+  if(_val->fpga_status & CIN_CTL_FPGA_STS_FP_PWR){
+    fprintf(out, "  ** FP Power Supply Unlocked\n");
+  } else {
+    fprintf(out, "  ** FP Power Supply Locked Off\n");
+  }
 }
 
 int cin_ctl_get_dcm_status(struct cin_port* cp, uint16_t *_val){
@@ -530,6 +540,26 @@ int cin_ctl_get_dcm_status(struct cin_port* cp, uint16_t *_val){
 
   DEBUG_PRINT("CFG DCM Status   :  %04X\n", *_val);
   return 0; 
+}
+
+void cin_ctl_display_dcm_status(FILE *out, uint16_t *_val){
+  fprintf(out, "CFG DCM Status :\n\n");
+  fprintf(out, "  DCM Status       : %04X\n\n", *_val);
+  if(*_val & CIN_CTL_DCM_STS_ATCA){
+    fprintf(out, "  ** ATCA 48V Alarm Active\n");
+  } else {
+    fprintf(out, "  ** ATCA 48V OK\n");
+  }
+  if(*_val & CIN_CTL_DCM_STS_LOCKED){
+    fprintf(out, "  ** CFG Clock DCM Locked\n");
+  } else {
+    fprintf(out, "  ** CFG Clock DCM NOT Locked\n");
+  }
+  if(*_val & CIN_CTL_DCM_STS_OVERIDE){
+    fprintf(out, "  ** FP Power Supply Interlock Overide Enabled\n");
+  } else {
+    fprintf(out, "  ** FP Power Supply Interlock Active\n");
+  }
 }
 
 double cin_ctl_current_calc(uint16_t val){

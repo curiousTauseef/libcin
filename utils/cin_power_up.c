@@ -41,7 +41,17 @@ int main(){
   fprintf(stderr, "Powering ON CIN Front Panel.\n");
 	cin_fp_on(&cp[0]);
 	sleep(5);
-	
+
+  fprintf(stderr, "\n");
+  cin_ctl_fpga_status_t fpga_status;
+  cin_ctl_get_cfg_fpga_status(&cp[0], &fpga_status);
+  cin_ctl_display_fpga_status(stderr, &fpga_status);
+  fprintf(stderr, "\n");
+  uint16_t dcm;
+  cin_ctl_get_dcm_status(&cp[0], &dcm);
+  cin_ctl_display_dcm_status(stderr, &dcm);
+  fprintf(stderr, "\n");
+
 	cin_ctl_load_firmware(&cp[0],&cp[1],cin_fpga_config);	
 	sleep(5);
 
@@ -49,9 +59,11 @@ int main(){
   cin_ctl_set_fabric_address(&cp[0], "10.23.5.127");
 
   fprintf(stderr, "\n");
-  cin_ctl_fpga_status_t fpga_status;
 	cin_ctl_get_cfg_fpga_status(&cp[0], &fpga_status);
   cin_ctl_display_fpga_status(stderr, &fpga_status);
+  cin_ctl_get_dcm_status(&cp[0], &dcm);
+  cin_ctl_display_dcm_status(stderr, &dcm);
+  fprintf(stderr, "\n");
 
   // This appears to be broken
   //int fclk;
@@ -77,7 +89,9 @@ int main(){
 
   // Do some setup. Set the focus bit
 
-  // cin_ctl_set_focus(&cp[0], 1);
+  cin_ctl_set_focus(&cp[0], 1);
+  cin_ctl_set_mux(&cp[0], 0, CIN_CTL_MUX1_TRIGMON);
+  cin_ctl_set_mux(&cp[0], 1, CIN_CTL_MUX2_CONVERT);
   // int focus;
   // cin_ctl_get_focus(&cp[0], &focus);
 

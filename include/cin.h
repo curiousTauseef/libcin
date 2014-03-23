@@ -45,6 +45,13 @@ extern "C" {
 #define CIN_CTL_FCLK_200                   0x0001
 #define CIN_CTL_FCLK_250                   0x0002
 
+#define CIN_CTL_FPGA_STS_CFG               0x8000
+#define CIN_CTL_FPGA_STS_FP_PWR            0x0008
+
+#define CIN_CTL_DCM_STS_ATCA               0x0080
+#define CIN_CTL_DCM_STS_LOCKED             0x0001
+#define CIN_CTL_DCM_STS_OVERIDE            0x0800
+
 #define CIN_CTL_MUX1_VCLK1                 0x0001
 #define CIN_CTL_MUX1_VCLK2                 0x0002
 #define CIN_CTL_MUX1_VCLK3                 0x0003
@@ -301,6 +308,7 @@ int cin_ctl_get_cfg_fpga_status(struct cin_port* cp,
                                 cin_ctl_fpga_status_t *_val);
 void cin_ctl_display_fpga_status(FILE *out, cin_ctl_fpga_status_t *_val);
 int cin_ctl_get_dcm_status(struct cin_port* cp, uint16_t *_val);
+void cin_ctl_display_dcm_status(FILE *out, uint16_t *_val);
 
 /* Power status */
 

@@ -3,10 +3,10 @@ CC=gcc
 CFLAGS=-Wall -O3 -g --pic
 
 # Include DEBUG statements
-CFLAGS+=-D__DEBUG__
+#CFLAGS+=-D__DEBUG__
 
 # Include Stream DEBUG statements
-CFLAGS+=-D__DEBUG_STREAM__
+#CFLAGS+=-D__DEBUG_STREAM__
 
 # Add code for profiling speed
 #CFLAGS+=-D__PROFILE__
@@ -43,7 +43,7 @@ SUBDIRS=src utils tests
 LIBHEADERS=include/cin_register_map.h \
            include/cin.h
 
-LIBSOURCES=src/cincontrol.c src/cindata.c src/fifo.c \
+LIBSOURCES=src/control.c src/data.c src/fifo.c \
            src/mbuffer.c src/descramble.c
 
 LIBOBJECTS=$(LIBSOURCES:.c=.o)

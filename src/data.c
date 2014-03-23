@@ -16,7 +16,7 @@
 
 #include "cin.h"
 #include "fifo.h"
-#include "cindata.h"
+#include "data.h"
 #include "mbuffer.h"
 #include "descramble.h"
 
