@@ -995,7 +995,7 @@ int cin_ctl_set_address(struct cin_port* cp, char *ip, uint16_t reg0, uint16_t r
 
 /*******************  MUX Settings for Output **********************/
 
-int cin_ctl_set_mux(struct cin_port *cp, int chan, int setting){
+int cin_ctl_set_mux(struct cin_port *cp, int setting){
 
   // First read the mux register
 
@@ -1006,12 +1006,10 @@ int cin_ctl_set_mux(struct cin_port *cp, int chan, int setting){
     return -1;
   }
 
-  if(chan == 0){
+  if((setting & 0x000F) == 0x0){
     _val = (_val & 0xF0) | setting;
-  } else if(chan == 1){
-    _val = (_val & 0x0F) | setting;
   } else {
-    ERROR_COMMENT("Invalid MUX chanel\n");
+    _val = (_val & 0x0F) | setting;
   }
 
   _status = cin_ctl_write(cp, REG_TRIGGERSELECT_REG, _val);

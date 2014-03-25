@@ -90,8 +90,8 @@ int main(){
   // Do some setup. Set the focus bit
 
   cin_ctl_set_focus(&cp[0], 1);
-  cin_ctl_set_mux(&cp[0], 0, CIN_CTL_MUX1_TRIGMON);
-  cin_ctl_set_mux(&cp[0], 1, CIN_CTL_MUX2_CONVERT);
+  cin_ctl_set_mux(&cp[0], CIN_CTL_MUX1_TRIGMON);
+  cin_ctl_set_mux(&cp[0], CIN_CTL_MUX2_CONVERT);
   // int focus;
   // cin_ctl_get_focus(&cp[0], &focus);
 
