@@ -27,6 +27,7 @@ extern "C" {
 #define CIN_CTL_CLI_FRMW_PORT              50202
 
 #define CIN_CTL_MAX_READ_TRIES             10
+#define CIN_CTL_MAX_WRITE_TRIES            5
 
 #define CIN_CTL_DCM_LOCKED                 0x0001
 #define CIN_CTL_DCM_PSDONE                 0x0002
@@ -286,6 +287,7 @@ int cin_ctl_close_port(struct cin_port* cp);
 int cin_ctl_read(struct cin_port* cp, uint16_t reg, uint16_t *val);
 int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val);
 int cin_ctl_stream_write(struct cin_port* cp, char* val,int size);
+int cin_ctl_write_with_readback(struct cin_port* cp, uint16_t reg, uint16_t &val);
 
 /*------------------------
  * CIN PowerUP-PowerDown

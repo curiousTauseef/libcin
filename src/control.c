@@ -174,6 +174,7 @@ int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val){
       ERROR_COMMENT("CIN control port - sendto() failure!!");
       goto error;
    }
+
 #ifdef __DEBUG_STREAM__ 
   DEBUG_PRINT("Set register %04X to %04X\n", reg, val);
 #endif 
@@ -183,6 +184,36 @@ int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val){
 error:  
    ERROR_COMMENT("Write error control port");
    return (-1);
+}
+
+int cin_ctl_write_with_readback(struct cin_port* cp, uint16_t reg, uint16_t &val){
+  
+  int tries = CIN_CTL_MAX_WRITE_TRIES;
+
+  while(tries){
+    int _status;
+
+    _status = cin_ctl_write(cp, reg, *val);
+    if(_status){
+      ERROR_COMMENT("Error writing register\n");
+      return _status;
+    }
+
+    uint16_t _val;
+    _status = cin_ctl_read(cp, reg, &_val);
+    if(_status){
+      ERROR_COMMENT("Unable to read register\n");
+      return _status;
+    }
+    
+    if(_val == *val){
+      // Value correct
+      break;
+    }
+
+    tries--;
+  }
+  return 0;
 }
 
 int cin_ctl_stream_write(struct cin_port* cp, char *val,int size) {
