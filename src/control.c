@@ -186,14 +186,14 @@ error:
    return (-1);
 }
 
-int cin_ctl_write_with_readback(struct cin_port* cp, uint16_t reg, uint16_t &val){
+int cin_ctl_write_with_readback(struct cin_port* cp, uint16_t reg, uint16_t val){
   
   int tries = CIN_CTL_MAX_WRITE_TRIES;
 
   while(tries){
     int _status;
-
-    _status = cin_ctl_write(cp, reg, *val);
+    DEBUG_PRINT("try = %d\n", tries);
+    _status = cin_ctl_write(cp, reg, val);
     if(_status){
       ERROR_COMMENT("Error writing register\n");
       return _status;
@@ -205,8 +205,8 @@ int cin_ctl_write_with_readback(struct cin_port* cp, uint16_t reg, uint16_t &val
       ERROR_COMMENT("Unable to read register\n");
       return _status;
     }
-    
-    if(_val == *val){
+    DEBUG_PRINT("sent = %04X recv = %04X\n", val, _val); 
+    if(_val == val){
       // Value correct
       break;
     }
@@ -303,7 +303,7 @@ int cin_pwr(struct cin_port* cp, int pwr){
     _val = 0x0000;
   }
 
-  _status=cin_ctl_write(cp,REG_PS_ENABLE, _val);
+  _status=cin_ctl_write_with_readback(cp,REG_PS_ENABLE, _val);
   if (_status != 0){
     goto error;
   }
@@ -787,7 +787,7 @@ int cin_ctl_set_trigger(struct cin_port* cp,int val){
     return -1;
   }
 
-  _status=cin_ctl_write(cp,REG_TRIGGERMASK_REG, val);
+  _status=cin_ctl_write_with_readback(cp,REG_TRIGGERMASK_REG, val);
   if(_status){
     ERROR_PRINT("Unable to set trigger to %d\n", val);
     return _status;
@@ -848,7 +848,8 @@ int cin_ctl_set_focus(struct cin_port* cp, int val){
     _val1 &= ~CIN_CTL_FOCUS_BIT;
   } 
 
-  _status = cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, _val1);
+  _status = cin_ctl_write_with_readback(cp,REG_CLOCKCONFIGREGISTER0_REG, _val1);
+
   if(_status){
     ERROR_COMMENT("Unable to write focus bit\n");
     return _status;
@@ -863,8 +864,9 @@ int cin_ctl_int_trigger_start(struct cin_port* cp, int nimages){
   int _status;
 
   DEBUG_PRINT("Set n exposures to %d\n", nimages);
-  _status  = cin_ctl_write(cp, REG_NUMBEROFEXPOSURE_REG, (uint16_t)nimages);
-  _status |= cin_ctl_write(cp, REG_FRM_COMMAND, 0x0100);
+  _status  = cin_ctl_write_with_readback(cp, REG_NUMBEROFEXPOSURE_REG, 
+                                         (uint16_t)nimages);
+  _status |= cin_ctl_write_with_readback(cp, REG_FRM_COMMAND, 0x0100);
   if(_status){
     ERROR_COMMENT("Unable to start triggers");
     goto error;
@@ -933,8 +935,8 @@ int cin_ctl_set_exposure_time(struct cin_port* cp,float ftime){
   _msbval = (uint32_t)(_time >> 16);
   _lsbval = (uint32_t)(_time & 0xFFFF);
 
-  _status  = cin_ctl_write(cp,REG_EXPOSURETIMEMSB_REG,_msbval);
-  _status |= cin_ctl_write(cp,REG_EXPOSURETIMELSB_REG,_lsbval);
+  _status  = cin_ctl_write_with_readback(cp,REG_EXPOSURETIMEMSB_REG,_msbval);
+  _status |= cin_ctl_write_with_readback(cp,REG_EXPOSURETIMELSB_REG,_lsbval);
   if(_status){
     ERROR_COMMENT("Unable to set exposure time");
     return _status;
@@ -955,8 +957,8 @@ int cin_ctl_set_trigger_delay(struct cin_port* cp,float ftime){
   _msbval=(uint16_t)(_time >> 16);
   _lsbval=(uint16_t)(_time & 0xFFFF);
 
-  _status  = cin_ctl_write(cp,REG_DELAYTOEXPOSUREMSB_REG,_msbval);
-  _status |= cin_ctl_write(cp,REG_DELAYTOEXPOSURELSB_REG,_lsbval);
+  _status  = cin_ctl_write_with_readback(cp,REG_DELAYTOEXPOSUREMSB_REG,_msbval);
+  _status |= cin_ctl_write_with_readback(cp,REG_DELAYTOEXPOSURELSB_REG,_lsbval);
   if(_status){
     ERROR_COMMENT("Unable to set trigger delay");
     return _status;
@@ -978,8 +980,8 @@ int cin_ctl_set_cycle_time(struct cin_port* cp,float ftime){
   _msbval=(uint16_t)(_time >> 16);
   _lsbval=(uint16_t)(_time & 0xFFFF);
 
-  _status  = cin_ctl_write(cp,REG_TRIGGERREPETITIONTIMEMSB_REG,_msbval);
-  _status |= cin_ctl_write(cp,REG_TRIGGERREPETITIONTIMELSB_REG,_lsbval);
+  _status  = cin_ctl_write_with_readback(cp,REG_TRIGGERREPETITIONTIMEMSB_REG,_msbval);
+  _status |= cin_ctl_write_with_readback(cp,REG_TRIGGERREPETITIONTIMELSB_REG,_lsbval);
 
   if(_status){
     ERROR_COMMENT("Unable to set cycle time");
@@ -1025,8 +1027,8 @@ int cin_ctl_set_address(struct cin_port* cp, char *ip, uint16_t reg0, uint16_t r
   DEBUG_PRINT("Setting IP to %08X\n", addr_s);
 
   int _status;
-  _status  = cin_ctl_write(cp, reg0, (uint16_t)addr_s);
-  _status |= cin_ctl_write(cp, reg1, (uint16_t)(addr_s >> 16));
+  _status  = cin_ctl_write_with_readback(cp, reg0, (uint16_t)addr_s);
+  _status |= cin_ctl_write_with_readback(cp, reg1, (uint16_t)(addr_s >> 16));
 
   if(_status){
     ERROR_COMMENT("Could not set IP.\n");
@@ -1055,7 +1057,7 @@ int cin_ctl_set_mux(struct cin_port *cp, int setting){
     _val = (_val & 0x0F) | setting;
   }
 
-  _status = cin_ctl_write(cp, REG_TRIGGERSELECT_REG, _val);
+  _status = cin_ctl_write_with_readback(cp, REG_TRIGGERSELECT_REG, _val);
   if(_status){
     ERROR_COMMENT("Failed to write MUX setting\n");
     return -1;

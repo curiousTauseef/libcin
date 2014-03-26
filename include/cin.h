@@ -287,7 +287,7 @@ int cin_ctl_close_port(struct cin_port* cp);
 int cin_ctl_read(struct cin_port* cp, uint16_t reg, uint16_t *val);
 int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val);
 int cin_ctl_stream_write(struct cin_port* cp, char* val,int size);
-int cin_ctl_write_with_readback(struct cin_port* cp, uint16_t reg, uint16_t &val);
+int cin_ctl_write_with_readback(struct cin_port* cp, uint16_t reg, uint16_t val);
 
 /*------------------------
  * CIN PowerUP-PowerDown
