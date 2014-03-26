@@ -25,6 +25,9 @@ extern "C" {
 #define CIN_CTL_CLI_PORT                   50200
 #define CIN_CTL_SVR_FRMW_PORT              49202
 #define CIN_CTL_CLI_FRMW_PORT              50202
+
+#define CIN_CTL_MAX_READ_TRIES             10
+
 #define CIN_CTL_DCM_LOCKED                 0x0001
 #define CIN_CTL_DCM_PSDONE                 0x0002
 #define CIN_CTL_DCM_STATUS0                0x0004

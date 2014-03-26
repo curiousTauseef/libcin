@@ -83,8 +83,9 @@ int cin_ctl_init_port(struct cin_port* cp, char* ipaddr,
 
   pthread_create(&listener->thread_id, NULL, 
                  cin_ctl_listen_thread, (void*)listener);
-  sleep(10);
   cp->listener = listener;
+  
+  // SBW : Do we need to wait for listener to start?
 
   DEBUG_COMMENT("Created port.\n");
   return 0;
@@ -214,7 +215,7 @@ int cin_ctl_read(struct cin_port* cp, uint16_t reg, uint16_t *val) {
   int _status;
   uint32_t buf = 0;
 
-  int tries = 10;
+  int tries = CIN_CTL_MAX_READ_TRIES;
   while(tries){
     fifo_flush(&cp->listener->ctl_fifo);     
 
