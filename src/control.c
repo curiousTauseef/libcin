@@ -83,8 +83,10 @@ int cin_ctl_init_port(struct cin_port* cp, char* ipaddr,
 
   pthread_create(&listener->thread_id, NULL, 
                  cin_ctl_listen_thread, (void*)listener);
-
+  sleep(10);
   cp->listener = listener;
+
+  DEBUG_COMMENT("Created port.\n");
   return 0;
 }
 
@@ -98,7 +100,7 @@ uint32_t cin_ctl_get_packet(struct cin_port *cp, uint32_t *val){
       fifo_advance_tail(&cp->listener->ctl_fifo, 0);
       return 0;
     }
-    usleep(10);
+    usleep(100);
   }
 
   return -1;
@@ -122,6 +124,7 @@ void *cin_ctl_listen_thread(void* args){
 
   while(1){
     buffer = (uint32_t*)fifo_get_head(ctl_fifo);
+    DEBUG_COMMENT("Got head pointer\n");
     i = recvfrom(cp->sockfd, &val, sizeof(val), 0,
                  (struct sockaddr*)&cp->sin_cli,
                  (socklen_t*)&cp->slen);
@@ -131,6 +134,8 @@ void *cin_ctl_listen_thread(void* args){
       DEBUG_PRINT("Received %d bytes value  = %08lX\n", i, (long int)(*buffer));
 #endif
       fifo_advance_head(ctl_fifo);
+    } else {
+      DEBUG_COMMENT("Timeout\n");
     }
   }
 
@@ -209,23 +214,29 @@ int cin_ctl_read(struct cin_port* cp, uint16_t reg, uint16_t *val) {
   int _status;
   uint32_t buf = 0;
 
-  _status=cin_ctl_write(cp, REG_READ_ADDRESS, reg);
-  if (_status){
-    goto error;
+  int tries = 10;
+  while(tries){
+    fifo_flush(&cp->listener->ctl_fifo);     
+
+    _status=cin_ctl_write(cp, REG_READ_ADDRESS, reg);
+    if (_status){
+      goto error;
+    }
+
+    _status=cin_ctl_write(cp, REG_COMMAND, CMD_READ_REG);
+    if (_status != 0){
+      goto error;
+    }
+
+    if(!cin_ctl_get_packet(cp, &buf)){
+      break;
+    }
+    tries--;
   }
-
-  //usleep(100000); // Hard coded sleep (0.1 s)
-
-  _status=cin_ctl_write(cp, REG_COMMAND, CMD_READ_REG);
-  if (_status != 0){
-    goto error;
-  }
-
-  if(cin_ctl_get_packet(cp, &buf)){
+  if(!tries){ 
     ERROR_PRINT("Failed to read register %04X\n", reg);
     goto error;
   }
-
 #ifdef __DEBUG_STREAM__
   DEBUG_PRINT("Got %04X from %04X\n", buf & 0xFFFF, (buf >> 16));
 #endif
