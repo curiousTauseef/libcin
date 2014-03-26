@@ -45,7 +45,7 @@ int fifo_init(fifo *f, int elem_size, long int size, int readers);
 long int fifo_used_bytes(fifo *f);
 double fifo_percent_full(fifo *f);
 long int fifo_used_elements(fifo *f);
-
+void fifo_flush(fifo *f);
 #ifdef __cplusplus
 }
 #endif

@@ -46,6 +46,17 @@ int fifo_init(fifo *f, int elem_size, long int size, int readers){
   return FIFO_NOERR;
 }
 
+void fifo_flush(fifo *f){
+  pthread_mutex_lock(&f->mutex);
+  int i;
+  for(i=0;i<FIFO_MAX_READERS;i++){
+    f->tail[i] = f->head;
+  }
+  f->full = 0;
+
+  pthread_mutex_unlock(&f->mutex);
+}
+
 long int fifo_used_bytes(fifo *f){
   long int bytes = 0;
 
