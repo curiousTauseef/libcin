@@ -22,7 +22,9 @@ int main(int argc, char *argv[]){
   info = localtime(&rawtime);
   strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S %Z", info);
 
+  fprintf(stdout, "\n");
   fprintf(stdout, "cinregdump : Started at %s\n\n", buf);
+  fprintf(stdout, "-------------------------------------------------------------\n");
   fprintf(stdout, "Register Name                            : Register : Value \n");
   fprintf(stdout, "-------------------------------------------------------------\n");
   cin_map_t *rmap = cin_reg_map;
