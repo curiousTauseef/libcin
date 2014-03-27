@@ -30,40 +30,56 @@ int main(){
 	cin_ctl_init_port(&cp[0], 0, CIN_CTL_SVR_PORT, CIN_CTL_CLI_PORT);
 	cin_ctl_init_port(&cp[1], 0, CIN_CTL_SVR_FRMW_PORT, CIN_CTL_CLI_FRMW_PORT);
 
-  fprintf(stderr, "Powering OFF CIN.\n");
+  fprintf(stderr, "Powering OFF CIN ............................");
 	cin_off(&cp[0]);
-	sleep(5);
+	sleep(2);
+  fprintf(stderr, " DONE\n");  
 
-  fprintf(stderr, "Powering ON CIN.\n");
+  fprintf(stderr, "Powering ON CIN .............................");
 	cin_on(&cp[0]);
-	sleep(5);
+	sleep(2);
+  fprintf(stderr, " DONE\n");
 
-  fprintf(stderr, "Powering ON CIN Front Panel.\n");
+  fprintf(stderr, "Powering ON CIN Front Panel .................");
 	cin_fp_on(&cp[0]);
-	sleep(5);
+	sleep(2);
+  fprintf(stderr, " DONE\n");
 
-  fprintf(stderr, "\n");
-  cin_ctl_fpga_status_t fpga_status;
-  cin_ctl_get_cfg_fpga_status(&cp[0], &fpga_status);
-  cin_ctl_display_fpga_status(stderr, &fpga_status);
-  fprintf(stderr, "\n");
-  uint16_t dcm;
-  cin_ctl_get_dcm_status(&cp[0], &dcm);
-  cin_ctl_display_dcm_status(stderr, &dcm);
-  fprintf(stderr, "\n");
+  //fprintf(stderr, "\n");
+  //cin_ctl_fpga_status_t fpga_status;
+  //cin_ctl_get_cfg_fpga_status(&cp[0], &fpga_status);
+  //cin_ctl_display_fpga_status(stderr, &fpga_status);
+  //fprintf(stderr, "\n");
+  //uint16_t dcm;
+  //cin_ctl_get_dcm_status(&cp[0], &dcm);
+  //cin_ctl_display_dcm_status(stderr, &dcm);
+  //fprintf(stderr, "\n");
 
-	cin_ctl_load_firmware(&cp[0],&cp[1],cin_fpga_config);	
-	sleep(5);
+  int tries = 5;
+  while(tries){
+    fprintf(stderr, "Loading Firmware ............................");
+	  if(cin_ctl_load_firmware(&cp[0],&cp[1],cin_fpga_config)){
+      fprintf(stderr, "FAILED.\n");
+    } else {
+      break;
+    }
+    tries--;
+  }
+  
+  if(tries){  
+    fprintf(stderr, " DONE\n");
+  }
 
-  fprintf(stderr, "Setting fabric IP address\n");
+  fprintf(stderr, "Setting fabric IP address ...................");
   cin_ctl_set_fabric_address(&cp[0], "10.23.5.127");
+  fprintf(stderr, " DONE\n");
 
-  fprintf(stderr, "\n");
-	cin_ctl_get_cfg_fpga_status(&cp[0], &fpga_status);
-  cin_ctl_display_fpga_status(stderr, &fpga_status);
-  cin_ctl_get_dcm_status(&cp[0], &dcm);
-  cin_ctl_display_dcm_status(stderr, &dcm);
-  fprintf(stderr, "\n");
+  // fprintf(stderr, "\n");
+	// cin_ctl_get_cfg_fpga_status(&cp[0], &fpga_status);
+  // cin_ctl_display_fpga_status(stderr, &fpga_status);
+  // cin_ctl_get_dcm_status(&cp[0], &dcm);
+  // cin_ctl_display_dcm_status(stderr, &dcm);
+  // fprintf(stderr, "\n");
 
   // This appears to be broken
   //int fclk;
