@@ -428,7 +428,7 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
   sleep(1);
   //int count = 0;
   //size = size / sizeof(buffer); // Number of writes
-  fprintf(stderr, "Loading Firmware ......... ");
+  //fprintf(stderr, "Loading Firmware ......... ");
   while ((num_e = fread(buffer,sizeof(char), sizeof(buffer), file)) != 0){    
     _status = cin_ctl_stream_write(dcp, buffer, num_e);       
     if (_status != 0){
@@ -445,15 +445,15 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
     // }
     // fprintf(stderr, "]\r");
     // count++;
-    usleep(2000);   /*for UDP flow control*/ 
+    usleep(500);   /*for UDP flow control*/ 
   }
   fclose(file);
 
-  fprintf(stderr, "Done.\n");
+  DEBUG_COMMENT("Done.\n");
   
   sleep(1);
 
-  fprintf(stderr, "Resetting Frame FPGA ..... ");
+  DEBUG_COMMENT("Resetting Frame FPGA\n");
 
   _status=cin_ctl_write(cp,REG_FRM_RESET,0x0001);
   if(_status != 0){
@@ -466,7 +466,17 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
   } 
 
   sleep(1);
-  fprintf(stderr, "Done.\n");
+  DEBUG_COMMENT("Done.\n");
+
+  cin_ctl_fpga_status_t _fpga_status;
+  _status = cin_ctl_get_cfg_fpga_status(cp, &_fpga_status);
+  _status |= !(_fpga_status.fpga_status & CIN_CTL_FPGA_STS_CFG);
+  if(_status){
+    DEBUG_COMMENT("FPGA Failed to configure.\n");
+    return -1;
+  }
+  
+  DEBUG_COMMENT("FPGA Configured OK\n");
   return 0;
    
 error:
