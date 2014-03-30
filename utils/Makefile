@@ -1,7 +1,7 @@
 include ../CONFIG
 
 LDFLAGS+=-L../lib 
-LDLIBS+=-ltiff -lcin
+LDLIBS+=-ltiff -lcin -lpthread
 CFLAGS+=-I../include
 
 .PHONY : clean
