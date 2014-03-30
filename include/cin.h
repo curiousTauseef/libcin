@@ -360,7 +360,7 @@ int cin_ctl_set_address(struct cin_port* cp, char *ip, uint16_t reg0, uint16_t r
  * ---------------------------------------------------------------------
  */
 
-int cin_init_data_port(struct cin_port* dp,
+int cin_data_init_port(struct cin_port* dp,
                        char* ipaddr, uint16_t port,
                        char* cin_ipaddr, uint16_t cin_port,
                        int rcvbuf);

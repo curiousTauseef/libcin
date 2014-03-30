@@ -413,10 +413,6 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
     return -1;
   }
             
-  fseek(file, 0L, SEEK_END);
-  long size = ftell(file);
-  fseek(file, 0L, SEEK_SET);
-
   DEBUG_PRINT("Loading %s\n", filename);
 
   _status = cin_ctl_write(cp,REG_COMMAND,CMD_PROGRAM_FRAME); 
@@ -426,9 +422,6 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
   }   
 
   sleep(1);
-  //int count = 0;
-  //size = size / sizeof(buffer); // Number of writes
-  //fprintf(stderr, "Loading Firmware ......... ");
   while ((num_e = fread(buffer,sizeof(char), sizeof(buffer), file)) != 0){    
     _status = cin_ctl_stream_write(dcp, buffer, num_e);       
     if (_status != 0){
@@ -436,15 +429,6 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
       fclose(file);
       goto error;
     }
-    // int i;
-    // for(i=0;i<(count * 50/ size);i++){
-    //   fprintf(stderr, "#");
-    // }
-    // for(;i<50;i++){
-    //   fprintf(stderr, ".");
-    // }
-    // fprintf(stderr, "]\r");
-    // count++;
     usleep(500);   /*for UDP flow control*/ 
   }
   fclose(file);
@@ -459,7 +443,9 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
   if(_status != 0){
     goto error;
   } 
+
   sleep(1); 
+
   _status=cin_ctl_write(cp,REG_FRM_RESET,0x0000);
   if(_status != 0){
     goto error;
