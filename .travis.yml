@@ -3,4 +3,4 @@ compiler: gcc
 script: make
 before_install:
  - sudo apt-get update -qq
- - sudo apt-get install -qq pthread
+ - sudo apt-get install -qq libtiff5-dev
