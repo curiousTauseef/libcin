@@ -173,8 +173,8 @@ int cin_data_write(struct cin_port* dp, char* buffer, int buffer_len){
  * -------------------------------------------------------------------------------
  */
 
-int cin_data_init(int mode,
-                  int packet_buffer_len, int frame_buffer_len){
+int cin_data_init(int mode, int packet_buffer_len, int frame_buffer_len,
+                  cin_data_callback push_callback, cin_data_callback pop_callback){
   /* Initialize and start all the threads to acquire data */
   /* This does not block, just start threads */
   /* Setup FIFO elements */
@@ -234,33 +234,18 @@ int cin_data_init(int mode,
   descramble1->input_args = (void*)thread_data.frame_fifo;
   descramble1->reader = 0;
   
-  if(CIN_DATA_MODE_BUFFER & mode){
-    descramble1->output_get = (void*)&fifo_get_head;
-    descramble1->output_put = (void*)&fifo_advance_head;
-    descramble1->output_args = (void*)thread_data.image_fifo;
-  } else if(CIN_DATA_MODE_DBL_BUFFER & mode){
+  if(CIN_DATA_MODE_DBL_BUFFER & mode){
     descramble1->output_get = (void*)&mbuffer_get_write_buffer;
     descramble1->output_put = (void*)&mbuffer_write_done;
     descramble1->output_args = (void*)thread_data.image_dbuffer;
   } else {
+    thread_data.callbacks.push = (void*)push_callback;
+    thread_data.callbacks.pop = (void*)pop_callback;
+    thread_data.callbacks.frame = malloc(sizeof(cin_data_frame_t));
     descramble1->output_get = (void*)&cin_data_buffer_push;
     descramble1->output_put = (void*)&cin_data_buffer_pop;
-    descramble1->output_args = (void*)thread_data.image_buffer;
+    descramble1->output_args = (void*)&thread_data.callbacks;
   }
-
-  cin_data_proc_t *descramble2 = malloc(sizeof(cin_data_proc_t));
-  //cin_data_proc_t *writer = malloc(sizeof(cin_data_proc_t));
-
-  if(mode & CIN_DATA_MODE_DBL_BUFFER_COPY){
-    descramble2->input_get = (void*)&fifo_get_tail;
-    descramble2->input_put = (void*)&fifo_advance_tail;
-    descramble2->input_args = (void*)thread_data.frame_fifo;
-    descramble2->reader = 1;   
-    descramble2->output_get = (void*)&mbuffer_get_write_buffer;
-    descramble2->output_put = (void*)&mbuffer_write_done;
-    descramble2->output_args = (void*)thread_data.image_dbuffer;
-  }
-
 
   cin_data_thread_start(&threads[0], NULL,
                         (void *)cin_data_listen_thread, 
@@ -275,15 +260,6 @@ int cin_data_init(int mode,
   cin_data_thread_start(&threads[3], NULL,
                         (void *)cin_data_monitor_thread, 
                         NULL);
-  if((mode & CIN_DATA_MODE_WRITER) || (mode & CIN_DATA_MODE_DBL_BUFFER_COPY)){
-    cin_data_thread_start(&threads[4], NULL,
-                          (void *)cin_data_descramble_thread,
-                          (void *)descramble2);
-    //cin_data_thread_start(&threads[5], NULL,
-    //                      (void*)cin_data_writer_thread,
-    //                      (void*)writer);
-  }
-
 #ifdef __AFFINITY__
 
   /*
@@ -393,11 +369,6 @@ int cin_data_init_buffers(int packet_buffer_len, int frame_buffer_len){
   q[0].data = malloc(sizeof(uint16_t) * size);
   q[1].data = malloc(sizeof(uint16_t) * size);
 
-  /* Push Pull Buffer */
-
-  thread_data.image_buffer = malloc(sizeof(image_buffer_t));
-  thread_data.image_buffer->data = malloc(sizeof(cin_data_frame_t));
-  thread_data.image_buffer->waiting = 0;
   return 0;
 }
 
@@ -977,49 +948,24 @@ struct cin_data_stats cin_data_get_stats(void){
  * -------------------------------------------------------------------------------
  */
 
-int cin_data_load_frame(uint16_t *buffer, uint16_t *frame_num){
-  pthread_mutex_lock(&thread_data.image_buffer->mutex);
-
-  // Load the buffer pointer into the buffer
-  thread_data.image_buffer->data->data = buffer;
-  thread_data.image_buffer->waiting = 1;
-  pthread_cond_signal(&thread_data.image_buffer->signal_push);
-
-  // Now wait for the data to be copied
-  pthread_cond_wait(&thread_data.image_buffer->signal_pop, 
-                    &thread_data.image_buffer->mutex);
-
-  *frame_num = thread_data.image_buffer->data->number;
-
-  // We are no longer waiting
-  thread_data.image_buffer->waiting = 0;
-
-  // Now we have a valid image, we can return
-  pthread_mutex_unlock(&thread_data.image_buffer->mutex);
-
-  return 0;
-}
-
 void* cin_data_buffer_push(void *arg){
   void *rtn; 
-  image_buffer_t *buffer = (image_buffer_t*)arg;
+  cin_data_callbacks_t *callbacks = (cin_data_callbacks_t*)arg;
+  
+  // Run the callback to load the data frame
+  DEBUG_PRINT("Calling callback %p with frame %p\n", callbacks->push, callbacks->frame);
+  (*callbacks->push)(callbacks->frame);
 
-  pthread_mutex_lock(&buffer->mutex);
-  if(!buffer->waiting){
-    // If the waiting flag has gone up
-    // we signaled but this routine was not listening
-    pthread_cond_wait(&buffer->signal_push,
-                      &buffer->mutex);
-  }
-  rtn = (void *)(buffer->data);
-  pthread_mutex_unlock(&buffer->mutex);
+  // We return a type of cin_data_frame to process
+  rtn = (void *)callbacks->frame;
   return rtn;
 }
 
 void cin_data_buffer_pop(void *arg){
-  image_buffer_t *buffer = (image_buffer_t*)arg;
+  cin_data_callbacks_t *callbacks = (cin_data_callbacks_t*)arg;
+  
+  // Run the callback to process the dataframe
+  (*callbacks->pop)(callbacks->frame);
 
-  pthread_mutex_lock(&buffer->mutex);
-  pthread_cond_signal(&buffer->signal_pop);
-  pthread_mutex_unlock(&buffer->mutex);
+  return;
 }

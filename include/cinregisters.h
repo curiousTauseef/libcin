@@ -1,3 +1,6 @@
+#ifndef CIN_REG_MAP_H
+#define CIN_REG_MAP_H 1
+
 typedef struct {
   char *name;
   uint16_t reg;
@@ -238,3 +241,5 @@ cin_map_t cin_reg_map[] = {
 	{  "REG_DEBUGCOUNTER04_REG"                 , 0x8233 },
   {  NULL                                     , 0      }
 };
+
+#endif

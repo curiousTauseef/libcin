@@ -21,13 +21,11 @@ typedef struct cin_data_threads {
   int started;
 } cin_data_threads_t;
 
-typedef struct image_buffer {
-  cin_data_frame_t *data;
-  int waiting;
-  pthread_mutex_t mutex;
-  pthread_cond_t signal_push;
-  pthread_cond_t signal_pop;
-} image_buffer_t;
+typedef struct cin_data_callbacks {
+  void* (*push) (cin_data_frame_t *);
+  void* (*pop)  (cin_data_frame_t *);
+  cin_data_frame_t *frame;
+} cin_data_callbacks_t;
 
 typedef struct cin_data_thread_data {
   /* FIFO Elements */
@@ -38,9 +36,9 @@ typedef struct cin_data_thread_data {
   /* Image double buffer */
   mbuffer_t *image_dbuffer;
 
-  /* Buffer for images */
+  /* Callbacks Buffer */
 
-  image_buffer_t *image_buffer;
+  cin_data_callbacks_t callbacks;
 
   /* Interface */
   struct cin_port* dp; 
@@ -74,6 +72,7 @@ typedef struct cin_data_proc {
   void* (*output_get) (void*);
   void* output_args;
 } cin_data_proc_t;
+
 
 /* Templates for functions */
 
