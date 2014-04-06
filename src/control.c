@@ -863,6 +863,12 @@ int cin_ctl_int_trigger_start(struct cin_port* cp, int nimages){
   int _status;
 
   DEBUG_PRINT("Set n exposures to %d\n", nimages);
+  if(nimages != 1){
+    _status = cin_ctl_set_focus(cp, 1);
+    if(_status){
+      return _status;
+    }
+  }
   _status  = cin_ctl_write_with_readback(cp, REG_NUMBEROFEXPOSURE_REG, 
                                          (uint16_t)nimages);
   _status |= cin_ctl_write(cp, REG_FRM_COMMAND, 0x0100);
@@ -880,7 +886,7 @@ error:
       
 int cin_ctl_int_trigger_stop(struct cin_port* cp){
   int _status;
-  _status = cin_ctl_set_trigger(cp, CIN_CTL_TRIG_INTERNAL);
+  _status = cin_ctl_set_focus(cp, 0);
 
   if(_status){
     ERROR_COMMENT("Error stopping internal triggers\n");
