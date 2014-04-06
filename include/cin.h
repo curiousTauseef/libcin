@@ -274,6 +274,12 @@ typedef struct {
 } cin_ctl_pwr_mon_t;
 
 /*------------------------
+ * Reporting functions
+ *------------------------*/
+
+void cin_report(FILE *fp, int details);
+
+/*------------------------
  * UDP Socket
  *------------------------*/
 
@@ -343,7 +349,7 @@ int cin_ctl_ext_trigger_stop(struct cin_port* cp);
 int cin_ctl_set_exposure_time(struct cin_port* cp,float e_time);
 int cin_ctl_set_trigger_delay(struct cin_port* cp,float t_time);
 int cin_ctl_set_cycle_time(struct cin_port* cp,float ftime);
-int cin_ctl_set_frame_count_reset(struct cin_port* cp);
+int cin_ctl_frame_count_reset(struct cin_port* cp);
 int cin_ctl_set_mux(struct cin_port *cp, int setting);
 
 /*------------------------
@@ -397,6 +403,7 @@ struct cin_data_stats cin_data_get_stats(void);
 void cin_data_show_stats(void);
 
 int cin_data_load_frame(uint16_t *buffer, uint16_t *frame_num);
+int cin_data_frame_avaliable(void);
 
 void cin_data_start_monitor_output(void);
 void cin_data_stop_monitor_output(void);

@@ -3,10 +3,10 @@ CC=gcc
 CFLAGS=-Wall -O3 -g --pic
 
 # Include DEBUG statements
-#CFLAGS+=-D__DEBUG__
+CFLAGS+=-D__DEBUG__
 
 # Include Stream DEBUG statements
-#CFLAGS+=-D__DEBUG_STREAM__
+CFLAGS+=-D__DEBUG_STREAM__
 
 # Add code for profiling speed
 #CFLAGS+=-D__PROFILE__
@@ -30,6 +30,9 @@ exec_prefix = $(prefix)
 bindir = $(exec_prefix)/bin
 libdir = $(exec_prefix)/lib
 
+GIT = /usr/bin/git
+AWK = /usr/bin/awk
+
 INSTALL_DATA = $(INSTALL) -m 644
 INSTALL_PROGRAM = ${INSTALL} -m 755
 
@@ -44,7 +47,7 @@ LIBHEADERS=include/cin_register_map.h \
            include/cin.h
 
 LIBSOURCES=src/control.c src/data.c src/fifo.c \
-           src/mbuffer.c src/descramble.c
+           src/mbuffer.c src/descramble.c src/version.c
 
 LIBOBJECTS=$(LIBSOURCES:.c=.o)
 
