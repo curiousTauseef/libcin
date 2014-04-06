@@ -19,6 +19,7 @@
 #include "data.h"
 #include "mbuffer.h"
 #include "descramble.h"
+#include "version.h"
 
 /* -------------------------------------------------------------------------------
  *
@@ -180,6 +181,9 @@ int cin_data_init(int mode, int packet_buffer_len, int frame_buffer_len,
   /* Setup FIFO elements */
   
   /* For DEBUG print out the process id */
+
+  DEBUG_PRINT("build sha = %s\n", cin_build_git_sha);
+  DEBUG_PRINT("build time = %s\n", cin_build_git_time);
 
   DEBUG_PRINT("PID = %d\n", getpid());
   DEBUG_PRINT("getuid = %d\n", getuid());
