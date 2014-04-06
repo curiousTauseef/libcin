@@ -4,7 +4,6 @@
 #include <time.h>
 
 #include "cin.h"
-#include "cinregisters.h"
 
 int main(int argc, char *argv[]){
 
@@ -24,20 +23,10 @@ int main(int argc, char *argv[]){
 
   fprintf(stdout, "\n");
   fprintf(stdout, "cinregdump : Started at %s\n\n", buf);
-  fprintf(stdout, "-------------------------------------------------------------\n");
-  fprintf(stdout, "Register Name                            : Register : Value \n");
-  fprintf(stdout, "-------------------------------------------------------------\n");
-  cin_map_t *rmap = cin_reg_map;
-  while(rmap->name != NULL){
-    uint16_t reg = rmap->reg;
-    uint16_t val;
-    if(!cin_ctl_read(&cp, reg, &val)){
-      fprintf(stdout, "%-40s :  0x%04X  :  0x%04X\n", rmap->name, reg, val);
-    } else {
-      fprintf(stdout, "%-40s :  0x%04X  : ERROR\n", rmap->name, reg);
-    }
-    rmap++;
-  }
 
-  return 0;
+  int status = cin_ctl_reg_dump(&cp, stdout);
+
+  cin_ctl_close_port(&cp);
+
+  return status;
 }

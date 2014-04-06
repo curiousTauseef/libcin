@@ -9,6 +9,7 @@
 
 #include "cin.h"
 #include "cin_register_map.h"
+#include "cinregisters.h"
 #include "control.h"
 #include "fifo.h"
 
@@ -1062,4 +1063,30 @@ int cin_ctl_set_mux(struct cin_port *cp, int setting){
   } 
 
   return 0;
+}
+
+/*******************  Register Dump of CIN    **********************/
+
+int cin_ctl_reg_dump(struct cin_port *cp, FILE *fp)
+{
+  fprintf(fp, "-------------------------------------------------------------\n");
+  fprintf(fp, "Register Name                            : Register : Value \n");
+  fprintf(fp, "-------------------------------------------------------------\n");
+
+  cin_map_t *rmap = cin_reg_map;
+  
+  int status = 0;
+  while(rmap->name != NULL){
+    uint16_t reg = rmap->reg;
+    uint16_t val;
+    if(!(status |= cin_ctl_read(cp, reg, &val)))
+    {
+      fprintf(fp, "%-40s :  0x%04X  :  0x%04X\n", rmap->name, reg, val);
+    } else {
+      fprintf(fp, "%-40s :  0x%04X  : ERROR\n", rmap->name, reg);
+    }
+    rmap++;
+  } 
+
+  return status;
 }
