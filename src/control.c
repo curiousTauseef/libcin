@@ -9,6 +9,7 @@
 
 #include "cin.h"
 #include "cin_register_map.h"
+#include "cinregisters.h"
 #include "control.h"
 #include "fifo.h"
 
@@ -127,7 +128,6 @@ void *cin_ctl_listen_thread(void* args){
 
   while(1){
     buffer = (uint32_t*)fifo_get_head(ctl_fifo);
-    DEBUG_COMMENT("Got head pointer\n");
     i = recvfrom(cp->sockfd, &val, sizeof(val), 0,
                  (struct sockaddr*)&cp->sin_cli,
                  (socklen_t*)&cp->slen);
@@ -152,6 +152,7 @@ int cin_ctl_close_port(struct cin_port* cp) {
     pthread_join(cp->listener->thread_id, NULL);
     DEBUG_COMMENT("Thread returned\n");
     close(cp->sockfd); 
+    cp->sockfd = 0;
   }
   return 0;
 }
@@ -864,7 +865,7 @@ int cin_ctl_int_trigger_start(struct cin_port* cp, int nimages){
   DEBUG_PRINT("Set n exposures to %d\n", nimages);
   _status  = cin_ctl_write_with_readback(cp, REG_NUMBEROFEXPOSURE_REG, 
                                          (uint16_t)nimages);
-  _status |= cin_ctl_write_with_readback(cp, REG_FRM_COMMAND, 0x0100);
+  _status |= cin_ctl_write(cp, REG_FRM_COMMAND, 0x0100);
   if(_status){
     ERROR_COMMENT("Unable to start triggers");
     goto error;
@@ -1062,4 +1063,30 @@ int cin_ctl_set_mux(struct cin_port *cp, int setting){
   } 
 
   return 0;
+}
+
+/*******************  Register Dump of CIN    **********************/
+
+int cin_ctl_reg_dump(struct cin_port *cp, FILE *fp)
+{
+  fprintf(fp, "-------------------------------------------------------------\n");
+  fprintf(fp, "Register Name                            : Register : Value \n");
+  fprintf(fp, "-------------------------------------------------------------\n");
+
+  cin_map_t *rmap = cin_reg_map;
+  
+  int status = 0;
+  while(rmap->name != NULL){
+    uint16_t reg = rmap->reg;
+    uint16_t val;
+    if(!(status |= cin_ctl_read(cp, reg, &val)))
+    {
+      fprintf(fp, "%-40s :  0x%04X  :  0x%04X\n", rmap->name, reg, val);
+    } else {
+      fprintf(fp, "%-40s :  0x%04X  : ERROR\n", rmap->name, reg);
+    }
+    rmap++;
+  } 
+
+  return status;
 }
