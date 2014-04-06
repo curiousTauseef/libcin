@@ -7,6 +7,7 @@ src/version.c:
 	$(GIT) rev-parse HEAD | $(AWK) ' BEGIN {print "#include \"version.h\""} {print "const char *cin_build_git_sha = \"" $$0"\";"} END {}' > src/version.c
 	date | $(AWK) 'BEGIN {} {print "const char *cin_build_git_time = \""$$0"\";"} END {} ' >> src/version.c
 	$(GIT) describe --dirty --always | $(AWK) 'BEGIN {} {print "const char *cin_build_version = \""$$0"\";"} END {} ' >> src/version.c
+	cat src/version.c
 
 # create dynamically and statically-linked libs.
 lib/libcin.a: $(LIBOBJECTS) 
