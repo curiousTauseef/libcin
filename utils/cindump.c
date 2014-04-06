@@ -96,7 +96,7 @@ int main(int argc, char *argv[]){
 
   /* Start the main routine */
   if(cin_data_init(CIN_DATA_MODE_CALLBACK, 20000, 2000,
-                   allocate_image, write_image))
+                   allocate_image, write_image, NULL))
   {
     exit(1);
   }
