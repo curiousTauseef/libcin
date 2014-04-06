@@ -182,8 +182,9 @@ int cin_data_init(int mode, int packet_buffer_len, int frame_buffer_len,
   
   /* For DEBUG print out the process id */
 
-  DEBUG_PRINT("build sha = %s\n", cin_build_git_sha);
-  DEBUG_PRINT("build time = %s\n", cin_build_git_time);
+  DEBUG_PRINT("build sha     = %s\n", cin_build_git_sha);
+  DEBUG_PRINT("build time    = %s\n", cin_build_git_time);
+  DEBUG_PRINT("build version = %s\n", cin_build_version);
 
   DEBUG_PRINT("PID = %d\n", getpid());
   DEBUG_PRINT("getuid = %d\n", getuid());
@@ -836,14 +837,12 @@ void* cin_data_descramble_thread(void *args){
 
 void* cin_data_writer_thread(void *args){
   /* This routine gets the next frame and descrambles is */
-  struct cin_data_frame *image = NULL;
-
   cin_data_proc_t *proc = (cin_data_proc_t*)args;
 
   while(1){
     // Get a frame 
     
-    image = (cin_data_frame_t*)(*proc->input_get)(proc->input_args, proc->reader);
+    cin_data_frame_t *image = (cin_data_frame_t*)(*proc->input_get)(proc->input_args, proc->reader);
     DEBUG_PRINT("image %d\n", image->number);
     // Release the frame and the image
 
