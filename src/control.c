@@ -84,6 +84,11 @@ int cin_ctl_init_port(struct cin_port* cp, char* ipaddr,
     return -1;
   }
 
+  // Initialize the mutex for sequential access
+  pthread_mutexattr_init(&cp->access_attr);
+  pthread_mutexattr_settype(&cp->access_attr, PTHREAD_MUTEX_RECURSIVE);
+  pthread_mutex_init(&cp->access, &cp->access_attr);
+
   pthread_create(&listener->thread_id, NULL, 
                  cin_ctl_listen_thread, (void*)listener);
   cp->listener = listener;
@@ -168,12 +173,19 @@ int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val){
       ERROR_COMMENT("Parameter cp is NULL!");
       goto error;
    }
-   
+  
+  // Lock the mutex for access
+  pthread_mutex_lock(&cp->access);
+
    _valwr = ntohl((uint32_t)(reg << 16 | val));
    rc = sendto(cp->sockfd, &_valwr, sizeof(_valwr), 0,
          (struct sockaddr*)&cp->sin_srv,
          sizeof(cp->sin_srv));
-   if (rc != sizeof(_valwr) ) {
+
+  // Unlock Mutex for access
+  pthread_mutex_unlock(&cp->access);
+
+  if (rc != sizeof(_valwr) ) {
       ERROR_COMMENT("CIN control port - sendto() failure!!");
       goto error;
    }
@@ -193,30 +205,37 @@ int cin_ctl_write_with_readback(struct cin_port* cp, uint16_t reg, uint16_t val)
   
   int tries = CIN_CTL_MAX_WRITE_TRIES;
 
+  pthread_mutex_lock(&cp->access);
+
+  int _status;
   while(tries){
-    int _status;
     DEBUG_PRINT("try = %d\n", tries);
     _status = cin_ctl_write(cp, reg, val);
     if(_status){
       ERROR_COMMENT("Error writing register\n");
-      return _status;
+      goto error;
     }
 
     uint16_t _val;
     _status = cin_ctl_read(cp, reg, &_val);
     if(_status){
       ERROR_COMMENT("Unable to read register\n");
-      return _status;
+      goto error;
     }
     DEBUG_PRINT("sent = %04X recv = %04X\n", val, _val); 
     if(_val == val){
       // Value correct
       break;
     }
-
     tries--;
   }
+
+  pthread_mutex_unlock(&cp->access);
   return 0;
+
+error:
+  pthread_mutex_unlock(&cp->access);
+  return _status;
 }
 
 int cin_ctl_stream_write(struct cin_port* cp, char *val,int size) {
@@ -227,10 +246,15 @@ int cin_ctl_stream_write(struct cin_port* cp, char *val,int size) {
       ERROR_COMMENT("Parameter cp is NULL!");
       goto error;
    }
-   
+
+  pthread_mutex_lock(&cp->access);
+
    rc = sendto(cp->sockfd, val, size, 0,
                (struct sockaddr*)&cp->sin_srv,
                sizeof(cp->sin_srv));
+
+  pthread_mutex_unlock(&cp->access);
+
    if (rc != size ) {
       ERROR_COMMENT("sendto() failure!!");
       goto error;
@@ -248,6 +272,8 @@ int cin_ctl_read(struct cin_port* cp, uint16_t reg, uint16_t *val) {
     
   int _status;
   uint32_t buf = 0;
+
+  pthread_mutex_lock(&cp->access);
 
   int tries = CIN_CTL_MAX_READ_TRIES;
   while(tries){
@@ -272,6 +298,7 @@ int cin_ctl_read(struct cin_port* cp, uint16_t reg, uint16_t *val) {
     ERROR_PRINT("Failed to read register %04X\n", reg);
     goto error;
   }
+
 #ifdef __DEBUG_STREAM__
   DEBUG_PRINT("Got %04X from %04X\n", buf & 0xFFFF, (buf >> 16));
 #endif
@@ -283,11 +310,12 @@ int cin_ctl_read(struct cin_port* cp, uint16_t reg, uint16_t *val) {
   }
 
   *val = (uint16_t)buf;
-
+  pthread_mutex_unlock(&cp->access);
   return 0;
     
 error:  
    ERROR_COMMENT("Read error.\n");
+   pthread_mutex_unlock(&cp->access);
    return (-1);
 }
 
