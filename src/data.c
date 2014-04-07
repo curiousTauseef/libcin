@@ -175,15 +175,17 @@ int cin_data_write(struct cin_port* dp, char* buffer, int buffer_len){
  */
 
 int cin_data_init(int mode, int packet_buffer_len, int frame_buffer_len,
-                  cin_data_callback push_callback, cin_data_callback pop_callback){
+                  cin_data_callback push_callback, cin_data_callback pop_callback,
+                  void *usr_ptr){
   /* Initialize and start all the threads to acquire data */
   /* This does not block, just start threads */
   /* Setup FIFO elements */
   
   /* For DEBUG print out the process id */
 
-  DEBUG_PRINT("build sha = %s\n", cin_build_git_sha);
-  DEBUG_PRINT("build time = %s\n", cin_build_git_time);
+  DEBUG_PRINT("build sha     = %s\n", cin_build_git_sha);
+  DEBUG_PRINT("build time    = %s\n", cin_build_git_time);
+  DEBUG_PRINT("build version = %s\n", cin_build_version);
 
   DEBUG_PRINT("PID = %d\n", getpid());
   DEBUG_PRINT("getuid = %d\n", getuid());
@@ -246,6 +248,7 @@ int cin_data_init(int mode, int packet_buffer_len, int frame_buffer_len,
     thread_data.callbacks.push = (void*)push_callback;
     thread_data.callbacks.pop = (void*)pop_callback;
     thread_data.callbacks.frame = malloc(sizeof(cin_data_frame_t));
+    thread_data.callbacks.frame->usr_ptr = usr_ptr;
     descramble1->output_get = (void*)&cin_data_buffer_push;
     descramble1->output_put = (void*)&cin_data_buffer_pop;
     descramble1->output_args = (void*)&thread_data.callbacks;
@@ -836,14 +839,12 @@ void* cin_data_descramble_thread(void *args){
 
 void* cin_data_writer_thread(void *args){
   /* This routine gets the next frame and descrambles is */
-  struct cin_data_frame *image = NULL;
-
   cin_data_proc_t *proc = (cin_data_proc_t*)args;
 
   while(1){
     // Get a frame 
     
-    image = (cin_data_frame_t*)(*proc->input_get)(proc->input_args, proc->reader);
+    cin_data_frame_t *image = (cin_data_frame_t*)(*proc->input_get)(proc->input_args, proc->reader);
     DEBUG_PRINT("image %d\n", image->number);
     // Release the frame and the image
 
@@ -967,8 +968,8 @@ void* cin_data_buffer_push(void *arg){
 
 void cin_data_buffer_pop(void *arg){
   cin_data_callbacks_t *callbacks = (cin_data_callbacks_t*)arg;
-  
-  // Run the callback to process the dataframe
+
+  DEBUG_PRINT("Calling callback %p with frame %p\n", callbacks->pop, callbacks->frame); 
   (*callbacks->pop)(callbacks->frame);
 
   return;
