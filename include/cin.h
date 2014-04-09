@@ -177,13 +177,13 @@ typedef struct {
   pthread_cond_t signal;
 } fifo;
 
-typedef struct {
+typedef struct cin_ctl_listener {
   struct cin_port *cp;
   fifo ctl_fifo;
   pthread_t thread_id;
 } cin_ctl_listener_t;
 
-struct cin_port {
+typedef struct cin_port {
     char *srvaddr;
     char *cliaddr;
     uint16_t srvport;
@@ -198,7 +198,7 @@ struct cin_port {
     cin_ctl_listener_t *listener;
     pthread_mutex_t access; /* For sequential access to CIN */
     pthread_mutexattr_t access_attr;
-};
+} cin_port_t;
 
 typedef struct cin_data_frame {
   uint16_t *data;
