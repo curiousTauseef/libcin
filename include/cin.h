@@ -250,12 +250,11 @@ typedef void (*cin_data_callback) (cin_data_frame_t *);
  */
 
 
-typedef struct cin_ctl_fpga_status {
+typedef struct cin_ctl_id {
   uint16_t board_id;
   uint16_t serial_no;
   uint16_t fpga_ver;
-  uint16_t fpga_status;
-} cin_ctl_fpga_status_t;
+} cin_ctl_id_t;
 
 typedef struct cin_ctl_pwr_val {
   double i;
@@ -314,9 +313,10 @@ int cin_ctl_load_config(struct cin_port* cp,char *filename);
 int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp, char *filename);
 int cin_ctl_set_fclk(struct cin_port* cp, int clkfreq);
 int cin_ctl_get_fclk(struct cin_port* cp, int *clkfreq);
-int cin_ctl_get_cfg_fpga_status(struct cin_port* cp,
-                                cin_ctl_fpga_status_t *_val);
-void cin_ctl_display_fpga_status(FILE *out, cin_ctl_fpga_status_t *_val);
+int cin_ctl_get_cfg_fpga_status(struct cin_port* cp, uint16_t *_val);
+int cin_ctl_get_id(struct cin_port *cp, cin_ctl_id_t *_val);
+void cin_ctl_display_id(FILE *out, cin_ctl_id_t val);
+void cin_ctl_display_fpga_status(FILE *out, uint16_t val);
 int cin_ctl_get_dcm_status(struct cin_port* cp, uint16_t *_val);
 void cin_ctl_display_dcm_status(FILE *out, uint16_t *_val);
 

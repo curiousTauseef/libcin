@@ -428,9 +428,8 @@ error:
 int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filename){
    
   uint32_t num_e;
-  int _status; 
   char buffer[128];
-   
+  int _status = -1; 
   // Lock the mutex for exclusive access to the CIN
 
   pthread_mutex_lock(&cp->access);
@@ -482,9 +481,9 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
   sleep(1);
   DEBUG_COMMENT("Done.\n");
 
-  cin_ctl_fpga_status_t _fpga_status;
+  uint16_t _fpga_status;
   _status = cin_ctl_get_cfg_fpga_status(cp, &_fpga_status);
-  _status |= !(_fpga_status.fpga_status & CIN_CTL_FPGA_STS_CFG);
+  _status |= !(_fpga_status & CIN_CTL_FPGA_STS_CFG);
   if(_status){
     DEBUG_COMMENT("FPGA Failed to configure.\n");
     goto error;
@@ -556,23 +555,10 @@ int cin_ctl_get_fclk(struct cin_port* cp, int *clkfreq){
   return -1;
 }  
 
-int cin_ctl_get_cfg_fpga_status(struct cin_port* cp, 
-                                cin_ctl_fpga_status_t *_val){
+int cin_ctl_get_cfg_fpga_status(struct cin_port* cp, uint16_t *_val){
       
-  int _status; 
-
-  //# get Status Registers
-  _status  = cin_ctl_read(cp, REG_BOARD_ID, &_val->board_id);
-  DEBUG_PRINT("CIN Board ID     :  %04X\n",_val->board_id);
-
-  _status |= cin_ctl_read(cp,REG_HW_SERIAL_NUM, &_val->serial_no);
-  DEBUG_PRINT("HW Serial Number :  %04X\n",_val->serial_no);
-
-  _status |= cin_ctl_read(cp,REG_FPGA_VERSION, &_val->fpga_ver);
-  DEBUG_PRINT("CFG FPGA Version :  %04X\n\n",_val->fpga_ver);
-
-  _status |= cin_ctl_read(cp,REG_FPGA_STATUS, &_val->fpga_status);
-  DEBUG_PRINT("CFG FPGA Status  :  %04X\n",_val->fpga_status);
+  int _status = cin_ctl_read(cp,REG_FPGA_STATUS, _val);
+  DEBUG_PRINT("CFG FPGA Status  :  %04X\n", *_val);
 
   if(_status){
     ERROR_COMMENT("Unable to read FPGA status\n");
@@ -582,18 +568,41 @@ int cin_ctl_get_cfg_fpga_status(struct cin_port* cp,
   return 0;
 }
 
-void cin_ctl_display_fpga_status(FILE *out, cin_ctl_fpga_status_t *_val){
+int cin_ctl_get_id(struct cin_port *cp, cin_ctl_id_t *val){
+  int _status;
+
+  _status  = cin_ctl_read(cp, REG_BOARD_ID, &val->board_id);
+  DEBUG_PRINT("CIN Board ID     :  %04X\n",val->board_id);
+
+  _status |= cin_ctl_read(cp,REG_HW_SERIAL_NUM, &val->serial_no);
+  DEBUG_PRINT("HW Serial Number :  %04X\n",val->serial_no);
+
+  _status |= cin_ctl_read(cp,REG_FPGA_VERSION, &val->fpga_ver);
+  DEBUG_PRINT("CFG FPGA Version :  %04X\n\n",val->fpga_ver);
+
+  if(_status){
+    ERROR_COMMENT("Unable to read CIN ID\n");
+    return -1;
+  }
+
+  return 0;
+}
+
+void cin_ctl_display_id(FILE *out, cin_ctl_id_t val){
   fprintf(out, "FPGA Status :\n\n");
-  fprintf(out, "  Board ID         : %04X\n", _val->board_id);
-  fprintf(out, "  Serial Number    : %04X\n", _val->serial_no);
-  fprintf(out, "  CFG FPGA Ver.    : %04X\n", _val->fpga_ver);
-  fprintf(out, "  CFG FPGA Status  : %04X\n\n", _val->fpga_status);
-  if(_val->fpga_status & CIN_CTL_FPGA_STS_CFG){
+  fprintf(out, "  Board ID         : %04X\n", val.board_id);
+  fprintf(out, "  Serial Number    : %04X\n", val.serial_no);
+  fprintf(out, "  CFG FPGA Ver.    : %04X\n", val.fpga_ver);
+}
+
+void cin_ctl_display_fpga_status(FILE *out, uint16_t fpga_status){
+  fprintf(out, "  CFG FPGA Status  : %04X\n\n", fpga_status);
+  if(fpga_status & CIN_CTL_FPGA_STS_CFG){
     fprintf(out, "  ** Frame FPGA Configuration Done\n");
   } else {
     fprintf(out, "  ** Frame FPGA NOT CONFIGURED!\n");
   }
-  if(_val->fpga_status & CIN_CTL_FPGA_STS_FP_PWR){
+  if(fpga_status & CIN_CTL_FPGA_STS_FP_PWR){
     fprintf(out, "  ** FP Power Supply Unlocked\n");
   } else {
     fprintf(out, "  ** FP Power Supply Locked Off\n");
