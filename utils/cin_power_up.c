@@ -31,19 +31,21 @@ int main(){
 	cin_ctl_init_port(&cp[1], 0, CIN_CTL_SVR_FRMW_PORT, CIN_CTL_CLI_FRMW_PORT);
 
   fprintf(stderr, "Powering OFF CIN ............................");
-	cin_off(&cp[0]);
+	cin_ctl_pwr(&cp[0], 0);
 	sleep(2);
   fprintf(stderr, " DONE\n");  
 
   fprintf(stderr, "Powering ON CIN .............................");
-	cin_on(&cp[0]);
+	cin_ctl_pwr(&cp[0], 1);
 	sleep(2);
   fprintf(stderr, " DONE\n");
 
   fprintf(stderr, "Powering ON CIN Front Panel .................");
-	cin_fp_on(&cp[0]);
+	cin_ctl_fp_pwr(&cp[0], 1);
 	sleep(2);
   fprintf(stderr, " DONE\n");
+
+  return;
 
   //fprintf(stderr, "\n");
   //cin_ctl_fpga_status_t fpga_status;
@@ -102,14 +104,6 @@ int main(){
 	//sleep(3);
 
 /**********************************************************************/		
-
-  // Do some setup. Set the focus bit
-
-  cin_ctl_set_focus(&cp[0], 1);
-  cin_ctl_set_mux(&cp[0], CIN_CTL_MUX1_TRIGMON);
-  cin_ctl_set_mux(&cp[0], CIN_CTL_MUX2_CONVERT);
-  // int focus;
-  // cin_ctl_get_focus(&cp[0], &focus);
 
   cin_ctl_close_port(&cp[0]);
   cin_ctl_close_port(&cp[1]);
