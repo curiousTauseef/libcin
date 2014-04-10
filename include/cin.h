@@ -303,13 +303,8 @@ int cin_ctl_write_with_readback(struct cin_port* cp, uint16_t reg, uint16_t val)
  * CIN PowerUP-PowerDown
  *------------------------*/
 
-int cin_pwr(struct cin_port *cp, int pwr);
-int cin_on(struct cin_port* cp);
-int cin_off(struct cin_port* cp);
-
-int cin_fp_pwr(struct cin_port* cp, int pwr);
-int cin_fp_on(struct cin_port* cp);
-int cin_fp_off(struct cin_port* cp);
+int cin_ctl_pwr(struct cin_port *cp, int pwr);
+int cin_ctl_fp_pwr(struct cin_port* cp, int pwr);
 
 /*------------------------
  * CIN Configuration-Status

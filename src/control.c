@@ -321,7 +321,7 @@ error:
 
  
 /******************* CIN PowerUP/PowerDown *************************/
-int cin_pwr(struct cin_port* cp, int pwr){
+int cin_ctl_pwr(struct cin_port* cp, int pwr){
 
   int _status;
   uint16_t _val;
@@ -347,15 +347,7 @@ error:
    return _status;
 }
 
-int cin_on(struct cin_port* cp) {
-  return cin_pwr(cp, 1);
-}
-
-int cin_off(struct cin_port* cp) {
-  return cin_pwr(cp, 0);
-}
-
-int cin_fp_pwr(struct cin_port* cp, int pwr){ 
+int cin_ctl_fp_pwr(struct cin_port* cp, int pwr){ 
 
   int _status;
   uint16_t _val;
@@ -381,13 +373,6 @@ error:
    return _status;
 }
 
-int cin_fp_off(struct cin_port* cp){
-  return cin_fp_pwr(cp, 0);
-}
-int cin_fp_on(struct cin_port* cp){
-  return cin_fp_pwr(cp, 1);
-}
-
 /******************* CIN Configuration/Status *************************/
 
 int cin_ctl_load_config(struct cin_port* cp,char *filename){
@@ -406,9 +391,13 @@ int cin_ctl_load_config(struct cin_port* cp,char *filename){
    
   /* Read a line an filter out comments */     
 
-  while(fgets(_line,sizeof _line,file)!= NULL){ 
-    _line[strlen(_line)-1]='\0';   
+  // Lock the mutex to get exclusive access to the CIN
 
+  pthread_mutex_lock(&cp->access);
+
+  while(fgets(_line,sizeof _line,file) != NULL){ 
+    _line[strlen(_line)-1]='\0';   
+    //fprintf(stderr, "Line\n");
     if ('#' == _line[0] || '\0' == _line[0]){
       //fprintf(stdout," Ignore line\n"); //DEBUG 
     } else { 
@@ -424,11 +413,15 @@ int cin_ctl_load_config(struct cin_port* cp,char *filename){
       }
    }
   }
+ 
+  DEBUG_COMMENT("Done.");
+  pthread_mutex_unlock(&cp->access);
   
   fclose(file);
   return 0;
   
 error:
+  pthread_mutex_unlock(&cp->access);
   return -1;
 }
 
@@ -438,10 +431,14 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
   int _status; 
   char buffer[128];
    
-  FILE *file= fopen(filename, "rb");
+  // Lock the mutex for exclusive access to the CIN
 
+  pthread_mutex_lock(&cp->access);
+
+  FILE *file= fopen(filename, "rb");
   if(file == NULL){ 
-    return -1;
+    ERROR_COMMENT("Failed to open file.\n");
+    goto error;
   }
             
   DEBUG_PRINT("Loading %s\n", filename);
@@ -490,14 +487,16 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
   _status |= !(_fpga_status.fpga_status & CIN_CTL_FPGA_STS_CFG);
   if(_status){
     DEBUG_COMMENT("FPGA Failed to configure.\n");
-    return -1;
+    goto error;
   }
   
+  pthread_mutex_unlock(&cp->access);
   DEBUG_COMMENT("FPGA Configured OK\n");
   return 0;
    
 error:
-   return _status;
+  pthread_mutex_unlock(&cp->access);
+  return _status;
 }
 
 int cin_ctl_set_fclk(struct cin_port* cp, int clkfreq){
@@ -691,6 +690,7 @@ int cin_ctl_get_power_status(struct cin_port* cp,
     DEBUG_COMMENT("12V Power Supply is OFF\n");
     return 0;
   } else {
+    *pwr = 1;
     DEBUG_COMMENT("12V Power Supply in ON\n");
   }
 
