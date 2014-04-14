@@ -12,7 +12,9 @@
 void int_handler(int dummy){
   cin_data_stop_threads();
   fprintf(stderr, "\n");
-  cin_data_show_stats();
+  cin_data_stats_t stats;
+  cin_data_compute_stats(&stats);
+  cin_data_show_stats(stderr, stats);
   fprintf(stderr, "\n\n");
   exit(0);
 }
@@ -115,7 +117,9 @@ int main(int argc, char *argv[]){
 
   cin_data_wait_for_threads();
 
-  cin_data_show_stats();
+  cin_data_stats_t stats;
+  cin_data_compute_stats(&stats);
+  cin_data_show_stats(stderr, stats);
 
   fprintf(stderr, "\n\n");
 
