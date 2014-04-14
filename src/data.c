@@ -625,75 +625,70 @@ void *cin_data_assembler_thread(void *args){
   pthread_exit(NULL);
 }
 
-void *cin_data_monitor_thread(void){
+void cin_data_compute_stats(cin_data_stats_t *stats){
   double framerate, datarate;
 
-  unsigned int last_frame = 0;
+  static unsigned int last_frame = 0;
+  //static unsigned long int n = 0; // Note this will rollover .. then this breaks!
 
-  unsigned long int n = 0; // Note this will rollover .. then this breaks!
+  pthread_mutex_lock(&thread_data.stats_mutex);
 
-  int sid = syscall(SYS_gettid);
-  DEBUG_PRINT("Starting monitor thread ppid = %d\n", sid);
+  if((unsigned int)thread_data.last_frame != last_frame){
+    // Compute framerate
 
-  while(1){
-
-    if((unsigned int)thread_data.last_frame != last_frame){
-      // Compute framerate
-
-      framerate  =  (double)thread_data.framerate.tv_usec * 1e-6;
-      framerate  += (double)thread_data.framerate.tv_sec; 
-      if(framerate == 0){
-        framerate = 0;
-      } else {
-        framerate = 1 / framerate;
-      }
+    framerate  =  (double)thread_data.framerate.tv_usec * 1e-6;
+    framerate  += (double)thread_data.framerate.tv_sec; 
+    if(framerate == 0){
+      framerate = 0;
     } else {
-      framerate = 0; 
+      framerate = 1 / framerate;
     }
-
-    datarate = framerate * CIN_DATA_MAX_STREAM * sizeof(uint16_t);
-    datarate = datarate / (1024 * 1024); // Convert to Mb.s^-1
-
-    pthread_mutex_lock(&thread_data.stats_mutex);
-
-    last_frame = (int)thread_data.last_frame;
-    thread_data.stats.last_frame = last_frame;
-
-    thread_data.stats.framerate = framerate;
-    thread_data.stats.datarate = datarate;
-    if(n == 0){
-      thread_data.stats.av_framerate = framerate;
-      thread_data.stats.av_datarate = datarate;
-    } else {
-      thread_data.stats.av_datarate =  ((n * thread_data.stats.av_datarate + datarate) / (n + 1));
-      thread_data.stats.av_framerate = ((n * thread_data.stats.av_framerate + framerate) / (n + 1));
-    }
-    n++;
-
-    thread_data.stats.packet_percent_full = fifo_percent_full(thread_data.packet_fifo);
-    thread_data.stats.frame_percent_full = fifo_percent_full(thread_data.frame_fifo);
-    thread_data.stats.image_percent_full = fifo_percent_full(thread_data.image_fifo);
-    thread_data.stats.packet_overruns = thread_data.packet_fifo->overruns;
-    thread_data.stats.frame_overruns = thread_data.frame_fifo->overruns;
-    thread_data.stats.image_overruns = thread_data.image_fifo->overruns;
-    thread_data.stats.dropped_packets = thread_data.dropped_packets;
-    thread_data.stats.mallformed_packets = thread_data.mallformed_packets;
-
-    pthread_mutex_unlock(&thread_data.stats_mutex);
-
-    usleep(CIN_DATA_MONITOR_UPDATE);
+  } else {
+    framerate = 0; 
   }
 
-  pthread_exit(NULL);
+  datarate = framerate * CIN_DATA_MAX_STREAM * sizeof(uint16_t);
+  datarate = datarate / (1024 * 1024); // Convert to Mb.s^-1
+
+  last_frame = (int)thread_data.last_frame;
+  stats->last_frame = last_frame;
+
+  stats->framerate = framerate;
+  stats->datarate = datarate;
+  stats->av_framerate = framerate;
+  stats->av_datarate = datarate;
+
+  //if(n == 0){
+  //  stats->av_framerate = framerate;
+  //  stats->av_datarate = datarate;
+  //} else {
+  //  stats->av_datarate =  ((n * stats->av_datarate + datarate) / (n + 1));
+  //  stats->av_framerate = ((n * stats->av_framerate + framerate) / (n + 1));
+  //}
+  //n++;
+
+  stats->packet_percent_full = fifo_percent_full(thread_data.packet_fifo);
+  stats->frame_percent_full = fifo_percent_full(thread_data.frame_fifo);
+  stats->image_percent_full = fifo_percent_full(thread_data.image_fifo);
+  stats->packet_overruns = thread_data.packet_fifo->overruns;
+  stats->frame_overruns = thread_data.frame_fifo->overruns;
+  stats->image_overruns = thread_data.image_fifo->overruns;
+  stats->dropped_packets = thread_data.dropped_packets;
+  stats->mallformed_packets = thread_data.mallformed_packets;
+
+  pthread_mutex_unlock(&thread_data.stats_mutex);
+
 }
 
 void *cin_data_monitor_output_thread(void){
-   /* Output to screen monitored values */
 
   //fprintf(stderr, "\033[?25l");
 
+  cin_data_stats_t stats;
+
   while(1){
-    cin_data_show_stats();
+    cin_data_compute_stats(&stats);
+    cin_data_show_stats(stderr, stats);
     fprintf(stderr, "\033[A\033[A\033[A\033[A\033[A"); // Move up 5 lines 
 
     usleep(CIN_DATA_MONITOR_UPDATE);
@@ -702,16 +697,11 @@ void *cin_data_monitor_output_thread(void){
   pthread_exit(NULL);
 }
 
-void cin_data_show_stats(void){
-  cin_data_stats_t stats;
+void cin_data_show_stats(FILE *fp, cin_data_stats_t stats){
   char buffer[256];
   
-  pthread_mutex_lock(&thread_data.stats_mutex);
-  stats = thread_data.stats;
-  pthread_mutex_unlock(&thread_data.stats_mutex);
-
   sprintf(buffer, "Last frame %-12d", stats.last_frame);
-  fprintf(stderr, "%-80s\n", buffer);
+  fprintf(fp, "%-80s\n", buffer);
 
   sprintf(buffer, "Packet buffer %8.3f%%.", 
           stats.packet_percent_full);
@@ -719,30 +709,33 @@ void cin_data_show_stats(void){
           stats.frame_percent_full);
   sprintf(buffer, "%s Spool buffer %8.3f%%.",buffer,
           stats.image_percent_full);
-  fprintf(stderr, "%-80s\n", buffer);
+  fprintf(fp, "%-80s\n", buffer);
 
   sprintf(buffer, "Framerate     = %6.1f s^-1 : Data Rate     = %10.3f Mb.s^-1",
           stats.framerate, stats.datarate);
-  fprintf(stderr, "%-80s\n", buffer);
+  fprintf(fp, "%-80s\n", buffer);
 
-  sprintf(buffer, "Av. framerate = %6.1f s^-1 : Av. data Rate = %10.3f Mb.s^-1",
-          stats.av_framerate, stats.av_datarate);
-  fprintf(stderr, "%-80s\n", buffer);
+  //sprintf(buffer, "Av. framerate = %6.1f s^-1 : Av. data Rate = %10.3f Mb.s^-1",
+  //        stats.av_framerate, stats.av_datarate);
+  //fprintf(fp, "%-80s\n", buffer);
 
   sprintf(buffer, "Dropped packets %-11ld : Mallformed packets %-11ld",
           stats.dropped_packets, stats.mallformed_packets);
-  fprintf(stderr, "%-80s\n", buffer);
+  fprintf(fp, "%-80s\n", buffer);
+}
+
+int cin_data_send_magic(void){
+  char* dummy = "DUMMY DATA";
+  return cin_data_write(thread_data.dp, dummy, sizeof(dummy));
 }
 
 void *cin_data_listen_thread(void *args){
   
   struct cin_data_packet *buffer = NULL;
-  char* dummy = "DUMMY DATA";
   cin_data_proc_t *proc = (cin_data_proc_t*)args;
  
   /* Send a packet to initialize the CIN */
-
-  cin_data_write(thread_data.dp, dummy, sizeof(dummy));
+  cin_data_send_magic();
 
   int sid = syscall(SYS_gettid);
   DEBUG_PRINT("Starting listener thread ppid = %d\n", sid);
