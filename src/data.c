@@ -163,8 +163,13 @@ int cin_data_read(struct cin_port* dp, unsigned char* buffer){
 }
 
 int cin_data_write(struct cin_port* dp, char* buffer, int buffer_len){
-  return sendto(dp->sockfd, buffer, buffer_len, 0,
-                (struct sockaddr*)&dp->sin_srv, sizeof(dp->sin_srv));
+  int rtn = sendto(dp->sockfd, buffer, buffer_len, 0,
+                   (struct sockaddr*)&dp->sin_srv, sizeof(dp->sin_srv));
+  if(rtn == buffer_len){
+    return 0;
+  } else {
+    return -1;
+  }
 }
 
 /* -------------------------------------------------------------------------------
