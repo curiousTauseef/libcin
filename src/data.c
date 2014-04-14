@@ -269,9 +269,6 @@ int cin_data_init(int mode, int packet_buffer_len, int frame_buffer_len,
   cin_data_thread_start(&threads[2], NULL,
                         (void *)cin_data_descramble_thread,
                         (void *)descramble1);
-  cin_data_thread_start(&threads[3], NULL,
-                        (void *)cin_data_monitor_thread, 
-                        NULL);
 #ifdef __AFFINITY__
 
   /*
@@ -507,7 +504,7 @@ void *cin_data_assembler_thread(void *args){
     //DEBUG_PRINT("Recieved packet %d from frame %d\n", this_packet, this_frame);
 
     if(this_frame != last_frame){
-      /* We have a new frame */
+      // We have a new frame, but missed the DEAD FOOD
 
       if(frame){
         // Note this is repeated below, but is here in
@@ -519,8 +516,10 @@ void *cin_data_assembler_thread(void *args){
         (*proc->output_put)(proc->output_args);
         frame = NULL;
       }
+    } // this_frame != last_frame 
 
-      /* Get the next frame buffer */
+    if(!frame){
+      // We don't have a valid frame, get one from the stack
 
       frame = (cin_data_frame_t*)(*proc->output_get)(proc->output_args);
 
@@ -536,7 +535,7 @@ void *cin_data_assembler_thread(void *args){
       last_frame_timestamp  = this_frame_timestamp;
       this_frame_timestamp  = buffer->timestamp;
       thread_data.framerate = timeval_diff(last_frame_timestamp,this_frame_timestamp);
-    } // this_frame != last_frame 
+    } // !frame 
 
     if(this_packet < last_packet){
       this_packet_msb += 0x100;
@@ -551,13 +550,13 @@ void *cin_data_assembler_thread(void *args){
     }
 
     skipped = (this_packet + this_packet_msb) - (last_packet + last_packet_msb + 1);
-    if(skipped){
+    if(skipped > 0){
       thread_data.dropped_packets += skipped;
       // Do some bounds checking
-      if(((this_packet + this_packet_msb) * CIN_DATA_PACKET_LEN) <
-         (CIN_DATA_MAX_STREAM)){
+      if(((this_packet + this_packet_msb + 1) * CIN_DATA_PACKET_LEN) <
+         (CIN_DATA_MAX_STREAM * 2)){
 
-        //DEBUG_PRINT("Skipped %d packets from frame %d\n", skipped, this_frame);
+        DEBUG_PRINT("Skipped %d packets from frame %d\n", skipped, this_frame);
      
         // Encode skipped packets into the data
         int i;
@@ -575,7 +574,6 @@ void *cin_data_assembler_thread(void *args){
 
     // First check if this is the last packet. 
 
-    
     footer = ((uint64_t*)(buffer->data + (buffer->size - 8)));
     if(*footer == CIN_DATA_TAIL_MAGIC_PACKET){
       last_packet_flag = 1;
@@ -586,8 +584,8 @@ void *cin_data_assembler_thread(void *args){
     // Check if the packet number is bigger than the 
     // frame size. If so, skip the packet. 
 
-    if((this_packet + this_packet_msb) <= 
-       (CIN_DATA_MAX_STREAM * 2 / CIN_DATA_PACKET_LEN)){
+    if(((this_packet + this_packet_msb + 1) * CIN_DATA_PACKET_LEN) < 
+       (CIN_DATA_MAX_STREAM * 2)){
       // Copy the data and swap the endieness
       frame_p = frame->data;
       frame_p += (this_packet + this_packet_msb) * CIN_DATA_PACKET_LEN / 2;
