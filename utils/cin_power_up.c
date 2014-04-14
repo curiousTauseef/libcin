@@ -45,8 +45,6 @@ int main(){
 	sleep(2);
   fprintf(stderr, " DONE\n");
 
-  return;
-
   //fprintf(stderr, "\n");
   //cin_ctl_fpga_status_t fpga_status;
   //cin_ctl_get_cfg_fpga_status(&cp[0], &fpga_status);
