@@ -8,7 +8,7 @@
 int main(){
 
 	/*Set directory for CIN configuration files*/ 
-	char fpga_config_dir[]="/home/swilkins/Repos/lbl-fastccds/BINARY/CIN_1kFSCCD/";
+	char fpga_config_dir[]="/home/swilkins/Repos/lbl-fastccds/CIN_1kFSCCD_BINARY/";
 
 	/*Set CIN FPGA configuration file*/   
 	char fpga_configfile[]="top_frame_fpga-v1019j.bit";
@@ -74,12 +74,12 @@ int main(){
   cin_ctl_set_fabric_address(&cp[0], "10.23.5.127");
   fprintf(stderr, " DONE\n");
 
-  // fprintf(stderr, "\n");
-	// cin_ctl_get_cfg_fpga_status(&cp[0], &fpga_status);
-  // cin_ctl_display_fpga_status(stderr, &fpga_status);
-  // cin_ctl_get_dcm_status(&cp[0], &dcm);
-  // cin_ctl_display_dcm_status(stderr, &dcm);
-  // fprintf(stderr, "\n");
+  //fprintf(stderr, "\n");
+  //cin_ctl_get_cfg_fpga_status(&cp[0], &fpga_status);
+  //cin_ctl_display_fpga_status(stderr, &fpga_status);
+  //cin_ctl_get_dcm_status(&cp[0], &dcm);
+  //cin_ctl_display_dcm_status(stderr, &dcm);
+  //fprintf(stderr, "\n");
 
   // This appears to be broken
   //int fclk;
