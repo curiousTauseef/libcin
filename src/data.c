@@ -300,36 +300,6 @@ int cin_data_init(int mode, int packet_buffer_len, int frame_buffer_len,
   cin_data_thread_start(&threads[2], NULL,
                         (void *)cin_data_descramble_thread,
                         (void *)descramble1);
-#ifdef __AFFINITY__
-
-  /*
-   * Try to set the processor AFFINITY to lock the current
-   * thread onto the first CPU and then the other three threads
-   * onto separate cores. YMMV use carefully.
-   */
-
-  int j;
-  cpu_set_t cpu_set;
-
-  CPU_ZERO(&cpu_set);
-  CPU_SET(1, &cpu_set);
-  sched_setaffinity(0, sizeof(cpu_set_t), &cpu_set);
-
-  for(j=0;j<3;j++){
-    if(threads[j].started){
-      CPU_ZERO(&cpu_set);
-      CPU_SET(j + 2, &cpu_set);
-      if(!pthread_setaffinity_np(threads[j].thread_id, sizeof(cpu_set_t), &cpu_set)){
-        DEBUG_PRINT("Set CUP affinity on thread %d to CPU %d\n", j, j);
-      } else {
-        DEBUG_COMMENT("Unable to set CPU affinity");
-      }
-    }
-  }
-
-#endif
-
-
   return 0;
 }
 
@@ -659,6 +629,16 @@ void *cin_data_assembler_thread(void *args){
   pthread_exit(NULL);
 }
 
+void cin_data_reset_stats(void){
+  pthread_mutex_lock(&thread_data.stats_mutex);
+  thread_data.dropped_packets = 0;
+  thread_data.mallformed_packets = 0;
+  thread_data.packet_fifo->overruns = 0;
+  thread_data.frame_fifo->overruns = 0;
+  thread_data.image_fifo->overruns = 0;
+  pthread_mutex_unlock(&thread_data.stats_mutex);
+}
+
 void cin_data_compute_stats(cin_data_stats_t *stats){
   double framerate, datarate;
 
@@ -773,24 +753,6 @@ void *cin_data_listen_thread(void *args){
 
   int sid = syscall(SYS_gettid);
   DEBUG_PRINT("Starting listener thread ppid = %d\n", sid);
-
-
-#ifdef __REALTIME__
-
-  /*
-   * Try so set the UDP listener thread to use realtime
-   * scheduling with a high priority.
-   */
-
-  struct sched_param fifo_param;
-  fifo_param.sched_priority = sched_get_priority_max(SCHED_FIFO);
-  if(!pthread_setschedparam(pthread_self(), SCHED_FIFO, &fifo_param)){
-    DEBUG_COMMENT("Set realtime priority to UDP listener\n");
-  } else {
-    DEBUG_COMMENT("Unable to set realtime priority to UDP listener\n");
-  }
- 
-#endif
 
   // Release root priv.
   if(setuid(getuid())){

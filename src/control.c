@@ -43,6 +43,7 @@
 #include "cinregisters.h"
 #include "control.h"
 #include "fifo.h"
+  
 
 // Test comment
 
@@ -359,10 +360,10 @@ int cin_ctl_pwr(struct cin_port* cp, int pwr){
 
   if(pwr){
     DEBUG_COMMENT("Powering ON CIN Board\n");
-    _val = 0x000F;
+    _val = CIN_CTL_POWER_ENABLE;
   } else {
     DEBUG_COMMENT("Powering OFF CIN Board\n");
-    _val = 0x0000;
+    _val = CIN_CTL_POWER_DISABLE;
   }
 
   _status=cin_ctl_write_with_readback(cp,REG_PS_ENABLE, _val);
@@ -383,21 +384,30 @@ int cin_ctl_fp_pwr(struct cin_port* cp, int pwr){
   int _status;
   uint16_t _val;
 
-  if(pwr){
-    DEBUG_COMMENT("Powering ON CIN Front Panel Boards\n");
-    _val = 0x003F;
-  } else {
-    DEBUG_COMMENT("Powering OFF CIN Front Panel Boards\n");
-    _val = 0x0000;
+  _status = cin_ctl_read(cp, REG_PS_ENABLE, &_val);
+  if(_status != 0){
+    goto error;
   }
 
-  _status=cin_ctl_write(cp,REG_PS_ENABLE, _val);
-  if(_status != 0){
-    goto error;
-  }
-  _status=cin_ctl_write(cp,REG_COMMAND, CMD_PS_ENABLE);
-  if(_status != 0){
-    goto error;
+  if(_val){
+    // We are powered up do we ever want to turn on FP power?
+
+    if(pwr){
+      DEBUG_COMMENT("Powering ON CIN Front Panel Boards\n");
+      _val |= CIN_CTL_FP_POWER_ENABLE;
+    } else {
+      DEBUG_COMMENT("Powering OFF CIN Front Panel Boards\n");
+      _val &= ~CIN_CTL_FP_POWER_ENABLE;
+    }
+
+    _status=cin_ctl_write_with_readback(cp,REG_PS_ENABLE, _val);
+    if(_status != 0){
+      goto error;
+    }
+    _status=cin_ctl_write(cp,REG_COMMAND, CMD_PS_ENABLE);
+    if(_status != 0){
+      goto error;
+    }
   }
    
 error:
@@ -723,15 +733,20 @@ int cin_ctl_get_power_status(struct cin_port* cp,
     ERROR_COMMENT("Unable to read power supply status\n");
     return _status;
   }
-      
-  if(!(_val & 0x0001)) {
+
+  if(!((_val & CIN_CTL_POWER_ENABLE) == CIN_CTL_POWER_ENABLE)) {
     // Power supply is off
     *pwr = 0;
     DEBUG_COMMENT("12V Power Supply is OFF\n");
     return 0;
+  } 
+  
+  if(_val & CIN_CTL_FP_POWER_ENABLE){
+    *pwr = 2;
+    DEBUG_COMMENT("12V Power Supply + FP ON\n");
   } else {
     *pwr = 1;
-    DEBUG_COMMENT("12V Power Supply in ON\n");
+    DEBUG_COMMENT("12V Power Supply ON\n");
   }
 
   /* ADC == LT4151 */
@@ -824,6 +839,22 @@ int cin_ctl_set_bias(struct cin_port* cp,int val){
   return 0;
 }
 
+int cin_ctl_get_bias(struct cin_port* cp, int *val){
+
+  int _status;
+  uint16_t _val;
+  _status = cin_ctl_read(cp, REG_BIASCONFIGREGISTER0_REG, &_val); 
+   
+  if(_status){
+    ERROR_COMMENT("Unable to read bias status\n");
+    return _status;
+  }
+
+  *val = (int)_val;
+  DEBUG_PRINT("Bias value is %d\n", *val);
+  return 0;
+}
+
 int cin_ctl_set_clocks(struct cin_port* cp,int val){
 
   int _status;   
@@ -843,6 +874,22 @@ int cin_ctl_set_clocks(struct cin_port* cp,int val){
   }
 
   DEBUG_PRINT("Clocks set to %d\n", val);
+  return 0;
+}
+
+int cin_ctl_get_clocks(struct cin_port* cp, int *val){
+
+  int _status;
+  uint16_t _val;
+  _status = cin_ctl_read(cp, REG_CLOCKCONFIGREGISTER0_REG, &_val); 
+   
+  if(_status){
+    ERROR_COMMENT("Unable to read clock status\n");
+    return _status;
+  }
+
+  *val = (int)_val;
+  DEBUG_PRINT("Clock value is %d\n", *val);
   return 0;
 }
 
