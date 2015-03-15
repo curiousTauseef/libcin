@@ -858,11 +858,18 @@ int cin_ctl_get_bias(struct cin_port* cp, int *val){
 int cin_ctl_set_clocks(struct cin_port* cp,int val){
 
   int _status;   
+  uint16_t _val;
+
+  _status = cin_ctl_read(cp, REG_CLOCKCONFIGREGISTER0_REG, &_val); 
+  if(_status){
+    ERROR_COMMENT("Unable to read clock status\n");
+    return _status;
+  }
    
   if (val == 1){
-    _status = cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, 0x0001);
+    _status = cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, _val | 0x0001);
   } else if (val == 0){
-    _status = cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, 0x0000);
+    _status = cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, _val & ~0x0000);
   } else {
     ERROR_COMMENT("Illegal Clocks state: Only 0 or 1 allowed\n");
     return -1;
@@ -888,7 +895,12 @@ int cin_ctl_get_clocks(struct cin_port* cp, int *val){
     return _status;
   }
 
-  *val = (int)_val;
+  if(_val & 0x0001){
+    *val = 1;
+  } else {
+    *val = 0;
+  }
+
   DEBUG_PRINT("Clock value is %d\n", *val);
   return 0;
 }
