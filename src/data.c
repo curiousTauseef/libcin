@@ -1,3 +1,34 @@
+/* vim: set ts=2 sw=2 tw=0 noet :
+   
+   libcin : Driver for LBNL FastCCD 
+   Copyright (c) 2014, Stuart B. Wilkins, Daron Chabot
+   All rights reserved.
+   
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions are met: 
+   
+   1. Redistributions of source code must retain the above copyright notice, this
+      list of conditions and the following disclaimer. 
+   2. Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution. 
+   
+   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+   ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+   WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+   ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+   (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+   ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+   
+   The views and conclusions contained in the software and documentation are those
+   of the authors and should not be interpreted as representing official policies, 
+   either expressed or implied, of the FreeBSD Project.
+
+*/
 #define _GNU_SOURCE
 #include <stdlib.h>
 #include <stdint.h>
@@ -163,8 +194,13 @@ int cin_data_read(struct cin_port* dp, unsigned char* buffer){
 }
 
 int cin_data_write(struct cin_port* dp, char* buffer, int buffer_len){
-  return sendto(dp->sockfd, buffer, buffer_len, 0,
-                (struct sockaddr*)&dp->sin_srv, sizeof(dp->sin_srv));
+  int rtn = sendto(dp->sockfd, buffer, buffer_len, 0,
+                   (struct sockaddr*)&dp->sin_srv, sizeof(dp->sin_srv));
+  if(rtn == buffer_len){
+    return 0;
+  } else {
+    return -1;
+  }
 }
 
 /* -------------------------------------------------------------------------------
@@ -264,39 +300,6 @@ int cin_data_init(int mode, int packet_buffer_len, int frame_buffer_len,
   cin_data_thread_start(&threads[2], NULL,
                         (void *)cin_data_descramble_thread,
                         (void *)descramble1);
-  cin_data_thread_start(&threads[3], NULL,
-                        (void *)cin_data_monitor_thread, 
-                        NULL);
-#ifdef __AFFINITY__
-
-  /*
-   * Try to set the processor AFFINITY to lock the current
-   * thread onto the first CPU and then the other three threads
-   * onto separate cores. YMMV use carefully.
-   */
-
-  int j;
-  cpu_set_t cpu_set;
-
-  CPU_ZERO(&cpu_set);
-  CPU_SET(1, &cpu_set);
-  sched_setaffinity(0, sizeof(cpu_set_t), &cpu_set);
-
-  for(j=0;j<3;j++){
-    if(threads[j].started){
-      CPU_ZERO(&cpu_set);
-      CPU_SET(j + 2, &cpu_set);
-      if(!pthread_setaffinity_np(threads[j].thread_id, sizeof(cpu_set_t), &cpu_set)){
-        DEBUG_PRINT("Set CUP affinity on thread %d to CPU %d\n", j, j);
-      } else {
-        DEBUG_COMMENT("Unable to set CPU affinity");
-      }
-    }
-  }
-
-#endif
-
-
   return 0;
 }
 
@@ -502,7 +505,7 @@ void *cin_data_assembler_thread(void *args){
     //DEBUG_PRINT("Recieved packet %d from frame %d\n", this_packet, this_frame);
 
     if(this_frame != last_frame){
-      /* We have a new frame */
+      // We have a new frame, but missed the DEAD FOOD
 
       if(frame){
         // Note this is repeated below, but is here in
@@ -514,8 +517,10 @@ void *cin_data_assembler_thread(void *args){
         (*proc->output_put)(proc->output_args);
         frame = NULL;
       }
+    } // this_frame != last_frame 
 
-      /* Get the next frame buffer */
+    if(!frame){
+      // We don't have a valid frame, get one from the stack
 
       frame = (cin_data_frame_t*)(*proc->output_get)(proc->output_args);
 
@@ -531,7 +536,7 @@ void *cin_data_assembler_thread(void *args){
       last_frame_timestamp  = this_frame_timestamp;
       this_frame_timestamp  = buffer->timestamp;
       thread_data.framerate = timeval_diff(last_frame_timestamp,this_frame_timestamp);
-    } // this_frame != last_frame 
+    } // !frame 
 
     if(this_packet < last_packet){
       this_packet_msb += 0x100;
@@ -546,13 +551,13 @@ void *cin_data_assembler_thread(void *args){
     }
 
     skipped = (this_packet + this_packet_msb) - (last_packet + last_packet_msb + 1);
-    if(skipped){
+    if(skipped > 0){
       thread_data.dropped_packets += skipped;
       // Do some bounds checking
-      if(((this_packet + this_packet_msb) * CIN_DATA_PACKET_LEN) <
-         (CIN_DATA_MAX_STREAM)){
+      if(((this_packet + this_packet_msb + 1) * CIN_DATA_PACKET_LEN) <
+         (CIN_DATA_MAX_STREAM * 2)){
 
-        //DEBUG_PRINT("Skipped %d packets from frame %d\n", skipped, this_frame);
+        DEBUG_PRINT("Skipped %d packets from frame %d\n", skipped, this_frame);
      
         // Encode skipped packets into the data
         int i;
@@ -570,7 +575,6 @@ void *cin_data_assembler_thread(void *args){
 
     // First check if this is the last packet. 
 
-    
     footer = ((uint64_t*)(buffer->data + (buffer->size - 8)));
     if(*footer == CIN_DATA_TAIL_MAGIC_PACKET){
       last_packet_flag = 1;
@@ -581,8 +585,8 @@ void *cin_data_assembler_thread(void *args){
     // Check if the packet number is bigger than the 
     // frame size. If so, skip the packet. 
 
-    if((this_packet + this_packet_msb) <= 
-       (CIN_DATA_MAX_STREAM * 2 / CIN_DATA_PACKET_LEN)){
+    if(((this_packet + this_packet_msb + 1) * CIN_DATA_PACKET_LEN) < 
+       (CIN_DATA_MAX_STREAM * 2)){
       // Copy the data and swap the endieness
       frame_p = frame->data;
       frame_p += (this_packet + this_packet_msb) * CIN_DATA_PACKET_LEN / 2;
@@ -625,75 +629,80 @@ void *cin_data_assembler_thread(void *args){
   pthread_exit(NULL);
 }
 
-void *cin_data_monitor_thread(void){
+void cin_data_reset_stats(void){
+  pthread_mutex_lock(&thread_data.stats_mutex);
+  thread_data.dropped_packets = 0;
+  thread_data.mallformed_packets = 0;
+  thread_data.packet_fifo->overruns = 0;
+  thread_data.frame_fifo->overruns = 0;
+  thread_data.image_fifo->overruns = 0;
+  pthread_mutex_unlock(&thread_data.stats_mutex);
+}
+
+void cin_data_compute_stats(cin_data_stats_t *stats){
   double framerate, datarate;
 
-  unsigned int last_frame = 0;
+  static unsigned int last_frame = 0;
+  //static unsigned long int n = 0; // Note this will rollover .. then this breaks!
 
-  unsigned long int n = 0; // Note this will rollover .. then this breaks!
+  pthread_mutex_lock(&thread_data.stats_mutex);
 
-  int sid = syscall(SYS_gettid);
-  DEBUG_PRINT("Starting monitor thread ppid = %d\n", sid);
+  if((unsigned int)thread_data.last_frame != last_frame){
+    // Compute framerate
 
-  while(1){
-
-    if((unsigned int)thread_data.last_frame != last_frame){
-      // Compute framerate
-
-      framerate  =  (double)thread_data.framerate.tv_usec * 1e-6;
-      framerate  += (double)thread_data.framerate.tv_sec; 
-      if(framerate == 0){
-        framerate = 0;
-      } else {
-        framerate = 1 / framerate;
-      }
+    framerate  =  (double)thread_data.framerate.tv_usec * 1e-6;
+    framerate  += (double)thread_data.framerate.tv_sec; 
+    if(framerate == 0){
+      framerate = 0;
     } else {
-      framerate = 0; 
+      framerate = 1 / framerate;
     }
-
-    datarate = framerate * CIN_DATA_MAX_STREAM * sizeof(uint16_t);
-    datarate = datarate / (1024 * 1024); // Convert to Mb.s^-1
-
-    pthread_mutex_lock(&thread_data.stats_mutex);
-
-    last_frame = (int)thread_data.last_frame;
-    thread_data.stats.last_frame = last_frame;
-
-    thread_data.stats.framerate = framerate;
-    thread_data.stats.datarate = datarate;
-    if(n == 0){
-      thread_data.stats.av_framerate = framerate;
-      thread_data.stats.av_datarate = datarate;
-    } else {
-      thread_data.stats.av_datarate =  ((n * thread_data.stats.av_datarate + datarate) / (n + 1));
-      thread_data.stats.av_framerate = ((n * thread_data.stats.av_framerate + framerate) / (n + 1));
-    }
-    n++;
-
-    thread_data.stats.packet_percent_full = fifo_percent_full(thread_data.packet_fifo);
-    thread_data.stats.frame_percent_full = fifo_percent_full(thread_data.frame_fifo);
-    thread_data.stats.image_percent_full = fifo_percent_full(thread_data.image_fifo);
-    thread_data.stats.packet_overruns = thread_data.packet_fifo->overruns;
-    thread_data.stats.frame_overruns = thread_data.frame_fifo->overruns;
-    thread_data.stats.image_overruns = thread_data.image_fifo->overruns;
-    thread_data.stats.dropped_packets = thread_data.dropped_packets;
-    thread_data.stats.mallformed_packets = thread_data.mallformed_packets;
-
-    pthread_mutex_unlock(&thread_data.stats_mutex);
-
-    usleep(CIN_DATA_MONITOR_UPDATE);
+  } else {
+    framerate = 0; 
   }
 
-  pthread_exit(NULL);
+  datarate = framerate * CIN_DATA_MAX_STREAM * sizeof(uint16_t);
+  datarate = datarate / (1024 * 1024); // Convert to Mb.s^-1
+
+  last_frame = (int)thread_data.last_frame;
+  stats->last_frame = last_frame;
+
+  stats->framerate = framerate;
+  stats->datarate = datarate;
+  stats->av_framerate = framerate;
+  stats->av_datarate = datarate;
+
+  //if(n == 0){
+  //  stats->av_framerate = framerate;
+  //  stats->av_datarate = datarate;
+  //} else {
+  //  stats->av_datarate =  ((n * stats->av_datarate + datarate) / (n + 1));
+  //  stats->av_framerate = ((n * stats->av_framerate + framerate) / (n + 1));
+  //}
+  //n++;
+
+  stats->packet_percent_full = fifo_percent_full(thread_data.packet_fifo);
+  stats->frame_percent_full = fifo_percent_full(thread_data.frame_fifo);
+  stats->image_percent_full = fifo_percent_full(thread_data.image_fifo);
+  stats->packet_overruns = thread_data.packet_fifo->overruns;
+  stats->frame_overruns = thread_data.frame_fifo->overruns;
+  stats->image_overruns = thread_data.image_fifo->overruns;
+  stats->dropped_packets = thread_data.dropped_packets;
+  stats->mallformed_packets = thread_data.mallformed_packets;
+
+  pthread_mutex_unlock(&thread_data.stats_mutex);
+
 }
 
 void *cin_data_monitor_output_thread(void){
-   /* Output to screen monitored values */
 
   //fprintf(stderr, "\033[?25l");
 
+  cin_data_stats_t stats;
+
   while(1){
-    cin_data_show_stats();
+    cin_data_compute_stats(&stats);
+    cin_data_show_stats(stderr, stats);
     fprintf(stderr, "\033[A\033[A\033[A\033[A\033[A"); // Move up 5 lines 
 
     usleep(CIN_DATA_MONITOR_UPDATE);
@@ -702,16 +711,11 @@ void *cin_data_monitor_output_thread(void){
   pthread_exit(NULL);
 }
 
-void cin_data_show_stats(void){
-  cin_data_stats_t stats;
+void cin_data_show_stats(FILE *fp, cin_data_stats_t stats){
   char buffer[256];
   
-  pthread_mutex_lock(&thread_data.stats_mutex);
-  stats = thread_data.stats;
-  pthread_mutex_unlock(&thread_data.stats_mutex);
-
   sprintf(buffer, "Last frame %-12d", stats.last_frame);
-  fprintf(stderr, "%-80s\n", buffer);
+  fprintf(fp, "%-80s\n", buffer);
 
   sprintf(buffer, "Packet buffer %8.3f%%.", 
           stats.packet_percent_full);
@@ -719,51 +723,36 @@ void cin_data_show_stats(void){
           stats.frame_percent_full);
   sprintf(buffer, "%s Spool buffer %8.3f%%.",buffer,
           stats.image_percent_full);
-  fprintf(stderr, "%-80s\n", buffer);
+  fprintf(fp, "%-80s\n", buffer);
 
   sprintf(buffer, "Framerate     = %6.1f s^-1 : Data Rate     = %10.3f Mb.s^-1",
           stats.framerate, stats.datarate);
-  fprintf(stderr, "%-80s\n", buffer);
+  fprintf(fp, "%-80s\n", buffer);
 
-  sprintf(buffer, "Av. framerate = %6.1f s^-1 : Av. data Rate = %10.3f Mb.s^-1",
-          stats.av_framerate, stats.av_datarate);
-  fprintf(stderr, "%-80s\n", buffer);
+  //sprintf(buffer, "Av. framerate = %6.1f s^-1 : Av. data Rate = %10.3f Mb.s^-1",
+  //        stats.av_framerate, stats.av_datarate);
+  //fprintf(fp, "%-80s\n", buffer);
 
   sprintf(buffer, "Dropped packets %-11ld : Mallformed packets %-11ld",
           stats.dropped_packets, stats.mallformed_packets);
-  fprintf(stderr, "%-80s\n", buffer);
+  fprintf(fp, "%-80s\n", buffer);
+}
+
+int cin_data_send_magic(void){
+  char* dummy = "DUMMY DATA";
+  return cin_data_write(thread_data.dp, dummy, sizeof(dummy));
 }
 
 void *cin_data_listen_thread(void *args){
   
   struct cin_data_packet *buffer = NULL;
-  char* dummy = "DUMMY DATA";
   cin_data_proc_t *proc = (cin_data_proc_t*)args;
  
   /* Send a packet to initialize the CIN */
-
-  cin_data_write(thread_data.dp, dummy, sizeof(dummy));
+  cin_data_send_magic();
 
   int sid = syscall(SYS_gettid);
   DEBUG_PRINT("Starting listener thread ppid = %d\n", sid);
-
-
-#ifdef __REALTIME__
-
-  /*
-   * Try so set the UDP listener thread to use realtime
-   * scheduling with a high priority.
-   */
-
-  struct sched_param fifo_param;
-  fifo_param.sched_priority = sched_get_priority_max(SCHED_FIFO);
-  if(!pthread_setschedparam(pthread_self(), SCHED_FIFO, &fifo_param)){
-    DEBUG_COMMENT("Set realtime priority to UDP listener\n");
-  } else {
-    DEBUG_COMMENT("Unable to set realtime priority to UDP listener\n");
-  }
- 
-#endif
 
   // Release root priv.
   if(setuid(getuid())){

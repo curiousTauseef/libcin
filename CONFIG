@@ -11,12 +11,6 @@ CFLAGS=-Wall -O3 -g --pic
 # Add code for profiling speed
 #CFLAGS+=-D__PROFILE__
 
-# Add code for setting processor affinity
-#CFLAGS+=-D__AFFINITY__
-
-# Add code for realtime UDP listener
-#CFLAGS+=-D__REALTIME__
-
 LDFLAGS=-L. 
 #LDFLAGS=-Wl,--no-as-needed -L.
 LDLIBS=-lpthread -lrt

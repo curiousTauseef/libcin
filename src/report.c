@@ -1,4 +1,4 @@
-/* 
+/* vim: set ts=2 sw=2 tw=0 noet :
    
    libcin : Driver for LBNL FastCCD 
    Copyright (c) 2014, Stuart B. Wilkins, Daron Chabot
@@ -29,7 +29,6 @@
    either expressed or implied, of the FreeBSD Project.
 
 */
-
 #include <stdio.h>
 #include "version.h"
 
