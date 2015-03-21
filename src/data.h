@@ -75,7 +75,7 @@ typedef struct cin_data_thread_data {
   struct cin_port* dp; 
 
   /* Statistics */
-  struct timeval framerate;
+  struct timespec framerate;
   unsigned long int dropped_packets;
   unsigned long int mallformed_packets;
   uint16_t last_frame;
@@ -90,7 +90,7 @@ typedef struct cin_data_thread_data {
 typedef struct cin_data_packet {
   unsigned char *data;
   int size;
-  struct timeval timestamp;
+  struct timespec timestamp;
 } cin_data_packet_t;
 
 typedef struct cin_data_proc {

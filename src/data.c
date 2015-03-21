@@ -453,8 +453,8 @@ void *cin_data_assembler_thread(void *args){
   uint64_t *header;
   uint64_t *footer;
 
-  struct timeval last_frame_timestamp = {0,0};
-  struct timeval this_frame_timestamp = {0,0};
+  struct timespec last_frame_timestamp = {0,0};
+  struct timespec this_frame_timestamp = {0,0};
 
   cin_data_proc_t *proc = (cin_data_proc_t*)args;
 
@@ -535,7 +535,7 @@ void *cin_data_assembler_thread(void *args){
         
       last_frame_timestamp  = this_frame_timestamp;
       this_frame_timestamp  = buffer->timestamp;
-      thread_data.framerate = timeval_diff(last_frame_timestamp,this_frame_timestamp);
+      thread_data.framerate = timespec_diff(last_frame_timestamp,this_frame_timestamp);
     } // !frame 
 
     if(this_packet < last_packet){
@@ -650,7 +650,7 @@ void cin_data_compute_stats(cin_data_stats_t *stats){
   if((unsigned int)thread_data.last_frame != last_frame){
     // Compute framerate
 
-    framerate  =  (double)thread_data.framerate.tv_usec * 1e-6;
+    framerate  =  (double)thread_data.framerate.tv_nsec * 1e-9;
     framerate  += (double)thread_data.framerate.tv_sec; 
     if(framerate == 0){
       framerate = 0;
@@ -669,17 +669,6 @@ void cin_data_compute_stats(cin_data_stats_t *stats){
 
   stats->framerate = framerate;
   stats->datarate = datarate;
-  stats->av_framerate = framerate;
-  stats->av_datarate = datarate;
-
-  //if(n == 0){
-  //  stats->av_framerate = framerate;
-  //  stats->av_datarate = datarate;
-  //} else {
-  //  stats->av_datarate =  ((n * stats->av_datarate + datarate) / (n + 1));
-  //  stats->av_framerate = ((n * stats->av_framerate + framerate) / (n + 1));
-  //}
-  //n++;
 
   stats->packet_percent_full = fifo_percent_full(thread_data.packet_fifo);
   stats->frame_percent_full = fifo_percent_full(thread_data.frame_fifo);
@@ -729,10 +718,6 @@ void cin_data_show_stats(FILE *fp, cin_data_stats_t stats){
           stats.framerate, stats.datarate);
   fprintf(fp, "%-80s\n", buffer);
 
-  //sprintf(buffer, "Av. framerate = %6.1f s^-1 : Av. data Rate = %10.3f Mb.s^-1",
-  //        stats.av_framerate, stats.av_datarate);
-  //fprintf(fp, "%-80s\n", buffer);
-
   sprintf(buffer, "Dropped packets %-11ld : Mallformed packets %-11ld",
           stats.dropped_packets, stats.mallformed_packets);
   fprintf(fp, "%-80s\n", buffer);
@@ -761,6 +746,7 @@ void *cin_data_listen_thread(void *args){
     DEBUG_COMMENT("Dropped root priv.\n");
   }
 
+  struct timespec time;
   while(1){
     /* Get the next element in the fifo */
     buffer = (cin_data_packet_t*)(*proc->output_get)(proc->output_args);
@@ -768,12 +754,14 @@ void *cin_data_listen_thread(void *args){
                             CIN_DATA_MAX_MTU * sizeof(unsigned char), 0,
                             (struct sockaddr*)&thread_data.dp->sin_cli, 
                             (socklen_t*)&thread_data.dp->slen);
-    //buffer->size = cin_data_read(thread_data.dp, buffer->data);
-    if(ioctl(thread_data.dp->sockfd, SIOCGSTAMP, &buffer->timestamp) == -1){
-      DEBUG_COMMENT("Unable to read packet time");
-      //clock_gettime(CLOCK_REALTIME, &buffer->timestamp);
-      gettimeofday(&buffer->timestamp, 0);
+    
+    if(ioctl(thread_data.dp->sockfd, SIOCGSTAMPNS, &time) == -1){
+      ERROR_COMMENT("Unable to read packet time");
+      clock_gettime(CLOCK_REALTIME, &time);
     }
+
+    buffer->timestamp = time;
+
     (*proc->output_put)(proc->output_args);
   }
 

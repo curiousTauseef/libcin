@@ -34,11 +34,11 @@
 
 typedef struct {
 
-  uint16_t ChanMap[192]; // Actual chanelmap
-  uint16_t TopBot[192];  // Definition of top or bottom
-  uint16_t MapCol[48];   // Column Map
-  uint16_t MapCric[48];  // fCRIC Map
-  uint16_t MapAddr[48];  // Address Map
+  uint16_t ChanMap[CIN_DATA_CCD_COLS * 2]; // Actual chanelmap
+  uint16_t TopBot[CIN_DATA_CCD_COLS * 2];  // Definition of top or bottom
+  uint16_t MapCol[CIN_DATA_CCD_COLS / 2];   // Column Map
+  uint16_t MapCric[CIN_DATA_CCD_COLS / 2];  // fCRIC Map
+  uint16_t MapAddr[CIN_DATA_CCD_COLS / 2];  // Address Map
 
   uint32_t *Map;
   int      size_x; // COLS
