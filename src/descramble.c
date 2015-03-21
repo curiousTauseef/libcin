@@ -38,6 +38,16 @@
 
 int cin_data_descramble_init(descramble_map_t *map, int ccd_size_rows, int overscan){
 
+  // Do some bounds checking
+  
+  if((ccd_size_rows <= 0) || (ccd_size_rows > CIN_DATA_MAX_FRAME_Y)){
+    return -1;
+  }
+
+  if(overscan < 0){
+    return -1;
+  }
+
   // Pixel Mapping Table
   map->MapCol[0]=129;      map->MapCric[0]=4;       map->MapAddr[0]=0;
   map->MapCol[1]=145;      map->MapCric[1]=4;       map->MapAddr[1]=1;
@@ -131,6 +141,11 @@ int cin_data_descramble_init(descramble_map_t *map, int ccd_size_rows, int overs
           pIndex = xdex + (y * CCDsizeX);
         } else {
           pIndex = (CCDsizeX - xdex - 1) + ((CCDsizeY * 2 - y - 1) * CCDsizeX);
+        }
+        // Check if pIndex is in bounds
+        if(pIndex >= CIN_DATA_MAX_STREAM){
+          pIndex = 0;
+          ERROR_PRINT("Map contains invalid value %ld\n", (long int)pIndex);
         }
         *(Map_p++) = pIndex;
       } // i
