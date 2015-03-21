@@ -3,7 +3,7 @@ CC=gcc
 CFLAGS=-Wall -O3 -g --pic
 
 # Include DEBUG statements
-CFLAGS+=-D__DEBUG__
+#CFLAGS+=-D__DEBUG__
 
 # Include Stream DEBUG statements
 #CFLAGS+=-D__DEBUG_STREAM__

@@ -36,6 +36,7 @@
 #include <string.h>
 #include <unistd.h>  // For getpid()
 #include <syscall.h>
+#include <time.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>
