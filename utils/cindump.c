@@ -31,7 +31,7 @@ void write_image(cin_data_frame_t *frame)
 
   tfp = TIFFOpen(filename, "w");
 
-  TIFFSetField(tfp, TIFFTAG_IMAGEWIDTH, CIN_DATA_FRAME_WIDTH);
+  TIFFSetField(tfp, TIFFTAG_IMAGEWIDTH, frame->size_x);
   TIFFSetField(tfp, TIFFTAG_BITSPERSAMPLE, 16);
   TIFFSetField(tfp, TIFFTAG_SAMPLESPERPIXEL, 1);
   TIFFSetField(tfp, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
@@ -40,9 +40,9 @@ void write_image(cin_data_frame_t *frame)
 
   uint16_t *p = frame->data;
   int j;
-  for(j=0;j<CIN_DATA_FRAME_HEIGHT;j++){
+  for(j=0;j<frame->size_y;j++){
     TIFFWriteScanline(tfp, p, j, 0);
-    p += CIN_DATA_FRAME_WIDTH;
+    p += frame->size_x;
   }
 
   TIFFClose(tfp);
@@ -55,7 +55,7 @@ void write_image(cin_data_frame_t *frame)
 void allocate_image(cin_data_frame_t *frame)
 {
   // Allocate memory
-  while(!(frame->data = malloc(CIN_DATA_FRAME_WIDTH * CIN_DATA_FRAME_HEIGHT * sizeof(uint16_t))))
+  while(!(frame->data = malloc(CIN_DATA_MAX_STREAM * sizeof(uint16_t))))
   {
     sleep(1);
     fprintf(stderr, "Failed to allocate memory ... sleeping to wait for data.\n");

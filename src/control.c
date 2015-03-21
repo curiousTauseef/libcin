@@ -223,7 +223,7 @@ int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val){
    }
 
 #ifdef __DEBUG_STREAM__ 
-  DEBUG_PRINT("Set register %04X to %04X\n", reg, val);
+  DEBUG_PRINT("Set register 0x%04X to 0x%04X\n", reg, val);
 #endif 
 
    return 0;
@@ -244,17 +244,17 @@ int cin_ctl_write_with_readback(struct cin_port* cp, uint16_t reg, uint16_t val)
     DEBUG_PRINT("try = %d\n", tries);
     _status = cin_ctl_write(cp, reg, val);
     if(_status){
-      ERROR_COMMENT("Error writing register\n");
+      ERROR_PRINT("Error writing register %x\n", reg);
       goto error;
     }
 
     uint16_t _val;
     _status = cin_ctl_read(cp, reg, &_val);
     if(_status){
-      ERROR_COMMENT("Unable to read register\n");
+      ERROR_PRINT("Unable to read register %x\n", reg);
       goto error;
     }
-    DEBUG_PRINT("sent = %04X recv = %04X\n", val, _val); 
+    DEBUG_PRINT("sent = 0x%04X recv = 0x%04X\n", val, _val); 
     if(_val == val){
       // Value correct
       break;
@@ -336,7 +336,7 @@ int cin_ctl_read(struct cin_port* cp, uint16_t reg, uint16_t *val) {
 #endif
 
   if((buf >> 16) != reg){
-    ERROR_PRINT("Read value is register %04X was expecting %04X\n", 
+    ERROR_PRINT("Read value is register 0x%04X was expecting 0x%04X\n", 
                 (buf >> 16), reg);
     goto error;
   }
@@ -455,7 +455,7 @@ int cin_ctl_load_config(struct cin_port* cp,char *filename){
    }
   }
  
-  DEBUG_COMMENT("Done.");
+  DEBUG_COMMENT("Done.\n");
   pthread_mutex_unlock(&cp->access);
   
   fclose(file);
@@ -599,7 +599,7 @@ int cin_ctl_get_fclk(struct cin_port* cp, int *clkfreq){
 int cin_ctl_get_cfg_fpga_status(struct cin_port* cp, uint16_t *_val){
       
   int _status = cin_ctl_read(cp,REG_FPGA_STATUS, _val);
-  DEBUG_PRINT("CFG FPGA Status  :  %04X\n", *_val);
+  DEBUG_PRINT("CFG FPGA Status  :  0x%04X\n", *_val);
 
   if(_status){
     ERROR_COMMENT("Unable to read FPGA status\n");
@@ -613,13 +613,13 @@ int cin_ctl_get_id(struct cin_port *cp, cin_ctl_id_t *val){
   int _status;
 
   _status  = cin_ctl_read(cp, REG_BOARD_ID, &val->board_id);
-  DEBUG_PRINT("CIN Board ID     :  %04X\n",val->board_id);
+  DEBUG_PRINT("CIN Board ID     :  0x%04X\n",val->board_id);
 
   _status |= cin_ctl_read(cp,REG_HW_SERIAL_NUM, &val->serial_no);
-  DEBUG_PRINT("HW Serial Number :  %04X\n",val->serial_no);
+  DEBUG_PRINT("HW Serial Number :  0x%04X\n",val->serial_no);
 
   _status |= cin_ctl_read(cp,REG_FPGA_VERSION, &val->fpga_ver);
-  DEBUG_PRINT("CFG FPGA Version :  %04X\n\n",val->fpga_ver);
+  DEBUG_PRINT("CFG FPGA Version :  0x%04X\n\n",val->fpga_ver);
 
   if(_status){
     ERROR_COMMENT("Unable to read CIN ID\n");
@@ -631,13 +631,13 @@ int cin_ctl_get_id(struct cin_port *cp, cin_ctl_id_t *val){
 
 void cin_ctl_display_id(FILE *out, cin_ctl_id_t val){
   fprintf(out, "FPGA Status :\n\n");
-  fprintf(out, "  Board ID         : %04X\n", val.board_id);
-  fprintf(out, "  Serial Number    : %04X\n", val.serial_no);
-  fprintf(out, "  CFG FPGA Ver.    : %04X\n", val.fpga_ver);
+  fprintf(out, "  Board ID         : 0x%04X\n", val.board_id);
+  fprintf(out, "  Serial Number    : 0x%04X\n", val.serial_no);
+  fprintf(out, "  CFG FPGA Ver.    : 0x%04X\n", val.fpga_ver);
 }
 
 void cin_ctl_display_fpga_status(FILE *out, uint16_t fpga_status){
-  fprintf(out, "  CFG FPGA Status  : %04X\n\n", fpga_status);
+  fprintf(out, "  CFG FPGA Status  : 0x%04X\n\n", fpga_status);
   if(fpga_status & CIN_CTL_FPGA_STS_CFG){
     fprintf(out, "  ** Frame FPGA Configuration Done\n");
   } else {
@@ -659,13 +659,13 @@ int cin_ctl_get_dcm_status(struct cin_port* cp, uint16_t *_val){
     return _status;
   }
 
-  DEBUG_PRINT("CFG DCM Status   :  %04X\n", *_val);
+  DEBUG_PRINT("CFG DCM Status   :  0x%04X\n", *_val);
   return 0; 
 }
 
 void cin_ctl_display_dcm_status(FILE *out, uint16_t *_val){
   fprintf(out, "CFG DCM Status :\n\n");
-  fprintf(out, "  DCM Status       : %04X\n\n", *_val);
+  fprintf(out, "  DCM Status       : 0x%04X\n\n", *_val);
   if(*_val & CIN_CTL_DCM_STS_ATCA){
     fprintf(out, "  ** ATCA 48V Alarm Active\n");
   } else {
@@ -1174,11 +1174,26 @@ int cin_ctl_set_address(struct cin_port* cp, char *ip, uint16_t reg0, uint16_t r
 
 int cin_ctl_set_mux(struct cin_port *cp, int setting){
 
-  int _status = cin_ctl_write_with_readback(cp, REG_TRIGGERSELECT_REG, setting);
+  int _status = cin_ctl_write_with_readback(cp, REG_TRIGGERSELECT_REG, (uint16_t)setting);
   if(_status){
     ERROR_COMMENT("Failed to write MUX setting\n");
     return -1;
   } 
+
+  DEBUG_PRINT("Set MUX to 0x%X\n", setting);
+
+  return 0;
+}
+
+int cin_ctl_get_mux(struct cin_port *cp, int *setting){
+
+  int _status = cin_ctl_read(cp, REG_TRIGGERSELECT_REG, (uint16_t*)setting);
+  if(_status){
+    ERROR_COMMENT("Failed to read MUX setting\n");
+    return -1;
+  } 
+
+  DEBUG_PRINT("Mux value is 0x%X\n", *setting);
 
   return 0;
 }

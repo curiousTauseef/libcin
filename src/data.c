@@ -239,8 +239,18 @@ int cin_data_init(int mode, int packet_buffer_len, int frame_buffer_len,
   thread_data.mallformed_packets = 0;
   thread_data.dropped_packets = 0;
 
+  /* Setup the descramble map */
+
+  thread_data.map.map = malloc(sizeof(uint32_t) * CIN_DATA_MAX_STREAM);
+  if(!thread_data.map.map){
+    return 1;
+  }
+  thread_data.map.overscan = 2;
+  thread_data.map.rows = CIN_DATA_MAX_FRAME_Y;
+
   /* Setup the needed mutexes */
   pthread_mutex_init(&thread_data.stats_mutex, NULL);
+  pthread_mutex_init(&thread_data.descramble_map_mutex, NULL);
 
   /* Setup threads */
 
@@ -768,6 +778,30 @@ void *cin_data_listen_thread(void *args){
   pthread_exit(NULL);
 }
 
+int cin_data_get_descramble_params(int *rows, int *overscan){
+  pthread_mutex_lock(&thread_data.descramble_map_mutex);
+  *overscan = thread_data.map.overscan;
+  *rows = thread_data.map.rows;
+  pthread_mutex_unlock(&thread_data.descramble_map_mutex);
+
+}
+
+int cin_data_set_descramble_params(int rows, int overscan){
+  /* This routine sets the descamble parameters */
+  int rtn;
+
+  pthread_mutex_lock(&thread_data.descramble_map_mutex);
+
+  thread_data.map.overscan = overscan;
+  thread_data.map.rows = rows;
+
+  rtn = cin_data_descramble_init(&thread_data.map);
+  DEBUG_PRINT("Created new descramble map. Overscan = %d, rows = %d\n", overscan, rows);
+  
+  pthread_mutex_unlock(&thread_data.descramble_map_mutex);
+
+  return rtn;
+}
 
 void* cin_data_descramble_thread(void *args){
   /* This routine gets the next frame and descrambles is */
@@ -780,13 +814,10 @@ void* cin_data_descramble_thread(void *args){
   int sid = syscall(SYS_gettid);
   DEBUG_PRINT("Starting descrambler thread ppid = %d\n", sid);
  
-  descramble_map_t *map;
-  map = malloc(sizeof(descramble_map_t));
-  if(!map){
-    pthread_exit(NULL);
-  }
- 
-  cin_data_descramble_init(map, CIN_DATA_FRAME_HEIGHT, 2);
+  pthread_mutex_lock(&thread_data.descramble_map_mutex);
+  cin_data_descramble_init(&thread_data.map);
+  pthread_mutex_unlock(&thread_data.descramble_map_mutex);
+
   DEBUG_COMMENT("Initialized descramble map\n");
 
   while(1){
@@ -797,12 +828,14 @@ void* cin_data_descramble_thread(void *args){
 
     DEBUG_PRINT("Descrambling frame %d\n", frame->number);
 
-    cin_data_descramble_frame(map, image->data, frame->data); 
+    pthread_mutex_lock(&thread_data.descramble_map_mutex);
+    cin_data_descramble_frame(&thread_data.map, image->data, frame->data); 
+    pthread_mutex_unlock(&thread_data.descramble_map_mutex);
 
     image->timestamp = frame->timestamp;
     image->number = frame->number;
-    image->size_x = map->size_x;
-    image->size_y = map->size_y;
+    image->size_x = thread_data.map.size_x;
+    image->size_y = thread_data.map.size_y;
 
     // Release the frame and the image
 

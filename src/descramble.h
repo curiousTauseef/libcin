@@ -33,23 +33,16 @@
 #define _DESCRAMBLE_H
 
 typedef struct {
-
-  uint16_t ChanMap[CIN_DATA_CCD_COLS * 2]; // Actual chanelmap
-  uint16_t TopBot[CIN_DATA_CCD_COLS * 2];  // Definition of top or bottom
-  uint16_t MapCol[CIN_DATA_CCD_COLS / 2];   // Column Map
-  uint16_t MapCric[CIN_DATA_CCD_COLS / 2];  // fCRIC Map
-  uint16_t MapAddr[CIN_DATA_CCD_COLS / 2];  // Address Map
-
-  uint32_t *Map;
+  uint32_t *map;
   int      size_x; // COLS
   int      size_y; // ROWS
-
+  int      overscan;
+  int      rows;
 } descramble_map_t;
 
 // Function prototypes
 
-int cin_data_descramble_init(descramble_map_t *map, 
-                             int ccd_size_rows, int overscan);
+int cin_data_descramble_init(descramble_map_t *map);
 int cin_data_descramble_frame(descramble_map_t *map, 
                               uint16_t *out, uint16_t *in);
 

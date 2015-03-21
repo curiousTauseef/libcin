@@ -35,6 +35,7 @@
 #include "mbuffer.h"
 #include "fifo.h"
 #include "pthread.h"
+#include "descramble.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -84,6 +85,11 @@ typedef struct cin_data_thread_data {
   struct cin_data_stats stats;
   pthread_mutex_t stats_mutex;
   pthread_cond_t stats_signal;
+
+  /* Descramble */
+  
+  pthread_mutex_t descramble_map_mutex;
+  descramble_map_t map;
 
 } cin_data_thread_data_t;
 
