@@ -40,6 +40,7 @@
 
 #include "cin.h"
 #include "cin_register_map.h"
+#include "fclk_program.h"
 #include "cinregisters.h"
 #include "control.h"
 #include "fifo.h"
@@ -539,24 +540,67 @@ error:
   return _status;
 }
 
+int cin_ctl_set_dco(struct cin_port* cp, int freeze){
+  int _status;
+
+  _status = cin_ctl_write(cp,REG_FCLK_I2C_ADDRESS, 0xB089);
+
+  if(freeze){
+    _status |= cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, 0xF010);
+  } else {
+    _status |= cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, 0xF000);
+  }
+
+  _status |= cin_ctl_write(cp,REG_FRM_COMMAND, CMD_FCLK_COMMIT);
+
+  if(!freeze){
+    // Start the DCO up
+    _status |= cin_ctl_write(cp,REG_FCLK_I2C_ADDRESS, 0xB087);
+    _status |= cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, 0xF040);
+    _status |= cin_ctl_write(cp,REG_FRM_COMMAND, CMD_FCLK_COMMIT);
+  }
+
+  return _status; 
+}
+
 int cin_ctl_set_fclk(struct cin_port* cp, int clkfreq){
 
-  int _status;
-   
-  if (clkfreq == CIN_CTL_FCLK_125){
-    _status = cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, CMD_FCLK_125);
-  } else if (clkfreq == CIN_CTL_FCLK_200){
-    _status = cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, CMD_FCLK_200);
-  } else if (clkfreq == CIN_CTL_FCLK_250){
-    _status = cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, CMD_FCLK_250);
-  } else {
-    ERROR_COMMENT("Invalid clkfreq.\n");
+  if((clkfreq < 0) || (clkfreq >= CIN_FCLK_NUM_REG)){
+    ERROR_PRINT("Invalid clock frequency %d\n", clkfreq);
     return -1;
   }
 
+  int _status = -1;
+
+  switch(clkfreq){
+    case CIN_CTL_FCLK_125:
+      _status = cin_ctl_write(cp, REG_FCLK_I2C_DATA_WR, CMD_FCLK_125);
+      break;
+    case CIN_CTL_FCLK_200:
+      _status = cin_ctl_write(cp, REG_FCLK_I2C_DATA_WR, CMD_FCLK_200);
+      break;
+    case CIN_CTL_FCLK_250:
+      _status = cin_ctl_write(cp, REG_FCLK_I2C_DATA_WR, CMD_FCLK_250);
+      break;
+  }
+
+
+  //  if(cin_ctl_set_dco(cp, 1)){
+  //    ERROR_COMMENT("Unable to freeze DCO");
+  //    return -1;
+  //  }
+  //
+  // int i;
+  // int _status = 0;
+  // for(i=0;i<CIN_FCLK_NUM_REG;i++){
+  //   _status |= cin_ctl_write(cp,REG_FCLK_I2C_ADDRESS, CIN_FCLK_REG[i]);
+  //   _status |= cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, CIN_FCLK_PROGRAM[clkfreq][i]);
+  //   fprintf(stderr, "REG = 0x%X PGM = 0x%X\n", CIN_FCLK_REG[i], CIN_FCLK_PROGRAM[clkfreq][i]);
+  // }
+
   if(_status){
     ERROR_COMMENT("Unable to set FCLK frequency.\n");
-    return _status;
+    return -1;
   }
 
   DEBUG_PRINT("Set FCLK to %d\n", clkfreq);
@@ -574,25 +618,39 @@ int cin_ctl_get_fclk(struct cin_port* cp, int *clkfreq){
     return _status;
   }
 
-  if(_val & CIN_CTL_FCLK_125){
+  if((_val & 0xF000) == 0xF000){
+    /* Not standard clock frequency */
+    ERROR_PRINT("Not standard clk. freq. 0x%X\n", (int)_val);
+    int i;
+    _status = 0;
+    for(i=0;i<CIN_FCLK_READ_N;i++){
+      _status |= cin_ctl_write(cp, REG_FCLK_I2C_ADDRESS, CIN_FCLK_READ[i]);
+      _status |= cin_ctl_write(cp, REG_FRM_COMMAND, CMD_FCLK_COMMIT);
+      _status |= cin_ctl_read(cp, REG_FCLK_I2C_DATA_RD, &_val);
+      // fprintf(stderr, "Read FCLK 0x%X val = 0x%X\n", CIN_FCLK_READ[i], _val);
+    }
+    return -1;
+  }
+
+  if((_val & CMD_FCLK_125) == CMD_FCLK_125){
     DEBUG_COMMENT("FCLK Frequency = 125 MHz\n");
     *clkfreq = CIN_CTL_FCLK_125;
     return 0;
   } 
 
-  if(_val & CIN_CTL_FCLK_200){
+  if((_val & CMD_FCLK_200) == CMD_FCLK_200){
     DEBUG_COMMENT("FCLK Frequency = 200 MHz\n");
     *clkfreq = CIN_CTL_FCLK_200;
     return 0;		     
   }
 
-  if(_val & CIN_CTL_FCLK_250){
+  if((_val & CMD_FCLK_250) == CMD_FCLK_250){
     DEBUG_COMMENT("FCLK Frequency = 250 MHz\n");
     *clkfreq = CIN_CTL_FCLK_250;
     return 0;
   }
 
-  ERROR_COMMENT("Recieved unknown clk. freq.\n");
+  ERROR_PRINT("Recieved unknown clk. freq. 0x%X\n", (int)_val);
   return -1;
 }  
 

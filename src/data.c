@@ -158,7 +158,7 @@ int cin_data_init_port(struct cin_port* dp,
 
   /* Set the receieve buffers for the socket */
 
-  fprintf(stderr, "Requesting recieve buffer of %d Mb\n", dp->rcvbuf / (1024*1024));
+  // fprintf(stderr, "Requesting recieve buffer of %d Mb\n", dp->rcvbuf / (1024*1024));
 
   if(setsockopt(dp->sockfd, SOL_SOCKET, SO_RCVBUF, 
                 &dp->rcvbuf, sizeof(dp->rcvbuf)) == -1){
@@ -171,7 +171,7 @@ int cin_data_init_port(struct cin_port* dp,
     perror("CIN data port - unable to get receive buffer :");
   }
 
-  fprintf(stderr, "Recieve buffer = %d Mb\n", dp->rcvbuf_rb / (1024 * 1024));
+  // fprintf(stderr, "Recieve buffer = %d Mb\n", dp->rcvbuf_rb / (1024 * 1024));
 
   int zero = 0;
   if(setsockopt(dp->sockfd, SOL_SOCKET, SO_TIMESTAMP,
@@ -779,10 +779,16 @@ void *cin_data_listen_thread(void *args){
   pthread_exit(NULL);
 }
 
-int cin_data_get_descramble_params(int *rows, int *overscan){
+int cin_data_get_descramble_params(int *rows, int *overscan, int *xsize, int *ysize){
   pthread_mutex_lock(&thread_data.descramble_map_mutex);
   *overscan = thread_data.map.overscan;
   *rows = thread_data.map.rows;
+  if(xsize != NULL){
+    *xsize = thread_data.map.size_x;
+  }
+  if(ysize != NULL){
+    *ysize = thread_data.map.size_y;
+  }
   pthread_mutex_unlock(&thread_data.descramble_map_mutex);
 
 }
@@ -798,7 +804,7 @@ int cin_data_set_descramble_params(int rows, int overscan){
 
   rtn = cin_data_descramble_init(&thread_data.map);
   DEBUG_PRINT("Created new descramble map. Overscan = %d, rows = %d\n", overscan, rows);
-  
+
   pthread_mutex_unlock(&thread_data.descramble_map_mutex);
 
   return rtn;
