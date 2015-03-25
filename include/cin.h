@@ -345,6 +345,8 @@ int cin_ctl_calc_vi_status(struct cin_port* cp,
  * CIN Control
  *------------------------*/
 
+int cin_ctl_get_camera_pwr(struct cin_port* cp, int *val);
+int cin_ctl_set_camera_pwr(struct cin_port* cp, int val);
 int cin_ctl_set_bias(struct cin_port* cp,int val);
 int cin_ctl_get_bias(struct cin_port* cp, int *val);
 int cin_ctl_set_clocks(struct cin_port* cp,int val);

@@ -480,6 +480,7 @@ void *cin_data_assembler_thread(void *args){
 
     if(buffer == NULL){
       /* We don't have a frame, continue */
+      (*proc->input_put)(proc->input_args, proc->reader);
       continue;
     }
 
@@ -489,9 +490,16 @@ void *cin_data_assembler_thread(void *args){
     buffer_len = buffer->size - CIN_DATA_UDP_HEADER;
     if(buffer_len > CIN_DATA_PACKET_LEN){
       /* Dump the frame and continue */
-      DEBUG_COMMENT("Recieved packet too large");
+      ERROR_COMMENT("Recieved packet too large");
       (*proc->input_put)(proc->input_args, proc->reader);
       thread_data.mallformed_packets++;
+      (*proc->input_put)(proc->input_args, proc->reader);
+      continue;
+    } else if(buffer_len < 60) {
+      // This is a quick hack to remove some bad packets from the end
+      // of the data stream. They all say DEAD FOOD .....
+      DEBUG_COMMENT("Packet too small ... dropping.\n");
+      (*proc->input_put)(proc->input_args, proc->reader);
       continue;
     }
 
@@ -499,9 +507,10 @@ void *cin_data_assembler_thread(void *args){
     header = ((uint64_t *)buffer_p); 
     if((*header & CIN_DATA_MAGIC_PACKET_MASK) != CIN_DATA_MAGIC_PACKET) {
       /* Dump the packet and continue */
-      DEBUG_COMMENT("Packet does not match magic\n");
+      ERROR_COMMENT("Packet does not match magic\n");
       (*proc->input_put)(proc->input_args, proc->reader);
       thread_data.mallformed_packets++;
+      (*proc->input_put)(proc->input_args, proc->reader);
       continue;
     }
     
@@ -521,7 +530,7 @@ void *cin_data_assembler_thread(void *args){
       if(frame){
         // Note this is repeated below, but is here in
         // case we haven't pushed out the frame at the end
-        DEBUG_PRINT("Missed end of frame magic on frame %d\n", last_frame);
+        ERROR_PRINT("Missed end of frame magic on frame %d\n", last_frame);
         frame->number = last_frame;
         frame->timestamp = last_frame_timestamp;
         thread_data.last_frame = last_frame;
@@ -554,10 +563,11 @@ void *cin_data_assembler_thread(void *args){
     }
 
     if(this_packet == last_packet){
-      DEBUG_PRINT("Duplicate packet (frame = %d, packet = 0x%x)\n", 
+      ERROR_PRINT("Duplicate packet (frame = %d, packet = 0x%x)\n", 
                   this_frame, this_packet + this_packet_msb);
       (*proc->input_put)(proc->input_args, proc->reader);
       thread_data.mallformed_packets++;
+      (*proc->input_put)(proc->input_args, proc->reader);
       continue;
     }
 
@@ -568,7 +578,7 @@ void *cin_data_assembler_thread(void *args){
       if(((this_packet + this_packet_msb + 1) * CIN_DATA_PACKET_LEN) <
          (CIN_DATA_MAX_STREAM * 2)){
 
-        DEBUG_PRINT("Skipped %d packets from frame %d\n", skipped, this_frame);
+        ERROR_PRINT("Skipped %d packets from frame %d\n", skipped, this_frame);
      
         // Encode skipped packets into the data
         int i;
@@ -580,7 +590,7 @@ void *cin_data_assembler_thread(void *args){
         }
       } else {
         // Out of bounds packet
-        DEBUG_COMMENT("Packet out of bounds\n");
+        ERROR_COMMENT("Packet out of bounds\n");
       }
     }
 
@@ -606,10 +616,11 @@ void *cin_data_assembler_thread(void *args){
         *frame_p++ += *buffer_p++;
       }
     } else {
-      DEBUG_PRINT("Packet count out of bounds (frame = %d, packet = 0x%x)\n", 
+      ERROR_PRINT("Packet count out of bounds (frame = %d, packet = 0x%x)\n", 
                   this_frame, this_packet + this_packet_msb);
       (*proc->input_put)(proc->input_args, proc->reader);
       thread_data.mallformed_packets++;
+      (*proc->input_put)(proc->input_args, proc->reader);
       continue;
     }
 

@@ -446,7 +446,7 @@ int cin_ctl_load_config(struct cin_port* cp,char *filename){
       sscanf (_line,"%s %s",_regstr,_valstr);
       _regul=strtoul(_regstr,NULL,16);
       _valul=strtoul(_valstr,NULL,16);          
-      usleep(10000);   /*for flow control*/ 
+      usleep(200);   /*for flow control*/ 
       _status=cin_ctl_write(cp,_regul,_valul);
       if (_status != 0){
         ERROR_COMMENT("Error writing to CIN\n");
@@ -498,7 +498,7 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
       fclose(file);
       goto error;
     }
-    usleep(500);   /*for UDP flow control*/ 
+    usleep(200);   /*for UDP flow control*/ 
   }
   fclose(file);
 
@@ -875,18 +875,35 @@ void cin_ctl_display_pwr_line(FILE *out,const char* msg, cin_ctl_pwr_val_t val){
 
 /******************* CIN Control *************************/
 
+int cin_ctl_set_camera_pwr(struct cin_port* cp, int val){
+  int _status = 0;
+  _status |= cin_ctl_set_bias(cp, val);
+  _status |= cin_ctl_set_clocks(cp, val);
+  return _status;
+}
+
+int cin_ctl_get_camera_pwr(struct cin_port* cp, int *val){
+  int _status = 0;
+  int _val1, _val2;
+  _status |= cin_ctl_get_bias(cp, &_val1);
+  _status |= cin_ctl_get_clocks(cp, &_val2);
+
+  if(_status){
+    *val = _val1 & _val2;
+  }
+
+  return _status;
+}
+
 int cin_ctl_set_bias(struct cin_port* cp,int val){
 
   int _status;
    
-  if (val == 1){
-    _status = cin_ctl_write(cp,REG_BIASCONFIGREGISTER0_REG, 0x0001);
+  if(val){
+    _status = cin_ctl_write(cp,REG_BIASCONFIGREGISTER0_REG, 0x0003);
   } else if (val == 0){
     _status = cin_ctl_write(cp,REG_BIASCONFIGREGISTER0_REG, 0x0000);
-  } else {
-    ERROR_COMMENT("Illegal Bias state: Only 0 or 1 allowed\n");
-    return -1;
-  }
+  } 
 
   if(_status){
     ERROR_COMMENT("Unable to set bias.\n");
@@ -907,8 +924,13 @@ int cin_ctl_get_bias(struct cin_port* cp, int *val){
     ERROR_COMMENT("Unable to read bias status\n");
     return _status;
   }
+  
+  if((_val & 0x0003) == 0x0003){
+    *val = 1;
+  } else {
+    *val = 0;
+  }
 
-  *val = (int)_val;
   DEBUG_PRINT("Bias value is %d\n", *val);
   return 0;
 }
@@ -925,9 +947,9 @@ int cin_ctl_set_clocks(struct cin_port* cp,int val){
   }
    
   if (val == 1){
-    _status = cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, _val | 0x0001);
+    _status = cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, _val | 0x0003);
   } else if (val == 0){
-    _status = cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, _val & ~0x0000);
+    _status = cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, _val & ~0x0003);
   } else {
     ERROR_COMMENT("Illegal Clocks state: Only 0 or 1 allowed\n");
     return -1;
@@ -953,7 +975,7 @@ int cin_ctl_get_clocks(struct cin_port* cp, int *val){
     return _status;
   }
 
-  if(_val & 0x0001){
+  if((_val & 0x0003) == 0x0003){
     *val = 1;
   } else {
     *val = 0;
