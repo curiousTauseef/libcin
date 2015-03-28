@@ -142,7 +142,7 @@ uint32_t cin_ctl_get_packet(struct cin_port *cp, uint32_t *val){
       fifo_advance_tail(&cp->listener->ctl_fifo, 0);
       return 0;
     }
-    usleep(100);
+    usleep(200);
   }
 
   return -1;
@@ -390,7 +390,7 @@ int cin_ctl_fp_pwr(struct cin_port* cp, int pwr){
     goto error;
   }
 
-  if(_val){
+  if((_val & CIN_CTL_POWER_ENABLE) == CIN_CTL_POWER_ENABLE){
     // We are powered up do we ever want to turn on FP power?
 
     if(pwr){
@@ -423,6 +423,29 @@ int cin_ctl_load_config(struct cin_port* cp,char *filename){
   uint32_t _regul,_valul;
   char _regstr[12],_valstr[12],_line [1024];
 
+  // We are going to check if bias and clocks are on. 
+ 
+  int _val;
+  _status = cin_ctl_get_bias(cp, &_val);
+  if(_status){
+    ERROR_COMMENT("Unable to read bias status. Refusing to upload config\n");
+    return -1;
+  }
+  if(_val){
+    ERROR_COMMENT("Cannot upload with bias on.\n");
+    return -1;
+  }
+
+  _status = cin_ctl_get_clocks(cp, &_val);
+  if(_status){
+    ERROR_COMMENT("Unable to read clock status. Refusing to upload config\n");
+    return -1;
+  }
+  if(_val){
+    ERROR_COMMENT("Cannot upload with clocks on.\n");
+    return -1;
+  }
+
   FILE *file = fopen(filename, "r");
   if(file == NULL){
     ERROR_PRINT("Unable to open file %s\n", filename);
@@ -446,7 +469,7 @@ int cin_ctl_load_config(struct cin_port* cp,char *filename){
       sscanf (_line,"%s %s",_regstr,_valstr);
       _regul=strtoul(_regstr,NULL,16);
       _valul=strtoul(_valstr,NULL,16);          
-      usleep(200);   /*for flow control*/ 
+      usleep(5000);   /*for flow control*/ 
       _status=cin_ctl_write(cp,_regul,_valul);
       if (_status != 0){
         ERROR_COMMENT("Error writing to CIN\n");
@@ -779,7 +802,7 @@ int cin_ctl_calc_vi_status(struct cin_port* cp,
   return 0;
 }
 
-int cin_ctl_get_power_status(struct cin_port* cp, 
+int cin_ctl_get_power_status(struct cin_port* cp, int full,
                              int *pwr, cin_ctl_pwr_mon_t *values){
     
   double _current, _voltage;
@@ -819,26 +842,29 @@ int cin_ctl_get_power_status(struct cin_port* cp,
   values->bus_12v0.v = _voltage;
   values->bus_12v0.i = _current;
 
-  _status  = cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH5, REG_IMON_ADC0_CH5,
-                         0.00015258, &values->mgmt_3v3);
-  _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH7, REG_IMON_ADC0_CH7,
-                         0.00015258, &values->mgmt_2v5);
-  _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH2, REG_IMON_ADC0_CH2,
-                         0.00007629, &values->mgmt_1v2);
-  _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH3, REG_IMON_ADC0_CH3,
-                         0.00007629, &values->enet_1v0);
-  _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH4, REG_IMON_ADC0_CH4,
-                         0.00015258, &values->s3e_3v3);
-  _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH8, REG_IMON_ADC0_CH8,
-                         0.00015258, &values->gen_3v3);
-  _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH9, REG_IMON_ADC0_CH9,
-                         0.00015258, &values->gen_2v5);
-  _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CHE, REG_IMON_ADC0_CHE,
-                         0.00007629, &values->v6_0v9);
-  _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CHB, REG_IMON_ADC0_CHB,
-                         0.00007629, &values->v6_1v0);
-  _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CHD, REG_IMON_ADC0_CHD,
-                         0.00015258, &values->v6_2v5);
+  if(full){
+    _status  = cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH5, REG_IMON_ADC0_CH5,
+                           0.00015258, &values->mgmt_3v3);
+    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH7, REG_IMON_ADC0_CH7,
+                           0.00015258, &values->mgmt_2v5);
+    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH2, REG_IMON_ADC0_CH2,
+                           0.00007629, &values->mgmt_1v2);
+    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH3, REG_IMON_ADC0_CH3,
+                           0.00007629, &values->enet_1v0);
+    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH4, REG_IMON_ADC0_CH4,
+                           0.00015258, &values->s3e_3v3);
+    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH8, REG_IMON_ADC0_CH8,
+                           0.00015258, &values->gen_3v3);
+    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH9, REG_IMON_ADC0_CH9,
+                           0.00015258, &values->gen_2v5);
+    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CHE, REG_IMON_ADC0_CHE,
+                           0.00007629, &values->v6_0v9);
+    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CHB, REG_IMON_ADC0_CHB,
+                           0.00007629, &values->v6_1v0);
+    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CHD, REG_IMON_ADC0_CHD,
+                           0.00015258, &values->v6_2v5);
+  }
+
   _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CHF, REG_IMON_ADC0_CHF,
                          0.00030516, &values->fp);
   if(_status){
@@ -900,7 +926,7 @@ int cin_ctl_set_bias(struct cin_port* cp,int val){
   int _status;
    
   if(val){
-    _status = cin_ctl_write(cp,REG_BIASCONFIGREGISTER0_REG, 0x0003);
+    _status = cin_ctl_write(cp,REG_BIASCONFIGREGISTER0_REG, 0x0001);
   } else if (val == 0){
     _status = cin_ctl_write(cp,REG_BIASCONFIGREGISTER0_REG, 0x0000);
   } 
@@ -925,7 +951,7 @@ int cin_ctl_get_bias(struct cin_port* cp, int *val){
     return _status;
   }
   
-  if((_val & 0x0003) == 0x0003){
+  if((_val & 0x0001) == 0x0001){
     *val = 1;
   } else {
     *val = 0;
@@ -947,9 +973,9 @@ int cin_ctl_set_clocks(struct cin_port* cp,int val){
   }
    
   if (val == 1){
-    _status = cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, _val | 0x0003);
+    _status = cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, _val | 0x0001);
   } else if (val == 0){
-    _status = cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, _val & ~0x0003);
+    _status = cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, _val & ~0x0001);
   } else {
     ERROR_COMMENT("Illegal Clocks state: Only 0 or 1 allowed\n");
     return -1;
@@ -975,7 +1001,7 @@ int cin_ctl_get_clocks(struct cin_port* cp, int *val){
     return _status;
   }
 
-  if((_val & 0x0003) == 0x0003){
+  if((_val & 0x0001) == 0x0001){
     *val = 1;
   } else {
     *val = 0;
@@ -1067,27 +1093,19 @@ int cin_ctl_set_focus(struct cin_port* cp, int val){
 int cin_ctl_int_trigger_start(struct cin_port* cp, int nimages){
   // Trigger the camera, setting the trigger mode
 
-  int _status;
+  int _status = 0;
 
   DEBUG_PRINT("Set n exposures to %d\n", nimages);
-  if(nimages != 1){
-    _status = cin_ctl_set_focus(cp, 1);
-    if(_status){
-      return _status;
-    }
-  }
-  _status  = cin_ctl_write_with_readback(cp, REG_NUMBEROFEXPOSURE_REG, 
-                                         (uint16_t)nimages);
+
+  _status |= cin_ctl_write_with_readback(cp, REG_NUMBEROFEXPOSURE_REG, (uint16_t)nimages);
+  _status |= cin_ctl_set_focus(cp, 1);
   _status |= cin_ctl_write(cp, REG_FRM_COMMAND, 0x0100);
+
   if(_status){
     ERROR_COMMENT("Unable to start triggers");
-    goto error;
   }
 
   DEBUG_COMMENT("Trigger sent.\n");
-  return 0;
-
-error:
   return _status;
 }
       
@@ -1135,6 +1153,40 @@ int cin_ctl_ext_trigger_stop(struct cin_port* cp){
   return 0;
 }
 
+int cin_ctl_get_triggering(struct cin_port *cp, int *trigger){
+  // Return if we are triggering. 
+  // Check the focus bit and the ext status
+
+  int _status = 0;
+  int trig, focus;
+
+  _status = cin_ctl_get_trigger(cp, &trig);
+  if(_status){
+    return _status;
+  } 
+
+  if(trig != CIN_CTL_TRIG_INTERNAL){
+    *trigger = 2;
+    return 0;
+  }
+
+  _status = cin_ctl_get_focus(cp, &focus);
+  if(_status){
+    return _status;
+  }
+
+  if(focus){
+    *trigger = 1;
+    return 0;
+  } else {
+    *trigger = 0;
+    return 0;
+  }
+
+  return -1;
+
+}
+
 int cin_ctl_set_exposure_time(struct cin_port* cp,float ftime){
 
   int _status;
@@ -1150,7 +1202,7 @@ int cin_ctl_set_exposure_time(struct cin_port* cp,float ftime){
   _status  = cin_ctl_write_with_readback(cp,REG_EXPOSURETIMEMSB_REG,_msbval);
   _status |= cin_ctl_write_with_readback(cp,REG_EXPOSURETIMELSB_REG,_lsbval);
   if(_status){
-    ERROR_COMMENT("Unable to set exposure time");
+    ERROR_COMMENT("Unable to set exposure time\n");
     return _status;
   }
 
