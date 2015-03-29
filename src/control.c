@@ -197,7 +197,7 @@ int cin_ctl_close_port(struct cin_port* cp) {
 
 /*************************** CIN Read/Write ***************************/
 
-int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val){
+int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val, int wait){
 
    uint32_t _valwr;
    int rc;
@@ -214,6 +214,9 @@ int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val){
    rc = sendto(cp->sockfd, &_valwr, sizeof(_valwr), 0,
          (struct sockaddr*)&cp->sin_srv,
          sizeof(cp->sin_srv));
+  if(wait){
+    usleep(CIN_CTL_WRITE_SLEEP);
+  }
 
   // Unlock Mutex for access
   pthread_mutex_unlock(&cp->access);
@@ -243,7 +246,7 @@ int cin_ctl_write_with_readback(struct cin_port* cp, uint16_t reg, uint16_t val)
   int _status;
   while(tries){
     DEBUG_PRINT("try = %d\n", tries);
-    _status = cin_ctl_write(cp, reg, val);
+    _status = cin_ctl_write(cp, reg, val, 1);
     if(_status){
       ERROR_PRINT("Error writing register %x\n", reg);
       goto error;
@@ -312,12 +315,12 @@ int cin_ctl_read(struct cin_port* cp, uint16_t reg, uint16_t *val) {
   while(tries){
     fifo_flush(&cp->listener->ctl_fifo);     
 
-    _status=cin_ctl_write(cp, REG_READ_ADDRESS, reg);
+    _status = cin_ctl_write(cp, REG_READ_ADDRESS, reg, 1);
     if (_status){
       goto error;
     }
 
-    _status=cin_ctl_write(cp, REG_COMMAND, CMD_READ_REG);
+    _status = cin_ctl_write(cp, REG_COMMAND, CMD_READ_REG, 1);
     if (_status != 0){
       goto error;
     }
@@ -371,7 +374,7 @@ int cin_ctl_pwr(struct cin_port* cp, int pwr){
   if (_status != 0){
     goto error;
   }
-  _status=cin_ctl_write(cp,REG_COMMAND, CMD_PS_ENABLE);
+  _status=cin_ctl_write(cp,REG_COMMAND, CMD_PS_ENABLE, 0);
   if (_status != 0){
     goto error;
   }
@@ -405,7 +408,7 @@ int cin_ctl_fp_pwr(struct cin_port* cp, int pwr){
     if(_status != 0){
       goto error;
     }
-    _status=cin_ctl_write(cp,REG_COMMAND, CMD_PS_ENABLE);
+    _status=cin_ctl_write(cp,REG_COMMAND, CMD_PS_ENABLE, 0);
     if(_status != 0){
       goto error;
     }
@@ -470,7 +473,7 @@ int cin_ctl_load_config(struct cin_port* cp,char *filename){
       _regul=strtoul(_regstr,NULL,16);
       _valul=strtoul(_valstr,NULL,16);          
       usleep(5000);   /*for flow control*/ 
-      _status=cin_ctl_write(cp,_regul,_valul);
+      _status=cin_ctl_write(cp, _regul, _valul, 0);
       if (_status != 0){
         ERROR_COMMENT("Error writing to CIN\n");
         fclose(file);
@@ -507,7 +510,7 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
             
   DEBUG_PRINT("Loading %s\n", filename);
 
-  _status = cin_ctl_write(cp,REG_COMMAND,CMD_PROGRAM_FRAME); 
+  _status = cin_ctl_write(cp, REG_COMMAND, CMD_PROGRAM_FRAME, 0); 
   if (_status != 0){
     ERROR_COMMENT("Failed to program CIN\n");
     goto error;
@@ -531,14 +534,14 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
 
   DEBUG_COMMENT("Resetting Frame FPGA\n");
 
-  _status=cin_ctl_write(cp,REG_FRM_RESET,0x0001);
+  _status=cin_ctl_write(cp, REG_FRM_RESET, 0x0001, 0);
   if(_status != 0){
     goto error;
   } 
 
   sleep(1); 
 
-  _status=cin_ctl_write(cp,REG_FRM_RESET,0x0000);
+  _status=cin_ctl_write(cp,REG_FRM_RESET,0x0000, 0);
   if(_status != 0){
     goto error;
   } 
@@ -566,21 +569,21 @@ error:
 int cin_ctl_set_dco(struct cin_port* cp, int freeze){
   int _status;
 
-  _status = cin_ctl_write(cp,REG_FCLK_I2C_ADDRESS, 0xB089);
+  _status = cin_ctl_write(cp,REG_FCLK_I2C_ADDRESS, 0xB089, 1);
 
   if(freeze){
-    _status |= cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, 0xF010);
+    _status |= cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, 0xF010, 1);
   } else {
-    _status |= cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, 0xF000);
+    _status |= cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, 0xF000, 1);
   }
 
-  _status |= cin_ctl_write(cp,REG_FRM_COMMAND, CMD_FCLK_COMMIT);
+  _status |= cin_ctl_write(cp,REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
 
   if(!freeze){
     // Start the DCO up
-    _status |= cin_ctl_write(cp,REG_FCLK_I2C_ADDRESS, 0xB087);
-    _status |= cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, 0xF040);
-    _status |= cin_ctl_write(cp,REG_FRM_COMMAND, CMD_FCLK_COMMIT);
+    _status |= cin_ctl_write(cp,REG_FCLK_I2C_ADDRESS, 0xB087, 1);
+    _status |= cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, 0xF040, 1);
+    _status |= cin_ctl_write(cp,REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
   }
 
   return _status; 
@@ -588,38 +591,54 @@ int cin_ctl_set_dco(struct cin_port* cp, int freeze){
 
 int cin_ctl_set_fclk(struct cin_port* cp, int clkfreq){
 
-  if((clkfreq < 0) || (clkfreq >= CIN_FCLK_NUM_REG)){
-    ERROR_PRINT("Invalid clock frequency %d\n", clkfreq);
-    return -1;
-  }
-
-  int _status = -1;
+  int _status = 0;
 
   switch(clkfreq){
+
     case CIN_CTL_FCLK_125:
-      _status = cin_ctl_write(cp, REG_FCLK_I2C_DATA_WR, CMD_FCLK_125);
+      _status = cin_ctl_write(cp, REG_FCLK_I2C_DATA_WR, CMD_FCLK_125, 0);
       break;
+
     case CIN_CTL_FCLK_200:
-      _status = cin_ctl_write(cp, REG_FCLK_I2C_DATA_WR, CMD_FCLK_200);
+      _status = cin_ctl_write(cp, REG_FCLK_I2C_DATA_WR, CMD_FCLK_200, 0);
       break;
+
     case CIN_CTL_FCLK_250:
-      _status = cin_ctl_write(cp, REG_FCLK_I2C_DATA_WR, CMD_FCLK_250);
+      _status = cin_ctl_write(cp, REG_FCLK_I2C_DATA_WR, CMD_FCLK_250, 0);
+      break;
+
+    case CIN_CTL_FCLK_125_C:
+    case CIN_CTL_FCLK_200_C:
+    case CIN_CTL_FCLK_250_C:
+    case CIN_CTL_FCLK_180_C:
+      // These are the custom settings
+
+      if(cin_ctl_set_dco(cp, 1)){
+        ERROR_COMMENT("Unable to freeze DCO");
+        return -1;
+      }
+    
+      int i;
+      int _status = 0;
+      int _clkfreq = clkfreq - CIN_CTL_FCLK_125_C;
+      for(i=0;i<CIN_FCLK_NUM_REG;i++){
+        _status |= cin_ctl_write(cp, REG_FCLK_I2C_ADDRESS, CIN_FCLK_REG[i], 1);
+        _status |= cin_ctl_write(cp, REG_FCLK_I2C_DATA_WR, CIN_FCLK_PROGRAM[_clkfreq][i], 1);
+        _status |= cin_ctl_write(cp, REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
+        fprintf(stderr, "REG = 0x%X PGM = 0x%X\n", CIN_FCLK_REG[i], CIN_FCLK_PROGRAM[_clkfreq][i]);
+      }
+
+      if(cin_ctl_set_dco(cp, 0)){
+        ERROR_COMMENT("Unable to unfreeze DCO");
+        return -1;
+      }
+      break;
+
+    default:
+      ERROR_PRINT("Invalid clock frequency %d\n", clkfreq);
+      return -1;
       break;
   }
-
-
-  //  if(cin_ctl_set_dco(cp, 1)){
-  //    ERROR_COMMENT("Unable to freeze DCO");
-  //    return -1;
-  //  }
-  //
-  // int i;
-  // int _status = 0;
-  // for(i=0;i<CIN_FCLK_NUM_REG;i++){
-  //   _status |= cin_ctl_write(cp,REG_FCLK_I2C_ADDRESS, CIN_FCLK_REG[i]);
-  //   _status |= cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, CIN_FCLK_PROGRAM[clkfreq][i]);
-  //   fprintf(stderr, "REG = 0x%X PGM = 0x%X\n", CIN_FCLK_REG[i], CIN_FCLK_PROGRAM[clkfreq][i]);
-  // }
 
   if(_status){
     ERROR_COMMENT("Unable to set FCLK frequency.\n");
@@ -643,32 +662,54 @@ int cin_ctl_get_fclk(struct cin_port* cp, int *clkfreq){
 
   if((_val & 0xF000) == 0xF000){
     /* Not standard clock frequency */
-    ERROR_PRINT("Not standard clk. freq. 0x%X\n", (int)_val);
     int i;
     _status = 0;
+    uint16_t _reg[CIN_FCLK_READ_N];
     for(i=0;i<CIN_FCLK_READ_N;i++){
-      _status |= cin_ctl_write(cp, REG_FCLK_I2C_ADDRESS, CIN_FCLK_READ[i]);
-      _status |= cin_ctl_write(cp, REG_FRM_COMMAND, CMD_FCLK_COMMIT);
-      _status |= cin_ctl_read(cp, REG_FCLK_I2C_DATA_RD, &_val);
-      // fprintf(stderr, "Read FCLK 0x%X val = 0x%X\n", CIN_FCLK_READ[i], _val);
+      _status |= cin_ctl_write(cp, REG_FCLK_I2C_ADDRESS, CIN_FCLK_READ[i], 1);
+      _status |= cin_ctl_write(cp, REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
+      _status |= cin_ctl_read(cp, REG_FCLK_I2C_DATA_RD, &_reg[i]);
     }
-    return -1;
+
+    _val = (_reg[1] & 0x00F8) | (_reg[2] & 0x003);
+
+    if(_val == 0x0002){
+
+      *clkfreq = CIN_CTL_FCLK_125_C;
+      return 0;
+
+    } else if(_val == 0x0063){
+
+      *clkfreq = CIN_CTL_FCLK_200_C;
+      return 0;
+
+    } else if(_val == 0x0022){
+
+      *clkfreq = CIN_CTL_FCLK_250_C;
+      return 0;
+        
+    } else {
+
+      ERROR_COMMENT("Not standard clk. freq.\n");
+      for(i=0;i<CIN_FCLK_READ_N;i++){
+        ERROR_PRINT("Read FCLK 0x%04X 0x%04X\n", CIN_FCLK_READ[i], _reg[i]);
+      }
+      return -1;
+      
+    }
   }
 
   if((_val & CMD_FCLK_125) == CMD_FCLK_125){
-    DEBUG_COMMENT("FCLK Frequency = 125 MHz\n");
     *clkfreq = CIN_CTL_FCLK_125;
     return 0;
   } 
 
   if((_val & CMD_FCLK_200) == CMD_FCLK_200){
-    DEBUG_COMMENT("FCLK Frequency = 200 MHz\n");
     *clkfreq = CIN_CTL_FCLK_200;
     return 0;		     
   }
 
   if((_val & CMD_FCLK_250) == CMD_FCLK_250){
-    DEBUG_COMMENT("FCLK Frequency = 250 MHz\n");
     *clkfreq = CIN_CTL_FCLK_250;
     return 0;
   }
@@ -926,9 +967,9 @@ int cin_ctl_set_bias(struct cin_port* cp,int val){
   int _status;
    
   if(val){
-    _status = cin_ctl_write(cp,REG_BIASCONFIGREGISTER0_REG, 0x0001);
+    _status = cin_ctl_write_with_readback(cp,REG_BIASCONFIGREGISTER0_REG, 0x0001);
   } else if (val == 0){
-    _status = cin_ctl_write(cp,REG_BIASCONFIGREGISTER0_REG, 0x0000);
+    _status = cin_ctl_write_with_readback(cp,REG_BIASCONFIGREGISTER0_REG, 0x0000);
   } 
 
   if(_status){
@@ -973,9 +1014,9 @@ int cin_ctl_set_clocks(struct cin_port* cp,int val){
   }
    
   if (val == 1){
-    _status = cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, _val | 0x0001);
+    _status = cin_ctl_write_with_readback(cp,REG_CLOCKCONFIGREGISTER0_REG, _val | 0x0001);
   } else if (val == 0){
-    _status = cin_ctl_write(cp,REG_CLOCKCONFIGREGISTER0_REG, _val & ~0x0001);
+    _status = cin_ctl_write_with_readback(cp,REG_CLOCKCONFIGREGISTER0_REG, _val & ~0x0001);
   } else {
     ERROR_COMMENT("Illegal Clocks state: Only 0 or 1 allowed\n");
     return -1;
@@ -1054,7 +1095,7 @@ int cin_ctl_get_focus(struct cin_port* cp, int *val){
     return _status;
   }
 
-  if(_val & CIN_CTL_FOCUS_BIT){
+  if((_val & CIN_CTL_FOCUS_BIT) == CIN_CTL_FOCUS_BIT){
     *val = 1;
   } else {
     *val = 0;
@@ -1099,7 +1140,7 @@ int cin_ctl_int_trigger_start(struct cin_port* cp, int nimages){
 
   _status |= cin_ctl_write_with_readback(cp, REG_NUMBEROFEXPOSURE_REG, (uint16_t)nimages);
   _status |= cin_ctl_set_focus(cp, 1);
-  _status |= cin_ctl_write(cp, REG_FRM_COMMAND, 0x0100);
+  _status |= cin_ctl_write(cp, REG_FRM_COMMAND, 0x0100, 0);
 
   if(_status){
     ERROR_COMMENT("Unable to start triggers");
@@ -1260,7 +1301,7 @@ int cin_ctl_set_cycle_time(struct cin_port* cp,float ftime){
 int cin_ctl_frame_count_reset(struct cin_port* cp){
 
   int _status;
-  _status = cin_ctl_write(cp,REG_FRM_COMMAND, CMD_RESET_FRAME_COUNT);
+  _status = cin_ctl_write(cp,REG_FRM_COMMAND, CMD_RESET_FRAME_COUNT, 0);
   if(_status){
     ERROR_COMMENT("Unable to reset frame counter\n");
     return _status;
