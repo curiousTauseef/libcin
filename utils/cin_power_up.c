@@ -118,7 +118,7 @@ int main(){
 
   cin_ctl_pwr_mon_t pwr_values;
   int pwr;
-  cin_ctl_get_power_status(&cp[0], &pwr, &pwr_values);
+  cin_ctl_get_power_status(&cp[0], 1, &pwr, &pwr_values);
   fprintf(stderr, "\n");
   cin_ctl_display_pwr(stderr, &pwr_values);
   fprintf(stderr, "\n");
