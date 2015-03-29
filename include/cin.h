@@ -110,6 +110,9 @@ extern const char *cin_build_version;
 #define CIN_DATA_TAIL_MAGIC_PACKET_MASK    UINT64_C(0xFFFFFFFFFFFFFFFF)
 #define CIN_DATA_DROPPED_PACKET_VAL        0x2000
 #define CIN_DATA_DATA_MASK                 0x1FFF
+#define CIN_DATA_GAIN_8                    0xC000
+#define CIN_DATA_GAIN_4                    0x4000
+#define CIN_DATA_OFFSET                    0x1000
 #define CIN_DATA_PACKET_LEN                8184
 #define CIN_DATA_MAX_PACKETS               542
 #define CIN_DATA_RCVBUF                    100  // Mb 
