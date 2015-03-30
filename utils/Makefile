@@ -1,7 +1,7 @@
 include ../CONFIG
 
 LDFLAGS+=-L../lib 
-LDLIBS+=-ltiff -lcin -lpthread
+LDLIBS=-lcin -lrt -ltiff -lpthread
 CFLAGS+=-I../include
 
 .PHONY : clean
@@ -15,7 +15,7 @@ cin_power_up: cin_power_up.o ../lib/libcin.a ../include/cin.h
 	$(CC) $(LDFLAGS) cin_power_up.o -o $@ $(LDLIBS) 
 
 cinregdump: cinregdump.o ../lib/libcin.a ../include/cin.h
-	$(CC) $(LDFLAGS) cinregdump.o -o $@ $(LDLIBS) 
+	$(CC) $(LDFLAGS) cinregdump.o -o $@ $(LDLIBS)  
 
 clean:
 	rm -f *.o
