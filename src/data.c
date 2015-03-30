@@ -534,6 +534,7 @@ void *cin_data_assembler_thread(void *args){
         frame->number = last_frame;
         frame->timestamp = last_frame_timestamp;
         thread_data.last_frame = last_frame;
+        thread_data.mallformed_packets++;
         (*proc->output_put)(proc->output_args);
         frame = NULL;
       }
@@ -591,6 +592,7 @@ void *cin_data_assembler_thread(void *args){
       } else {
         // Out of bounds packet
         ERROR_COMMENT("Packet out of bounds\n");
+        thread_data.mallformed_packets++;
       }
     }
 
