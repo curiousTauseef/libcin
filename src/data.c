@@ -697,6 +697,9 @@ void cin_data_compute_stats(cin_data_stats_t *stats){
   stats->packet_percent_full = fifo_percent_full(thread_data.packet_fifo);
   stats->frame_percent_full = fifo_percent_full(thread_data.frame_fifo);
   stats->image_percent_full = fifo_percent_full(thread_data.image_fifo);
+  stats->packet_used = fifo_used_elements(thread_data.packet_fifo);
+  stats->frame_used = fifo_used_elements(thread_data.frame_fifo);
+  stats->image_used = fifo_used_elements(thread_data.image_fifo);
   stats->packet_overruns = thread_data.packet_fifo->overruns;
   stats->frame_overruns = thread_data.frame_fifo->overruns;
   stats->image_overruns = thread_data.image_fifo->overruns;

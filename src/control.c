@@ -472,7 +472,7 @@ int cin_ctl_load_config(struct cin_port* cp,char *filename){
       sscanf (_line,"%s %s",_regstr,_valstr);
       _regul=strtoul(_regstr,NULL,16);
       _valul=strtoul(_valstr,NULL,16);          
-      usleep(5000);   /*for flow control*/ 
+      usleep(10000);   /*for flow control*/ 
       _status=cin_ctl_write(cp, _regul, _valul, 0);
       if (_status != 0){
         ERROR_COMMENT("Error writing to CIN\n");
@@ -955,7 +955,7 @@ int cin_ctl_get_camera_pwr(struct cin_port* cp, int *val){
   _status |= cin_ctl_get_bias(cp, &_val1);
   _status |= cin_ctl_get_clocks(cp, &_val2);
 
-  if(_status){
+  if(!_status){
     *val = _val1 & _val2;
   }
 
@@ -1369,6 +1369,47 @@ int cin_ctl_get_mux(struct cin_port *cp, int *setting){
   DEBUG_PRINT("Mux value is 0x%X\n", *setting);
 
   return 0;
+}
+
+/*******************  Control Gain of fCRIC   **********************/
+
+int cin_ctl_set_fcric_gain(struct cin_port *cp, int gain){
+  uint16_t _gain;
+  int _status = 0;
+
+  int _pwr_val, _trig_val;
+  _status |= cin_ctl_get_camera_pwr(cp, &_pwr_val);
+  _status |= cin_ctl_get_triggering(cp, &_trig_val);
+
+  if(_status){
+    ERROR_COMMENT("Unable to get camera status\n");
+    return _status;
+  }
+  if(_pwr_val || _trig_val){
+    fprintf(stderr, "pwr = %d, trig = %d\n", _pwr_val, _trig_val);
+    ERROR_COMMENT("Refusing to change gain, camera is on or triggering\n");
+    return -1;
+  }
+
+  if((gain == 0) || (gain == 2) || (gain == 3)){
+    _gain = (uint16_t)gain;
+  } else {
+    ERROR_PRINT("Invalid gain setting %d\n", gain);
+    return -1;
+  }
+
+  _status |= cin_ctl_write(cp, REG_FCRIC_WRITE0_REG, 0xA000, 1);
+  _status |= cin_ctl_write(cp, REG_FCRIC_WRITE1_REG, 0x0086, 1);
+  _status |= cin_ctl_write(cp, REG_FCRIC_WRITE2_REG, _gain, 1);
+  _status |= cin_ctl_write(cp, REG_FRM_COMMAND, 0x0105, 1);
+
+  if(_status){
+    ERROR_COMMENT("Unable to set gain settings\n");
+    return _status;
+  }
+
+  return 0;
+
 }
 
 /*******************  Register Dump of CIN    **********************/
