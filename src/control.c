@@ -46,7 +46,10 @@
 #include "fifo.h"
   
 
-// Test comment
+double bias_voltage_range[NUM_BIAS_VOLTAGE] = {
+  9.0, -9.0, 9.0, -9.0, 9.0, -9.0, 9.0, -9.0, 9.0, -9.0, 
+  9.0, -9.0, 99.0, 5.0, -15.0, -25.0, -10.0, -5.1, 0.0, 0.0
+};
 
 /**************************** UDP Socket ******************************/
 
@@ -1410,6 +1413,40 @@ int cin_ctl_set_fcric_gain(struct cin_port *cp, int gain){
 
   return 0;
 
+}
+
+/*******************  BIAS Voltage Settings   **********************/
+
+int cin_ctl_read_bias_voltages(struct cin_port *cp, float *voltage){
+
+  int n;
+  int _status = 0;
+  uint16_t _val;
+
+  for(n=0;n<NUM_BIAS_VOLTAGE;n++){
+    _status |= cin_ctl_write(cp, REG_BIASANDCLOCKREGISTERADDRESS_REG, 0x0030 + (2 * n), 1);
+    _status |= cin_ctl_read(cp, REG_BIASREGISTERDATAOUT_REG, &_val);
+    voltage[n] = (float)(_val & 0x0FFF) * bias_voltage_range[n] / 4096.0;
+  } 
+
+  return _status;
+}
+
+int cin_ctl_write_bias_voltages(struct cin_port *cp, float *voltage){
+
+  int n;
+  int _status = 0;
+  int _val;
+
+  for(n=0;n<NUM_BIAS_VOLTAGE;n++){
+    _val =  (int)((voltage[n] / bias_voltage_range[n]) * 0x0FFF) & 0x0FFF;
+    _val |= ((n << 14) & 0xC000);
+    _status |= cin_ctl_write(cp, REG_BIASANDCLOCKREGISTERADDRESS_REG, (2 * n), 1);
+    _status |= cin_ctl_write(cp, REG_BIASANDCLOCKREGISTERDATA_REG	, _val, 1);
+    _status |= cin_ctl_write(cp, REG_FRM_COMMAND, 0x0102, 1);
+  } 
+
+  return _status;
 }
 
 /*******************  Register Dump of CIN    **********************/

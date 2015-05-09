@@ -285,6 +285,10 @@ extern "C" {
 /* Clock Static Registers */
 #define REG_CLOCKCONFIGREGISTER0_REG     	0x8205
 
+/* Bias Voltage */
+
+#define REG_BIASPARAM_READ_START          0x3000
+
 #define REG_EXPOSURETIMEMSB_REG		      	0x8206
 #define REG_EXPOSURETIMELSB_REG		      	0x8207
 #define REG_ALTEXPOSURETIMEMSB_REG	      0x8306
