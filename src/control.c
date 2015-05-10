@@ -225,7 +225,7 @@ int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val, int wait){
   pthread_mutex_unlock(&cp->access);
 
   if (rc != sizeof(_valwr) ) {
-      ERROR_COMMENT("CIN control port - sendto() failure!!");
+      ERROR_COMMENT("CIN control port - sendto() failure!!\n");
       goto error;
    }
 
@@ -236,7 +236,7 @@ int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val, int wait){
    return 0;
    
 error:  
-   ERROR_COMMENT("Write error control port");
+   ERROR_COMMENT("Write error control port\n");
    return (-1);
 }
 
