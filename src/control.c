@@ -1417,7 +1417,7 @@ int cin_ctl_set_fcric_gain(struct cin_port *cp, int gain){
 
 /*******************  BIAS Voltage Settings   **********************/
 
-int cin_ctl_read_bias_voltages(struct cin_port *cp, float *voltage){
+int cin_ctl_get_bias_voltages(struct cin_port *cp, float *voltage){
 
   int n;
   int _status = 0;
@@ -1432,7 +1432,7 @@ int cin_ctl_read_bias_voltages(struct cin_port *cp, float *voltage){
   return _status;
 }
 
-int cin_ctl_write_bias_voltages(struct cin_port *cp, float *voltage){
+int cin_ctl_set_bias_voltages(struct cin_port *cp, float *voltage){
 
   int n;
   int _status = 0;
