@@ -1438,6 +1438,27 @@ int cin_ctl_set_bias_voltages(struct cin_port *cp, float *voltage){
   int _status = 0;
   int _val;
 
+  _status = cin_ctl_get_bias(cp, &_val);
+  if(_status){
+    ERROR_COMMENT("Unable to read bias status.\n");
+    return -1;
+  }
+  if(_val){
+    ERROR_COMMENT("Cannot set bias values with BIAS on\n");
+    return -1;
+  }
+
+  _status = cin_ctl_get_clocks(cp, &_val);
+  if(_status){
+    ERROR_COMMENT("Unable to read clock status.\n"); 
+    return -1;
+  }
+  if(_val){
+    ERROR_COMMENT("Cannot set bias voltages with CLOCKS on.\n");
+    return -1;
+  }
+
+  _status = 0;
   for(n=0;n<NUM_BIAS_VOLTAGE;n++){
     _val =  (int)((voltage[n] / bias_voltage_range[n]) * 0x0FFF) & 0x0FFF;
     _val |= ((n << 14) & 0xC000);
