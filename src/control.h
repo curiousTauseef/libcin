@@ -35,7 +35,7 @@
 #include "cin.h"
 #include "fifo.h"
 
-extern double bias_voltage_range[NUM_BIAS_VOLTAGE];
+extern float bias_voltage_range[NUM_BIAS_VOLTAGE];
 
 void *cin_ctl_listen_thread(void* args);
 uint32_t cin_ctl_get_packet(struct cin_port *cp, uint32_t *val);
