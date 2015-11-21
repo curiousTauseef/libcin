@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/NSLS-II-CSX/libcin.svg?branch=testing)](https://travis-ci.org/NSLS-II-CSX/libcin) Testing 
-
 [![Build Status](https://travis-ci.org/NSLS-II-CSX/libcin.svg?branch=master)](https://travis-ci.org/NSLS-II-CSX/libcin) Main 
 
 libcin contains code to support the control and frame ports of the
