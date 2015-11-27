@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>TEST &mdash; libcin 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.2.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.2.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="libcin 0.2 documentation" href="index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          libcin</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="simple">
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">TEST</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/test.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="test">
+<h1>TEST<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h1>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Functions</p>
+<dl class="function">
+<dt id="_CPPv217cin_ctl_init_portP8cin_portPc8uint16_t8uint16_t">
+<span id="cin_ctl_init_port__cin_portP.cP.uint16_t.uint16_t"></span><span class="target" id="libcincontrol_8c_1a3e49fbe048486829c0f26305d94a83bf"></span>int <code class="descname">cin_ctl_init_port</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, char *<em>ipaddr</em>, uint16_t <em>oport</em>, uint16_t <em>iport</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv217cin_ctl_init_portP8cin_portPc8uint16_t8uint16_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the cin control port </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv218cin_ctl_get_packetP8cin_portP8uint32_t">
+<span id="cin_ctl_get_packet__cin_portP.uint32_tP"></span><span class="target" id="libcincontrol_8c_1afaabe6e7376605d339521471cabc59ff"></span>uint32_t <code class="descname">cin_ctl_get_packet</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, uint32_t *<em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv218cin_ctl_get_packetP8cin_portP8uint32_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv221cin_ctl_listen_threadPv">
+<span id="cin_ctl_listen_thread__voidP"></span><span class="target" id="libcincontrol_8c_1a52d4d4490b7b9fac4d98a9cda178d432"></span>void *<code class="descname">cin_ctl_listen_thread</code><span class="sig-paren">(</span>void *<em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv221cin_ctl_listen_threadPv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv218cin_ctl_close_portP8cin_port">
+<span id="cin_ctl_close_port__cin_portP"></span><span class="target" id="libcincontrol_8c_1a0875a41868c8c1b4fee7fd921a0f5fca"></span>int <code class="descname">cin_ctl_close_port</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv218cin_ctl_close_portP8cin_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv213cin_ctl_writeP8cin_port8uint16_t8uint16_ti">
+<span id="cin_ctl_write__cin_portP.uint16_t.uint16_t.i"></span><span class="target" id="libcincontrol_8c_1a5b3fb95ada069984e477e3fd201d794a"></span>int <code class="descname">cin_ctl_write</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, uint16_t <em>reg</em>, uint16_t <em>val</em>, int <em>wait</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv213cin_ctl_writeP8cin_port8uint16_t8uint16_ti" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv227cin_ctl_write_with_readbackP8cin_port8uint16_t8uint16_t">
+<span id="cin_ctl_write_with_readback__cin_portP.uint16_t.uint16_t"></span><span class="target" id="libcincontrol_8c_1a80ec84763ef7b11c1f4e6bf6c1c4aadc"></span>int <code class="descname">cin_ctl_write_with_readback</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, uint16_t <em>reg</em>, uint16_t <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv227cin_ctl_write_with_readbackP8cin_port8uint16_t8uint16_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv220cin_ctl_stream_writeP8cin_portPci">
+<span id="cin_ctl_stream_write__cin_portP.cP.i"></span><span class="target" id="libcincontrol_8c_1a85344c79aeac6eb3aaa4a5cd8e97acd3"></span>int <code class="descname">cin_ctl_stream_write</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, char *<em>val</em>, int <em>size</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv220cin_ctl_stream_writeP8cin_portPci" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv212cin_ctl_readP8cin_port8uint16_tP8uint16_t">
+<span id="cin_ctl_read__cin_portP.uint16_t.uint16_tP"></span><span class="target" id="libcincontrol_8c_1a1daedc75ef8b4dce9e9bebe63c98e555"></span>int <code class="descname">cin_ctl_read</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, uint16_t <em>reg</em>, uint16_t *<em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv212cin_ctl_readP8cin_port8uint16_tP8uint16_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv211cin_ctl_pwrP8cin_porti">
+<span id="cin_ctl_pwr__cin_portP.i"></span><span class="target" id="libcincontrol_8c_1a048f7abdacc7ec64399cc96ea34daf9b"></span>int <code class="descname">cin_ctl_pwr</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int <em>pwr</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv211cin_ctl_pwrP8cin_porti" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv214cin_ctl_fp_pwrP8cin_porti">
+<span id="cin_ctl_fp_pwr__cin_portP.i"></span><span class="target" id="libcincontrol_8c_1a77833cb884d7d337699256c5258788aa"></span>int <code class="descname">cin_ctl_fp_pwr</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int <em>pwr</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv214cin_ctl_fp_pwrP8cin_porti" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv219cin_ctl_load_configP8cin_portPc">
+<span id="cin_ctl_load_config__cin_portP.cP"></span><span class="target" id="libcincontrol_8c_1af7ba1b8a723ca96044987d3b62f1dc38"></span>int <code class="descname">cin_ctl_load_config</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, char *<em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv219cin_ctl_load_configP8cin_portPc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv221cin_ctl_load_firmwareP8cin_portP8cin_portPc">
+<span id="cin_ctl_load_firmware__cin_portP.cin_portP.cP"></span><span class="target" id="libcincontrol_8c_1a52c697d20173f99f2b95f9765a873706"></span>int <code class="descname">cin_ctl_load_firmware</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, <em class="property">struct</em> cin_port *<em>dcp</em>, char *<em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv221cin_ctl_load_firmwareP8cin_portP8cin_portPc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv215cin_ctl_set_dcoP8cin_porti">
+<span id="cin_ctl_set_dco__cin_portP.i"></span><span class="target" id="libcincontrol_8c_1ab1186b944c1ea852bfd94a3ae8f46422"></span>int <code class="descname">cin_ctl_set_dco</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int <em>freeze</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv215cin_ctl_set_dcoP8cin_porti" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv216cin_ctl_set_fclkP8cin_porti">
+<span id="cin_ctl_set_fclk__cin_portP.i"></span><span class="target" id="libcincontrol_8c_1abd564ae4c2a14d72802a2b061a847585"></span>int <code class="descname">cin_ctl_set_fclk</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int <em>clkfreq</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv216cin_ctl_set_fclkP8cin_porti" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv216cin_ctl_get_fclkP8cin_portPi">
+<span id="cin_ctl_get_fclk__cin_portP.iP"></span><span class="target" id="libcincontrol_8c_1af06bb149b307066b2e03245f0da72690"></span>int <code class="descname">cin_ctl_get_fclk</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int *<em>clkfreq</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv216cin_ctl_get_fclkP8cin_portPi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv227cin_ctl_get_cfg_fpga_statusP8cin_portP8uint16_t">
+<span id="cin_ctl_get_cfg_fpga_status__cin_portP.uint16_tP"></span><span class="target" id="libcincontrol_8c_1af52befc30305cf5c6c79fe28b5d6f08e"></span>int <code class="descname">cin_ctl_get_cfg_fpga_status</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, uint16_t *<em>_val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv227cin_ctl_get_cfg_fpga_statusP8cin_portP8uint16_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv214cin_ctl_get_idP8cin_portP12cin_ctl_id_t">
+<span id="cin_ctl_get_id__cin_portP.cin_ctl_id_tP"></span><span class="target" id="libcincontrol_8c_1afcfb77b3938bd3a59e9ca8976f0f096a"></span>int <code class="descname">cin_ctl_get_id</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, cin_ctl_id_t *<em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv214cin_ctl_get_idP8cin_portP12cin_ctl_id_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv218cin_ctl_display_idP4FILE12cin_ctl_id_t">
+<span id="cin_ctl_display_id__FILEP.cin_ctl_id_t"></span><span class="target" id="libcincontrol_8c_1a2aa5a118ae10e33ca99a693ab6ea3384"></span>void <code class="descname">cin_ctl_display_id</code><span class="sig-paren">(</span>FILE *<em>out</em>, cin_ctl_id_t <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv218cin_ctl_display_idP4FILE12cin_ctl_id_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv227cin_ctl_display_fpga_statusP4FILE8uint16_t">
+<span id="cin_ctl_display_fpga_status__FILEP.uint16_t"></span><span class="target" id="libcincontrol_8c_1aad247e42ffc96dbeb71e781a3d47a864"></span>void <code class="descname">cin_ctl_display_fpga_status</code><span class="sig-paren">(</span>FILE *<em>out</em>, uint16_t <em>fpga_status</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv227cin_ctl_display_fpga_statusP4FILE8uint16_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv222cin_ctl_get_dcm_statusP8cin_portP8uint16_t">
+<span id="cin_ctl_get_dcm_status__cin_portP.uint16_tP"></span><span class="target" id="libcincontrol_8c_1ad372d462c2704a8b44a0be255edd0c5b"></span>int <code class="descname">cin_ctl_get_dcm_status</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, uint16_t *<em>_val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv222cin_ctl_get_dcm_statusP8cin_portP8uint16_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv226cin_ctl_display_dcm_statusP4FILEP8uint16_t">
+<span id="cin_ctl_display_dcm_status__FILEP.uint16_tP"></span><span class="target" id="libcincontrol_8c_1a8331d2e8ee388e47e1842d25d9c75ebe"></span>void <code class="descname">cin_ctl_display_dcm_status</code><span class="sig-paren">(</span>FILE *<em>out</em>, uint16_t *<em>_val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv226cin_ctl_display_dcm_statusP4FILEP8uint16_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv220cin_ctl_current_calc8uint16_t">
+<span id="cin_ctl_current_calc__uint16_t"></span><span class="target" id="libcincontrol_8c_1a0ec1d43cc2553c967bfca6f6a70ef8c1"></span>double <code class="descname">cin_ctl_current_calc</code><span class="sig-paren">(</span>uint16_t <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv220cin_ctl_current_calc8uint16_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv222cin_ctl_calc_vi_statusP8cin_port8uint16_t8uint16_tdP17cin_ctl_pwr_val_t">
+<span id="cin_ctl_calc_vi_status__cin_portP.uint16_t.uint16_t.double.cin_ctl_pwr_val_tP"></span><span class="target" id="libcincontrol_8c_1a6efb5ebabbac1b7b8586803c1b1ebb43"></span>int <code class="descname">cin_ctl_calc_vi_status</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, uint16_t <em>vreg</em>, uint16_t <em>ireg</em>, double <em>vfact</em>, cin_ctl_pwr_val_t *<em>vi</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv222cin_ctl_calc_vi_statusP8cin_port8uint16_t8uint16_tdP17cin_ctl_pwr_val_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv224cin_ctl_get_power_statusP8cin_portiPiP17cin_ctl_pwr_mon_t">
+<span id="cin_ctl_get_power_status__cin_portP.i.iP.cin_ctl_pwr_mon_tP"></span><span class="target" id="libcincontrol_8c_1ae90d99a58a5741549a9c173346929fcf"></span>int <code class="descname">cin_ctl_get_power_status</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int <em>full</em>, int *<em>pwr</em>, cin_ctl_pwr_mon_t *<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv224cin_ctl_get_power_statusP8cin_portiPiP17cin_ctl_pwr_mon_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv219cin_ctl_display_pwrP4FILEP17cin_ctl_pwr_mon_t">
+<span id="cin_ctl_display_pwr__FILEP.cin_ctl_pwr_mon_tP"></span><span class="target" id="libcincontrol_8c_1ac801878f500a4e05738b7be009a1993b"></span>void <code class="descname">cin_ctl_display_pwr</code><span class="sig-paren">(</span>FILE *<em>out</em>, cin_ctl_pwr_mon_t *<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv219cin_ctl_display_pwrP4FILEP17cin_ctl_pwr_mon_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv224cin_ctl_display_pwr_lineP4FILEPKc17cin_ctl_pwr_val_t">
+<span id="cin_ctl_display_pwr_line__FILEP.cCP.cin_ctl_pwr_val_t"></span><span class="target" id="libcincontrol_8c_1ae9487554511406af3a3b7ea7e61aa939"></span>void <code class="descname">cin_ctl_display_pwr_line</code><span class="sig-paren">(</span>FILE *<em>out</em>, <em class="property">const</em> char *<em>msg</em>, cin_ctl_pwr_val_t <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv224cin_ctl_display_pwr_lineP4FILEPKc17cin_ctl_pwr_val_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv222cin_ctl_set_camera_pwrP8cin_porti">
+<span id="cin_ctl_set_camera_pwr__cin_portP.i"></span><span class="target" id="libcincontrol_8c_1af6035c8c8b527e0d7df7c24042a8bdf8"></span>int <code class="descname">cin_ctl_set_camera_pwr</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv222cin_ctl_set_camera_pwrP8cin_porti" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv222cin_ctl_get_camera_pwrP8cin_portPi">
+<span id="cin_ctl_get_camera_pwr__cin_portP.iP"></span><span class="target" id="libcincontrol_8c_1a2154bf58cdf62836344f351031252a89"></span>int <code class="descname">cin_ctl_get_camera_pwr</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int *<em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv222cin_ctl_get_camera_pwrP8cin_portPi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv216cin_ctl_set_biasP8cin_porti">
+<span id="cin_ctl_set_bias__cin_portP.i"></span><span class="target" id="libcincontrol_8c_1ab6e1e20128e0dbba529cdf8cb271783b"></span>int <code class="descname">cin_ctl_set_bias</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv216cin_ctl_set_biasP8cin_porti" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv216cin_ctl_get_biasP8cin_portPi">
+<span id="cin_ctl_get_bias__cin_portP.iP"></span><span class="target" id="libcincontrol_8c_1aff057e9870530ce2a47eb9cc10605dd6"></span>int <code class="descname">cin_ctl_get_bias</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int *<em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv216cin_ctl_get_biasP8cin_portPi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv218cin_ctl_set_clocksP8cin_porti">
+<span id="cin_ctl_set_clocks__cin_portP.i"></span><span class="target" id="libcincontrol_8c_1aad88298015770bcd6684fa7c7ab9e925"></span>int <code class="descname">cin_ctl_set_clocks</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv218cin_ctl_set_clocksP8cin_porti" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv218cin_ctl_get_clocksP8cin_portPi">
+<span id="cin_ctl_get_clocks__cin_portP.iP"></span><span class="target" id="libcincontrol_8c_1a0d40b0f31cdb0ab9d8c87947a3c991c4"></span>int <code class="descname">cin_ctl_get_clocks</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int *<em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv218cin_ctl_get_clocksP8cin_portPi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv219cin_ctl_set_triggerP8cin_porti">
+<span id="cin_ctl_set_trigger__cin_portP.i"></span><span class="target" id="libcincontrol_8c_1aabf8e6139a918f2c2f0c16af7deedfb4"></span>int <code class="descname">cin_ctl_set_trigger</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv219cin_ctl_set_triggerP8cin_porti" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv219cin_ctl_get_triggerP8cin_portPi">
+<span id="cin_ctl_get_trigger__cin_portP.iP"></span><span class="target" id="libcincontrol_8c_1ac6af83dfc18ff7c006b1f1a5261dfd51"></span>int <code class="descname">cin_ctl_get_trigger</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int *<em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv219cin_ctl_get_triggerP8cin_portPi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv217cin_ctl_get_focusP8cin_portPi">
+<span id="cin_ctl_get_focus__cin_portP.iP"></span><span class="target" id="libcincontrol_8c_1a6159c5eb64432a2bb8f9e48d5e748d6d"></span>int <code class="descname">cin_ctl_get_focus</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int *<em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv217cin_ctl_get_focusP8cin_portPi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv217cin_ctl_set_focusP8cin_porti">
+<span id="cin_ctl_set_focus__cin_portP.i"></span><span class="target" id="libcincontrol_8c_1a51ac9caf81873027d965d19ab6475739"></span>int <code class="descname">cin_ctl_set_focus</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv217cin_ctl_set_focusP8cin_porti" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv225cin_ctl_int_trigger_startP8cin_porti">
+<span id="cin_ctl_int_trigger_start__cin_portP.i"></span><span class="target" id="libcincontrol_8c_1a2c0c0fb66bffce3e1c0775a302f91660"></span>int <code class="descname">cin_ctl_int_trigger_start</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int <em>nimages</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv225cin_ctl_int_trigger_startP8cin_porti" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv224cin_ctl_int_trigger_stopP8cin_port">
+<span id="cin_ctl_int_trigger_stop__cin_portP"></span><span class="target" id="libcincontrol_8c_1a1959b64ca3eb73f7b3400d778a55e617"></span>int <code class="descname">cin_ctl_int_trigger_stop</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv224cin_ctl_int_trigger_stopP8cin_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv225cin_ctl_ext_trigger_startP8cin_porti">
+<span id="cin_ctl_ext_trigger_start__cin_portP.i"></span><span class="target" id="libcincontrol_8c_1a1fa3373a027d8df20515cd493aff99dc"></span>int <code class="descname">cin_ctl_ext_trigger_start</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int <em>trigger_mode</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv225cin_ctl_ext_trigger_startP8cin_porti" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv224cin_ctl_ext_trigger_stopP8cin_port">
+<span id="cin_ctl_ext_trigger_stop__cin_portP"></span><span class="target" id="libcincontrol_8c_1a58e7b494cc0e770cc5531cded9d8d8aa"></span>int <code class="descname">cin_ctl_ext_trigger_stop</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv224cin_ctl_ext_trigger_stopP8cin_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv222cin_ctl_get_triggeringP8cin_portPi">
+<span id="cin_ctl_get_triggering__cin_portP.iP"></span><span class="target" id="libcincontrol_8c_1ab4f4964dd24645d7cf7597d6ca98b50d"></span>int <code class="descname">cin_ctl_get_triggering</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int *<em>trigger</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv222cin_ctl_get_triggeringP8cin_portPi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv225cin_ctl_set_exposure_timeP8cin_portf">
+<span id="cin_ctl_set_exposure_time__cin_portP.float"></span><span class="target" id="libcincontrol_8c_1a9302178d50cf7b428dbf432141674169"></span>int <code class="descname">cin_ctl_set_exposure_time</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, float <em>ftime</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv225cin_ctl_set_exposure_timeP8cin_portf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv225cin_ctl_set_trigger_delayP8cin_portf">
+<span id="cin_ctl_set_trigger_delay__cin_portP.float"></span><span class="target" id="libcincontrol_8c_1a983be82485333c109735bcc24bd61ef1"></span>int <code class="descname">cin_ctl_set_trigger_delay</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, float <em>ftime</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv225cin_ctl_set_trigger_delayP8cin_portf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv222cin_ctl_set_cycle_timeP8cin_portf">
+<span id="cin_ctl_set_cycle_time__cin_portP.float"></span><span class="target" id="libcincontrol_8c_1a646fc08dda1e7627b9bfae6b84cf1761"></span>int <code class="descname">cin_ctl_set_cycle_time</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, float <em>ftime</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv222cin_ctl_set_cycle_timeP8cin_portf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv225cin_ctl_frame_count_resetP8cin_port">
+<span id="cin_ctl_frame_count_reset__cin_portP"></span><span class="target" id="libcincontrol_8c_1a905eaf00f4459c858f0aafec48aa2275"></span>int <code class="descname">cin_ctl_frame_count_reset</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv225cin_ctl_frame_count_resetP8cin_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv226cin_ctl_set_fabric_addressP8cin_portPc">
+<span id="cin_ctl_set_fabric_address__cin_portP.cP"></span><span class="target" id="libcincontrol_8c_1ad9a7a64b347bea3c77499497cee1b2ad"></span>int <code class="descname">cin_ctl_set_fabric_address</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, char *<em>ip</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv226cin_ctl_set_fabric_addressP8cin_portPc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv219cin_ctl_set_addressP8cin_portPc8uint16_t8uint16_t">
+<span id="cin_ctl_set_address__cin_portP.cP.uint16_t.uint16_t"></span><span class="target" id="libcincontrol_8c_1a308424c61d3dbc852866c03339dcdffa"></span>int <code class="descname">cin_ctl_set_address</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, char *<em>ip</em>, uint16_t <em>reg0</em>, uint16_t <em>reg1</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv219cin_ctl_set_addressP8cin_portPc8uint16_t8uint16_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv215cin_ctl_set_muxP8cin_porti">
+<span id="cin_ctl_set_mux__cin_portP.i"></span><span class="target" id="libcincontrol_8c_1a293ad1048840bd142022a26d487f5219"></span>int <code class="descname">cin_ctl_set_mux</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int <em>setting</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv215cin_ctl_set_muxP8cin_porti" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv215cin_ctl_get_muxP8cin_portPi">
+<span id="cin_ctl_get_mux__cin_portP.iP"></span><span class="target" id="libcincontrol_8c_1ad0405928031d9fc56493c81359492468"></span>int <code class="descname">cin_ctl_get_mux</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int *<em>setting</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv215cin_ctl_get_muxP8cin_portPi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv222cin_ctl_set_fcric_gainP8cin_porti">
+<span id="cin_ctl_set_fcric_gain__cin_portP.i"></span><span class="target" id="libcincontrol_8c_1a63dfc087706b8daa405f36333b373b62"></span>int <code class="descname">cin_ctl_set_fcric_gain</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, int <em>gain</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv222cin_ctl_set_fcric_gainP8cin_porti" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv225cin_ctl_get_bias_voltagesP8cin_portPf">
+<span id="cin_ctl_get_bias_voltages__cin_portP.floatP"></span><span class="target" id="libcincontrol_8c_1a61a1c1b9789228293b8f577519ac3005"></span>int <code class="descname">cin_ctl_get_bias_voltages</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, float *<em>voltage</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv225cin_ctl_get_bias_voltagesP8cin_portPf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv225cin_ctl_set_bias_voltagesP8cin_portPf">
+<span id="cin_ctl_set_bias_voltages__cin_portP.floatP"></span><span class="target" id="libcincontrol_8c_1a361afea64bcc1fbe38c53d4911894e89"></span>int <code class="descname">cin_ctl_set_bias_voltages</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, float *<em>voltage</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv225cin_ctl_set_bias_voltagesP8cin_portPf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv216cin_ctl_reg_dumpP8cin_portP4FILE">
+<span id="cin_ctl_reg_dump__cin_portP.FILEP"></span><span class="target" id="libcincontrol_8c_1aeec06eb87a964d4260c00ee638f3ff9f"></span>int <code class="descname">cin_ctl_reg_dump</code><span class="sig-paren">(</span><em class="property">struct</em> cin_port *<em>cp</em>, FILE *<em>fp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv216cin_ctl_reg_dumpP8cin_portP4FILE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Variables</p>
+<dl class="member">
+<dt id="_CPPv218bias_voltage_range">
+<span id="bias_voltage_range__floatA"></span><span class="target" id="libcincontrol_8c_1aa63af2fe1868c075429b995a9dfa198b"></span>float <code class="descname">bias_voltage_range</code>[NUM_BIAS_VOLTAGE]<a class="headerlink" href="#_CPPv218bias_voltage_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, Stuart B. Wilkins.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

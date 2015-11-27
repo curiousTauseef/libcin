@@ -1,0 +1,5 @@
+CIN Control Interface
+=====================
+
+.. doxygenfile:: control.c
+   :project: libcin
