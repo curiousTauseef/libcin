@@ -51,6 +51,14 @@ float bias_voltage_range[NUM_BIAS_VOLTAGE] = {
   9.0, -9.0, 99.0, 5.0, -15.0, -25.0, -10.0, -5.1, 0.0, 0.0
 };
 
+#define NUM_CLAMP_REG 8
+uint16_t fcric_clamp_reg[NUM_CLAMP_REG] =     { 0x0048, 0x0049, 0x0050, 0x0051, 
+                                                0x0058, 0x0059, 0x005A, 0x005B};
+uint16_t fcric_clamp_reg_on[NUM_CLAMP_REG] =  { 0x0001, 0x00FF, 0x0001, 0x00FF, 
+                                                0x00FF, 0x0001, 0x00FF, 0x0001};
+uint16_t fcric_clamp_reg_off[NUM_CLAMP_REG] = { 0x00C7, 0x004C, 0x00B4, 0x0002, 
+                                                0x0001, 0x004C, 0x0064, 0x005B};
+
 /**************************** UDP Socket ******************************/
 
 int cin_ctl_init_port(struct cin_port* cp, char* ipaddr, 
@@ -959,7 +967,7 @@ int cin_ctl_get_camera_pwr(struct cin_port* cp, int *val){
   _status |= cin_ctl_get_clocks(cp, &_val2);
 
   if(!_status){
-    *val = _val1 & _val2;
+    *val = _val1 | _val2;
   }
 
   return _status;
@@ -1380,20 +1388,6 @@ int cin_ctl_set_fcric_gain(struct cin_port *cp, int gain){
   uint16_t _gain;
   int _status = 0;
 
-  int _pwr_val, _trig_val;
-  _status |= cin_ctl_get_camera_pwr(cp, &_pwr_val);
-  _status |= cin_ctl_get_triggering(cp, &_trig_val);
-
-  if(_status){
-    ERROR_COMMENT("Unable to get camera status\n");
-    return _status;
-  }
-  if(_pwr_val || _trig_val){
-    fprintf(stderr, "pwr = %d, trig = %d\n", _pwr_val, _trig_val);
-    ERROR_COMMENT("Refusing to change gain, camera is on or triggering\n");
-    return -1;
-  }
-
   if((gain == 0) || (gain == 2) || (gain == 3)){
     _gain = (uint16_t)gain;
   } else {
@@ -1414,6 +1408,41 @@ int cin_ctl_set_fcric_gain(struct cin_port *cp, int gain){
   return 0;
 
 }
+
+
+/*******************  Set FCRIC to Clamp Mode **********************/
+
+
+int cin_ctl_set_fcric_clamp(struct cin_port *cp, int clamp){
+  uint16_t *_onoff;
+  int _status = 0;
+
+  if(clamp == 0){
+    _onoff = fcric_clamp_reg_off;
+  } else if(clamp == 1){
+    _onoff = fcric_clamp_reg_on;
+  } else {
+    ERROR_PRINT("Invalid clamp setting %d\n", clamp);
+    return -1;
+  }
+
+  int i;
+  for(i=0;i<NUM_CLAMP_REG;i++){
+    _status |= cin_ctl_write(cp, REG_FCRIC_WRITE0_REG, 0xA000, 1);
+    _status |= cin_ctl_write(cp, REG_FCRIC_WRITE1_REG, fcric_clamp_reg[i], 1);
+    _status |= cin_ctl_write(cp, REG_FCRIC_WRITE2_REG, _onoff[i], 1);
+    _status |= cin_ctl_write(cp, REG_FRM_COMMAND, 0x0105, 1);
+  }
+
+  if(_status){
+    ERROR_COMMENT("Unable to set clamp settings\n");
+    return _status;
+  }
+
+  return 0;
+
+}
+
 
 /*******************  BIAS Voltage Settings   **********************/
 
