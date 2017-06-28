@@ -57,7 +57,6 @@ clean:
 	-$(RM) -f *.o
 	-$(RM) -rf lib
 	$(MAKE) -C src clean
-	$(MAKE) -C tests clean
 	$(MAKE) -C utils clean
 
 .PHONY :install
