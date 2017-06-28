@@ -46,19 +46,6 @@
 #include "fifo.h"
   
 
-float bias_voltage_range[NUM_BIAS_VOLTAGE] = {
-  9.0, -9.0, 9.0, -9.0, 9.0, -9.0, 9.0, -9.0, 9.0, -9.0, 
-  9.0, -9.0, 99.0, 5.0, -15.0, -25.0, -10.0, -5.1, 0.0, 0.0
-};
-
-#define NUM_CLAMP_REG 8
-uint16_t fcric_clamp_reg[NUM_CLAMP_REG] =     { 0x0048, 0x0049, 0x0050, 0x0051, 
-                                                0x0058, 0x0059, 0x005A, 0x005B};
-uint16_t fcric_clamp_reg_on[NUM_CLAMP_REG] =  { 0x0001, 0x00FF, 0x0001, 0x00FF, 
-                                                0x00FF, 0x0001, 0x00FF, 0x0001};
-uint16_t fcric_clamp_reg_off[NUM_CLAMP_REG] = { 0x00C7, 0x004C, 0x00B4, 0x0002, 
-                                                0x0001, 0x004C, 0x0064, 0x005B};
-
 /**************************** UDP Socket ******************************/
 
 int cin_ctl_init_port(struct cin_port* cp, char* ipaddr, 
@@ -1484,6 +1471,16 @@ int cin_ctl_set_bias_voltages(struct cin_port *cp, float *voltage){
   }
   if(_val){
     ERROR_COMMENT("Cannot set bias voltages with CLOCKS on.\n");
+    return -1;
+  }
+  
+  _status = cin_ctl_get_triggering(cp, &_val);
+  if(_status){
+    ERROR_COMMENT("Unable to read triggering status.\n"); 
+    return -1;
+  }
+  if(_val){
+    ERROR_COMMENT("Cannot set bias voltages while camera is triggering.\n");
     return -1;
   }
 

@@ -35,7 +35,18 @@
 #include "cin.h"
 #include "fifo.h"
 
-extern float bias_voltage_range[NUM_BIAS_VOLTAGE];
+float bias_voltage_range[NUM_BIAS_VOLTAGE] = {
+  9.0, -9.0, 9.0, -9.0, 9.0, -9.0, 9.0, -9.0, 9.0, -9.0, 
+  9.0, -9.0, 99.0, 5.0, -15.0, -25.0, -10.0, -5.1, 0.0, 0.0
+};
+
+#define NUM_CLAMP_REG 8
+uint16_t fcric_clamp_reg[NUM_CLAMP_REG] =     { 0x0048, 0x0049, 0x0050, 0x0051, 
+                                                0x0058, 0x0059, 0x005A, 0x005B};
+uint16_t fcric_clamp_reg_on[NUM_CLAMP_REG] =  { 0x0001, 0x00FF, 0x0001, 0x00FF, 
+                                                0x00FF, 0x0001, 0x00FF, 0x0001};
+uint16_t fcric_clamp_reg_off[NUM_CLAMP_REG] = { 0x00C7, 0x004C, 0x00B4, 0x0002, 
+                                                0x0001, 0x004C, 0x0064, 0x005B};
 
 void *cin_ctl_listen_thread(void* args);
 uint32_t cin_ctl_get_packet(struct cin_port *cp, uint32_t *val);
