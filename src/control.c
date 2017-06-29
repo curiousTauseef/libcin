@@ -416,6 +416,33 @@ error:
    return _status;
 }
 
+int cin_ctl_fo_test_pattern(struct cin_port* cp, int on_off){
+  int _status;
+  uint16_t _val1 = 0x0000;
+  uint16_t _val2 = 0xFFFF;
+
+  if(on_off){
+    _val1 = 0x0001;
+    DEBUG_COMMENT("Powering ON CIN Front Panel Boards\n");
+    _val2 = 0x0000;
+  } else {
+    DEBUG_COMMENT("Powering ON CIN Front Panel Boards\n");
+  }
+
+  _status  = cin_ctl_write(cp,CIN_CTL_FO_REG1, 0x9E00);
+  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG2, 0x0000);
+  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG3, _val1);
+  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG4, 0x0105);
+
+  usleep(20000);   /*for flow control*/ 
+
+  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG5, _val2);
+  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG6, _val2);
+  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG7, _val2);
+
+  return _status;
+}
+
 /******************* CIN Configuration/Status *************************/
 
 int cin_ctl_load_config(struct cin_port* cp,char *filename){
@@ -955,6 +982,8 @@ int cin_ctl_get_camera_pwr(struct cin_port* cp, int *val){
 
   if(!_status){
     *val = _val1 | _val2;
+  } else {
+    *val = -1;
   }
 
   return _status;

@@ -103,6 +103,14 @@ extern const char *cin_build_version;
 #define CIN_CTL_MUX2_HWTRIG                0x00F0
 #define CIN_CTL_MUX2_EXPOSE                0x0000
 
+#define CIN_CTL_FO_REG1                    0x821D
+#define CIN_CTL_FO_REG2                    0x821E
+#define CIN_CTL_FO_REG3                    0x821F
+#define CIN_CTL_FO_REG4                    0x8001
+#define CIN_CTL_FO_REG5                    0x8211
+#define CIN_CTL_FO_REG6                    0x8212
+#define CIN_CTL_FO_REG7                    0x8213
+
 #define CIN_DATA_IP                        "10.0.5.207"
 #define CIN_DATA_PORT                      49201
 #define CIN_DATA_CTL_PORT                  49203
@@ -355,6 +363,7 @@ int cin_ctl_write_with_readback(struct cin_port* cp, uint16_t reg, uint16_t val)
 
 int cin_ctl_pwr(struct cin_port *cp, int pwr);
 int cin_ctl_fp_pwr(struct cin_port* cp, int pwr);
+int cin_ctl_fo_test_pattern(struct cin_port* cp, int on_off);
 
 /*------------------------
  * CIN Configuration-Status
@@ -488,7 +497,7 @@ void cin_data_stop_monitor_output(void);
 int cin_data_send_magic(void);
 
 int cin_data_set_descramble_params(int rows, int overscan);
-int cin_data_get_descramble_params(int *rows, int *overscan, int *xsize, int *ysize);
+void cin_data_get_descramble_params(int *rows, int *overscan, int *xsize, int *ysize);
 
 #ifdef __cplusplus
 }
