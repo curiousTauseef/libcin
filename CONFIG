@@ -1,6 +1,6 @@
 # Variables for compelation
 CC=gcc
-CFLAGS=-Wall -O3 -g --pic
+CFLAGS=-Wall -O3 -g #--pic
 
 # Include DEBUG statements
 #CFLAGS+=-D__DEBUG__
@@ -19,8 +19,8 @@ LDLIBS=-lpthread -lrt
 
 INSTALL = install
 prefix = /usr/local
-includedir = $(prefix)/include
 exec_prefix = $(prefix)
+includedir = $(prefix)/include
 bindir = $(exec_prefix)/bin
 libdir = $(exec_prefix)/lib
 
@@ -37,8 +37,7 @@ INSTALL_PROGRAM = ${INSTALL} -m 755
 SUBDIRS=src utils tests
 .PHONY :subdirs $(SUBDIRS)
 
-LIBHEADERS=include/cin_register_map.h \
-           include/cin.h
+LIBHEADERS=src/cin_register_map.h src/cin.h
 
 LIBSOURCES=src/control.c src/data.c src/fifo.c \
            src/mbuffer.c src/descramble.c src/version.c

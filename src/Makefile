@@ -31,7 +31,7 @@
 #
 include ../CONFIG
 
-CFLAGS+=-I../include -I../bindata
+#CFLAGS+=-I../include -I../bindata
 
 .PHONY : clean 
 
@@ -40,16 +40,15 @@ all: data.o fifo.o mbuffer.o descramble.o \
 
 cindata.o: data.h fifo.h mbuffer.h \
            descramble.h \
-           ../include/cin.h \
+           include/cin.h \
 
 fifo.o: fifo.h 
 
 mbuffer.o: mbuffer.h
 
-cincontrol.o: control.h \
-              ../include/cin.h ../include/cin_register_map.h
+cincontrol.o: control.h cin.h cin_register_map.h
 
-descramble.o: descramble.h ../include/cin.h
+descramble.o: descramble.h cin.h
 
 clean:
 	rm -f *.o
