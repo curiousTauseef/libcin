@@ -2,17 +2,14 @@ include ../CONFIG
 
 LDFLAGS+=-L../lib 
 LDLIBS=-lcin -lrt -lpthread
-CFLAGS+=-I../include
+CFLAGS+=-I../src
 
 .PHONY : clean
 
 all: cinregdump
 
-cinregdump: cinregdump.o ../lib/libcin.a ../include/cin.h
+cinregdump: cinregdump.o ../lib/libcin.a ../src/cin.h
 	$(CC) $(LDFLAGS) cinregdump.o -o $@ $(LDLIBS) 
-
-cinregdump: cinregdump.o ../lib/libcin.a ../include/cin.h
-	$(CC) $(LDFLAGS) cinregdump.o -o $@ $(LDLIBS)  
 
 clean:
 	rm -f *.o

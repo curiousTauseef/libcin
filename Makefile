@@ -49,7 +49,7 @@ lib/libcin.so:  $(LIBSOURCES)
 	test -d lib || mkdir lib
 	$(CC) $(CFLAGS) -shared -o $@ $(LIBOBJECTS)
 
-$(SUBDIRS): 
+$(SUBDIRS): src/version.c src lib/libcin.a 
 	$(MAKE) -C $@
 
 .PHONY :clean
@@ -66,6 +66,5 @@ install: all
 	test -d $(prefix)/bin     || mkdir $(prefix)/bin
 	test -d $(prefix)/include || mkdir $(prefix)/include
 	$(INSTALL_DATA) lib/libcin.a $(libdir)
-	$(INSTALL_DATA) include/cin.h $(includedir)
-	$(INSTALL_PROGRAM) utils/cindump $(bindir)
-	$(INSTALL_PROGRAM) utils/cin_power_up $(bindir)
+	$(INSTALL_DATA) src/cin.h $(includedir)
+	$(INSTALL_PROGRAM) utils/cinregdump $(bindir)
