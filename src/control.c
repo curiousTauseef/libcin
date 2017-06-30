@@ -976,7 +976,8 @@ int cin_ctl_set_camera_pwr(struct cin_port* cp, int val){
 
 int cin_ctl_get_camera_pwr(struct cin_port* cp, int *val){
   int _status = 0;
-  int _val1, _val2;
+  int _val1 = 0, _val2 = 0;
+
   _status |= cin_ctl_get_bias(cp, &_val1);
   _status |= cin_ctl_get_clocks(cp, &_val2);
 
@@ -1011,7 +1012,7 @@ int cin_ctl_set_bias(struct cin_port* cp,int val){
 int cin_ctl_get_bias(struct cin_port* cp, int *val){
 
   int _status;
-  uint16_t _val;
+  uint16_t _val = -1;
   _status = cin_ctl_read(cp, REG_BIASCONFIGREGISTER0_REG, &_val); 
    
   if(_status){
