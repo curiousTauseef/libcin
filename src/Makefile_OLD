@@ -36,19 +36,21 @@ include ../CONFIG
 .PHONY : clean 
 
 all: data.o fifo.o mbuffer.o descramble.o \
-     control.o
+     control.o common.o
 
-cindata.o: data.h fifo.h mbuffer.h \
-           descramble.h \
-           include/cin.h \
+data.o: data.h fifo.h mbuffer.h \
+        descramble.h \
+        cin.h \
 
-fifo.o: fifo.h 
+fifo.o: fifo.h cin.h
 
-mbuffer.o: mbuffer.h
+mbuffer.o: mbuffer.h cin.h
 
-cincontrol.o: control.h cin.h cin_register_map.h
+control.o: control.h cin.h cin_register_map.h
 
 descramble.o: descramble.h cin.h
+
+common.o: cin.h
 
 clean:
 	rm -f *.o

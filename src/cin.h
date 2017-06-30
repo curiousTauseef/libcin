@@ -192,24 +192,21 @@ extern const char *cin_build_version;
  * ---------------------------------------------------------------------
  */
 
-#ifdef __DEBUG__
-  #define DEBUG_PRINT(fmt, ...) \
-    if(1) { fprintf(stderr, "%s:%d:%s(): " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__); }
-#else
-  #define DEBUG_PRINT(...) do {}while(0)
-#endif
+// Global variables to set debug levels 
 
-#ifdef __DEBUG__
-  #define DEBUG_COMMENT(fmt)\
-    if(1) { fprintf(stderr, "%s:%d:%s(): " fmt, __FILE__, __LINE__, __func__); }
-#else
-  #define DEBUG_COMMENT(...) do {}while(0)
-#endif
+extern int _debug_print_flag;
+extern int _error_print_flag;
+
+#define DEBUG_PRINT(fmt, ...) \
+  if(_debug_print_flag) { fprintf(stderr, "%s:%d:%s(): " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__); }
+
+#define DEBUG_COMMENT(fmt)\
+  if(_debug_print_flag) { fprintf(stderr, "%s:%d:%s(): " fmt, __FILE__, __LINE__, __func__); }
 
 #define ERROR_COMMENT(fmt)\
-  if(1) { fprintf(stderr, "%s:%d:%s(): " fmt, __FILE__, __LINE__, __func__); }
+  if(_error_print_flag) { fprintf(stderr, "%s:%d:%s(): " fmt, __FILE__, __LINE__, __func__); }
 #define ERROR_PRINT(fmt, ...) \
-  if(1) { fprintf(stderr, "%s:%d:%s(): " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__); }
+  if(_error_print_flag) { fprintf(stderr, "%s:%d:%s(): " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__); }
 
 /* ---------------------------------------------------------------------
  *

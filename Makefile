@@ -31,7 +31,10 @@
 #
 include CONFIG
 
-all: src/version.c src lib/libcin.a utils
+LIBOBJECTS= src/data.o src/fifo.o src/mbuffer.o src/control.o src/descramble.o \
+		    src/common.o src/version.c
+
+all: lib/libcin.a
 
 .PHONY: src/version.c
 src/version.c: 
@@ -40,23 +43,36 @@ src/version.c:
 	$(GIT) describe --dirty --always | $(AWK) 'BEGIN {} {print "const char *cin_build_version = \""$$0"\";"} END {} ' >> src/version.c
 	cat src/version.c
 
+src/data.o: src/data.h src/fifo.h src/mbuffer.h \
+            src/descramble.h src/cin.h 
+
+src/fifo.o: src/fifo.h src/cin.h
+
+src/mbuffer.o: src/mbuffer.h src/cin.h
+
+src/control.o: src/control.h src/cin.h src/cin_register_map.h
+
+src/descramble.o: src/descramble.h src/cin.h
+
+src/common.o: src/cin.h
+
 # create dynamically and statically-linked libs.
-lib/libcin.a: $(LIBOBJECTS) 
+lib/libcin.a: $(LIBOBJECTS)
 	test -d lib || mkdir lib
 	$(AR) -rcs $@ $(LIBOBJECTS)
 
-lib/libcin.so:  $(LIBSOURCES)
+lib/libcin.so:  $(LIBOBJECTS)
 	test -d lib || mkdir lib
 	$(CC) $(CFLAGS) -shared -o $@ $(LIBOBJECTS)
 
-$(SUBDIRS): src/version.c src lib/libcin.a 
+$(SUBDIRS): src/version.c lib/libcin.a 
 	$(MAKE) -C $@
 
 .PHONY :clean
 clean:
 	-$(RM) -f *.o
 	-$(RM) -rf lib
-	$(MAKE) -C src clean
+	-$(RM) -rf src/*.o
 	$(MAKE) -C utils clean
 
 .PHONY :install

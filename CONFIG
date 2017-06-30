@@ -13,7 +13,7 @@ CFLAGS=-Wall -O3 -g #--pic
 
 LDFLAGS=-L. 
 #LDFLAGS=-Wl,--no-as-needed -L.
-LDLIBS=-lpthread -lrt
+LDLIBS=-lpthread -lrt -lconfig
 
 # Stuff for install files
 
@@ -34,13 +34,4 @@ INSTALL_PROGRAM = ${INSTALL} -m 755
 #CFLAGS+=-pg
 #LDFLAGS+=-pg
 
-SUBDIRS=src utils tests
-.PHONY :subdirs $(SUBDIRS)
-
-LIBHEADERS=src/cin_register_map.h src/cin.h
-
-LIBSOURCES=src/control.c src/data.c src/fifo.c \
-           src/mbuffer.c src/descramble.c src/version.c
-
-LIBOBJECTS=$(LIBSOURCES:.c=.o)
 
