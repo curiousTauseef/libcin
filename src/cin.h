@@ -60,7 +60,7 @@ extern const char *cin_build_version;
 #define CIN_CTL_FCLK_125_C                 0x0003
 #define CIN_CTL_FCLK_200_C                 0x0004
 #define CIN_CTL_FCLK_250_C                 0x0005
-#define CIN_CTL_FCLK_180_C                 0x0006
+#define CIN_CTL_FCLK_156_C                 0x0006
 
 #define CIN_CTL_FPGA_STS_CFG               0x8000
 #define CIN_CTL_FPGA_STS_FP_PWR            0x0008
@@ -187,7 +187,7 @@ extern const char *cin_build_version;
 
 /* ---------------------------------------------------------------------
  *
- * MACROS for debugging
+ * MACROS and functions for debugging
  *
  * ---------------------------------------------------------------------
  */
@@ -207,6 +207,7 @@ void cin_set_error_print(int error);
 
 #define ERROR_COMMENT(fmt)\
   if(_error_print_flag) { fprintf(stderr, "%s:%d:%s(): " fmt, __FILE__, __LINE__, __func__); }
+
 #define ERROR_PRINT(fmt, ...) \
   if(_error_print_flag) { fprintf(stderr, "%s:%d:%s(): " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__); }
 
@@ -372,7 +373,7 @@ int cin_ctl_load_config(struct cin_port* cp,char *filename);
 int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp, char *filename);
 int cin_ctl_set_fclk(struct cin_port* cp, int clkfreq);
 int cin_ctl_get_fclk(struct cin_port* cp, int *clkfreq);
-int cin_ctl_set_dco(struct cin_port* cp, int freeze);
+int cin_ctl_freeze_dco(struct cin_port* cp, int freeze);
 int cin_ctl_get_cfg_fpga_status(struct cin_port* cp, uint16_t *_val);
 int cin_ctl_get_id(struct cin_port *cp, cin_ctl_id_t *_val);
 void cin_ctl_display_id(FILE *out, cin_ctl_id_t val);

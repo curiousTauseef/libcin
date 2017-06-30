@@ -53,7 +53,8 @@ src/fifo.o: src/fifo.h src/cin.h
 
 src/mbuffer.o: src/mbuffer.h src/cin.h
 
-src/control.o: src/control.h src/cin.h src/cin_register_map.h
+src/control.o: src/control.h src/cin.h src/cin_register_map.h src/fclk_program.h \
+	           src/fifo.h src/cinregisters.h
 
 src/descramble.o: src/descramble.h src/cin.h
 

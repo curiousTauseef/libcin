@@ -591,7 +591,7 @@ error:
   return _status;
 }
 
-int cin_ctl_set_dco(struct cin_port* cp, int freeze){
+int cin_ctl_freeze_dco(struct cin_port* cp, int freeze){
   int _status;
 
   _status = cin_ctl_write(cp,REG_FCLK_I2C_ADDRESS, 0xB089, 1);
@@ -611,6 +611,11 @@ int cin_ctl_set_dco(struct cin_port* cp, int freeze){
     _status |= cin_ctl_write(cp,REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
   }
 
+  if(!_status){
+    DEBUG_PRINT("Set FCLK Freeze/Unfreeze to %d\n", freeze);
+  } else {
+    ERROR_PRINT("Error setting FCLK Freeze/Unfreeze to %d\n", freeze);
+  }
   return _status; 
 }
 
@@ -621,42 +626,22 @@ int cin_ctl_set_fclk(struct cin_port* cp, int clkfreq){
   switch(clkfreq){
 
     case CIN_CTL_FCLK_125:
-      _status = cin_ctl_write(cp, REG_FCLK_I2C_DATA_WR, CMD_FCLK_125, 0);
+      _status = cin_ctl_freeze_dco(cp, 1);
+      if(!_status){
+        _status  = cin_ctl_write(cp, REG_FCLK_SET0, 0xF002, 0);
+        _status |= cin_ctl_write(cp, REG_FCLK_SET1, 0xF042, 0);
+        _status |= cin_ctl_write(cp, REG_FCLK_SET2, 0xF0BC, 0);
+        _status |= cin_ctl_write(cp, REG_FCLK_SET3, 0xF019, 0);
+        _status |= cin_ctl_write(cp, REG_FCLK_SET4, 0xF06D, 0);
+        _status |= cin_ctl_write(cp, REG_FCLK_SET5, 0xF08F, 0);
+      }
+      if(!_status){
+        _status = cin_ctl_freeze_dco(cp, 0);
+      }
       break;
 
     case CIN_CTL_FCLK_200:
       _status = cin_ctl_write(cp, REG_FCLK_I2C_DATA_WR, CMD_FCLK_200, 0);
-      break;
-
-    case CIN_CTL_FCLK_250:
-      _status = cin_ctl_write(cp, REG_FCLK_I2C_DATA_WR, CMD_FCLK_250, 0);
-      break;
-
-    case CIN_CTL_FCLK_125_C:
-    case CIN_CTL_FCLK_200_C:
-    case CIN_CTL_FCLK_250_C:
-    case CIN_CTL_FCLK_180_C:
-      // These are the custom settings
-
-      if(cin_ctl_set_dco(cp, 1)){
-        ERROR_COMMENT("Unable to freeze DCO");
-        return -1;
-      }
-    
-      int i;
-      int _status = 0;
-      int _clkfreq = clkfreq - CIN_CTL_FCLK_125_C;
-      for(i=0;i<CIN_FCLK_NUM_REG;i++){
-        _status |= cin_ctl_write(cp, REG_FCLK_I2C_ADDRESS, CIN_FCLK_REG[i], 1);
-        _status |= cin_ctl_write(cp, REG_FCLK_I2C_DATA_WR, CIN_FCLK_PROGRAM[_clkfreq][i], 1);
-        _status |= cin_ctl_write(cp, REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
-        fprintf(stderr, "REG = 0x%X PGM = 0x%X\n", CIN_FCLK_REG[i], CIN_FCLK_PROGRAM[_clkfreq][i]);
-      }
-
-      if(cin_ctl_set_dco(cp, 0)){
-        ERROR_COMMENT("Unable to unfreeze DCO");
-        return -1;
-      }
       break;
 
     default:
@@ -690,34 +675,64 @@ int cin_ctl_get_fclk(struct cin_port* cp, int *clkfreq){
     int i;
     _status = 0;
     uint16_t _reg[CIN_FCLK_READ_N];
+
+    // Get CIN FCLK Registers
+
     for(i=0;i<CIN_FCLK_READ_N;i++){
       _status |= cin_ctl_write(cp, REG_FCLK_I2C_ADDRESS, CIN_FCLK_READ[i], 1);
       _status |= cin_ctl_write(cp, REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
       _status |= cin_ctl_read(cp, REG_FCLK_I2C_DATA_RD, &_reg[i]);
     }
 
-    _val = (_reg[1] & 0x00F8) | (_reg[2] & 0x003);
+    // Print Reisters to debug stream
 
-    if(_val == 0x0002){
+    for(i=0;i<CIN_FCLK_READ_N;i++){
+      DEBUG_PRINT("FCLK REG 0x%04X = 0x%04X\n", CIN_FCLK_READ[i], _reg[i]);
+    }
+
+    // Calculate HS Divider
+
+    uint16_t _hsd = ((_reg[1] & 0x00E0) >> 5) + 4;
+    DEBUG_PRINT("FCLK HS Divider = %d\n", _hsd);
+
+    // Calculate N1 Divider
+    
+    uint16_t _n1 = ((_reg[1] & 0x001F) << 2) + (_reg[2] & 0x00C0 >> 6);
+    if(_n1 % 2) _n1++;
+    DEBUG_PRINT("FCLK N1 Divider = %d\n", _n1);
+
+    DEBUG_PRINT("FCLK RFREQ      = %01X%01X.%01X%02X%02X%02X\n", (_reg[2] & 0x000F),
+                                                                 (_reg[3] & 0x00F0) >> 4,
+                                                                 (_reg[3] & 0x000F),
+                                                                 (_reg[4] & 0x00FF),
+                                                                 (_reg[5] & 0x00FF),
+                                                                 (_reg[6] & 0x00FF));
+
+    if((_hsd == 4) && (_n1 == 8)){
+
+      *clkfreq = CIN_CTL_FCLK_156_C;
+      return 0;
+
+    } else if((_hsd == 4) && (_n1 == 10)){
 
       *clkfreq = CIN_CTL_FCLK_125_C;
       return 0;
 
-    } else if(_val == 0x0063){
-
-      *clkfreq = CIN_CTL_FCLK_200_C;
-      return 0;
-
-    } else if(_val == 0x0022){
+    } else if((_hsd == 5) && (_n1 == 4)){
 
       *clkfreq = CIN_CTL_FCLK_250_C;
       return 0;
         
+    } else if((_hsd == 7) && (_n1 == 4)){
+
+      *clkfreq = CIN_CTL_FCLK_200_C;
+      return 0;
+
     } else {
 
-      ERROR_COMMENT("Not standard clk. freq.\n");
+      ERROR_COMMENT("Not known clk. freq.\n");
       for(i=0;i<CIN_FCLK_READ_N;i++){
-        ERROR_PRINT("Read FCLK 0x%04X 0x%04X\n", CIN_FCLK_READ[i], _reg[i]);
+        ERROR_PRINT("FCLK REG 0x%04X = 0x%04X\n", CIN_FCLK_READ[i], _reg[i]);
       }
       return -1;
       
@@ -739,7 +754,7 @@ int cin_ctl_get_fclk(struct cin_port* cp, int *clkfreq){
     return 0;
   }
 
-  ERROR_PRINT("Recieved unknown clk. freq. 0x%X\n", (int)_val);
+  ERROR_PRINT("Recieved unknown clk. freq. 0x%X\n", _val);
   return -1;
 }  
 

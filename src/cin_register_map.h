@@ -229,6 +229,13 @@ extern "C" {
 #define REG_CCDFCLKSELECT_REG		      	0x8052
 #define REG_CDICLKDISABLE_REG		      	0x8053
 
+#define REG_FCLK_SET0               0xB007
+#define REG_FCLK_SET1               0xB008
+#define REG_FCLK_SET2               0xB009
+#define REG_FCLK_SET3               0xB00A
+#define REG_FCLK_SET4               0xB00B
+#define REG_FCLK_SET5               0xB00C
+
 /* FRM Status */
 #define REG_FRM_DCM_STATUS     			0x8080
 #define REG_FRM_FPGA_STATUS    			0x8081
