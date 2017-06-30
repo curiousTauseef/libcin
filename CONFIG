@@ -1,6 +1,4 @@
 # Variables for compelation
-CC=gcc
-CFLAGS=-Wall -O3 -g #--pic
 
 # Include DEBUG statements
 #CFLAGS+=-D__DEBUG__
@@ -11,27 +9,13 @@ CFLAGS=-Wall -O3 -g #--pic
 # Add code for profiling speed
 #CFLAGS+=-D__PROFILE__
 
-LDFLAGS=-L. 
-#LDFLAGS=-Wl,--no-as-needed -L.
-LDLIBS=-lpthread -lrt -lconfig
 
 # Stuff for install files
 
-INSTALL = install
-prefix = /usr/local
-exec_prefix = $(prefix)
-includedir = $(prefix)/include
-bindir = $(exec_prefix)/bin
-libdir = $(exec_prefix)/lib
 
-GIT = git
-AWK = awk
 
-INSTALL_DATA = $(INSTALL) -m 644
-INSTALL_PROGRAM = ${INSTALL} -m 755
 
 # UNCOMMENT for Profiling code
 #CFLAGS+=-pg
 #LDFLAGS+=-pg
-
 

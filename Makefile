@@ -29,13 +29,16 @@
 #   either expressed or implied, of the FreeBSD Project.
 #
 #
-include CONFIG
+CC=gcc
+CFLAGS=-Wall -O3 -g #--pic
 
 LIBOBJECTS= src/data.o src/fifo.o src/mbuffer.o src/control.o src/descramble.o \
 		    src/common.o src/version.c
 
-all: lib/libcin.a
+all: lib/libcin.a bin/cinregdump
 
+GIT = git
+AWK = awk
 .PHONY: src/version.c
 src/version.c: 
 	$(GIT) rev-parse HEAD | $(AWK) ' BEGIN {print "#include \"version.h\""} {print "const char *cin_build_git_sha = \"" $$0"\";"} END {}' > src/version.c
@@ -56,6 +59,8 @@ src/descramble.o: src/descramble.h src/cin.h
 
 src/common.o: src/cin.h
 
+src/cinregdump.o: src/cin.h
+
 # create dynamically and statically-linked libs.
 lib/libcin.a: $(LIBOBJECTS)
 	test -d lib || mkdir lib
@@ -63,17 +68,32 @@ lib/libcin.a: $(LIBOBJECTS)
 
 lib/libcin.so:  $(LIBOBJECTS)
 	test -d lib || mkdir lib
-	$(CC) $(CFLAGS) -shared -o $@ $(LIBOBJECTS)
+	$(CC) $(CFLAGS) -Isrc -shared -o $@ $(LIBOBJECTS)
 
-$(SUBDIRS): src/version.c lib/libcin.a 
-	$(MAKE) -C $@
+# Now create 
+
+LDFLAGS=-L./lib
+LDLIBS=-lpthread -lrt -lconfig -lcin
+
+bin/cinregdump: src/cinregdump.o lib/libcin.a src/cin.h
+	test -d bin || mkdir bin
+	$(CC) $(LDFLAGS) src/cinregdump.o -o $@ $(LDLIBS) 
 
 .PHONY :clean
 clean:
 	-$(RM) -f *.o
 	-$(RM) -rf lib
 	-$(RM) -rf src/*.o
-	$(MAKE) -C utils clean
+	-$(RM) -rf utils/*.o
+	-$(RM) -rf utils/cinregdump
+
+INSTALL = install
+INSTALL_DATA = $(INSTALL) -m 644
+INSTALL_PROGRAM = ${INSTALL} -m 755
+prefix = /usr/local
+includedir = $(prefix)/include
+bindir = $(exec_prefix)/bin
+libdir = $(exec_prefix)/lib
 
 .PHONY :install
 install: all
