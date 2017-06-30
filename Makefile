@@ -35,7 +35,7 @@ CFLAGS=-Wall -O3 -g #--pic
 LIBOBJECTS= src/data.o src/fifo.o src/mbuffer.o src/control.o src/descramble.o \
 		    src/common.o src/version.c
 
-all: lib/libcin.a bin/cinregdump
+all: lib/libcin.a bin/cinregdump test/smoketest
 
 GIT = git
 AWK = awk
@@ -79,12 +79,18 @@ bin/cinregdump: src/cinregdump.o lib/libcin.a src/cin.h
 	test -d bin || mkdir bin
 	$(CC) $(LDFLAGS) src/cinregdump.o -o $@ $(LDLIBS) 
 
+CFLAGS+=-I./src
+test/smoketest: test/smoketest.o lib/libcin.a src/cin.h
+	$(CC) $(LDFLAGS) test/smoketest.o -o $@ $(LDLIBS) 
+	test $@ && rm -rf $@
+
 .PHONY :clean
 clean:
 	-$(RM) -f *.o
 	-$(RM) -rf lib
 	-$(RM) -rf src/*.o
 	-$(RM) -rf utils/*.o
+	-$(RM) -rf test/*.o
 	-$(RM) -rf utils/cinregdump
 
 INSTALL = install
