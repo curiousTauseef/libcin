@@ -196,6 +196,8 @@ extern const char *cin_build_version;
 
 extern int _debug_print_flag;
 extern int _error_print_flag;
+void cin_set_debug_print(int debug);
+void cin_set_error_print(int error);
 
 #define DEBUG_PRINT(fmt, ...) \
   if(_debug_print_flag) { fprintf(stderr, "%s:%d:%s(): " fmt, __FILE__, __LINE__, __func__, __VA_ARGS__); }

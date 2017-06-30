@@ -30,5 +30,19 @@
 
 */
 
-int _debug_print_flag = 1;
-int _error_print_flag = 1;
+#include <stdio.h>
+
+int _debug_print_flag = 0;
+int _error_print_flag = 0;
+
+void cin_set_debug_print(int debug){
+  fprintf(stderr, "%s:%d:%s(): Set DEBUG to %d from %d\n", __FILE__, __LINE__, __func__,
+          debug, _debug_print_flag);
+  _debug_print_flag = debug;
+}
+
+void cin_set_error_print(int error){
+  fprintf(stderr, "%s:%d:%s(): Set ERROR to %d from %d\n", __FILE__, __LINE__, __func__,
+          error, _error_print_flag);
+  _error_print_flag = error;
+}

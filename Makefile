@@ -82,7 +82,6 @@ bin/cinregdump: src/cinregdump.o lib/libcin.a src/cin.h
 CFLAGS+=-I./src
 test/smoketest: test/smoketest.o lib/libcin.a src/cin.h
 	$(CC) $(LDFLAGS) test/smoketest.o -o $@ $(LDLIBS) 
-	test $@ && rm -rf $@
 
 .PHONY :clean
 clean:
