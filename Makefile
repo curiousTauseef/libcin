@@ -109,3 +109,6 @@ install: all
 	$(INSTALL_DATA) lib/libcin.a $(libdir)
 	$(INSTALL_DATA) src/cin.h $(includedir)
 	$(INSTALL_PROGRAM) utils/cinregdump $(bindir)
+
+test: all
+	./test/smoketest
