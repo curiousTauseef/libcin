@@ -429,16 +429,16 @@ int cin_ctl_fo_test_pattern(struct cin_port* cp, int on_off){
     DEBUG_COMMENT("Powering ON CIN Front Panel Boards\n");
   }
 
-  _status  = cin_ctl_write(cp,CIN_CTL_FO_REG1, 0x9E00);
-  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG2, 0x0000);
-  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG3, _val1);
-  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG4, 0x0105);
+  _status  = cin_ctl_write(cp,CIN_CTL_FO_REG1, 0x9E00, 0);
+  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG2, 0x0000, 0);
+  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG3, _val1,  0);
+  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG4, 0x0105, 0);
 
   usleep(20000);   /*for flow control*/ 
 
-  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG5, _val2);
-  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG6, _val2);
-  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG7, _val2);
+  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG5, _val2, 0);
+  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG6, _val2, 0);
+  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG7, _val2, 0);
 
   return _status;
 }
