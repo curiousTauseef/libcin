@@ -96,6 +96,8 @@ clean:
 	-$(RM) -rf utils/*.o
 	-$(RM) -rf test/*.o
 	-$(RM) -rf utils/cinregdump
+	-$(RM) -rf test/smoketest
+	-$(RM) -rf test/configtest
 
 INSTALL = install
 INSTALL_DATA = $(INSTALL) -m 644
