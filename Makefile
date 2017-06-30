@@ -33,18 +33,19 @@ CC=gcc
 CFLAGS=-Wall -O3 -g #--pic
 
 LIBOBJECTS= src/data.o src/fifo.o src/mbuffer.o src/control.o src/descramble.o \
-		    src/common.o src/version.c
+		    src/common.o src/version.o
 
-all: lib/libcin.a bin/cinregdump test/smoketest
+all: lib/libcin.a bin/cinregdump test/smoketest test/configtest
 
 GIT = git
 AWK = awk
 .PHONY: src/version.c
-src/version.c: 
+src/version.o: 
 	$(GIT) rev-parse HEAD | $(AWK) ' BEGIN {print "#include \"version.h\""} {print "const char *cin_build_git_sha = \"" $$0"\";"} END {}' > src/version.c
 	date | $(AWK) 'BEGIN {} {print "const char *cin_build_git_time = \""$$0"\";"} END {} ' >> src/version.c
 	$(GIT) describe --dirty --always | $(AWK) 'BEGIN {} {print "const char *cin_build_version = \""$$0"\";"} END {} ' >> src/version.c
 	cat src/version.c
+	$(CC) $(CFLAGS) src/version.c -c -o $@ 
 
 src/data.o: src/data.h src/fifo.h src/mbuffer.h \
             src/descramble.h src/cin.h 
@@ -84,6 +85,9 @@ CFLAGS+=-I./src
 test/smoketest: test/smoketest.o lib/libcin.a src/cin.h
 	$(CC) $(LDFLAGS) test/smoketest.o -o $@ $(LDLIBS) 
 
+test/configtest: test/configtest.o lib/libcin.a src/cin.h
+	$(CC) $(LDFLAGS) test/configtest.o -o $@ $(LDLIBS) 
+
 .PHONY :clean
 clean:
 	-$(RM) -f *.o
@@ -113,3 +117,4 @@ install: all
 
 test: all
 	./test/smoketest
+	./test/configtest ./test/test.cfg

@@ -34,8 +34,25 @@
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
+#include <libconfig.h>
 
 #include "cin.h"
 #include "config.h"
 
+int cin_read_config_file(char *file){
+  config_t cfg;
+  config_setting_t *setting;
 
+  config_init(&cfg);
+
+  if(!config_read_file(&cfg, file)){
+    ERROR_PRINT("Unable to parse config file %s\n", file);
+    ERROR_PRINT("%s:%d - %s\n", config_error_file(&cfg),
+                                config_error_line(&cfg), config_error_text(&cfg));
+    config_destroy(&cfg);
+    return -1;
+  }
+
+  config_destroy(&cfg);
+  return 0;
+}
