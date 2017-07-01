@@ -218,6 +218,19 @@ void cin_set_error_print(int error);
  * ---------------------------------------------------------------------
  */
 
+
+#define CIN_MAX_FILENAME 256
+typedef struct {
+  char *name;
+  char firmware_filename[CIN_MAX_FILENAME];
+  char clocks_filename[CIN_MAX_FILENAME];
+  char fcric_filename[CIN_MAX_FILENAME];
+  char bias_filename[CIN_MAX_FILENAME];
+  int overscan;
+  int columns;
+  int fclk;
+} camera_config;
+
 #define FIFO_MAX_READERS 10 
 
 typedef struct {
@@ -444,6 +457,12 @@ int cin_ctl_set_bias_voltages(struct cin_port *cp, float *voltage);
  *------------------------*/
 
 int cin_ctl_set_fcric_clamp(struct cin_port *cp, int clamp);
+
+/*------------------------
+ * CIN Config File
+ *------------------------*/
+
+int cin_read_config_file(const char *file, const char *config_name, camera_config *config);
 
 /* ---------------------------------------------------------------------
  *

@@ -33,7 +33,7 @@ CC=gcc
 CFLAGS=-Wall -O3 -g #--pic
 
 LIBOBJECTS= src/data.o src/fifo.o src/mbuffer.o src/control.o src/descramble.o \
-		    src/common.o src/version.o
+		    src/common.o src/version.o src/report.o src/config.o
 
 all: lib/libcin.a bin/cinregdump test/smoketest test/configtest
 
@@ -60,6 +60,8 @@ src/control.o: src/control.h src/cin.h src/cin_register_map.h src/fclk_program.h
 src/descramble.o: src/descramble.h src/cin.h
 
 src/common.o: src/cin.h
+
+src/report.o: src/report.h src/cin.h
 
 src/cinregdump.o: src/cin.h
 

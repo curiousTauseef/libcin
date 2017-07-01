@@ -2,7 +2,6 @@
 #include <stdio.h>
 
 #include "cin.h"
-#include "version.h"
 
 int main(int argc, char *argv[]){
   cin_set_debug_print(1);

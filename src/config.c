@@ -39,7 +39,7 @@
 #include "cin.h"
 #include "config.h"
 
-int cin_read_config_file(char *file){
+int cin_read_config_file(const char *file, const char *config_name, camera_config *config){
   config_t cfg;
   config_setting_t *setting;
 
@@ -53,6 +53,52 @@ int cin_read_config_file(char *file){
     return -1;
   }
 
+  setting = config_lookup(&cfg, "camera_config");
+  if(setting != NULL){
+    int count = config_setting_length(setting);
+    int i;
+    const char *name;
+    const char *_firmware, *_clocks, *_bias, *_fcric;
+    for(i = 0; i < count; ++i){
+      config_setting_t *_element = config_setting_get_elem(setting, i);
+      if(!config_setting_lookup_string(_element, "name", &name)){
+        continue;
+      }
+
+      if(strcmp(name, config_name)){
+        DEBUG_PRINT("Skipping config : %s\n", name);
+        continue;
+      }
+
+      DEBUG_PRINT("Reading Config : %s\n", name);
+
+      if(!(config_setting_lookup_int(_element, "columns", &config->columns) &&
+           config_setting_lookup_int(_element, "overscan", &config->overscan) &&
+           config_setting_lookup_int(_element, "fclk", &config->fclk) &&
+           config_setting_lookup_string(_element, "firmware", &_firmware) &&
+           config_setting_lookup_string(_element, "bias", &_bias) &&
+           config_setting_lookup_string(_element, "clocks", &_clocks) &&
+           config_setting_lookup_string(_element, "fcric", &_fcric))){
+        ERROR_PRINT("Error in config \"%s\" in file %s\n", name, file);
+        continue;
+      }
+      
+      strncpy(config->firmware_filename, _firmware, CIN_MAX_FILENAME);
+      strncpy(config->bias_filename, _bias, CIN_MAX_FILENAME);
+      strncpy(config->clocks_filename, _clocks, CIN_MAX_FILENAME);
+      strncpy(config->fcric_filename, _fcric, CIN_MAX_FILENAME);
+      DEBUG_PRINT("Overscan     = %d\n", config->overscan);
+      DEBUG_PRINT("Columns      = %d\n", config->columns);
+      DEBUG_PRINT("Firmware     = %s\n", config->firmware_filename);
+      DEBUG_PRINT("Clocks       = %s\n", config->clocks_filename);
+      DEBUG_PRINT("FCRIC        = %s\n", config->fcric_filename);
+      DEBUG_PRINT("Bias         = %s\n", config->bias_filename);
+      DEBUG_PRINT("FCLOCK       = %d\n", config->fclk);
+      config_destroy(&cfg);
+      return 0;
+    }
+  }
+
   config_destroy(&cfg);
-  return 0;
+  return -1;
 }
