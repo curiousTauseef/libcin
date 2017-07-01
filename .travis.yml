@@ -1,6 +1,6 @@
 language: c
 compiler: gcc
-script: make
+script: make test
 dist: trusty
 before_install:
  - sudo apt-get update -qq
