@@ -33,6 +33,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
+#include <bsd/string.h>
 #include <unistd.h>
 #include <libconfig.h>
 
@@ -59,9 +60,9 @@ int cin_read_config_file(const char *file, const char *config_name, camera_confi
     DEBUG_COMMENT("No global path in config file\n");
     strcpy(global_path, "");
   } else {
-    strncpy(global_path, _path, CIN_MAX_FILENAME);
+    strlcpy(global_path, _path, CIN_MAX_FILENAME);
     if(global_path[strlen(global_path)-1] != '/'){
-      strncat(global_path, "/", CIN_MAX_FILENAME);
+      strlcat(global_path, "/", CIN_MAX_FILENAME);
     }
   }
   DEBUG_PRINT("Global path set to %s\n", global_path);
@@ -100,21 +101,21 @@ int cin_read_config_file(const char *file, const char *config_name, camera_confi
       }
      
       char _buf[CIN_MAX_FILENAME];
-      strncpy(_buf, global_path, CIN_MAX_FILENAME);
-      strncat(_buf, _firmware, CIN_MAX_FILENAME);
-      strncpy(config->firmware_filename, _buf, CIN_MAX_FILENAME);
+      strlcpy(_buf, global_path, CIN_MAX_FILENAME);
+      strlcat(_buf, _firmware, CIN_MAX_FILENAME);
+      strlcpy(config->firmware_filename, _buf, CIN_MAX_FILENAME);
 
-      strncpy(_buf, global_path, CIN_MAX_FILENAME);
-      strncat(_buf, _bias, CIN_MAX_FILENAME);
-      strncpy(config->bias_filename, _buf, CIN_MAX_FILENAME);
+      strlcpy(_buf, global_path, CIN_MAX_FILENAME);
+      strlcat(_buf, _bias, CIN_MAX_FILENAME);
+      strlcpy(config->bias_filename, _buf, CIN_MAX_FILENAME);
 
-      strncpy(_buf, global_path, CIN_MAX_FILENAME);
-      strncat(_buf, _clocks, CIN_MAX_FILENAME);
-      strncpy(config->clocks_filename, _buf, CIN_MAX_FILENAME);
+      strlcpy(_buf, global_path, CIN_MAX_FILENAME);
+      strlcat(_buf, _clocks, CIN_MAX_FILENAME);
+      strlcpy(config->clocks_filename, _buf, CIN_MAX_FILENAME);
 
-      strncpy(_buf, global_path, CIN_MAX_FILENAME);
-      strncat(_buf, _fcric, CIN_MAX_FILENAME);
-      strncpy(config->fcric_filename, _buf, CIN_MAX_FILENAME);
+      strlcpy(_buf, global_path, CIN_MAX_FILENAME);
+      strlcat(_buf, _fcric, CIN_MAX_FILENAME);
+      strlcpy(config->fcric_filename, _buf, CIN_MAX_FILENAME);
 
       DEBUG_PRINT("Overscan     = %d\n", config->overscan);
       DEBUG_PRINT("Columns      = %d\n", config->columns);
