@@ -77,7 +77,7 @@ lib/libcin.so:  $(LIBOBJECTS)
 # Now create 
 
 LDFLAGS=-L./lib
-LDLIBS=-lconfig -lpthread -lrt -lcin
+LDLIBS=-lcin -lconfig -lpthread -lrt
 
 bin/cinregdump: src/cinregdump.o lib/libcin.a src/cin.h
 	test -d bin || mkdir bin
