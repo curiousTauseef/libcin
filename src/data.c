@@ -158,7 +158,7 @@ int cin_data_init_port(struct cin_port* dp,
 
   /* Set the receieve buffers for the socket */
 
-  // fprintf(stderr, "Requesting recieve buffer of %d Mb\n", dp->rcvbuf / (1024*1024));
+  DEBUG_PRINT("Requesting recieve buffer of %d Mb\n", dp->rcvbuf / (1024*1024));
 
   if(setsockopt(dp->sockfd, SOL_SOCKET, SO_RCVBUF, 
                 &dp->rcvbuf, sizeof(dp->rcvbuf)) == -1){
@@ -171,7 +171,7 @@ int cin_data_init_port(struct cin_port* dp,
     perror("CIN data port - unable to get receive buffer :");
   }
 
-  // fprintf(stderr, "Recieve buffer = %d Mb\n", dp->rcvbuf_rb / (1024 * 1024));
+  DEBUG_PRINT("Recieve buffer = %d Mb\n", dp->rcvbuf_rb / (1024 * 1024));
 
   int zero = 0;
   if(setsockopt(dp->sockfd, SOL_SOCKET, SO_TIMESTAMP,

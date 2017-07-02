@@ -1,3 +1,35 @@
+/* vim: set ts=2 sw=2 tw=0 noet :
+   
+   libcin : Driver for LBNL FastCCD 
+   Copyright (c) 2014, Stuart B. Wilkins, Daron Chabot
+   All rights reserved.
+   
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions are met: 
+   
+   1. Redistributions of source code must retain the above copyright notice, this
+      list of conditions and the following disclaimer. 
+   2. Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution. 
+   
+   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+   ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+   WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+   ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+   (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+   ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+   
+   The views and conclusions contained in the software and documentation are those
+   of the authors and should not be interpreted as representing official policies, 
+   either expressed or implied, of the FreeBSD Project.
+
+*/
+
 #ifndef __CIN_H__
 #define __CIN_H__
 
@@ -219,17 +251,21 @@ void cin_set_error_print(int error);
  */
 
 
-#define CIN_MAX_FILENAME 256
+#define CIN_CONFIG_MAX_STRING 256
+#define CIN_CONFIG_MAX_DATA 5000
 typedef struct {
-  char *name;
-  char firmware_filename[CIN_MAX_FILENAME];
-  char clocks_filename[CIN_MAX_FILENAME];
-  char fcric_filename[CIN_MAX_FILENAME];
-  char bias_filename[CIN_MAX_FILENAME];
+  char name[CIN_CONFIG_MAX_STRING];
+  char firmware_filename[CIN_CONFIG_MAX_STRING];
   int overscan;
   int columns;
   int fclk;
-} camera_config;
+  uint16_t timing[CIN_CONFIG_MAX_DATA][2];
+  int timing_len;
+  uint16_t fcric[CIN_CONFIG_MAX_DATA][2];
+  int fcric_len;
+  uint16_t bias[CIN_CONFIG_MAX_DATA][2];
+  int bias_len;
+} cin_camera_config;
 
 #define FIFO_MAX_READERS 10 
 
@@ -320,7 +356,6 @@ typedef void (*cin_data_callback) (cin_data_frame_t *);
  * Datastructures for status readouts 
  */
 
-
 typedef struct cin_ctl_id {
   uint16_t board_id;
   uint16_t serial_no;
@@ -347,6 +382,11 @@ typedef struct {
   cin_ctl_pwr_val_t fp;
 } cin_ctl_pwr_mon_t;
 
+/*------------------------
+ * Common Library Functions
+ *------------------------*/
+
+void cin_init(void);
 
 /*------------------------
  * Reporting functions
@@ -462,7 +502,8 @@ int cin_ctl_set_fcric_clamp(struct cin_port *cp, int clamp);
  * CIN Config File
  *------------------------*/
 
-int cin_read_config_file(const char *file, const char *config_name, camera_config *config);
+void cin_config_init(cin_camera_config *config);
+int cin_config_read_file(const char *file, const char *config_name, cin_camera_config *config);
 
 /* ---------------------------------------------------------------------
  *

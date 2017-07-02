@@ -30,7 +30,7 @@
 #
 #
 CC=gcc
-CFLAGS=-Wall -O3 -g #--pic
+CFLAGS=-Wall -O3 -g --pic
 
 LIBOBJECTS= src/data.o src/fifo.o src/mbuffer.o src/control.o src/descramble.o \
 		    src/common.o src/version.o src/report.o src/config.o
@@ -64,6 +64,8 @@ src/common.o: src/cin.h
 src/report.o: src/report.h src/cin.h
 
 src/cinregdump.o: src/cin.h
+
+src/config.o: src/cin.h src/config.h
 
 # create dynamically and statically-linked libs.
 lib/libcin.a: $(LIBOBJECTS)
