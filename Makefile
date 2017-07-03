@@ -35,7 +35,14 @@ CFLAGS=-Wall -O3 -g --pic
 LIBOBJECTS= src/data.o src/fifo.o src/mbuffer.o src/control.o src/descramble.o \
 		    src/common.o src/version.o src/report.o src/config.o
 
-all: lib/libcin.a bin/cinregdump test/smoketest test/configtest
+#REQUIRED_DIRS = lib 
+#_MKDIR := $(shell for d in $(REQUIRED_DIRS) ;\
+#	do                                       \
+#	echo $$d                                 \
+#	[[ -d $$d ]] || mkdir -p $$d;            \
+#	done )
+
+all: lib/lincin.a lib/libcin.so bin/cinregdump test/smoketest test/configtest
 
 GIT = git
 AWK = awk
@@ -55,7 +62,7 @@ src/fifo.o: src/fifo.h src/cin.h
 src/mbuffer.o: src/mbuffer.h src/cin.h
 
 src/control.o: src/control.h src/cin.h src/cin_register_map.h src/fclk_program.h \
-	           src/fifo.h src/cinregisters.h
+	           src/fifo.h src/cinregisters.h src/config.h
 
 src/descramble.o: src/descramble.h src/cin.h
 
@@ -68,12 +75,11 @@ src/cinregdump.o: src/cin.h
 src/config.o: src/cin.h src/config.h
 
 # create dynamically and statically-linked libs.
+
 lib/libcin.a: $(LIBOBJECTS)
-	test -d lib || mkdir lib
 	$(AR) -rcs $@ $(LIBOBJECTS)
 
-lib/libcin.so:  $(LIBOBJECTS)
-	test -d lib || mkdir lib
+lib/libcin.so: $(LIBOBJECTS)
 	$(CC) $(CFLAGS) -Isrc -shared -o $@ $(LIBOBJECTS)
 
 # Now create 
@@ -81,15 +87,15 @@ lib/libcin.so:  $(LIBOBJECTS)
 LDFLAGS=-L./lib
 LDLIBS=-lcin -lconfig -lpthread -lrt -lbsd
 
-bin/cinregdump: src/cinregdump.o lib/libcin.a src/cin.h
+bin/cinregdump: src/cinregdump.o lib/libcin.a  src/cin.h
 	test -d bin || mkdir bin
 	$(CC) $(LDFLAGS) src/cinregdump.o -o $@ $(LDLIBS) 
 
 CFLAGS+=-I./src
-test/smoketest: test/smoketest.o lib/libcin.a src/cin.h
+test/smoketest: test/smoketest.o lib/libcin.a  src/cin.h
 	$(CC) $(LDFLAGS) test/smoketest.o -o $@ $(LDLIBS) 
 
-test/configtest: test/configtest.o lib/libcin.a src/cin.h
+test/configtest: test/configtest.o lib/libcin.a  src/cin.h
 	$(CC) $(LDFLAGS) test/configtest.o -o $@ $(LDLIBS) 
 
 .PHONY :clean

@@ -43,30 +43,89 @@
 #include "fclk_program.h"
 #include "cinregisters.h"
 #include "control.h"
+#include "config.h"
 #include "fifo.h"
   
+/**************************** INITIALIZATION **************************/
 
-/**************************** UDP Socket ******************************/
+int cin_ctl_init(cin_ctl_t *cin, const char* ipaddr, 
+                 uint16_t oport, uint16_t iport,
+                 uint16_t soport, uint16_t siport) {
+  
+  // Initialize the config
 
-int cin_ctl_init_port(struct cin_port* cp, char* ipaddr, 
-                      uint16_t oport, uint16_t iport) {
-  if(ipaddr == 0){ 
-    cp->srvaddr = CIN_CTL_IP; 
+  cin_config_init(&(cin->config));
+
+  char *srvaddr;
+  uint16_t srvport, cliport, ssrvport, scliport;  
+
+  if(ipaddr == NULL){ 
+    srvaddr = strdup(CIN_CTL_IP); 
   } else {
-    cp->srvaddr = strndup(ipaddr, strlen(ipaddr)); 
+    srvaddr = strdup(ipaddr); 
   }
    
   if(oport == 0){ 
-    cp->srvport = CIN_CTL_SVR_PORT; 
+    srvport = CIN_CTL_SVR_PORT; 
   } else {
-    cp->srvport = oport; 
+    srvport = oport; 
   }
 
   if(iport == 0){
-    cp->cliport = CIN_CTL_CLI_PORT;
+    cliport = CIN_CTL_CLI_PORT;
   } else {
-    cp->cliport = iport;
+    cliport = iport;
   }
+
+  if(siport == 0){
+    ssrvport = CIN_CTL_SVR_FRMW_PORT;
+  } else {
+    ssrvport = iport;
+  }
+
+  if(soport == 0){
+    scliport = CIN_CTL_CLI_FRMW_PORT;
+  } else {
+    scliport = iport;
+  }
+
+  if(cin_ctl_init_port(&(cin->ctl_port), srvaddr, srvport, cliport) ||
+     cin_ctl_init_port(&(cin->stream_port), srvaddr, ssrvport, scliport)){
+     ERROR_COMMENT("Unable to open commuincations\n");
+     return -1;
+  }
+
+  // Now initialize a listener thread for UDP communications
+
+  cin_ctl_listener_t *listener = malloc(sizeof(cin_ctl_listener_t));
+  if(!listener){
+    ERROR_COMMENT("Unable to create listener (MALLOC Failed)\n");
+    return -1;
+  }
+
+  listener->cp = &(cin->ctl_port);
+  if(fifo_init(&listener->ctl_fifo, sizeof(uint32_t), 100,1)){
+    ERROR_COMMENT("Failed to initialize fifo.\n");
+    return -1;
+  }
+
+  // Initialize the mutex for sequential access
+  pthread_mutexattr_init(&cin->access_attr);
+  pthread_mutexattr_settype(&cin->access_attr, PTHREAD_MUTEX_RECURSIVE);
+  pthread_mutex_init(&cin->access, &cin->access_attr);
+
+  pthread_create(&listener->thread_id, NULL, 
+                 cin_ctl_listen_thread, (void*)listener);
+  cin->listener = listener;
+  
+  // SBW : Do we need to wait for listener to start?
+  return(0);
+}
+
+/**************************** UDP Socket ******************************/
+
+int cin_ctl_init_port(cin_port_t *cp, char* ipaddr, 
+                      uint16_t oport, uint16_t iport) {
 
   cp->sockfd = socket(AF_INET, SOCK_DGRAM, 0);
   if (cp->sockfd < 0) {
@@ -101,43 +160,19 @@ int cin_ctl_init_port(struct cin_port* cp, char* ipaddr,
     return -1;
   }
 
-  // Now initialize a listener thread for UDP communications
-
-  cin_ctl_listener_t *listener = malloc(sizeof(cin_ctl_listener_t));
-    if(!listener){
-    ERROR_COMMENT("Malloc failed.\n");
-    return -1;
-  }
-
-  listener->cp = cp;
-  if(fifo_init(&listener->ctl_fifo, sizeof(uint32_t), 100,1)){
-    ERROR_COMMENT("Failed to initialize fifo.\n");
-    return -1;
-  }
-
-  // Initialize the mutex for sequential access
-  pthread_mutexattr_init(&cp->access_attr);
-  pthread_mutexattr_settype(&cp->access_attr, PTHREAD_MUTEX_RECURSIVE);
-  pthread_mutex_init(&cp->access, &cp->access_attr);
-
-  pthread_create(&listener->thread_id, NULL, 
-                 cin_ctl_listen_thread, (void*)listener);
-  cp->listener = listener;
-  
-  // SBW : Do we need to wait for listener to start?
-
   DEBUG_COMMENT("Created port.\n");
   return 0;
 }
 
-uint32_t cin_ctl_get_packet(struct cin_port *cp, uint32_t *val){
+uint32_t cin_ctl_get_packet(cin_ctl_t *cin, uint32_t *val){
   int i;
   long int r;
+  
   for(i=0;i<1000;i++){
-    r = fifo_used_bytes(&cp->listener->ctl_fifo);
+    r = fifo_used_bytes(&cin->listener->ctl_fifo);
     if(r){
-      *val = *((uint32_t *)fifo_get_tail(&cp->listener->ctl_fifo, 0));
-      fifo_advance_tail(&cp->listener->ctl_fifo, 0);
+      *val = *((uint32_t *)fifo_get_tail(&cin->listener->ctl_fifo, 0));
+      fifo_advance_tail(&cin->listener->ctl_fifo, 0);
       return 0;
     }
     usleep(200);
@@ -151,7 +186,7 @@ uint32_t cin_ctl_get_packet(struct cin_port *cp, uint32_t *val){
 void *cin_ctl_listen_thread(void* args){
   uint32_t *buffer;
   uint32_t val;
-  struct cin_port* cp;
+  cin_port_t *cp;
   fifo *ctl_fifo;
   int i;
 
@@ -181,24 +216,32 @@ void *cin_ctl_listen_thread(void* args){
   pthread_exit(NULL);
 }
 
-int cin_ctl_close_port(struct cin_port* cp) {
-  if(cp->sockfd){
+int cin_ctl_close_ports(cin_ctl_t *cin) {
+
+  if(cin->ctl_port.sockfd){
     DEBUG_COMMENT("Canceling thread\n");
-    pthread_cancel(cp->listener->thread_id);
-    pthread_join(cp->listener->thread_id, NULL);
+    pthread_cancel(cin->listener->thread_id);
+    pthread_join(cin->listener->thread_id, NULL);
     DEBUG_COMMENT("Thread returned\n");
-    close(cp->sockfd); 
-    cp->sockfd = 0;
+    close(cin->ctl_port.sockfd); 
+    cin->ctl_port.sockfd = 0;
   }
+
+  if(cin->stream_port.sockfd){
+    close(cin->stream_port.sockfd); 
+    cin->stream_port.sockfd = 0;
+  }
+
   return 0;
 }
 
 /*************************** CIN Read/Write ***************************/
 
-int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val, int wait){
+int cin_ctl_write(cin_ctl_t *cin, uint16_t reg, uint16_t val, int wait){
 
    uint32_t _valwr;
    int rc;
+   cin_port_t *cp = &(cin->ctl_port);
 
    if(cp == NULL){
       ERROR_COMMENT("Parameter cp is NULL!");
@@ -206,7 +249,7 @@ int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val, int wait){
    }
   
   // Lock the mutex for access
-  pthread_mutex_lock(&cp->access);
+  pthread_mutex_lock(&cin->access);
 
    _valwr = ntohl((uint32_t)(reg << 16 | val));
    rc = sendto(cp->sockfd, &_valwr, sizeof(_valwr), 0,
@@ -217,7 +260,7 @@ int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val, int wait){
   }
 
   // Unlock Mutex for access
-  pthread_mutex_unlock(&cp->access);
+  pthread_mutex_unlock(&cin->access);
 
   if (rc != sizeof(_valwr) ) {
       ERROR_COMMENT("CIN control port - sendto() failure!!\n");
@@ -235,23 +278,23 @@ error:
    return (-1);
 }
 
-int cin_ctl_write_with_readback(struct cin_port* cp, uint16_t reg, uint16_t val){
+int cin_ctl_write_with_readback(cin_ctl_t *cin, uint16_t reg, uint16_t val){
   
   int tries = CIN_CTL_MAX_WRITE_TRIES;
 
-  pthread_mutex_lock(&cp->access);
+  pthread_mutex_lock(&cin->access);
 
   int _status;
   while(tries){
     DEBUG_PRINT("try = %d\n", tries);
-    _status = cin_ctl_write(cp, reg, val, 1);
+    _status = cin_ctl_write(cin, reg, val, 1);
     if(_status){
       ERROR_PRINT("Error writing register %x\n", reg);
       goto error;
     }
 
     uint16_t _val;
-    _status = cin_ctl_read(cp, reg, &_val);
+    _status = cin_ctl_read(cin, reg, &_val);
     if(_status){
       ERROR_PRINT("Unable to read register %x\n", reg);
       goto error;
@@ -264,30 +307,26 @@ int cin_ctl_write_with_readback(struct cin_port* cp, uint16_t reg, uint16_t val)
     tries--;
   }
 
-  pthread_mutex_unlock(&cp->access);
+  pthread_mutex_unlock(&cin->access);
   return 0;
 
 error:
-  pthread_mutex_unlock(&cp->access);
+  pthread_mutex_unlock(&cin->access);
   return _status;
 }
 
-int cin_ctl_stream_write(struct cin_port* cp, char *val,int size) {
+int cin_ctl_stream_write(cin_ctl_t *cin, char *val,int size) {
  
    int rc;
+   cin_port_t *cp = &(cin->stream_port);
     
-   if (cp == NULL){
-      ERROR_COMMENT("Parameter cp is NULL!");
-      goto error;
-   }
-
-  pthread_mutex_lock(&cp->access);
+  pthread_mutex_lock(&cin->access);
 
    rc = sendto(cp->sockfd, val, size, 0,
                (struct sockaddr*)&cp->sin_srv,
                sizeof(cp->sin_srv));
 
-  pthread_mutex_unlock(&cp->access);
+  pthread_mutex_unlock(&cin->access);
 
    if (rc != size ) {
       ERROR_COMMENT("sendto() failure!!");
@@ -302,28 +341,28 @@ error:
    return -1;
 }                                      
 
-int cin_ctl_read(struct cin_port* cp, uint16_t reg, uint16_t *val) {
+int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val) {
     
   int _status;
   uint32_t buf = 0;
 
-  pthread_mutex_lock(&cp->access);
+  pthread_mutex_lock(&cin->access);
 
   int tries = CIN_CTL_MAX_READ_TRIES;
   while(tries){
-    fifo_flush(&cp->listener->ctl_fifo);     
+    fifo_flush(&cin->listener->ctl_fifo);     
 
-    _status = cin_ctl_write(cp, REG_READ_ADDRESS, reg, 1);
+    _status = cin_ctl_write(cin, REG_READ_ADDRESS, reg, 1);
     if (_status){
       goto error;
     }
 
-    _status = cin_ctl_write(cp, REG_COMMAND, CMD_READ_REG, 1);
+    _status = cin_ctl_write(cin, REG_COMMAND, CMD_READ_REG, 1);
     if (_status != 0){
       goto error;
     }
 
-    if(!cin_ctl_get_packet(cp, &buf)){
+    if(!cin_ctl_get_packet(cin, &buf)){
       break;
     }
     tries--;
@@ -344,18 +383,18 @@ int cin_ctl_read(struct cin_port* cp, uint16_t reg, uint16_t *val) {
   }
 
   *val = (uint16_t)buf;
-  pthread_mutex_unlock(&cp->access);
+  pthread_mutex_unlock(&cin->access);
   return 0;
     
 error:  
    ERROR_COMMENT("Read error.\n");
-   pthread_mutex_unlock(&cp->access);
+   pthread_mutex_unlock(&cin->access);
    return (-1);
 }
 
  
 /******************* CIN PowerUP/PowerDown *************************/
-int cin_ctl_pwr(struct cin_port* cp, int pwr){
+int cin_ctl_pwr(cin_ctl_t *cin, int pwr){
 
   int _status;
   uint16_t _val;
@@ -368,11 +407,11 @@ int cin_ctl_pwr(struct cin_port* cp, int pwr){
     _val = CIN_CTL_POWER_DISABLE;
   }
 
-  _status=cin_ctl_write_with_readback(cp,REG_PS_ENABLE, _val);
+  _status=cin_ctl_write_with_readback(cin,REG_PS_ENABLE, _val);
   if (_status != 0){
     goto error;
   }
-  _status=cin_ctl_write(cp,REG_COMMAND, CMD_PS_ENABLE, 0);
+  _status=cin_ctl_write(cin,REG_COMMAND, CMD_PS_ENABLE, 0);
   if (_status != 0){
     goto error;
   }
@@ -381,12 +420,12 @@ error:
    return _status;
 }
 
-int cin_ctl_fp_pwr(struct cin_port* cp, int pwr){ 
+int cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr){ 
 
   int _status;
   uint16_t _val;
 
-  _status = cin_ctl_read(cp, REG_PS_ENABLE, &_val);
+  _status = cin_ctl_read(cin, REG_PS_ENABLE, &_val);
   if(_status != 0){
     goto error;
   }
@@ -402,11 +441,11 @@ int cin_ctl_fp_pwr(struct cin_port* cp, int pwr){
       _val &= ~CIN_CTL_FP_POWER_ENABLE;
     }
 
-    _status=cin_ctl_write_with_readback(cp,REG_PS_ENABLE, _val);
+    _status=cin_ctl_write_with_readback(cin,REG_PS_ENABLE, _val);
     if(_status != 0){
       goto error;
     }
-    _status=cin_ctl_write(cp,REG_COMMAND, CMD_PS_ENABLE, 0);
+    _status=cin_ctl_write(cin,REG_COMMAND, CMD_PS_ENABLE, 0);
     if(_status != 0){
       goto error;
     }
@@ -416,7 +455,7 @@ error:
    return _status;
 }
 
-int cin_ctl_fo_test_pattern(struct cin_port* cp, int on_off){
+int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off){
   int _status;
   uint16_t _val1 = 0x0000;
   uint16_t _val2 = 0xFFFF;
@@ -429,23 +468,23 @@ int cin_ctl_fo_test_pattern(struct cin_port* cp, int on_off){
     DEBUG_COMMENT("Powering ON CIN Front Panel Boards\n");
   }
 
-  _status  = cin_ctl_write(cp,CIN_CTL_FO_REG1, 0x9E00, 0);
-  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG2, 0x0000, 0);
-  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG3, _val1,  0);
-  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG4, 0x0105, 0);
+  _status  = cin_ctl_write(cin,CIN_CTL_FO_REG1, 0x9E00, 0);
+  _status |= cin_ctl_write(cin,CIN_CTL_FO_REG2, 0x0000, 0);
+  _status |= cin_ctl_write(cin,CIN_CTL_FO_REG3, _val1,  0);
+  _status |= cin_ctl_write(cin,CIN_CTL_FO_REG4, 0x0105, 0);
 
   usleep(20000);   /*for flow control*/ 
 
-  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG5, _val2, 0);
-  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG6, _val2, 0);
-  _status |= cin_ctl_write(cp,CIN_CTL_FO_REG7, _val2, 0);
+  _status |= cin_ctl_write(cin,CIN_CTL_FO_REG5, _val2, 0);
+  _status |= cin_ctl_write(cin,CIN_CTL_FO_REG6, _val2, 0);
+  _status |= cin_ctl_write(cin,CIN_CTL_FO_REG7, _val2, 0);
 
   return _status;
 }
 
 /******************* CIN Configuration/Status *************************/
 
-int cin_ctl_load_config(struct cin_port* cp,char *filename){
+int cin_ctl_load_config(cin_ctl_t *cin,char *filename){
 
   int _status;
   uint32_t _regul,_valul;
@@ -454,7 +493,7 @@ int cin_ctl_load_config(struct cin_port* cp,char *filename){
   // We are going to check if bias and clocks are on. 
  
   int _val;
-  _status = cin_ctl_get_bias(cp, &_val);
+  _status = cin_ctl_get_bias(cin, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read bias status. Refusing to upload config\n");
     return -1;
@@ -464,7 +503,7 @@ int cin_ctl_load_config(struct cin_port* cp,char *filename){
     return -1;
   }
 
-  _status = cin_ctl_get_clocks(cp, &_val);
+  _status = cin_ctl_get_clocks(cin, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read clock status. Refusing to upload config\n");
     return -1;
@@ -486,7 +525,7 @@ int cin_ctl_load_config(struct cin_port* cp,char *filename){
 
   // Lock the mutex to get exclusive access to the CIN
 
-  pthread_mutex_lock(&cp->access);
+  pthread_mutex_lock(&cin->access);
 
   while(fgets(_line,sizeof _line,file) != NULL){ 
     _line[strlen(_line)-1]='\0';   
@@ -498,7 +537,7 @@ int cin_ctl_load_config(struct cin_port* cp,char *filename){
       _regul=strtoul(_regstr,NULL,16);
       _valul=strtoul(_valstr,NULL,16);          
       usleep(10000);   /*for flow control*/ 
-      _status=cin_ctl_write(cp, _regul, _valul, 0);
+      _status=cin_ctl_write(cin, _regul, _valul, 0);
       if (_status != 0){
         ERROR_COMMENT("Error writing to CIN\n");
         fclose(file);
@@ -508,24 +547,25 @@ int cin_ctl_load_config(struct cin_port* cp,char *filename){
   }
  
   DEBUG_COMMENT("Done.\n");
-  pthread_mutex_unlock(&cp->access);
+  pthread_mutex_unlock(&cin->access);
   
   fclose(file);
   return 0;
   
 error:
-  pthread_mutex_unlock(&cp->access);
+  pthread_mutex_unlock(&cin->access);
   return -1;
 }
 
-int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filename){
+int cin_ctl_load_firmware(cin_ctl_t *cin, char *filename){
    
   uint32_t num_e;
   char buffer[128];
   int _status = -1; 
+
   // Lock the mutex for exclusive access to the CIN
 
-  pthread_mutex_lock(&cp->access);
+  pthread_mutex_lock(&cin->access);
 
   FILE *file= fopen(filename, "rb");
   if(file == NULL){ 
@@ -535,7 +575,7 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
             
   DEBUG_PRINT("Loading %s\n", filename);
 
-  _status = cin_ctl_write(cp, REG_COMMAND, CMD_PROGRAM_FRAME, 0); 
+  _status = cin_ctl_write(cin, REG_COMMAND, CMD_PROGRAM_FRAME, 0); 
   if (_status != 0){
     ERROR_COMMENT("Failed to program CIN\n");
     goto error;
@@ -543,7 +583,7 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
 
   sleep(1);
   while ((num_e = fread(buffer,sizeof(char), sizeof(buffer), file)) != 0){    
-    _status = cin_ctl_stream_write(dcp, buffer, num_e);       
+    _status = cin_ctl_stream_write(cin, buffer, num_e);       
     if (_status != 0){
       ERROR_COMMENT("Error writing firmware to CIN\n");
       fclose(file);
@@ -559,14 +599,14 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
 
   DEBUG_COMMENT("Resetting Frame FPGA\n");
 
-  _status=cin_ctl_write(cp, REG_FRM_RESET, 0x0001, 0);
+  _status=cin_ctl_write(cin, REG_FRM_RESET, 0x0001, 0);
   if(_status != 0){
     goto error;
   } 
 
   sleep(1); 
 
-  _status=cin_ctl_write(cp,REG_FRM_RESET,0x0000, 0);
+  _status=cin_ctl_write(cin,REG_FRM_RESET,0x0000, 0);
   if(_status != 0){
     goto error;
   } 
@@ -575,40 +615,40 @@ int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp,char *filenam
   DEBUG_COMMENT("Done.\n");
 
   uint16_t _fpga_status;
-  _status = cin_ctl_get_cfg_fpga_status(cp, &_fpga_status);
+  _status = cin_ctl_get_cfg_fpga_status(cin, &_fpga_status);
   _status |= !(_fpga_status & CIN_CTL_FPGA_STS_CFG);
   if(_status){
     DEBUG_COMMENT("FPGA Failed to configure.\n");
     goto error;
   }
   
-  pthread_mutex_unlock(&cp->access);
+  pthread_mutex_unlock(&cin->access);
   DEBUG_COMMENT("FPGA Configured OK\n");
   return 0;
    
 error:
-  pthread_mutex_unlock(&cp->access);
+  pthread_mutex_unlock(&cin->access);
   return _status;
 }
 
-int cin_ctl_freeze_dco(struct cin_port* cp, int freeze){
+int cin_ctl_freeze_dco(cin_ctl_t *cin, int freeze){
   int _status;
 
-  _status = cin_ctl_write(cp,REG_FCLK_I2C_ADDRESS, 0xB089, 1);
+  _status = cin_ctl_write(cin,REG_FCLK_I2C_ADDRESS, 0xB089, 1);
 
   if(freeze){
-    _status |= cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, 0xF010, 1);
+    _status |= cin_ctl_write(cin,REG_FCLK_I2C_DATA_WR, 0xF010, 1);
   } else {
-    _status |= cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, 0xF000, 1);
+    _status |= cin_ctl_write(cin,REG_FCLK_I2C_DATA_WR, 0xF000, 1);
   }
 
-  _status |= cin_ctl_write(cp,REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
+  _status |= cin_ctl_write(cin,REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
 
   if(!freeze){
     // Start the DCO up
-    _status |= cin_ctl_write(cp,REG_FCLK_I2C_ADDRESS, 0xB087, 1);
-    _status |= cin_ctl_write(cp,REG_FCLK_I2C_DATA_WR, 0xF040, 1);
-    _status |= cin_ctl_write(cp,REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
+    _status |= cin_ctl_write(cin,REG_FCLK_I2C_ADDRESS, 0xB087, 1);
+    _status |= cin_ctl_write(cin,REG_FCLK_I2C_DATA_WR, 0xF040, 1);
+    _status |= cin_ctl_write(cin,REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
   }
 
   if(!_status){
@@ -619,29 +659,29 @@ int cin_ctl_freeze_dco(struct cin_port* cp, int freeze){
   return _status; 
 }
 
-int cin_ctl_set_fclk(struct cin_port* cp, int clkfreq){
+int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq){
 
   int _status = 0;
 
   switch(clkfreq){
 
     case CIN_CTL_FCLK_125:
-      _status = cin_ctl_freeze_dco(cp, 1);
+      _status = cin_ctl_freeze_dco(cin, 1);
       if(!_status){
-        _status  = cin_ctl_write(cp, REG_FCLK_SET0, 0xF002, 0);
-        _status |= cin_ctl_write(cp, REG_FCLK_SET1, 0xF042, 0);
-        _status |= cin_ctl_write(cp, REG_FCLK_SET2, 0xF0BC, 0);
-        _status |= cin_ctl_write(cp, REG_FCLK_SET3, 0xF019, 0);
-        _status |= cin_ctl_write(cp, REG_FCLK_SET4, 0xF06D, 0);
-        _status |= cin_ctl_write(cp, REG_FCLK_SET5, 0xF08F, 0);
+        _status  = cin_ctl_write(cin, REG_FCLK_SET0, 0xF002, 0);
+        _status |= cin_ctl_write(cin, REG_FCLK_SET1, 0xF042, 0);
+        _status |= cin_ctl_write(cin, REG_FCLK_SET2, 0xF0BC, 0);
+        _status |= cin_ctl_write(cin, REG_FCLK_SET3, 0xF019, 0);
+        _status |= cin_ctl_write(cin, REG_FCLK_SET4, 0xF06D, 0);
+        _status |= cin_ctl_write(cin, REG_FCLK_SET5, 0xF08F, 0);
       }
       if(!_status){
-        _status = cin_ctl_freeze_dco(cp, 0);
+        _status = cin_ctl_freeze_dco(cin, 0);
       }
       break;
 
     case CIN_CTL_FCLK_200:
-      _status = cin_ctl_write(cp, REG_FCLK_I2C_DATA_WR, CMD_FCLK_200, 0);
+      _status = cin_ctl_write(cin, REG_FCLK_I2C_DATA_WR, CMD_FCLK_200, 0);
       break;
 
     default:
@@ -659,12 +699,12 @@ int cin_ctl_set_fclk(struct cin_port* cp, int clkfreq){
   return 0;
 }
 
-int cin_ctl_get_fclk(struct cin_port* cp, int *clkfreq){ 
+int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq){ 
 
   uint16_t _val;
   int _status;
 
-  _status = cin_ctl_read(cp, REG_FCLK_I2C_DATA_WR, &_val);
+  _status = cin_ctl_read(cin, REG_FCLK_I2C_DATA_WR, &_val);
   if(_status){
     ERROR_COMMENT("Unable to get FCLK status.\n");
     return _status;
@@ -679,9 +719,9 @@ int cin_ctl_get_fclk(struct cin_port* cp, int *clkfreq){
     // Get CIN FCLK Registers
 
     for(i=0;i<CIN_FCLK_READ_N;i++){
-      _status |= cin_ctl_write(cp, REG_FCLK_I2C_ADDRESS, CIN_FCLK_READ[i], 1);
-      _status |= cin_ctl_write(cp, REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
-      _status |= cin_ctl_read(cp, REG_FCLK_I2C_DATA_RD, &_reg[i]);
+      _status |= cin_ctl_write(cin, REG_FCLK_I2C_ADDRESS, CIN_FCLK_READ[i], 1);
+      _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
+      _status |= cin_ctl_read(cin, REG_FCLK_I2C_DATA_RD, &_reg[i]);
     }
 
     // Print Reisters to debug stream
@@ -758,9 +798,9 @@ int cin_ctl_get_fclk(struct cin_port* cp, int *clkfreq){
   return -1;
 }  
 
-int cin_ctl_get_cfg_fpga_status(struct cin_port* cp, uint16_t *_val){
+int cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val){
       
-  int _status = cin_ctl_read(cp,REG_FPGA_STATUS, _val);
+  int _status = cin_ctl_read(cin,REG_FPGA_STATUS, _val);
   DEBUG_PRINT("CFG FPGA Status  :  0x%04X\n", *_val);
 
   if(_status){
@@ -771,16 +811,16 @@ int cin_ctl_get_cfg_fpga_status(struct cin_port* cp, uint16_t *_val){
   return 0;
 }
 
-int cin_ctl_get_id(struct cin_port *cp, cin_ctl_id_t *val){
+int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *val){
   int _status;
 
-  _status  = cin_ctl_read(cp, REG_BOARD_ID, &val->board_id);
+  _status  = cin_ctl_read(cin, REG_BOARD_ID, &val->board_id);
   DEBUG_PRINT("CIN Board ID     :  0x%04X\n",val->board_id);
 
-  _status |= cin_ctl_read(cp,REG_HW_SERIAL_NUM, &val->serial_no);
+  _status |= cin_ctl_read(cin,REG_HW_SERIAL_NUM, &val->serial_no);
   DEBUG_PRINT("HW Serial Number :  0x%04X\n",val->serial_no);
 
-  _status |= cin_ctl_read(cp,REG_FPGA_VERSION, &val->fpga_ver);
+  _status |= cin_ctl_read(cin,REG_FPGA_VERSION, &val->fpga_ver);
   DEBUG_PRINT("CFG FPGA Version :  0x%04X\n\n",val->fpga_ver);
 
   if(_status){
@@ -812,10 +852,10 @@ void cin_ctl_display_fpga_status(FILE *out, uint16_t fpga_status){
   }
 }
 
-int cin_ctl_get_dcm_status(struct cin_port* cp, uint16_t *_val){
+int cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val){
   int _status;
 
-  _status = cin_ctl_read(cp, REG_DCM_STATUS, _val);
+  _status = cin_ctl_read(cin, REG_DCM_STATUS, _val);
   if(_status){
     ERROR_COMMENT("Unable to read DCM status.\n");
     return _status;
@@ -858,13 +898,13 @@ double cin_ctl_current_calc(uint16_t val){
   return _current;
 }
 
-int cin_ctl_calc_vi_status(struct cin_port* cp, 
+int cin_ctl_calc_vi_status(cin_ctl_t *cin, 
                            uint16_t vreg, uint16_t ireg, double vfact,
                            cin_ctl_pwr_val_t *vi){
   uint16_t _val;
   int _status;
 
-  _status = cin_ctl_read(cp, vreg, &_val);
+  _status = cin_ctl_read(cin, vreg, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read voltage.\n");
     return _status;
@@ -872,7 +912,7 @@ int cin_ctl_calc_vi_status(struct cin_port* cp,
 
   vi->v = vfact * _val;
   
-  _status = cin_ctl_read(cp, ireg, &_val);
+  _status = cin_ctl_read(cin, ireg, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read current.\n");
     return _status;
@@ -883,14 +923,14 @@ int cin_ctl_calc_vi_status(struct cin_port* cp,
   return 0;
 }
 
-int cin_ctl_get_power_status(struct cin_port* cp, int full,
+int cin_ctl_get_power_status(cin_ctl_t *cin, int full,
                              int *pwr, cin_ctl_pwr_mon_t *values){
     
   double _current, _voltage;
   uint16_t _val;
   int _status;
 
-  _status = cin_ctl_read(cp, REG_PS_ENABLE, &_val);
+  _status = cin_ctl_read(cin, REG_PS_ENABLE, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read power supply status\n");
     return _status;
@@ -912,9 +952,9 @@ int cin_ctl_get_power_status(struct cin_port* cp, int full,
   }
 
   /* ADC == LT4151 */
-  _status  = cin_ctl_read(cp, REG_VMON_ADC1_CH1, &_val);
+  _status  = cin_ctl_read(cin, REG_VMON_ADC1_CH1, &_val);
   _voltage = 0.025 * _val;
-  _status |= cin_ctl_read(cp, REG_IMON_ADC1_CH0, &_val);
+  _status |= cin_ctl_read(cin, REG_IMON_ADC1_CH0, &_val);
   _current = 0.00002 * _val / 0.003;
   if(_status){
     ERROR_COMMENT("Unable to read ADC1 values.\n");
@@ -924,29 +964,29 @@ int cin_ctl_get_power_status(struct cin_port* cp, int full,
   values->bus_12v0.i = _current;
 
   if(full){
-    _status  = cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH5, REG_IMON_ADC0_CH5,
+    _status  = cin_ctl_calc_vi_status(cin, REG_VMON_ADC0_CH5, REG_IMON_ADC0_CH5,
                            0.00015258, &values->mgmt_3v3);
-    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH7, REG_IMON_ADC0_CH7,
+    _status |= cin_ctl_calc_vi_status(cin, REG_VMON_ADC0_CH7, REG_IMON_ADC0_CH7,
                            0.00015258, &values->mgmt_2v5);
-    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH2, REG_IMON_ADC0_CH2,
+    _status |= cin_ctl_calc_vi_status(cin, REG_VMON_ADC0_CH2, REG_IMON_ADC0_CH2,
                            0.00007629, &values->mgmt_1v2);
-    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH3, REG_IMON_ADC0_CH3,
+    _status |= cin_ctl_calc_vi_status(cin, REG_VMON_ADC0_CH3, REG_IMON_ADC0_CH3,
                            0.00007629, &values->enet_1v0);
-    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH4, REG_IMON_ADC0_CH4,
+    _status |= cin_ctl_calc_vi_status(cin, REG_VMON_ADC0_CH4, REG_IMON_ADC0_CH4,
                            0.00015258, &values->s3e_3v3);
-    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH8, REG_IMON_ADC0_CH8,
+    _status |= cin_ctl_calc_vi_status(cin, REG_VMON_ADC0_CH8, REG_IMON_ADC0_CH8,
                            0.00015258, &values->gen_3v3);
-    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CH9, REG_IMON_ADC0_CH9,
+    _status |= cin_ctl_calc_vi_status(cin, REG_VMON_ADC0_CH9, REG_IMON_ADC0_CH9,
                            0.00015258, &values->gen_2v5);
-    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CHE, REG_IMON_ADC0_CHE,
+    _status |= cin_ctl_calc_vi_status(cin, REG_VMON_ADC0_CHE, REG_IMON_ADC0_CHE,
                            0.00007629, &values->v6_0v9);
-    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CHB, REG_IMON_ADC0_CHB,
+    _status |= cin_ctl_calc_vi_status(cin, REG_VMON_ADC0_CHB, REG_IMON_ADC0_CHB,
                            0.00007629, &values->v6_1v0);
-    _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CHD, REG_IMON_ADC0_CHD,
+    _status |= cin_ctl_calc_vi_status(cin, REG_VMON_ADC0_CHD, REG_IMON_ADC0_CHD,
                            0.00015258, &values->v6_2v5);
   }
 
-  _status |= cin_ctl_calc_vi_status(cp, REG_VMON_ADC0_CHF, REG_IMON_ADC0_CHF,
+  _status |= cin_ctl_calc_vi_status(cin, REG_VMON_ADC0_CHF, REG_IMON_ADC0_CHF,
                          0.00030516, &values->fp);
   if(_status){
     ERROR_COMMENT("Unable to read power values\n");
@@ -982,19 +1022,19 @@ void cin_ctl_display_pwr_line(FILE *out,const char* msg, cin_ctl_pwr_val_t val){
 
 /******************* CIN Control *************************/
 
-int cin_ctl_set_camera_pwr(struct cin_port* cp, int val){
+int cin_ctl_set_camera_pwr(cin_ctl_t *cin, int val){
   int _status = 0;
-  _status |= cin_ctl_set_bias(cp, val);
-  _status |= cin_ctl_set_clocks(cp, val);
+  _status |= cin_ctl_set_bias(cin, val);
+  _status |= cin_ctl_set_clocks(cin, val);
   return _status;
 }
 
-int cin_ctl_get_camera_pwr(struct cin_port* cp, int *val){
+int cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val){
   int _status = 0;
   int _val1 = 0, _val2 = 0;
 
-  _status |= cin_ctl_get_bias(cp, &_val1);
-  _status |= cin_ctl_get_clocks(cp, &_val2);
+  _status |= cin_ctl_get_bias(cin, &_val1);
+  _status |= cin_ctl_get_clocks(cin, &_val2);
 
   if(!_status){
     *val = _val1 | _val2;
@@ -1005,14 +1045,14 @@ int cin_ctl_get_camera_pwr(struct cin_port* cp, int *val){
   return _status;
 }
 
-int cin_ctl_set_bias(struct cin_port* cp,int val){
+int cin_ctl_set_bias(cin_ctl_t *cin,int val){
 
   int _status;
    
   if(val){
-    _status = cin_ctl_write_with_readback(cp,REG_BIASCONFIGREGISTER0_REG, 0x0001);
+    _status = cin_ctl_write_with_readback(cin,REG_BIASCONFIGREGISTER0_REG, 0x0001);
   } else if (val == 0){
-    _status = cin_ctl_write_with_readback(cp,REG_BIASCONFIGREGISTER0_REG, 0x0000);
+    _status = cin_ctl_write_with_readback(cin,REG_BIASCONFIGREGISTER0_REG, 0x0000);
   } 
 
   if(_status){
@@ -1024,11 +1064,11 @@ int cin_ctl_set_bias(struct cin_port* cp,int val){
   return 0;
 }
 
-int cin_ctl_get_bias(struct cin_port* cp, int *val){
+int cin_ctl_get_bias(cin_ctl_t *cin, int *val){
 
   int _status;
   uint16_t _val = -1;
-  _status = cin_ctl_read(cp, REG_BIASCONFIGREGISTER0_REG, &_val); 
+  _status = cin_ctl_read(cin, REG_BIASCONFIGREGISTER0_REG, &_val); 
    
   if(_status){
     ERROR_COMMENT("Unable to read bias status\n");
@@ -1045,21 +1085,21 @@ int cin_ctl_get_bias(struct cin_port* cp, int *val){
   return 0;
 }
 
-int cin_ctl_set_clocks(struct cin_port* cp,int val){
+int cin_ctl_set_clocks(cin_ctl_t *cin,int val){
 
   int _status;   
   uint16_t _val;
 
-  _status = cin_ctl_read(cp, REG_CLOCKCONFIGREGISTER0_REG, &_val); 
+  _status = cin_ctl_read(cin, REG_CLOCKCONFIGREGISTER0_REG, &_val); 
   if(_status){
     ERROR_COMMENT("Unable to read clock status\n");
     return _status;
   }
    
   if (val == 1){
-    _status = cin_ctl_write_with_readback(cp,REG_CLOCKCONFIGREGISTER0_REG, _val | 0x0001);
+    _status = cin_ctl_write_with_readback(cin,REG_CLOCKCONFIGREGISTER0_REG, _val | 0x0001);
   } else if (val == 0){
-    _status = cin_ctl_write_with_readback(cp,REG_CLOCKCONFIGREGISTER0_REG, _val & ~0x0001);
+    _status = cin_ctl_write_with_readback(cin,REG_CLOCKCONFIGREGISTER0_REG, _val & ~0x0001);
   } else {
     ERROR_COMMENT("Illegal Clocks state: Only 0 or 1 allowed\n");
     return -1;
@@ -1074,11 +1114,11 @@ int cin_ctl_set_clocks(struct cin_port* cp,int val){
   return 0;
 }
 
-int cin_ctl_get_clocks(struct cin_port* cp, int *val){
+int cin_ctl_get_clocks(cin_ctl_t *cin, int *val){
 
   int _status;
   uint16_t _val;
-  _status = cin_ctl_read(cp, REG_CLOCKCONFIGREGISTER0_REG, &_val); 
+  _status = cin_ctl_read(cin, REG_CLOCKCONFIGREGISTER0_REG, &_val); 
    
   if(_status){
     ERROR_COMMENT("Unable to read clock status\n");
@@ -1095,7 +1135,7 @@ int cin_ctl_get_clocks(struct cin_port* cp, int *val){
   return 0;
 }
 
-int cin_ctl_set_trigger(struct cin_port* cp,int val){
+int cin_ctl_set_trigger(cin_ctl_t *cin,int val){
 
   int _status;
   if((val < 0) || (val > 3)){ 
@@ -1103,7 +1143,7 @@ int cin_ctl_set_trigger(struct cin_port* cp,int val){
     return -1;
   }
 
-  _status=cin_ctl_write_with_readback(cp,REG_TRIGGERMASK_REG, val);
+  _status=cin_ctl_write_with_readback(cin,REG_TRIGGERMASK_REG, val);
   if(_status){
     ERROR_PRINT("Unable to set trigger to %d\n", val);
     return _status;
@@ -1113,11 +1153,11 @@ int cin_ctl_set_trigger(struct cin_port* cp,int val){
   return 0;
 }
 
-int cin_ctl_get_trigger(struct cin_port* cp, int *val){
+int cin_ctl_get_trigger(cin_ctl_t *cin, int *val){
 
   int _status;
   uint16_t _val;
-  _status = cin_ctl_read(cp, REG_TRIGGERMASK_REG, &_val); 
+  _status = cin_ctl_read(cin, REG_TRIGGERMASK_REG, &_val); 
    
   if(_status){
     ERROR_COMMENT("Unable to read trigger status\n");
@@ -1129,10 +1169,10 @@ int cin_ctl_get_trigger(struct cin_port* cp, int *val){
   return 0;
 }
 
-int cin_ctl_get_focus(struct cin_port* cp, int *val){
+int cin_ctl_get_focus(cin_ctl_t *cin, int *val){
   int _status;
   uint16_t _val;
-  _status = cin_ctl_read(cp, REG_CLOCKCONFIGREGISTER0_REG, &_val);
+  _status = cin_ctl_read(cin, REG_CLOCKCONFIGREGISTER0_REG, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read focus status\n");
     return _status;
@@ -1147,12 +1187,12 @@ int cin_ctl_get_focus(struct cin_port* cp, int *val){
   return 0;
 }
 
-int cin_ctl_set_focus(struct cin_port* cp, int val){
+int cin_ctl_set_focus(cin_ctl_t *cin, int val){
 
   uint16_t _val1;
   int _status;
    
-  _status = cin_ctl_read(cp,REG_CLOCKCONFIGREGISTER0_REG, &_val1);
+  _status = cin_ctl_read(cin,REG_CLOCKCONFIGREGISTER0_REG, &_val1);
   if(_status){
     ERROR_COMMENT("Unable to read focus bit\n");
     return _status;
@@ -1164,7 +1204,7 @@ int cin_ctl_set_focus(struct cin_port* cp, int val){
     _val1 &= ~CIN_CTL_FOCUS_BIT;
   } 
 
-  _status = cin_ctl_write_with_readback(cp,REG_CLOCKCONFIGREGISTER0_REG, _val1);
+  _status = cin_ctl_write_with_readback(cin,REG_CLOCKCONFIGREGISTER0_REG, _val1);
 
   if(_status){
     ERROR_COMMENT("Unable to write focus bit\n");
@@ -1174,16 +1214,16 @@ int cin_ctl_set_focus(struct cin_port* cp, int val){
   return 0;
 }
 
-int cin_ctl_int_trigger_start(struct cin_port* cp, int nimages){
+int cin_ctl_int_trigger_start(cin_ctl_t *cin, int nimages){
   // Trigger the camera, setting the trigger mode
 
   int _status = 0;
 
   DEBUG_PRINT("Set n exposures to %d\n", nimages);
 
-  _status |= cin_ctl_write_with_readback(cp, REG_NUMBEROFEXPOSURE_REG, (uint16_t)nimages);
-  _status |= cin_ctl_set_focus(cp, 1);
-  _status |= cin_ctl_write(cp, REG_FRM_COMMAND, 0x0100, 0);
+  _status |= cin_ctl_write_with_readback(cin, REG_NUMBEROFEXPOSURE_REG, (uint16_t)nimages);
+  _status |= cin_ctl_set_focus(cin, 1);
+  _status |= cin_ctl_write(cin, REG_FRM_COMMAND, 0x0100, 0);
 
   if(_status){
     ERROR_COMMENT("Unable to start triggers");
@@ -1193,9 +1233,9 @@ int cin_ctl_int_trigger_start(struct cin_port* cp, int nimages){
   return _status;
 }
       
-int cin_ctl_int_trigger_stop(struct cin_port* cp){
+int cin_ctl_int_trigger_stop(cin_ctl_t *cin){
   int _status;
-  _status = cin_ctl_set_focus(cp, 0);
+  _status = cin_ctl_set_focus(cin, 0);
 
   if(_status){
     ERROR_COMMENT("Error stopping internal triggers\n");
@@ -1205,14 +1245,14 @@ int cin_ctl_int_trigger_stop(struct cin_port* cp){
   return 0;
 }
 
-int cin_ctl_ext_trigger_start(struct cin_port* cp, int trigger_mode){
+int cin_ctl_ext_trigger_start(cin_ctl_t *cin, int trigger_mode){
   // Trigger the camera, setting the trigger mode
 
   int _status;
 
   // First set the trigger mode (internal / external etc.)
 
-  _status = cin_ctl_set_trigger(cp, trigger_mode);
+  _status = cin_ctl_set_trigger(cin, trigger_mode);
   if(_status){
     ERROR_COMMENT("Unable to set trigger mode\n");
     goto error;
@@ -1225,9 +1265,9 @@ error:
   return _status;
 }
       
-int cin_ctl_ext_trigger_stop(struct cin_port* cp){
+int cin_ctl_ext_trigger_stop(cin_ctl_t *cin){
   int _status;
-  _status = cin_ctl_set_trigger(cp, CIN_CTL_TRIG_INTERNAL);
+  _status = cin_ctl_set_trigger(cin, CIN_CTL_TRIG_INTERNAL);
 
   if(_status){
     ERROR_COMMENT("Error stopping external triggers\n");
@@ -1237,14 +1277,14 @@ int cin_ctl_ext_trigger_stop(struct cin_port* cp){
   return 0;
 }
 
-int cin_ctl_get_triggering(struct cin_port *cp, int *trigger){
+int cin_ctl_get_triggering(cin_ctl_t *cin, int *trigger){
   // Return if we are triggering. 
   // Check the focus bit and the ext status
 
   int _status = 0;
   int trig, focus;
 
-  _status = cin_ctl_get_trigger(cp, &trig);
+  _status = cin_ctl_get_trigger(cin, &trig);
   if(_status){
     return _status;
   } 
@@ -1254,7 +1294,7 @@ int cin_ctl_get_triggering(struct cin_port *cp, int *trigger){
     return 0;
   }
 
-  _status = cin_ctl_get_focus(cp, &focus);
+  _status = cin_ctl_get_focus(cin, &focus);
   if(_status){
     return _status;
   }
@@ -1271,7 +1311,7 @@ int cin_ctl_get_triggering(struct cin_port *cp, int *trigger){
 
 }
 
-int cin_ctl_set_exposure_time(struct cin_port* cp,float ftime){
+int cin_ctl_set_exposure_time(cin_ctl_t *cin,float ftime){
 
   int _status;
   uint32_t _time;
@@ -1283,8 +1323,8 @@ int cin_ctl_set_exposure_time(struct cin_port* cp,float ftime){
   _msbval = (uint32_t)(_time >> 16);
   _lsbval = (uint32_t)(_time & 0xFFFF);
 
-  _status  = cin_ctl_write_with_readback(cp,REG_EXPOSURETIMEMSB_REG,_msbval);
-  _status |= cin_ctl_write_with_readback(cp,REG_EXPOSURETIMELSB_REG,_lsbval);
+  _status  = cin_ctl_write_with_readback(cin,REG_EXPOSURETIMEMSB_REG,_msbval);
+  _status |= cin_ctl_write_with_readback(cin,REG_EXPOSURETIMELSB_REG,_lsbval);
   if(_status){
     ERROR_COMMENT("Unable to set exposure time\n");
     return _status;
@@ -1294,7 +1334,7 @@ int cin_ctl_set_exposure_time(struct cin_port* cp,float ftime){
   return 0;
 }
 
-int cin_ctl_set_trigger_delay(struct cin_port* cp,float ftime){  
+int cin_ctl_set_trigger_delay(cin_ctl_t *cin,float ftime){  
 
   int _status;
   uint32_t _time;
@@ -1305,8 +1345,8 @@ int cin_ctl_set_trigger_delay(struct cin_port* cp,float ftime){
   _msbval=(uint16_t)(_time >> 16);
   _lsbval=(uint16_t)(_time & 0xFFFF);
 
-  _status  = cin_ctl_write_with_readback(cp,REG_DELAYTOEXPOSUREMSB_REG,_msbval);
-  _status |= cin_ctl_write_with_readback(cp,REG_DELAYTOEXPOSURELSB_REG,_lsbval);
+  _status  = cin_ctl_write_with_readback(cin,REG_DELAYTOEXPOSUREMSB_REG,_msbval);
+  _status |= cin_ctl_write_with_readback(cin,REG_DELAYTOEXPOSURELSB_REG,_lsbval);
   if(_status){
     ERROR_COMMENT("Unable to set trigger delay");
     return _status;
@@ -1316,7 +1356,7 @@ int cin_ctl_set_trigger_delay(struct cin_port* cp,float ftime){
   return 0;
 }
 
-int cin_ctl_set_cycle_time(struct cin_port* cp,float ftime){
+int cin_ctl_set_cycle_time(cin_ctl_t *cin,float ftime){
 
   int _status;
   uint32_t _time;
@@ -1328,8 +1368,8 @@ int cin_ctl_set_cycle_time(struct cin_port* cp,float ftime){
   _msbval=(uint16_t)(_time >> 16);
   _lsbval=(uint16_t)(_time & 0xFFFF);
 
-  _status  = cin_ctl_write_with_readback(cp,REG_TRIGGERREPETITIONTIMEMSB_REG,_msbval);
-  _status |= cin_ctl_write_with_readback(cp,REG_TRIGGERREPETITIONTIMELSB_REG,_lsbval);
+  _status  = cin_ctl_write_with_readback(cin,REG_TRIGGERREPETITIONTIMEMSB_REG,_msbval);
+  _status |= cin_ctl_write_with_readback(cin,REG_TRIGGERREPETITIONTIMELSB_REG,_lsbval);
 
   if(_status){
     ERROR_COMMENT("Unable to set cycle time");
@@ -1341,10 +1381,10 @@ int cin_ctl_set_cycle_time(struct cin_port* cp,float ftime){
 }
 
 /******************* Frame Acquisition *************************/
-int cin_ctl_frame_count_reset(struct cin_port* cp){
+int cin_ctl_frame_count_reset(cin_ctl_t *cin){
 
   int _status;
-  _status = cin_ctl_write(cp,REG_FRM_COMMAND, CMD_RESET_FRAME_COUNT, 0);
+  _status = cin_ctl_write(cin,REG_FRM_COMMAND, CMD_RESET_FRAME_COUNT, 0);
   if(_status){
     ERROR_COMMENT("Unable to reset frame counter\n");
     return _status;
@@ -1356,11 +1396,11 @@ int cin_ctl_frame_count_reset(struct cin_port* cp){
 
 /* Setting of IP Addresses */
 
-int cin_ctl_set_fabric_address(struct cin_port* cp, char *ip){
-  return cin_ctl_set_address(cp, ip, REG_IF_IP_FAB1B0, REG_IF_IP_FAB1B1);
+int cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip){
+  return cin_ctl_set_address(cin, ip, REG_IF_IP_FAB1B0, REG_IF_IP_FAB1B1);
 }
 
-int cin_ctl_set_address(struct cin_port* cp, char *ip, uint16_t reg0, uint16_t reg1){
+int cin_ctl_set_address(cin_ctl_t *cin, char *ip, uint16_t reg0, uint16_t reg1){
 
   // First get the address
 
@@ -1375,8 +1415,8 @@ int cin_ctl_set_address(struct cin_port* cp, char *ip, uint16_t reg0, uint16_t r
   DEBUG_PRINT("Setting IP to %08X\n", addr_s);
 
   int _status;
-  _status  = cin_ctl_write_with_readback(cp, reg0, (uint16_t)addr_s);
-  _status |= cin_ctl_write_with_readback(cp, reg1, (uint16_t)(addr_s >> 16));
+  _status  = cin_ctl_write_with_readback(cin, reg0, (uint16_t)addr_s);
+  _status |= cin_ctl_write_with_readback(cin, reg1, (uint16_t)(addr_s >> 16));
 
   if(_status){
     ERROR_COMMENT("Could not set IP.\n");
@@ -1388,9 +1428,9 @@ int cin_ctl_set_address(struct cin_port* cp, char *ip, uint16_t reg0, uint16_t r
 
 /*******************  MUX Settings for Output **********************/
 
-int cin_ctl_set_mux(struct cin_port *cp, int setting){
+int cin_ctl_set_mux(cin_ctl_t *cin, int setting){
 
-  int _status = cin_ctl_write_with_readback(cp, REG_TRIGGERSELECT_REG, (uint16_t)setting);
+  int _status = cin_ctl_write_with_readback(cin, REG_TRIGGERSELECT_REG, (uint16_t)setting);
   if(_status){
     ERROR_COMMENT("Failed to write MUX setting\n");
     return -1;
@@ -1401,9 +1441,9 @@ int cin_ctl_set_mux(struct cin_port *cp, int setting){
   return 0;
 }
 
-int cin_ctl_get_mux(struct cin_port *cp, int *setting){
+int cin_ctl_get_mux(cin_ctl_t *cin, int *setting){
 
-  int _status = cin_ctl_read(cp, REG_TRIGGERSELECT_REG, (uint16_t*)setting);
+  int _status = cin_ctl_read(cin, REG_TRIGGERSELECT_REG, (uint16_t*)setting);
   if(_status){
     ERROR_COMMENT("Failed to read MUX setting\n");
     return -1;
@@ -1416,7 +1456,7 @@ int cin_ctl_get_mux(struct cin_port *cp, int *setting){
 
 /*******************  Control Gain of fCRIC   **********************/
 
-int cin_ctl_set_fcric_gain(struct cin_port *cp, int gain){
+int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain){
   uint16_t _gain;
   int _status = 0;
 
@@ -1427,10 +1467,10 @@ int cin_ctl_set_fcric_gain(struct cin_port *cp, int gain){
     return -1;
   }
 
-  _status |= cin_ctl_write(cp, REG_FCRIC_WRITE0_REG, 0xA000, 1);
-  _status |= cin_ctl_write(cp, REG_FCRIC_WRITE1_REG, 0x0086, 1);
-  _status |= cin_ctl_write(cp, REG_FCRIC_WRITE2_REG, _gain, 1);
-  _status |= cin_ctl_write(cp, REG_FRM_COMMAND, 0x0105, 1);
+  _status |= cin_ctl_write(cin, REG_FCRIC_WRITE0_REG, 0xA000, 1);
+  _status |= cin_ctl_write(cin, REG_FCRIC_WRITE1_REG, 0x0086, 1);
+  _status |= cin_ctl_write(cin, REG_FCRIC_WRITE2_REG, _gain, 1);
+  _status |= cin_ctl_write(cin, REG_FRM_COMMAND, 0x0105, 1);
 
   if(_status){
     ERROR_COMMENT("Unable to set gain settings\n");
@@ -1445,7 +1485,7 @@ int cin_ctl_set_fcric_gain(struct cin_port *cp, int gain){
 /*******************  Set FCRIC to Clamp Mode **********************/
 
 
-int cin_ctl_set_fcric_clamp(struct cin_port *cp, int clamp){
+int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp){
   uint16_t *_onoff;
   int _status = 0;
 
@@ -1460,10 +1500,10 @@ int cin_ctl_set_fcric_clamp(struct cin_port *cp, int clamp){
 
   int i;
   for(i=0;i<NUM_CLAMP_REG;i++){
-    _status |= cin_ctl_write(cp, REG_FCRIC_WRITE0_REG, 0xA000, 1);
-    _status |= cin_ctl_write(cp, REG_FCRIC_WRITE1_REG, fcric_clamp_reg[i], 1);
-    _status |= cin_ctl_write(cp, REG_FCRIC_WRITE2_REG, _onoff[i], 1);
-    _status |= cin_ctl_write(cp, REG_FRM_COMMAND, 0x0105, 1);
+    _status |= cin_ctl_write(cin, REG_FCRIC_WRITE0_REG, 0xA000, 1);
+    _status |= cin_ctl_write(cin, REG_FCRIC_WRITE1_REG, fcric_clamp_reg[i], 1);
+    _status |= cin_ctl_write(cin, REG_FCRIC_WRITE2_REG, _onoff[i], 1);
+    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, 0x0105, 1);
   }
 
   if(_status){
@@ -1478,28 +1518,28 @@ int cin_ctl_set_fcric_clamp(struct cin_port *cp, int clamp){
 
 /*******************  BIAS Voltage Settings   **********************/
 
-int cin_ctl_get_bias_voltages(struct cin_port *cp, float *voltage){
+int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage){
 
   int n;
   int _status = 0;
   uint16_t _val;
 
   for(n=0;n<NUM_BIAS_VOLTAGE;n++){
-    _status |= cin_ctl_write(cp, REG_BIASANDCLOCKREGISTERADDRESS_REG, 0x0030 + (2 * n), 1);
-    _status |= cin_ctl_read(cp, REG_BIASREGISTERDATAOUT_REG, &_val);
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS_REG, 0x0030 + (2 * n), 1);
+    _status |= cin_ctl_read(cin, REG_BIASREGISTERDATAOUT_REG, &_val);
     voltage[n] = (float)(_val & 0x0FFF) * bias_voltage_range[n] / 4096.0;
   } 
 
   return _status;
 }
 
-int cin_ctl_set_bias_voltages(struct cin_port *cp, float *voltage){
+int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage){
 
   int n;
   int _status = 0;
   int _val;
 
-  _status = cin_ctl_get_bias(cp, &_val);
+  _status = cin_ctl_get_bias(cin, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read bias status.\n");
     return -1;
@@ -1509,7 +1549,7 @@ int cin_ctl_set_bias_voltages(struct cin_port *cp, float *voltage){
     return -1;
   }
 
-  _status = cin_ctl_get_clocks(cp, &_val);
+  _status = cin_ctl_get_clocks(cin, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read clock status.\n"); 
     return -1;
@@ -1519,7 +1559,7 @@ int cin_ctl_set_bias_voltages(struct cin_port *cp, float *voltage){
     return -1;
   }
   
-  _status = cin_ctl_get_triggering(cp, &_val);
+  _status = cin_ctl_get_triggering(cin, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read triggering status.\n"); 
     return -1;
@@ -1533,9 +1573,9 @@ int cin_ctl_set_bias_voltages(struct cin_port *cp, float *voltage){
   for(n=0;n<NUM_BIAS_VOLTAGE;n++){
     _val =  (int)((voltage[n] / bias_voltage_range[n]) * 0x0FFF) & 0x0FFF;
     _val |= ((n << 14) & 0xC000);
-    _status |= cin_ctl_write(cp, REG_BIASANDCLOCKREGISTERADDRESS_REG, (2 * n), 1);
-    _status |= cin_ctl_write(cp, REG_BIASANDCLOCKREGISTERDATA_REG	, _val, 1);
-    _status |= cin_ctl_write(cp, REG_FRM_COMMAND, 0x0102, 1);
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS_REG, (2 * n), 1);
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA_REG	, _val, 1);
+    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, 0x0102, 1);
   } 
 
   return _status;
@@ -1543,7 +1583,7 @@ int cin_ctl_set_bias_voltages(struct cin_port *cp, float *voltage){
 
 /*******************  Register Dump of CIN    **********************/
 
-int cin_ctl_reg_dump(struct cin_port *cp, FILE *fp)
+int cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp)
 {
   fprintf(fp, "-------------------------------------------------------------\n");
   fprintf(fp, "Register Name                            : Register : Value \n");
@@ -1555,7 +1595,7 @@ int cin_ctl_reg_dump(struct cin_port *cp, FILE *fp)
   while(rmap->name != NULL){
     uint16_t reg = rmap->reg;
     uint16_t val;
-    if(!(status |= cin_ctl_read(cp, reg, &val)))
+    if(!(status |= cin_ctl_read(cin, reg, &val)))
     {
       fprintf(fp, "%-40s :  0x%04X  :  0x%04X\n", rmap->name, reg, val);
     } else {

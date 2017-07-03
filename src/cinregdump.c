@@ -7,9 +7,9 @@
 
 int main(int argc, char *argv[]){
 
-  struct cin_port cp;
+  cin_ctl_t cin;
 
-  if(cin_ctl_init_port(&cp, 0, CIN_CTL_SVR_PORT, CIN_CTL_CLI_PORT)){
+  if(cin_ctl_init(&cin, NULL, 0, 0, 0, 0)){
     perror("Unable to initialize CIN port");
     return -1;
   }
@@ -24,9 +24,9 @@ int main(int argc, char *argv[]){
   fprintf(stdout, "\n");
   fprintf(stdout, "cinregdump : Started at %s\n\n", buf);
 
-  int status = cin_ctl_reg_dump(&cp, stdout);
+  int status = cin_ctl_reg_dump(&cin, stdout);
 
-  cin_ctl_close_port(&cp);
+  cin_ctl_close_ports(&cin);
 
   return status;
 }

@@ -649,6 +649,9 @@ void *cin_data_assembler_thread(void *args){
       frame->number = this_frame;
       frame->timestamp = this_frame_timestamp;
       thread_data.last_frame = this_frame;
+
+      // If we are in a framestore mode only output 
+      // if the framestore counter
       (*proc->output_put)(proc->output_args);
       frame = NULL;
       last_packet_flag = 0;

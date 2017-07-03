@@ -36,11 +36,6 @@
 
 int _debug_print_flag = 0;
 int _error_print_flag = 0;
-cin_camera_config _config;
-
-void cin_init(void){
-  cin_config_init(&_config);
-}
 
 void cin_set_debug_print(int debug){
   fprintf(stderr, "%s:%d:%s(): Set DEBUG to %d from %d\n", __FILE__, __LINE__, __func__,

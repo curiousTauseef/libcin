@@ -7,10 +7,9 @@ int main(int argc, char *argv[]){
   cin_set_debug_print(1);
   cin_set_error_print(1);
 
-  cin_init();
+  cin_ctl_t cin;
 
-  cin_camera_config config;
-  int val = cin_config_read_file(argv[1], "default", &config);
+  int val = cin_config_read_file(&cin, argv[1]);
 
   DEBUG_PRINT("config return val = %d\n", val);
 

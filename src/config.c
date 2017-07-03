@@ -40,13 +40,13 @@
 #include "cin.h"
 #include "config.h"
 
-void cin_config_init(cin_camera_config *config){
+void cin_config_init(cin_ctl_config_t *config){
+
   config->overscan = 0;
   config->columns = 960;
   config->fclk = 200;
  
   strcpy(config->firmware_filename, "");
-
 }
 
 int cin_config_read_regdata(config_t *cfg, const char *name, uint16_t data[][2], int *len){
@@ -84,8 +84,9 @@ int cin_config_read_regdata(config_t *cfg, const char *name, uint16_t data[][2],
   return 0;
 }
 
-int cin_config_read_file(const char *file, const char *config_name, cin_camera_config *config){
+int cin_config_read_file(cin_ctl_t *cin, const char *file){
   config_t cfg;
+  cin_ctl_config_t *config = &(cin->config);
 
   config_init(&cfg);
 

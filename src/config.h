@@ -33,6 +33,9 @@
 #ifndef CIN_CONFIG_H
 #define CIN_CONFIG_H 1
 
+#include <libconfig.h>
+
 int cin_config_read_regdata(config_t *cfg, const char* name, uint16_t data[][2], int *len);
+void cin_config_init(cin_ctl_config_t *config);
 
 #endif

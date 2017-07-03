@@ -253,7 +253,7 @@ void cin_set_error_print(int error);
 
 #define CIN_CONFIG_MAX_STRING 256
 #define CIN_CONFIG_MAX_DATA 5000
-typedef struct {
+typedef struct cin_ctl_config {
   char name[CIN_CONFIG_MAX_STRING];
   char firmware_filename[CIN_CONFIG_MAX_STRING];
   int overscan;
@@ -265,7 +265,7 @@ typedef struct {
   int fcric_len;
   uint16_t bias[CIN_CONFIG_MAX_DATA][2];
   int bias_len;
-} cin_camera_config;
+} cin_ctl_config_t;
 
 #define FIFO_MAX_READERS 10 
 
@@ -283,6 +283,7 @@ typedef struct {
   pthread_cond_t signal;
 } fifo;
 
+
 typedef struct cin_ctl_listener {
   struct cin_port *cp;
   fifo ctl_fifo;
@@ -290,21 +291,34 @@ typedef struct cin_ctl_listener {
 } cin_ctl_listener_t;
 
 typedef struct cin_port {
-    char *srvaddr;
-    char *cliaddr;
-    uint16_t srvport;
-    uint16_t cliport;
-    int sockfd;
-    struct timeval tv;
-    struct sockaddr_in sin_srv; /* server info */
-    struct sockaddr_in sin_cli; /* client info (us!) */
-    socklen_t slen; /* for recvfrom() */
-    int rcvbuf; /* For setting data recieve buffer */
-    int rcvbuf_rb; /* For readback */
-    cin_ctl_listener_t *listener;
-    pthread_mutex_t access; /* For sequential access to CIN */
-    pthread_mutexattr_t access_attr;
+  char *srvaddr;
+  char *cliaddr;
+  uint16_t srvport;
+  uint16_t cliport;
+  int sockfd;
+  struct timeval tv;
+  struct sockaddr_in sin_srv; /* server info */
+  struct sockaddr_in sin_cli; /* client info (us!) */
+  socklen_t slen; /* for recvfrom() */
+  int rcvbuf; /* For setting data recieve buffer */
+  int rcvbuf_rb; /* For readback */
 } cin_port_t;
+
+
+typedef struct cin_ctl {
+  // TCP/IP Port Information
+  cin_port_t ctl_port;
+  cin_port_t stream_port;
+
+  // Config information
+  cin_ctl_config_t config;
+
+  // Mutex for threaded access
+  cin_ctl_listener_t *listener;
+  pthread_mutex_t access; /* For sequential access to CIN */
+  pthread_mutexattr_t access_attr;
+} cin_ctl_t;
+
 
 typedef struct cin_data_frame {
   uint16_t *data;
@@ -382,11 +396,6 @@ typedef struct {
   cin_ctl_pwr_val_t fp;
 } cin_ctl_pwr_mon_t;
 
-/*------------------------
- * Common Library Functions
- *------------------------*/
-
-void cin_init(void);
 
 /*------------------------
  * Reporting functions
@@ -398,50 +407,53 @@ void cin_report(FILE *fp, int details);
  * UDP Socket
  *------------------------*/
 
-int cin_ctl_init_port(struct cin_port* cp, char* ipaddr, uint16_t oport, uint16_t iport);
-int cin_ctl_close_port(struct cin_port* cp);
+int cin_ctl_init(cin_ctl_t *cin, const char* ipaddr, 
+                 uint16_t oport, uint16_t iport,
+                 uint16_t soport, uint16_t siport);
+int cin_ctl_init_port(cin_port_t *cp, char* ipaddr, uint16_t oport, uint16_t iport);
+int cin_ctl_close_ports(cin_ctl_t *cin);
 
 /*------------------------
  * CIN Read-Write
  *------------------------*/
 
-int cin_ctl_read(struct cin_port* cp, uint16_t reg, uint16_t *val);
-int cin_ctl_write(struct cin_port* cp, uint16_t reg, uint16_t val, int wait);
-int cin_ctl_stream_write(struct cin_port* cp, char* val,int size);
-int cin_ctl_write_with_readback(struct cin_port* cp, uint16_t reg, uint16_t val);
+int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val);
+int cin_ctl_write(cin_ctl_t *cin, uint16_t reg, uint16_t val, int wait);
+int cin_ctl_stream_write(cin_ctl_t *cin, char* val,int size);
+int cin_ctl_write_with_readback(cin_ctl_t *cin, uint16_t reg, uint16_t val);
 
 /*------------------------
  * CIN PowerUP-PowerDown
  *------------------------*/
 
-int cin_ctl_pwr(struct cin_port *cp, int pwr);
-int cin_ctl_fp_pwr(struct cin_port* cp, int pwr);
-int cin_ctl_fo_test_pattern(struct cin_port* cp, int on_off);
+int cin_ctl_pwr(cin_ctl_t *cin, int pwr);
+int cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr);
+int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off);
 
 /*------------------------
  * CIN Configuration-Status
  *------------------------*/
 
-int cin_ctl_load_config(struct cin_port* cp,char *filename);
-int cin_ctl_load_firmware(struct cin_port* cp,struct cin_port* dcp, char *filename);
-int cin_ctl_set_fclk(struct cin_port* cp, int clkfreq);
-int cin_ctl_get_fclk(struct cin_port* cp, int *clkfreq);
-int cin_ctl_freeze_dco(struct cin_port* cp, int freeze);
-int cin_ctl_get_cfg_fpga_status(struct cin_port* cp, uint16_t *_val);
-int cin_ctl_get_id(struct cin_port *cp, cin_ctl_id_t *_val);
+int cin_ctl_load_config(cin_ctl_t *cin,char *filename);
+int cin_ctl_load_firmware(cin_ctl_t *cin, char *filename);
+int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq);
+int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq);
+int cin_ctl_freeze_dco(cin_ctl_t *cin, int freeze);
+int cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val);
+int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *_val);
 void cin_ctl_display_id(FILE *out, cin_ctl_id_t val);
 void cin_ctl_display_fpga_status(FILE *out, uint16_t val);
-int cin_ctl_get_dcm_status(struct cin_port* cp, uint16_t *_val);
+int cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val);
 void cin_ctl_display_dcm_status(FILE *out, uint16_t *_val);
 
 /* Power status */
 
 
 double cin_ctl_current_calc(uint16_t val);
-int cin_ctl_get_power_status(struct cin_port* cp, int full, int *pwr, cin_ctl_pwr_mon_t *values);
+int cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon_t *values);
 void cin_ctl_display_pwr(FILE *out, cin_ctl_pwr_mon_t *values);
 void cin_ctl_display_pwr_line(FILE *out,const char* msg, cin_ctl_pwr_val_t val);
-int cin_ctl_calc_vi_status(struct cin_port* cp, 
+int cin_ctl_calc_vi_status(cin_ctl_t *cin, 
                            uint16_t vreg, uint16_t ireg, double vfact,
                            cin_ctl_pwr_val_t *vi);
 
@@ -449,61 +461,60 @@ int cin_ctl_calc_vi_status(struct cin_port* cp,
  * CIN Control
  *------------------------*/
 
-int cin_ctl_get_camera_pwr(struct cin_port* cp, int *val);
-int cin_ctl_set_camera_pwr(struct cin_port* cp, int val);
-int cin_ctl_set_bias(struct cin_port* cp,int val);
-int cin_ctl_get_bias(struct cin_port* cp, int *val);
-int cin_ctl_set_clocks(struct cin_port* cp,int val);
-int cin_ctl_get_clocks(struct cin_port* cp, int *val);
-int cin_ctl_set_trigger(struct cin_port* cp,int val);
-int cin_ctl_get_trigger(struct cin_port* cp, int *val);
-int cin_ctl_set_focus(struct cin_port* cp, int val);
-int cin_ctl_get_focus(struct cin_port* cp, int *val);
-int cin_ctl_get_triggering(struct cin_port *cp, int *trigger);
-int cin_ctl_int_trigger_start(struct cin_port* cp, int nimages);
-int cin_ctl_int_trigger_stop(struct cin_port* cp);
-int cin_ctl_ext_trigger_start(struct cin_port* cp, int trigger_mode);
-int cin_ctl_ext_trigger_stop(struct cin_port* cp);
-int cin_ctl_set_exposure_time(struct cin_port* cp,float e_time);
-int cin_ctl_set_trigger_delay(struct cin_port* cp,float t_time);
-int cin_ctl_set_cycle_time(struct cin_port* cp,float ftime);
-int cin_ctl_frame_count_reset(struct cin_port* cp);
-int cin_ctl_set_mux(struct cin_port *cp, int setting);
-int cin_ctl_get_mux(struct cin_port *cp, int *setting);
-int cin_ctl_set_fcric_gain(struct cin_port *cp, int gain);
+int cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val);
+int cin_ctl_set_camera_pwr(cin_ctl_t *cin, int val);
+int cin_ctl_set_bias(cin_ctl_t *cin,int val);
+int cin_ctl_get_bias(cin_ctl_t *cin, int *val);
+int cin_ctl_set_clocks(cin_ctl_t *cin,int val);
+int cin_ctl_get_clocks(cin_ctl_t *cin, int *val);
+int cin_ctl_set_trigger(cin_ctl_t *cin,int val);
+int cin_ctl_get_trigger(cin_ctl_t *cin, int *val);
+int cin_ctl_set_focus(cin_ctl_t *cin, int val);
+int cin_ctl_get_focus(cin_ctl_t *cin, int *val);
+int cin_ctl_get_triggering(cin_ctl_t *cin, int *trigger);
+int cin_ctl_int_trigger_start(cin_ctl_t *cin, int nimages);
+int cin_ctl_int_trigger_stop(cin_ctl_t *cin);
+int cin_ctl_ext_trigger_start(cin_ctl_t *cin, int trigger_mode);
+int cin_ctl_ext_trigger_stop(cin_ctl_t *cin);
+int cin_ctl_set_exposure_time(cin_ctl_t *cin,float e_time);
+int cin_ctl_set_trigger_delay(cin_ctl_t *cin,float t_time);
+int cin_ctl_set_cycle_time(cin_ctl_t *cin,float ftime);
+int cin_ctl_frame_count_reset(cin_ctl_t *cin);
+int cin_ctl_set_mux(cin_ctl_t *cin, int setting);
+int cin_ctl_get_mux(cin_ctl_t *cin, int *setting);
+int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain);
 
 /*------------------------
  * CIN TCP/IP Settings
  *------------------------*/
 
-int cin_ctl_set_fabric_address(struct cin_port* cp, char *ip);
-int cin_ctl_set_address(struct cin_port* cp, char *ip, uint16_t reg0, uint16_t reg1);
+int cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip);
+int cin_ctl_set_address(cin_ctl_t *cin, char *ip, uint16_t reg0, uint16_t reg1);
 
 /*------------------------
  * CIN Register Dump
  *------------------------*/
 
-int cin_ctl_reg_dump(struct cin_port *cp, FILE *fp);
+int cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp);
 
 /*------------------------
  * CIN Bias Voltages
  *------------------------*/
 
-int cin_ctl_get_bias_voltages(struct cin_port *cp, float *voltage);
-int cin_ctl_set_bias_voltages(struct cin_port *cp, float *voltage);
+int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage);
+int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage);
 
 /*------------------------
  * CIN FCRIC Clamp
  *------------------------*/
 
-int cin_ctl_set_fcric_clamp(struct cin_port *cp, int clamp);
+int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp);
 
 /*------------------------
  * CIN Config File
  *------------------------*/
 
-void cin_config_init(cin_camera_config *config);
-int cin_config_read_file(const char *file, const char *config_name, cin_camera_config *config);
+int cin_config_read_file(cin_ctl_t *cin, const char *file);
 
 /* ---------------------------------------------------------------------
  *
