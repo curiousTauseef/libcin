@@ -122,6 +122,7 @@ install: all
 	test -d $(prefix)/bin     || mkdir $(prefix)/bin
 	test -d $(prefix)/include || mkdir $(prefix)/include
 	$(INSTALL_DATA) lib/libcin.a $(libdir)
+	$(INSTALL_DATA) lib/libcin.so $(libdir)
 	$(INSTALL_DATA) src/cin.h $(includedir)
 	$(INSTALL_PROGRAM) utils/cinregdump $(bindir)
 
