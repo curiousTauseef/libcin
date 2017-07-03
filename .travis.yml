@@ -7,3 +7,4 @@ before_install:
  - sudo apt-get install libtiff-dev
  - sudo apt-get install libconfig-dev
  - sudo apt-get install libbsd-dev
+ - export LD_LIBRARY_PATH=`pwd`/lib
