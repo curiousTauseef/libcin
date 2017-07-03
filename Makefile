@@ -40,7 +40,7 @@ _MKDIR := $(shell for d in $(REQUIRED_DIRS) ; do\
 	[ -d $$d ] || mkdir -p $$d;            \
 	done )
 
-all: lib/libcin.a bin/cinregdump test/smoketest test/configtest
+all: lib/libcin.so lib/libcin.a bin/cinregdump test/smoketest test/configtest
 
 GIT = git
 AWK = awk
@@ -85,21 +85,21 @@ lib/libcin.so: $(LIBOBJECTS)
 LDFLAGS=-L./lib
 LDLIBS=-lcin -lconfig -lpthread -lrt -lbsd
 
-bin/cinregdump: src/cinregdump.o lib/libcin.a  src/cin.h
-	test -d bin || mkdir bin
+bin/cinregdump: src/cinregdump.o lib/libcin.so  src/cin.h
 	$(CC) $(LDFLAGS) src/cinregdump.o -o $@ $(LDLIBS) 
 
 CFLAGS+=-I./src
-test/smoketest: test/smoketest.o lib/libcin.a  src/cin.h
+test/smoketest: test/smoketest.o lib/libcin.so  src/cin.h
 	$(CC) $(LDFLAGS) test/smoketest.o -o $@ $(LDLIBS) 
 
-test/configtest: test/configtest.o lib/libcin.a  src/cin.h
+test/configtest: test/configtest.o lib/libcin.so  src/cin.h
 	$(CC) $(LDFLAGS) test/configtest.o -o $@ $(LDLIBS) 
 
 .PHONY :clean
 clean:
 	-$(RM) -f *.o
 	-$(RM) -rf lib
+	-$(RM) -rf bin
 	-$(RM) -rf src/*.o
 	-$(RM) -rf utils/*.o
 	-$(RM) -rf test/*.o
