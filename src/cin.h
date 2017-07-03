@@ -410,7 +410,6 @@ void cin_report(FILE *fp, int details);
 int cin_ctl_init(cin_ctl_t *cin, const char* ipaddr, 
                  uint16_t oport, uint16_t iport,
                  uint16_t soport, uint16_t siport);
-int cin_ctl_init_port(cin_port_t *cp, char* ipaddr, uint16_t oport, uint16_t iport);
 int cin_ctl_close_ports(cin_ctl_t *cin);
 
 /*------------------------

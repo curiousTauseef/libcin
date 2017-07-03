@@ -56,44 +56,44 @@ int cin_ctl_init(cin_ctl_t *cin, const char* ipaddr,
 
   cin_config_init(&(cin->config));
 
-  char *srvaddr;
-  uint16_t srvport, cliport, ssrvport, scliport;  
-
   if(ipaddr == NULL){ 
-    srvaddr = strdup(CIN_CTL_IP); 
+    cin->ctl_port.srvaddr = strdup(CIN_CTL_IP); 
+    cin->stream_port.srvaddr = strdup(CIN_CTL_IP); 
   } else {
-    srvaddr = strdup(ipaddr); 
+    cin->ctl_port.srvaddr = strdup(ipaddr); 
+    cin->stream_port.srvaddr = strdup(ipaddr); 
   }
    
   if(oport == 0){ 
-    srvport = CIN_CTL_SVR_PORT; 
+    cin->ctl_port.srvport = CIN_CTL_SVR_PORT; 
   } else {
-    srvport = oport; 
+    cin->ctl_port.srvport = oport; 
   }
 
   if(iport == 0){
-    cliport = CIN_CTL_CLI_PORT;
+    cin->ctl_port.cliport = CIN_CTL_CLI_PORT;
   } else {
-    cliport = iport;
+    cin->ctl_port.cliport = iport;
   }
 
   if(siport == 0){
-    ssrvport = CIN_CTL_SVR_FRMW_PORT;
+    cin->stream_port.srvport = CIN_CTL_SVR_FRMW_PORT;
   } else {
-    ssrvport = iport;
+    cin->stream_port.srvport = iport;
   }
 
   if(soport == 0){
-    scliport = CIN_CTL_CLI_FRMW_PORT;
+    cin->stream_port.cliport = CIN_CTL_CLI_FRMW_PORT;
   } else {
-    scliport = iport;
+    cin->stream_port.cliport = iport;
   }
 
-  if(cin_ctl_init_port(&(cin->ctl_port), srvaddr, srvport, cliport) ||
-     cin_ctl_init_port(&(cin->stream_port), srvaddr, ssrvport, scliport)){
+  if(cin_ctl_init_port(&(cin->ctl_port)) || cin_ctl_init_port(&(cin->stream_port))){
      ERROR_COMMENT("Unable to open commuincations\n");
      return -1;
   }
+
+  DEBUG_COMMENT("Opened ports\n");
 
   // Now initialize a listener thread for UDP communications
 
@@ -124,8 +124,7 @@ int cin_ctl_init(cin_ctl_t *cin, const char* ipaddr,
 
 /**************************** UDP Socket ******************************/
 
-int cin_ctl_init_port(cin_port_t *cp, char* ipaddr, 
-                      uint16_t oport, uint16_t iport) {
+int cin_ctl_init_port(cin_port_t *cp){
 
   cp->sockfd = socket(AF_INET, SOCK_DGRAM, 0);
   if (cp->sockfd < 0) {
@@ -133,23 +132,30 @@ int cin_ctl_init_port(cin_port_t *cp, char* ipaddr,
       // Should this return (-1) ?
   }
 
+  DEBUG_PRINT("Opened socket as stream %d\n", cp->sockfd);
+
   int i = 1;
   if(setsockopt(cp->sockfd, SOL_SOCKET, SO_REUSEADDR, 
                 (void *)&i, sizeof i) < 0) {
     ERROR_COMMENT("CIN control port - setsockopt() failed !!!\n");
     return -1;
   }
+
+  DEBUG_COMMENT("setsockopt() sucsessful\n");
     
   // initialize CIN (server) and client (us!) sockaddr structs
   memset(&cp->sin_srv, 0, sizeof(struct sockaddr_in));
   cp->sin_srv.sin_family = AF_INET;
   cp->sin_srv.sin_port = htons(cp->srvport);
   cp->slen = sizeof(struct sockaddr_in);
-  if(inet_aton(cp->srvaddr, &cp->sin_srv.sin_addr) == 0) {
+  DEBUG_PRINT("IP %s\n", cp->srvaddr);
+  if(inet_aton(cp->srvaddr, &(cp->sin_srv.sin_addr)) == 0) {
     ERROR_COMMENT("CIN control port - inet_aton() failed!!");
     return -1;
-
   }
+
+  DEBUG_COMMENT("inet_aton() sucsessful\n");
+
   memset(&cp->sin_cli, 0, sizeof(struct sockaddr_in));
   cp->sin_cli.sin_family = AF_INET;
   cp->sin_cli.sin_port = htons(cp->cliport);
