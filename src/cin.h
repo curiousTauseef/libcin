@@ -523,7 +523,7 @@ int cin_config_read_file(cin_ctl_t *cin, const char *file);
  * ---------------------------------------------------------------------
  */
 
-int cin_data_init_port(struct cin_port* dp,
+int cin_data_init_port(cin_port_t *dp,
                        char* ipaddr, uint16_t port,
                        char* cin_ipaddr, uint16_t cin_port,
                        int rcvbuf);

@@ -72,7 +72,7 @@ static cin_data_thread_data_t thread_data;
 
 //int cin_init
 
-int cin_data_init_port(struct cin_port* dp, 
+int cin_data_init_port(cin_port_t *dp, 
                        char* ipaddr, uint16_t port,
                        char* cin_ipaddr, uint16_t cin_port,
                        int rcvbuf) {
@@ -115,7 +115,7 @@ int cin_data_init_port(struct cin_port* dp,
 
   dp->sockfd = socket(AF_INET, SOCK_DGRAM, 0);
   if(dp->sockfd < 0) {
-    perror("CIN data port - socket() failed !!!");
+    ERROR_COMMENT("CIN data port - socket() failed !!!");
     return 1;
   }
 
@@ -124,7 +124,7 @@ int cin_data_init_port(struct cin_port* dp,
   int i = 1;
   if(setsockopt(dp->sockfd, SOL_SOCKET, SO_REUSEADDR, \
                 (void *)&i, sizeof i) < 0) {
-    perror("CIN data port - setsockopt() failed !!!");
+    ERROR_COMMENT("CIN data port - setsockopt() failed !!!");
     return 1;
   }
 
@@ -140,19 +140,19 @@ int cin_data_init_port(struct cin_port* dp,
   dp->slen = sizeof(struct sockaddr_in);
 
   if(inet_aton(dp->srvaddr, &dp->sin_srv.sin_addr) == 0) {
-    perror("CIN data port - inet_aton() failed!!");
+    ERROR_COMMENT("CIN data port - inet_aton() failed!!");
     return 1;
   }
 
   if(inet_aton(dp->cliaddr, &dp->sin_cli.sin_addr) == 0) {
-    perror("CIN data port - inet_aton() failed!!");
+    ERROR_COMMENT("CIN data port - inet_aton() failed!!");
     return 1;
   }
 
   /* Bind to the socket to get CIN traffic */
 
   if((bind(dp->sockfd, (struct sockaddr *)&dp->sin_cli , sizeof(dp->sin_cli))) == -1){
-    perror("CIN data port - cannot bind");
+    ERROR_COMMENT("CIN data port - cannot bind");
     return 1;
   }
 
@@ -162,13 +162,13 @@ int cin_data_init_port(struct cin_port* dp,
 
   if(setsockopt(dp->sockfd, SOL_SOCKET, SO_RCVBUF, 
                 &dp->rcvbuf, sizeof(dp->rcvbuf)) == -1){
-    perror("CIN data port - unable to set receive buffer :");
+    ERROR_COMMENT("CIN data port - unable to set receive buffer :");
   } 
 
   socklen_t rcvbuf_rb_len = sizeof(dp->rcvbuf_rb);
   if(getsockopt(dp->sockfd, SOL_SOCKET, SO_RCVBUF,
                 &dp->rcvbuf_rb, &rcvbuf_rb_len) == -1){
-    perror("CIN data port - unable to get receive buffer :");
+    ERROR_COMMENT("CIN data port - unable to get receive buffer :");
   }
 
   DEBUG_PRINT("Recieve buffer = %d Mb\n", dp->rcvbuf_rb / (1024 * 1024));
@@ -176,7 +176,7 @@ int cin_data_init_port(struct cin_port* dp,
   int zero = 0;
   if(setsockopt(dp->sockfd, SOL_SOCKET, SO_TIMESTAMP,
                 &zero, sizeof(zero)) == -1){
-    perror("Unable to set sockopt SO_TIMESTAMP");
+    ERROR_COMMENT("Unable to set sockopt SO_TIMESTAMP");
   } else {
     DEBUG_COMMENT("Set SO_TIMESTAMP to zero\n");
   }
