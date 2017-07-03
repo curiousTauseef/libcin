@@ -35,14 +35,12 @@ CFLAGS=-Wall -O3 -g --pic
 LIBOBJECTS= src/data.o src/fifo.o src/mbuffer.o src/control.o src/descramble.o \
 		    src/common.o src/version.o src/report.o src/config.o
 
-#REQUIRED_DIRS = lib 
-#_MKDIR := $(shell for d in $(REQUIRED_DIRS) ;\
-#	do                                       \
-#	echo $$d                                 \
-#	[[ -d $$d ]] || mkdir -p $$d;            \
-#	done )
+REQUIRED_DIRS = lib bin 
+_MKDIR := $(shell for d in $(REQUIRED_DIRS) ; do\
+	[ -d $$d ] || mkdir -p $$d;            \
+	done )
 
-all: lib/lincin.a lib/libcin.so bin/cinregdump test/smoketest test/configtest
+all: lib/libcin.a bin/cinregdump test/smoketest test/configtest
 
 GIT = git
 AWK = awk
