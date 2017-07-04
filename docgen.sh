@@ -15,13 +15,18 @@ git config --global push.default simple
 git config user.name "Travis CI"
 git config user.email "travis@travis-ci.org"
 
-rm -rf *
-echo "" > .nojekyll
+test -d doxygen && rm -rf doxygen
+test -e .nojekyll || echo "" > .nojekyll
 
 mkdir doxygen
 
 echo 'Copying docs to repo dir'
 cp -r ../doc/html/* doxygen
+
+echo 'Copying pdf docs'
+
+cp ../doc/latex/refman.pdf libcin-manual.pdf
+
 echo 'Uploading documentation to the gh-pages branch...'
 git add --all
 git commit -m "Deploy code docs to GitHub Pages Travis build: ${TRAVIS_BUILD_NUMBER}" -m "Commit: ${TRAVIS_COMMIT}"
