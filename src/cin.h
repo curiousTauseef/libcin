@@ -667,6 +667,10 @@ int cin_config_read_file(cin_ctl_t *cin, const char *file);
  * ---------------------------------------------------------------------
  */
 
+/** @defgroup cin_data CIN Data Routines
+ * Data group
+ */
+
 /** Initialize the cin data library
  *
  * Initialize the data handeling routines and start the threads for listening.
@@ -704,6 +708,7 @@ void cin_data_reset_stats(cin_data_t *cin);
 int cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan);
 void cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize);
 
+/** @} */ // End of cin_data group
 #ifdef __cplusplus
 }
 #endif
