@@ -52,5 +52,6 @@ void *cin_ctl_listen_thread(void* args);
 uint32_t cin_ctl_get_packet(cin_ctl_t *cin, uint32_t *val);
 int cin_ctl_init_port(cin_port_t *cp);
 int cin_ctl_close_ports(cin_ctl_t *cin);
+int cin_ctl_set_address(cin_ctl_t *cin, char *ip, uint16_t reg0, uint16_t reg1);
 
 #endif /* ifndef __CIN_API_H__ */

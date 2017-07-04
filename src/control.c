@@ -252,22 +252,23 @@ int cin_ctl_close_ports(cin_ctl_t *cin) {
 
 int cin_ctl_write(cin_ctl_t *cin, uint16_t reg, uint16_t val, int wait){
 
-   uint32_t _valwr;
-   int rc;
-   cin_port_t *cp = &(cin->ctl_port);
+  uint32_t _valwr;
+  int rc;
+  cin_port_t *cp = &(cin->ctl_port);
 
-   if(cp == NULL){
-      ERROR_COMMENT("Parameter cp is NULL!");
-      goto error;
-   }
+  if(cp == NULL){
+     ERROR_COMMENT("Parameter cp is NULL!");
+     goto error;
+  }
   
   // Lock the mutex for access
   pthread_mutex_lock(&cin->access);
 
-   _valwr = ntohl((uint32_t)(reg << 16 | val));
-   rc = sendto(cp->sockfd, &_valwr, sizeof(_valwr), 0,
-         (struct sockaddr*)&cp->sin_srv,
-         sizeof(cp->sin_srv));
+  _valwr = ntohl((uint32_t)(reg << 16 | val));
+  rc = sendto(cp->sockfd, &_valwr, sizeof(_valwr), 0,
+        (struct sockaddr*)&cp->sin_srv,
+        sizeof(cp->sin_srv));
+
   if(wait){
     usleep(CIN_CTL_WRITE_SLEEP);
   }
@@ -276,19 +277,19 @@ int cin_ctl_write(cin_ctl_t *cin, uint16_t reg, uint16_t val, int wait){
   pthread_mutex_unlock(&cin->access);
 
   if (rc != sizeof(_valwr) ) {
-      ERROR_COMMENT("CIN control port - sendto() failure!!\n");
-      goto error;
-   }
+    ERROR_COMMENT("CIN control port - sendto() failure!!\n");
+    goto error;
+  }
 
 #ifdef __DEBUG_STREAM__ 
   DEBUG_PRINT("Set register 0x%04X to 0x%04X\n", reg, val);
 #endif 
 
-   return 0;
+  return 0;
    
 error:  
-   ERROR_COMMENT("Write error control port\n");
-   return (-1);
+  ERROR_COMMENT("Write error control port\n");
+  return (-1);
 }
 
 int cin_ctl_write_with_readback(cin_ctl_t *cin, uint16_t reg, uint16_t val){

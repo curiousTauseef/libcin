@@ -96,6 +96,7 @@ test/configtest: test/configtest.o lib/libcin.so  src/cin.h
 .PHONY :doc
 docs:
 	@doxygen 
+	$(MAKE) -C doc/latex
 
 
 .PHONY :clean

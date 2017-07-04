@@ -474,12 +474,13 @@ void cin_report(FILE *fp, int details);
  * recieve packets from the CIN.
  *
  * @param cin handle to cin library
- * @param ipaddr ipaddress of CIN
+ * @param ipaddr ip address of CIN base address
  * @param oport output udp port of cin 
  * @param iport input udp port of cin 
  * @param soport stream output udp port of cin
  * @param siport stream input udp port of cin
  *
+ * @return Returns 0 on sucsess non-zero if error
  */
 int cin_ctl_init(cin_ctl_t *cin, const char* ipaddr, 
                  uint16_t oport, uint16_t iport,
@@ -492,6 +493,7 @@ int cin_ctl_init(cin_ctl_t *cin, const char* ipaddr,
  *
  * @param cin handle to cin library
  *
+ * @return Returns 0 on sucsess non-zero if error
  */
 int cin_ctl_destroy(cin_ctl_t *cin);
 
@@ -502,29 +504,70 @@ int cin_ctl_destroy(cin_ctl_t *cin);
  *--------------------------------------------------------------------------------------------------------*/
 
 /*!
- * Destroy (close) the cin control library
- *
- * Close connections, free memory and exit library
+ * Read register from CIN
  *
  * @param cin handle to cin library
+ * @param reg register to read
+ * @param val variable to read value of register to
  *
+ * @return Returns 0 on sucsess non-zero if error
  */
 int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val);
+/*!
+ * Write register to CIN
+ *
+ * @param cin handle to cin library
+ * @param reg register to write to
+ * @param val value to write to register
+ * @param wait if non-zero
+ *
+ * Write register value to CIN. If wait is non-zero then wait a sleep time of i
+ * CIN_CTL_WRITE_SLEEP before releasing the mutex to add flow control to the cin.
+ *
+ * @return Returns 0 on sucsess non-zero if error
+ */
 int cin_ctl_write(cin_ctl_t *cin, uint16_t reg, uint16_t val, int wait);
+/*!
+ * Write stream data to CIN
+ *
+ * @param cin handle to cin library
+ * @param val array of values to write
+ * @param size size of array pointed to by val
+ *
+ * Write stream data to cin in form of 16 bit array.
+ *
+ * @return Returns 0 on sucsess non-zero if error
+ */
 int cin_ctl_stream_write(cin_ctl_t *cin, char* val,int size);
+/*!
+ * Write register to CIN with readback verification
+ *
+ * @param cin handle to cin library
+ * @param reg register to write to
+ * @param val value to write to register
+ *
+ * Write register value to CIN. Follow write with read of register and compare value.
+ * CIN_CTL_WRITE_SLEEP before releasing the mutex to add flow control to the cin.
+ *
+ * @return Returns 0 on sucsess non-zero if error
+ */
 int cin_ctl_write_with_readback(cin_ctl_t *cin, uint16_t reg, uint16_t val);
 
-/*------------------------
- * CIN PowerUP-PowerDown
- *------------------------*/
+/*--------------------------------------------------------------------------------------------------------
+ * 
+ * CIN Read Write Routines
+ *
+ *--------------------------------------------------------------------------------------------------------*/
 
 int cin_ctl_pwr(cin_ctl_t *cin, int pwr);
 int cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr);
 int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off);
 
-/*------------------------
+/*--------------------------------------------------------------------------------------------------------
+ * 
  * CIN Configuration-Status
- *------------------------*/
+ *
+ *--------------------------------------------------------------------------------------------------------*/
 
 int cin_ctl_load_config(cin_ctl_t *cin,char *filename);
 int cin_ctl_load_firmware(cin_ctl_t *cin, char *filename);
@@ -538,8 +581,11 @@ void cin_ctl_display_fpga_status(FILE *out, uint16_t val);
 int cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val);
 void cin_ctl_display_dcm_status(FILE *out, uint16_t *_val);
 
-/* Power status */
-
+/*--------------------------------------------------------------------------------------------------------
+ * 
+ * CIN Power Status
+ *
+ *--------------------------------------------------------------------------------------------------------*/
 
 double cin_ctl_current_calc(uint16_t val);
 int cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon_t *values);
@@ -581,7 +627,6 @@ int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain);
  *------------------------*/
 
 int cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip);
-int cin_ctl_set_address(cin_ctl_t *cin, char *ip, uint16_t reg0, uint16_t reg1);
 
 /*------------------------
  * CIN Register Dump
@@ -615,15 +660,19 @@ int cin_config_read_file(cin_ctl_t *cin, const char *file);
  * ---------------------------------------------------------------------
  */
 
-int cin_data_init(cin_data_t *cin, int mode, int packet_buffer_len, int frame_buffer_len,
-                  char* ipaddr, uint16_t port, char* cin_ipaddr, uint16_t cin_port, int rcvbuf,
-                  cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr);
-/*
+/** Initialize the cin data library
+ *
  * Initialize the data handeling routines and start the threads for listening.
  * mode should be set for the desired output. The packet_buffer_len in the
  * length of the packet FIFO in number of packets. The frame_buffer_len is
  * the number of data frames to buffer. 
+ *
+ * @param cin Handle to cin data library
+ *
  */
+int cin_data_init(cin_data_t *cin, int mode, int packet_buffer_len, int frame_buffer_len,
+                  char* ipaddr, uint16_t port, char* cin_ipaddr, uint16_t cin_port, int rcvbuf,
+                  cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr);
  
 void cin_data_wait_for_threads(cin_data_t *cin);
 /* 
