@@ -35,7 +35,7 @@ CFLAGS=-Wall -O3 -g --pic
 LIBOBJECTS= src/data.o src/fifo.o src/control.o src/descramble.o \
 		    src/common.o src/version.o src/report.o src/config.o
 
-REQUIRED_DIRS = lib bin 
+REQUIRED_DIRS = lib bin doc
 _MKDIR := $(shell for d in $(REQUIRED_DIRS) ; do\
 	[ -d $$d ] || mkdir -p $$d;            \
 	done )
@@ -92,6 +92,11 @@ test/smoketest: test/smoketest.o lib/libcin.so  src/cin.h
 
 test/configtest: test/configtest.o lib/libcin.so  src/cin.h
 	$(CC) $(LDFLAGS) test/configtest.o -o $@ $(LDLIBS) 
+
+.PHONY :doc
+docs:
+	@doxygen 
+
 
 .PHONY :clean
 clean:
