@@ -48,6 +48,22 @@
   
 /**************************** INITIALIZATION **************************/
 
+/*!
+ * Initialize the cin control library
+ *
+ * Initialize the control structures and communications with the CIN via the control
+ * interface. This function opens the UDP ports and starts a listening thread to 
+ * recieve packets from the CIN.
+ *
+ * @param cin handle to cin library
+ * @param ipaddr ipaddress of CIN
+ * @param oport output udp port of cin 
+ * @param iport input udp port of cin 
+ * @param soport stream output udp port of cin
+ * @param siport stream input udp port of cin
+ *
+ */
+
 int cin_ctl_init(cin_ctl_t *cin, const char* ipaddr, 
                  uint16_t oport, uint16_t iport,
                  uint16_t soport, uint16_t siport) {
