@@ -33,6 +33,14 @@
 #include <stdio.h>
 
 #include "cin.h"
+#include "common.h"
+
+/* -----------------------------------------------------------------------------------------
+ *
+ * Routines for benchmarking
+ *
+ * -----------------------------------------------------------------------------------------
+ */
 
 int _debug_print_flag = 0;
 int _error_print_flag = 0;
@@ -48,3 +56,38 @@ void cin_set_error_print(int error){
           error, _error_print_flag);
   _error_print_flag = error;
 }
+
+/* -----------------------------------------------------------------------------------------
+ *
+ * Routines for benchmarking
+ *
+ * -----------------------------------------------------------------------------------------
+ */
+
+struct timespec timespec_diff(struct timespec start, struct timespec end){
+  /* Calculte the difference between two times */
+  struct timespec temp;
+  if ((end.tv_nsec-start.tv_nsec)<0) {
+    temp.tv_sec = end.tv_sec-start.tv_sec-1;
+    temp.tv_nsec = 1000000000+end.tv_nsec-start.tv_nsec;
+  } else {
+    temp.tv_sec = end.tv_sec-start.tv_sec;
+    temp.tv_nsec = end.tv_nsec-start.tv_nsec;
+  }
+  return temp;
+}
+
+struct timeval timeval_diff(struct timeval start, struct timeval end){
+  /* Calculte the difference between two times */
+  struct timeval temp;
+  if ((end.tv_usec-start.tv_usec)<0) {
+    temp.tv_sec = end.tv_sec-start.tv_sec-1;
+    temp.tv_usec = 1000000+end.tv_usec-start.tv_usec;
+  } else {
+    temp.tv_sec = end.tv_sec-start.tv_sec;
+    temp.tv_usec = end.tv_usec-start.tv_usec;
+  }
+  return temp;
+}
+
+

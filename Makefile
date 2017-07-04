@@ -32,7 +32,7 @@
 CC=gcc
 CFLAGS=-Wall -O3 -g --pic
 
-LIBOBJECTS= src/data.o src/fifo.o src/mbuffer.o src/control.o src/descramble.o \
+LIBOBJECTS= src/data.o src/fifo.o src/control.o src/descramble.o \
 		    src/common.o src/version.o src/report.o src/config.o
 
 REQUIRED_DIRS = lib bin 
@@ -52,19 +52,17 @@ src/version.o:
 	cat src/version.c
 	$(CC) $(CFLAGS) src/version.c -c -o $@ 
 
-src/data.o: src/data.h src/fifo.h src/mbuffer.h \
-            src/descramble.h src/cin.h 
+src/data.o: src/data.h src/fifo.h src/version.h \
+            src/descramble.h src/cin.h src/common.h
 
-src/fifo.o: src/fifo.h src/cin.h
-
-src/mbuffer.o: src/mbuffer.h src/cin.h
+src/fifo.o: src/fifo.h src/cin.h src/version.h
 
 src/control.o: src/control.h src/cin.h src/cin_register_map.h src/fclk_program.h \
-	           src/fifo.h src/cinregisters.h src/config.h
+	           src/fifo.h src/cinregisters.h src/config.h src/common.h
 
 src/descramble.o: src/descramble.h src/cin.h
 
-src/common.o: src/cin.h
+src/common.o: src/cin.h src/common.h
 
 src/report.o: src/report.h src/cin.h
 

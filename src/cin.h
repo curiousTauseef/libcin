@@ -41,6 +41,8 @@
 #include <sys/time.h>   // For timespec
 #include <pthread.h>
 
+#include "descramble.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -185,7 +187,6 @@ extern const char *cin_build_version;
  */
 
 #define CIN_DATA_MODE_CALLBACK          0x01
-#define CIN_DATA_MODE_DBL_BUFFER        0x02
 
 /* -------------------------------------------------------------------------------
  *
@@ -354,6 +355,52 @@ typedef struct cin_data_stats {
   long int mallformed_packets;
 } cin_data_stats_t;
 
+typedef struct cin_data_threads {
+  pthread_t thread_id;
+  int started;
+} cin_data_threads_t;
+
+typedef struct cin_data_callbacks {
+  void* (*push) (cin_data_frame_t *);
+  void* (*pop)  (cin_data_frame_t *);
+  cin_data_frame_t *frame;
+} cin_data_callbacks_t;
+
+
+typedef struct cin_data {
+
+  /* FIFO Elements */
+  fifo *packet_fifo;  
+  fifo *frame_fifo;
+  fifo *image_fifo;
+
+  /* Thread Pointers */
+
+  cin_data_threads_t listen_thread;
+  cin_data_threads_t assembler_thread;
+  cin_data_threads_t descramble_thread;
+  pthread_mutex_t listen_mutex;
+  pthread_mutex_t assembler_mutex;
+  pthread_mutex_t descramble_mutex;
+  pthread_mutex_t stats_mutex;
+
+  /* Callbacks Buffer */
+
+  cin_data_callbacks_t callbacks;
+
+  /* Interface */
+  cin_port_t dp; 
+
+  /* Statistics */
+  struct timespec framerate;
+  unsigned long int dropped_packets;
+  unsigned long int mallformed_packets;
+  uint16_t last_frame;
+
+  /* Current Descramble Map */
+  descramble_map_t map;
+
+} cin_data_t;
 // Callback functions
 
 typedef void (*cin_data_callback) (cin_data_frame_t *);
@@ -522,19 +569,9 @@ int cin_config_read_file(cin_ctl_t *cin, const char *file);
  * ---------------------------------------------------------------------
  */
 
-int cin_data_init_port(cin_port_t *dp,
-                       char* ipaddr, uint16_t port,
-                       char* cin_ipaddr, uint16_t cin_port,
-                       int rcvbuf);
-/*
- * Initialize the data port used for recieveing the UDP packets. A
- * structure of cin_port is modified with the settings. If the strings
- * are NULL and the ports zero then defaults are used.
- */
-
-int cin_data_init(int mode, int packet_buffer_len, int frame_buffer_len,
-                  cin_data_callback push_callback, cin_data_callback pop_callback,
-                  void *usr_ptr);
+int cin_data_init(cin_data_t *cin, int mode, int packet_buffer_len, int frame_buffer_len,
+                  char* ipaddr, uint16_t port, char* cin_ipaddr, uint16_t cin_port, int rcvbuf,
+                  cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr);
 /*
  * Initialize the data handeling routines and start the threads for listening.
  * mode should be set for the desired output. The packet_buffer_len in the
@@ -542,32 +579,28 @@ int cin_data_init(int mode, int packet_buffer_len, int frame_buffer_len,
  * the number of data frames to buffer. 
  */
  
-void cin_data_wait_for_threads(void);
+void cin_data_wait_for_threads(cin_data_t *cin);
 /* 
  * Block until all th threads have closed. 
  */
-int cin_data_stop_threads(void);
+void cin_data_stop_threads(cin_data_t *cin);
 /* 
  * Send a cancel request to all threads.
  */
 
-struct cin_data_frame* cin_data_get_next_frame(void);
-void cin_data_release_frame(int free_mem);
+struct cin_data_frame* cin_data_get_next_frame(cin_data_t *cin);
+void cin_data_release_frame(cin_data_t *cin, int free_mem);
 
 struct cin_data_frame* cin_data_get_buffered_frame(void);
 void cin_data_release_buffered_frame(void);
 
-void cin_data_compute_stats(cin_data_stats_t *stats);
+void cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats);
 void cin_data_show_stats(FILE *fp,cin_data_stats_t stats);
-void cin_data_reset_stats(void);
+void cin_data_reset_stats(cin_data_t *cin);
 
-void cin_data_start_monitor_output(void);
-void cin_data_stop_monitor_output(void);
 
-int cin_data_send_magic(void);
-
-int cin_data_set_descramble_params(int rows, int overscan);
-void cin_data_get_descramble_params(int *rows, int *overscan, int *xsize, int *ysize);
+int cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan);
+void cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize);
 
 #ifdef __cplusplus
 }
