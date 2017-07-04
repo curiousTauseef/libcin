@@ -2,9 +2,24 @@ language: c
 compiler: gcc
 script: make test
 dist: trusty
+branches:
+  except:
+    - gh-pages
+
+env:
+  global:
+    - GH_REPO_NAME: libcin
+    - DOXYFILE: $TRAVIS_BUILD_DIR/Doxygen
+    - GH_REPO_REF: github.com/NSLS-II-CSX/libcin.git
+
 before_install:
  - sudo apt-get update -qq
  - sudo apt-get install libtiff-dev
  - sudo apt-get install libconfig-dev
  - sudo apt-get install libbsd-dev
+ - sudo apt-get install doxygen doxygen-doc doxygen-latex doxygen-gui graphviz
  - export LD_LIBRARY_PATH=`pwd`/lib
+
+after_success:
+  - cd $TRAVIS_BUILD_DIR
+  - /bin/sh docgen.sh
