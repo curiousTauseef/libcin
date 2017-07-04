@@ -16,16 +16,18 @@ git config user.name "Travis CI"
 git config user.email "travis@travis-ci.org"
 
 test -d doxygen && rm -rf doxygen
+mkdir doxygen
+
 test -e .nojekyll || echo "" > .nojekyll
 
-mkdir doxygen
 
 echo 'Copying docs to repo dir'
 cp -r ../doc/html/* doxygen
+cp ../doxygen.log doxygen
 
 echo 'Copying pdf docs'
 
-cp ../doc/latex/refman.pdf libcin-manual.pdf
+cp ../doc/latex/refman.pdf doxygen/libcin-manual.pdf
 
 echo 'Uploading documentation to the gh-pages branch...'
 git add --all
