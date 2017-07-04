@@ -51,5 +51,6 @@ uint16_t fcric_clamp_reg_off[NUM_CLAMP_REG] = { 0x00C7, 0x004C, 0x00B4, 0x0002,
 void *cin_ctl_listen_thread(void* args);
 uint32_t cin_ctl_get_packet(cin_ctl_t *cin, uint32_t *val);
 int cin_ctl_init_port(cin_port_t *cp);
+int cin_ctl_close_ports(cin_ctl_t *cin);
 
 #endif /* ifndef __CIN_API_H__ */

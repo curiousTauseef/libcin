@@ -450,9 +450,11 @@ typedef struct {
 
 void cin_report(FILE *fp, int details);
 
-/*------------------------
- * UDP Socket
- *------------------------*/
+/*--------------------------------------------------------------------------------------------------------
+ * 
+ * Initialization Routines
+ *
+ *--------------------------------------------------------------------------------------------------------*/
 
 
 /*!
@@ -473,11 +475,22 @@ void cin_report(FILE *fp, int details);
 int cin_ctl_init(cin_ctl_t *cin, const char* ipaddr, 
                  uint16_t oport, uint16_t iport,
                  uint16_t soport, uint16_t siport);
-int cin_ctl_close_ports(cin_ctl_t *cin);
 
-/*------------------------
- * CIN Read-Write
- *------------------------*/
+/*!
+ * Destroy (close) the cin control library
+ *
+ * Close connections, free memory and exit library
+ *
+ * @param cin handle to cin library
+ *
+ */
+int cin_ctl_destroy(cin_ctl_t *cin);
+
+/*--------------------------------------------------------------------------------------------------------
+ * 
+ * CIN Read Write Routines
+ *
+ *--------------------------------------------------------------------------------------------------------*/
 
 int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val);
 int cin_ctl_write(cin_ctl_t *cin, uint16_t reg, uint16_t val, int wait);
