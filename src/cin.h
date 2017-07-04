@@ -459,6 +459,11 @@ typedef struct {
 
 void cin_report(FILE *fp, int details);
 
+/** @defgroup cin_ctl Cin Control Routines
+ *
+ * @{
+ */
+
 /*--------------------------------------------------------------------------------------------------------
  * 
  * Initialization Routines
@@ -646,6 +651,8 @@ int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage);
  *------------------------*/
 
 int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp);
+
+/** @} */ // End of cin_ctl group
 
 /*------------------------
  * CIN Config File
