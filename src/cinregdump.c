@@ -29,7 +29,7 @@ int main(int argc, char *argv[]){
 
   int status = cin_ctl_reg_dump(&cin, stdout);
 
-  cin_ctl_close_ports(&cin);
+  cin_ctl_destroy(&cin);
 
   return status;
 }
