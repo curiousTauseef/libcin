@@ -18,8 +18,10 @@ git config user.email "travis@travis-ci.org"
 rm -rf *
 echo "" > .nojekyll
 
+mkdir doxygen
+
 echo 'Copying docs to repo dir'
-cp -r ../doc/html/* .
+cp -r ../doc/html/* doxygen
 echo 'Uploading documentation to the gh-pages branch...'
 git add --all
 git commit -m "Deploy code docs to GitHub Pages Travis build: ${TRAVIS_BUILD_NUMBER}" -m "Commit: ${TRAVIS_COMMIT}"
