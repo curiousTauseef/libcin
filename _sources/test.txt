@@ -1,5 +1,0 @@
-TEST
-====
-
-.. doxygenfile:: control.c
-   :project: libcin

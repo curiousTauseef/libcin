@@ -1,5 +1,0 @@
-CIN Data Interface
-==================
-
-.. doxygenfile:: data.c
-   :project: libcin
