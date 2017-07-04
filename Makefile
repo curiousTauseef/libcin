@@ -103,6 +103,7 @@ clean:
 	-$(RM) -f *.o
 	-$(RM) -rf lib
 	-$(RM) -rf bin
+	-$(RM) -rf doc
 	-$(RM) -rf src/*.o
 	-$(RM) -rf utils/*.o
 	-$(RM) -rf test/*.o
