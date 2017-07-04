@@ -1,14 +1,22 @@
 var searchData=
 [
+  ['cin_2eh',['cin.h',['../cin_8h.html',1,'']]],
   ['cin_5fctl',['cin_ctl',['../structcin__ctl.html',1,'']]],
   ['cin_5fctl_5fconfig',['cin_ctl_config',['../structcin__ctl__config.html',1,'']]],
+  ['cin_5fctl_5fdestroy',['cin_ctl_destroy',['../cin_8h.html#a888fd017426a3718a875f6bdb5078b81',1,'cin.h']]],
   ['cin_5fctl_5fid',['cin_ctl_id',['../structcin__ctl__id.html',1,'']]],
+  ['cin_5fctl_5finit',['cin_ctl_init',['../cin_8h.html#a4f73558e9eadda6262b9c71bdf8b41be',1,'cin.h']]],
   ['cin_5fctl_5flistener',['cin_ctl_listener',['../structcin__ctl__listener.html',1,'']]],
   ['cin_5fctl_5fpwr_5fmon_5ft',['cin_ctl_pwr_mon_t',['../structcin__ctl__pwr__mon__t.html',1,'']]],
   ['cin_5fctl_5fpwr_5fval',['cin_ctl_pwr_val',['../structcin__ctl__pwr__val.html',1,'']]],
+  ['cin_5fctl_5fread',['cin_ctl_read',['../cin_8h.html#a0bc2500271d8f7ff30c3479993906f29',1,'cin.h']]],
+  ['cin_5fctl_5fstream_5fwrite',['cin_ctl_stream_write',['../cin_8h.html#a0331c06356498297810ec163535eeb1d',1,'cin.h']]],
+  ['cin_5fctl_5fwrite',['cin_ctl_write',['../cin_8h.html#ac9b282b5280a34b0abb9ea0dcc6e3308',1,'cin.h']]],
+  ['cin_5fctl_5fwrite_5fwith_5freadback',['cin_ctl_write_with_readback',['../cin_8h.html#a15ae1265f7abc5a08ca4560c007a92b0',1,'cin.h']]],
   ['cin_5fdata',['cin_data',['../structcin__data.html',1,'']]],
   ['cin_5fdata_5fcallbacks',['cin_data_callbacks',['../structcin__data__callbacks.html',1,'']]],
   ['cin_5fdata_5fframe',['cin_data_frame',['../structcin__data__frame.html',1,'']]],
+  ['cin_5fdata_5finit',['cin_data_init',['../cin_8h.html#a128d41b42ffc9da69892f05861929e1d',1,'cin.h']]],
   ['cin_5fdata_5fstats',['cin_data_stats',['../structcin__data__stats.html',1,'']]],
   ['cin_5fdata_5fthreads',['cin_data_threads',['../structcin__data__threads.html',1,'']]],
   ['cin_5fport',['cin_port',['../structcin__port.html',1,'']]]
