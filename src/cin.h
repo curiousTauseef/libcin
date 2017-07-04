@@ -492,6 +492,14 @@ int cin_ctl_destroy(cin_ctl_t *cin);
  *
  *--------------------------------------------------------------------------------------------------------*/
 
+/*!
+ * Destroy (close) the cin control library
+ *
+ * Close connections, free memory and exit library
+ *
+ * @param cin handle to cin library
+ *
+ */
 int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val);
 int cin_ctl_write(cin_ctl_t *cin, uint16_t reg, uint16_t val, int wait);
 int cin_ctl_stream_write(cin_ctl_t *cin, char* val,int size);

@@ -124,8 +124,9 @@ int cin_ctl_init(cin_ctl_t *cin, const char* ipaddr,
 
 int cin_ctl_destroy(cin_ctl_t *cin){
   DEBUG_COMMENT("Closing comm ports\n");
-  cin_ctl_close_ports(cp);
+  cin_ctl_close_ports(cin);
   DEBUG_COMMENT("Goodbye .....\n");
+  return 0;
 }
 
 /**************************** UDP Socket ******************************/
