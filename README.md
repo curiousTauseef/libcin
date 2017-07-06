@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/NSLS-II-CSX/libcin.svg?branch=master)](https://travis-ci.org/NSLS-II-CSX/libcin) Main 
+[![Build Status](https://travis-ci.org/NSLS-II/libcin.svg?branch=master)](https://travis-ci.org/NSLS-II/libcin) Main 
 
 libcin contains code to support the control and frame ports of the
 Berkeley FCCD 
@@ -9,4 +9,4 @@ Based on code avaliable at https://bitbucket.org/berkeleylab/lbl-fastccds
 
 Started at 23-ID (CSX) at NSLS-II
 
-Documentation avaliable at (http://nsls-ii.github.io/libcin)
+Documentation avaliable at (http://github.io/nsls-ii/libcin)
