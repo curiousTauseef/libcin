@@ -714,8 +714,7 @@ void cin_data_stop_threads(cin_data_t *cin);
 /** Send a framestore (software) trigger
  * 
  * Send a software trigger to the CIN by timestamping the request time and allow images to be
- * processed when recieved after this time. The function is enabled by setting the
- * framestore mode to CIN_DATA_FRAMESTORE_TRIGGER. The count option sets the number of frames
+ * processed when recieved after this time. The count option sets the number of frames
  * to trigger. A value of -1 indicated that the trigger should not count images but run indefinately
  * after the trigger has occured.
  *
