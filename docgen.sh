@@ -3,6 +3,15 @@ echo 'Setting up the script...'
 
 set -e
 
+DOXYGEN_VER=doxygen-1.8.13
+DOXYGEN_TAR=${DOXYGEN_VER}.linux.bin.tar.gz
+DOXYGEN_URL="http://ftp.stack.nl/pub/users/dimitri/${DOXYGEN_TAR}"
+DOXYGEN_BIN="/usr/local/bin/doxygen"
+
+wget -O - "${DOXYGEN_URL}" | \
+	tar xz -C ${TMPDIR-/tmp} ${DOXYGEN_VER}/bin/doxygen
+	export PATH="${TMPDIR-/tmp}/${DOXYGEN_VER}/bin:$PATH"
+
 echo 'Generating Doxygen code documentation...'
 make docs 2>&1 | tee doxygen.log
 
