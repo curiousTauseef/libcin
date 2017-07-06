@@ -758,7 +758,6 @@ int cin_data_get_framestore_counter(cin_data_t *cin);
  */
 void cin_data_framestore_disable(cin_data_t *cin);
 
-
 /** Enable the framestore trigger mode
  *
  * This function enables the framestore trigger mode. It cases the images to not be processed pending a call
