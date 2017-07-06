@@ -748,6 +748,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>cin_data_stop_threads
 <tr class="separator:ab1ca9b95c7cfcd50a443156835cc6408"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bf11587b2e32826e28ada5c2f656c63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cin_8h.html#a4bf11587b2e32826e28ada5c2f656c63">cin_data_framestore_disable</a> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin)</td></tr>
 <tr class="separator:a4bf11587b2e32826e28ada5c2f656c63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58c152e17f298b5b5c82a01a9b80d366"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cin_8h.html#a58c152e17f298b5b5c82a01a9b80d366">cin_data_framestore_trigger_enable</a> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin)</td></tr>
+<tr class="separator:a58c152e17f298b5b5c82a01a9b80d366"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab52605120a5f5e955e0f631744c86ce0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab52605120a5f5e955e0f631744c86ce0"></a>
 struct <a class="el" href="structcin__data__frame.html">cin_data_frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>cin_data_get_next_frame</b> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin)</td></tr>
 <tr class="separator:ab52605120a5f5e955e0f631744c86ce0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -831,7 +833,7 @@ DESCRIPTION</h1>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="cin_8h.html#a66d8e0e63f2bb83a98177a828f3061b9">cin_data_framestore_trigger</a> cin_data_framestore_skiup </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="cin_8h.html#a66d8e0e63f2bb83a98177a828f3061b9">cin_data_framestore_trigger</a> <a class="el" href="cin_8h.html#a4c4ccc7ec34ae559c28622d6b48017e8">cin_data_framestore_skip</a> </dd></dl>
 
 </div>
 </div>
@@ -904,6 +906,31 @@ DESCRIPTION</h1>
   </dd>
 </dl>
 <dl class="section see"><dt>See Also</dt><dd>cin_data_set_framestore_disable </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a58c152e17f298b5b5c82a01a9b80d366"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cin_data_framestore_trigger_enable </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcin__data.html">cin_data_t</a> *&#160;</td>
+          <td class="paramname"><em>cin</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Enable the framestore trigger mode</p>
+<p>This function enables the framestore trigger mode. It cases the images to not be processed pending a call to the function to (software) trigger the camera.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cin</td><td>Handle to the cin library </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="cin_8h.html#a66d8e0e63f2bb83a98177a828f3061b9">cin_data_framestore_trigger</a> </dd></dl>
 
 </div>
 </div>
@@ -1036,7 +1063,7 @@ DESCRIPTION</h1>
 </div>
 </div>
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 6 2017 18:33:10 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 6 2017 18:37:44 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
