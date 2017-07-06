@@ -188,15 +188,6 @@ extern const char *cin_build_version;
 
 /* -------------------------------------------------------------------------------
  *
- * Definitions for CIN DATA config
- *
- * -------------------------------------------------------------------------------
- */
-
-#define CIN_DATA_MODE_CALLBACK          0x01
-
-/* -------------------------------------------------------------------------------
- *
  * Definitions for CIN BIAS SETTINGS
  *
  * -------------------------------------------------------------------------------
@@ -678,27 +669,43 @@ int cin_config_read_file(cin_ctl_t *cin, const char *file);
  * ---------------------------------------------------------------------
  */
 
+/** @defgroup cin_data_init CIN Data Initialization Routines
+ * Initialization group
+ * @{
+ */
+
 /** Initialize the cin data library
  *
  * Initialize the data handeling routines and start the threads for listening.
- * mode should be set for the desired output. The packet_buffer_len in the
- * length of the packet FIFO in number of packets. The frame_buffer_len is
- * the number of data frames to buffer. 
  *
  * @param cin Handle to cin data library
+ * @param packet_buffer_len Length of packet buffer fifo (in units number of packets)
+ * @param frame_buffer_len Length of frame (assembler) buffer fifo (in units of number of frames)
+ * @param ipaddr IP-Address to bind to (if NULL binds to 0.0.0.0)
+ * @param port UDP Port of host
+ * @param cin_ipaddr IP-Address of cin (if NULL defaults to standard)
+ * @param cin_port UDP Port of CIN 
+ * @param rcvbuf TCP/IP Kernel recieve buffer size
+ * @param push_callback This function is called when a data structure is needed
+ * @param pop_callback This function is called when an image has been processed
+ * @param usr_ptr Pointer passed to callback functions
  *
  */
-int cin_data_init(cin_data_t *cin, int mode, int packet_buffer_len, int frame_buffer_len,
+int cin_data_init(cin_data_t *cin, int packet_buffer_len, int frame_buffer_len,
                   char* ipaddr, uint16_t port, char* cin_ipaddr, uint16_t cin_port, int rcvbuf,
                   cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr);
- 
-void cin_data_wait_for_threads(cin_data_t *cin);
-/* 
- * Block until all th threads have closed. 
+
+/** Stop all threads and wait
+ *
+ * Stop all the processing threads and join them to the main thread. This function blocks until all
+ * threads have joined the main thread (program). This should be called to clean up the library before
+ * the program is exited 
+ *
+ * @param cin Handle to cin data library
  */
 void cin_data_stop_threads(cin_data_t *cin);
-/* 
- * Send a cancel request to all threads.
+/**
+ * @}
  */
 
 /*--------------------------------------------------------------------------------------------------------
@@ -767,7 +774,7 @@ void cin_data_framestore_disable(cin_data_t *cin);
  */
 void cin_data_framestore_trigger_enable(cin_data_t *cin);
 
-/** @} */ // End of cin_data group
+/** @} */ // End of cin_data_framestore group
 
 struct cin_data_frame* cin_data_get_next_frame(cin_data_t *cin);
 void cin_data_release_frame(cin_data_t *cin, int free_mem);

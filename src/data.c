@@ -203,7 +203,7 @@ int cin_data_write(cin_port_t *dp, char* buffer, int buffer_len){
  */
 
 
-int cin_data_init(cin_data_t *cin, int mode, int packet_buffer_len, int frame_buffer_len,
+int cin_data_init(cin_data_t *cin, int packet_buffer_len, int frame_buffer_len,
                   char* ipaddr, uint16_t port, char* cin_ipaddr, uint16_t cin_port, int rcvbuf,
                   cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr){
 
@@ -382,25 +382,6 @@ int cin_data_thread_start(cin_data_threads_t *thread,
   return 1;
 }
 
-void cin_data_wait_for_threads(cin_data_t *cin){
-  /* This routine waits for the threads to stop 
-     NOTE : This blocks until all threads complete */
-  DEBUG_COMMENT("Waiting for threads to join\n");
-
-  if(cin->descramble_thread.started){
-    pthread_join(cin->descramble_thread.thread_id, NULL);
-    DEBUG_COMMENT("Descramble thread joined\n");
-  }
-  if(cin->assembler_thread.started){
-    pthread_join(cin->assembler_thread.thread_id, NULL);
-    DEBUG_COMMENT("Assembler thread joined\n");
-  }
-  if(cin->listen_thread.started){
-    pthread_join(cin->listen_thread.thread_id, NULL);
-    DEBUG_COMMENT("Listener thread joined\n");
-  }
-}
-
 void cin_data_stop_threads(cin_data_t *cin){
   DEBUG_COMMENT("Thread cancel requested\n");
 
@@ -415,6 +396,21 @@ void cin_data_stop_threads(cin_data_t *cin){
   if(cin->listen_thread.started){
     pthread_cancel(cin->listen_thread.thread_id);
     DEBUG_COMMENT("Listener thread canceled\n");
+  }
+
+  DEBUG_COMMENT("Waiting for threads to join\n");
+
+  if(cin->descramble_thread.started){
+    pthread_join(cin->descramble_thread.thread_id, NULL);
+    DEBUG_COMMENT("Descramble thread joined\n");
+  }
+  if(cin->assembler_thread.started){
+    pthread_join(cin->assembler_thread.thread_id, NULL);
+    DEBUG_COMMENT("Assembler thread joined\n");
+  }
+  if(cin->listen_thread.started){
+    pthread_join(cin->listen_thread.thread_id, NULL);
+    DEBUG_COMMENT("Listener thread joined\n");
   }
 }
 
