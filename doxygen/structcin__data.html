@@ -127,6 +127,9 @@ pthread_mutex_t&#160;</td><td class="memItemRight" valign="bottom"><b>descramble
 <tr class="memitem:afa968d86093d30bb5e9abe4a8389b853"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afa968d86093d30bb5e9abe4a8389b853"></a>
 pthread_mutex_t&#160;</td><td class="memItemRight" valign="bottom"><b>stats_mutex</b></td></tr>
 <tr class="separator:afa968d86093d30bb5e9abe4a8389b853"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6f1634e3f7a94b16e88c9fe3a943d68"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac6f1634e3f7a94b16e88c9fe3a943d68"></a>
+pthread_mutex_t&#160;</td><td class="memItemRight" valign="bottom"><b>framestore_mutex</b></td></tr>
+<tr class="separator:ac6f1634e3f7a94b16e88c9fe3a943d68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a462e88899cc617196dce631a2dde03ec"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a462e88899cc617196dce631a2dde03ec"></a>
 <a class="el" href="structcin__data__callbacks.html">cin_data_callbacks_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>callbacks</b></td></tr>
 <tr class="separator:a462e88899cc617196dce631a2dde03ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -148,6 +151,15 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>last_frame</b></t
 <tr class="memitem:a88c5fbc783bfb5e2ef0cd234ce766dbc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88c5fbc783bfb5e2ef0cd234ce766dbc"></a>
 <a class="el" href="structdescramble__map__t.html">descramble_map_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>map</b></td></tr>
 <tr class="separator:a88c5fbc783bfb5e2ef0cd234ce766dbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62f55d5a1b58230409dcd0cf63e7478b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a62f55d5a1b58230409dcd0cf63e7478b"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>framestore_mode</b></td></tr>
+<tr class="separator:a62f55d5a1b58230409dcd0cf63e7478b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a888945d0ca4cdabffac8a0b366320f3a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a888945d0ca4cdabffac8a0b366320f3a"></a>
+struct timespec&#160;</td><td class="memItemRight" valign="bottom"><b>framestore_trigger</b></td></tr>
+<tr class="separator:a888945d0ca4cdabffac8a0b366320f3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6451d3b603125e1012baac3194c05ec0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6451d3b603125e1012baac3194c05ec0"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>framestore_counter</b></td></tr>
+<tr class="separator:a6451d3b603125e1012baac3194c05ec0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/<a class="el" href="cin_8h_source.html">cin.h</a></li>
@@ -161,7 +173,7 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>last_frame</b></t
 </div>
 </div>
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 6 2017 11:30:19 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 6 2017 12:00:18 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

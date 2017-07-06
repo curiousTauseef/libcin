@@ -4,7 +4,7 @@ To avoid this warning please remove this line from your configuration file or up
 /home/travis/build/NSLS-II/libcin/src/cin.h:301: warning: Compound cin_port is not documented.
 /home/travis/build/NSLS-II/libcin/src/data.h:50: warning: Compound cin_data_packet is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:365: warning: Compound cin_data_threads is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:440: warning: Compound cin_ctl_pwr_val is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:446: warning: Compound cin_ctl_pwr_val is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:376: warning: Compound descramble_map_t is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:370: warning: Compound cin_data_callbacks is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:340: warning: Compound cin_data_stats is not documented.
@@ -13,10 +13,10 @@ To avoid this warning please remove this line from your configuration file or up
 /home/travis/build/NSLS-II/libcin/src/cin.h:331: warning: Compound cin_data_frame is not documented.
 /home/travis/build/NSLS-II/libcin/src/data.h:56: warning: Compound cin_data_proc is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:316: warning: Compound cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:434: warning: Compound cin_ctl_id is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:440: warning: Compound cin_ctl_id is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:295: warning: Compound cin_ctl_listener is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:384: warning: Compound cin_data is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:445: warning: Compound cin_ctl_pwr_mon_t is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:451: warning: Compound cin_ctl_pwr_mon_t is not documented.
 Searching for include files...
 Searching for example files...
 Searching for images...
@@ -225,6 +225,9 @@ Search for main page./home/travis/build/NSLS-II/libcin/src/cin.h:68: warning: Me
 /home/travis/build/NSLS-II/libcin/src/cin.h:262: warning: Member CIN_CONFIG_MAX_STRING (macro definition) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:263: warning: Member CIN_CONFIG_MAX_DATA (macro definition) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:278: warning: Member FIFO_MAX_READERS (macro definition) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:714: warning: Member CIN_DATA_FRAMESTORE_NONE (macro definition) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:715: warning: Member CIN_DATA_FRAMESTORE_TRIGGER (macro definition) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:716: warning: Member CIN_DATA_FRAMESTORE_SKIP (macro definition) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:276: warning: Member cin_ctl_config_t (typedef) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:299: warning: Member cin_ctl_listener_t (typedef) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:313: warning: Member cin_port_t (typedef) of file cin.h is not documented.
@@ -233,77 +236,81 @@ Search for main page./home/travis/build/NSLS-II/libcin/src/cin.h:68: warning: Me
 /home/travis/build/NSLS-II/libcin/src/cin.h:363: warning: Member cin_data_stats_t (typedef) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:368: warning: Member cin_data_threads_t (typedef) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:374: warning: Member cin_data_callbacks_t (typedef) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:417: warning: Member cin_data_t (typedef) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:420: warning: Member cin_data_callback)(cin_data_frame_t *) (typedef) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:438: warning: Member cin_ctl_id_t (typedef) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:443: warning: Member cin_ctl_pwr_val_t (typedef) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:423: warning: Member cin_data_t (typedef) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:426: warning: Member cin_data_callback)(cin_data_frame_t *) (typedef) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:444: warning: Member cin_ctl_id_t (typedef) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:449: warning: Member cin_ctl_pwr_val_t (typedef) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:239: warning: Member cin_set_debug_print(int debug) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:240: warning: Member cin_set_error_print(int error) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:465: warning: Member cin_report(FILE *fp, int details) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:572: warning: Member cin_ctl_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:573: warning: Member cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:574: warning: Member cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:582: warning: Member cin_ctl_load_config(cin_ctl_t *cin, char *filename) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:583: warning: Member cin_ctl_load_firmware(cin_ctl_t *cin, char *filename) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:584: warning: Member cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:585: warning: Member cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:586: warning: Member cin_ctl_freeze_dco(cin_ctl_t *cin, int freeze) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:587: warning: Member cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:588: warning: Member cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *_val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:589: warning: Member cin_ctl_display_id(FILE *out, cin_ctl_id_t val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:590: warning: Member cin_ctl_display_fpga_status(FILE *out, uint16_t val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:591: warning: Member cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:592: warning: Member cin_ctl_display_dcm_status(FILE *out, uint16_t *_val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:600: warning: Member cin_ctl_current_calc(uint16_t val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:601: warning: Member cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon_t *values) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:602: warning: Member cin_ctl_display_pwr(FILE *out, cin_ctl_pwr_mon_t *values) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:603: warning: Member cin_ctl_display_pwr_line(FILE *out, const char *msg, cin_ctl_pwr_val_t val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:604: warning: Member cin_ctl_calc_vi_status(cin_ctl_t *cin, uint16_t vreg, uint16_t ireg, double vfact, cin_ctl_pwr_val_t *vi) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:612: warning: Member cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:613: warning: Member cin_ctl_set_camera_pwr(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:614: warning: Member cin_ctl_set_bias(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:615: warning: Member cin_ctl_get_bias(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:616: warning: Member cin_ctl_set_clocks(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:617: warning: Member cin_ctl_get_clocks(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:618: warning: Member cin_ctl_set_trigger(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:619: warning: Member cin_ctl_get_trigger(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:620: warning: Member cin_ctl_set_focus(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:621: warning: Member cin_ctl_get_focus(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:622: warning: Member cin_ctl_get_triggering(cin_ctl_t *cin, int *trigger) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:623: warning: Member cin_ctl_int_trigger_start(cin_ctl_t *cin, int nimages) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:624: warning: Member cin_ctl_int_trigger_stop(cin_ctl_t *cin) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:625: warning: Member cin_ctl_ext_trigger_start(cin_ctl_t *cin, int trigger_mode) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:626: warning: Member cin_ctl_ext_trigger_stop(cin_ctl_t *cin) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:627: warning: Member cin_ctl_set_exposure_time(cin_ctl_t *cin, float e_time) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:628: warning: Member cin_ctl_set_trigger_delay(cin_ctl_t *cin, float t_time) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:629: warning: Member cin_ctl_set_cycle_time(cin_ctl_t *cin, float ftime) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:630: warning: Member cin_ctl_frame_count_reset(cin_ctl_t *cin) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:631: warning: Member cin_ctl_set_mux(cin_ctl_t *cin, int setting) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:632: warning: Member cin_ctl_get_mux(cin_ctl_t *cin, int *setting) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:633: warning: Member cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:639: warning: Member cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:645: warning: Member cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:651: warning: Member cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:652: warning: Member cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:658: warning: Member cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:666: warning: Member cin_config_read_file(cin_ctl_t *cin, const char *file) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:693: warning: Member cin_data_wait_for_threads(cin_data_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:697: warning: Member cin_data_stop_threads(cin_data_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:702: warning: Member cin_data_get_next_frame(cin_data_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:703: warning: Member cin_data_release_frame(cin_data_t *cin, int free_mem) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:705: warning: Member cin_data_get_buffered_frame(void) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:706: warning: Member cin_data_release_buffered_frame(void) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:708: warning: Member cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:709: warning: Member cin_data_show_stats(FILE *fp, cin_data_stats_t stats) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:710: warning: Member cin_data_reset_stats(cin_data_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:713: warning: Member cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:714: warning: Member cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:471: warning: Member cin_report(FILE *fp, int details) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:578: warning: Member cin_ctl_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:579: warning: Member cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:580: warning: Member cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:588: warning: Member cin_ctl_load_config(cin_ctl_t *cin, char *filename) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:589: warning: Member cin_ctl_load_firmware(cin_ctl_t *cin, char *filename) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:590: warning: Member cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:591: warning: Member cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:592: warning: Member cin_ctl_freeze_dco(cin_ctl_t *cin, int freeze) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:593: warning: Member cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:594: warning: Member cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *_val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:595: warning: Member cin_ctl_display_id(FILE *out, cin_ctl_id_t val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:596: warning: Member cin_ctl_display_fpga_status(FILE *out, uint16_t val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:597: warning: Member cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:598: warning: Member cin_ctl_display_dcm_status(FILE *out, uint16_t *_val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:606: warning: Member cin_ctl_current_calc(uint16_t val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:607: warning: Member cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon_t *values) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:608: warning: Member cin_ctl_display_pwr(FILE *out, cin_ctl_pwr_mon_t *values) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:609: warning: Member cin_ctl_display_pwr_line(FILE *out, const char *msg, cin_ctl_pwr_val_t val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:610: warning: Member cin_ctl_calc_vi_status(cin_ctl_t *cin, uint16_t vreg, uint16_t ireg, double vfact, cin_ctl_pwr_val_t *vi) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:618: warning: Member cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:619: warning: Member cin_ctl_set_camera_pwr(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:620: warning: Member cin_ctl_set_bias(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:621: warning: Member cin_ctl_get_bias(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:622: warning: Member cin_ctl_set_clocks(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:623: warning: Member cin_ctl_get_clocks(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:624: warning: Member cin_ctl_set_trigger(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:625: warning: Member cin_ctl_get_trigger(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:626: warning: Member cin_ctl_set_focus(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:627: warning: Member cin_ctl_get_focus(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:628: warning: Member cin_ctl_get_triggering(cin_ctl_t *cin, int *trigger) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:629: warning: Member cin_ctl_int_trigger_start(cin_ctl_t *cin, int nimages) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:630: warning: Member cin_ctl_int_trigger_stop(cin_ctl_t *cin) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:631: warning: Member cin_ctl_ext_trigger_start(cin_ctl_t *cin, int trigger_mode) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:632: warning: Member cin_ctl_ext_trigger_stop(cin_ctl_t *cin) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:633: warning: Member cin_ctl_set_exposure_time(cin_ctl_t *cin, float e_time) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:634: warning: Member cin_ctl_set_trigger_delay(cin_ctl_t *cin, float t_time) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:635: warning: Member cin_ctl_set_cycle_time(cin_ctl_t *cin, float ftime) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:636: warning: Member cin_ctl_frame_count_reset(cin_ctl_t *cin) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:637: warning: Member cin_ctl_set_mux(cin_ctl_t *cin, int setting) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:638: warning: Member cin_ctl_get_mux(cin_ctl_t *cin, int *setting) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:639: warning: Member cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:645: warning: Member cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:651: warning: Member cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:657: warning: Member cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:658: warning: Member cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:664: warning: Member cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:672: warning: Member cin_config_read_file(cin_ctl_t *cin, const char *file) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:699: warning: Member cin_data_wait_for_threads(cin_data_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:703: warning: Member cin_data_stop_threads(cin_data_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:730: warning: Member cin_data_set_framestore_counter(cin_data_t *cin, int count) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:731: warning: Member cin_data_get_framestore_counter(cin_data_t *cin, int *count) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:732: warning: Member cin_data_set_framestore_mode(cin_data_t *cin, int mode) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:733: warning: Member cin_data_get_framestore_mode(cin_data_t *cin, int *mode) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:735: warning: Member cin_data_get_next_frame(cin_data_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:736: warning: Member cin_data_release_frame(cin_data_t *cin, int free_mem) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:738: warning: Member cin_data_get_buffered_frame(void) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:739: warning: Member cin_data_release_buffered_frame(void) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:741: warning: Member cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:742: warning: Member cin_data_show_stats(FILE *fp, cin_data_stats_t stats) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:743: warning: Member cin_data_reset_stats(cin_data_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:746: warning: Member cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:747: warning: Member cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:57: warning: Member cin_build_git_time (variable) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:58: warning: Member cin_build_git_sha (variable) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:59: warning: Member cin_build_version (variable) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:237: warning: Member _debug_print_flag (variable) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:238: warning: Member _error_print_flag (variable) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:679: warning: The following parameters of cin_data_init(cin_data_t *cin, int mode, int packet_buffer_len, int frame_buffer_len, char *ipaddr, uint16_t port, char *cin_ipaddr, uint16_t cin_port, int rcvbuf, cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr) are not documented:
+/home/travis/build/NSLS-II/libcin/src/cin.h:685: warning: The following parameters of cin_data_init(cin_data_t *cin, int mode, int packet_buffer_len, int frame_buffer_len, char *ipaddr, uint16_t port, char *cin_ipaddr, uint16_t cin_port, int rcvbuf, cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr) are not documented:
   parameter 'mode'
   parameter 'packet_buffer_len'
   parameter 'frame_buffer_len'
@@ -315,52 +322,52 @@ Search for main page./home/travis/build/NSLS-II/libcin/src/cin.h:68: warning: Me
   parameter 'push_callback'
   parameter 'pop_callback'
   parameter 'usr_ptr'
-/home/travis/build/NSLS-II/libcin/src/cin.h:572: warning: Member cin_ctl_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:573: warning: Member cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:574: warning: Member cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:582: warning: Member cin_ctl_load_config(cin_ctl_t *cin, char *filename) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:583: warning: Member cin_ctl_load_firmware(cin_ctl_t *cin, char *filename) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:584: warning: Member cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:585: warning: Member cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:586: warning: Member cin_ctl_freeze_dco(cin_ctl_t *cin, int freeze) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:587: warning: Member cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:588: warning: Member cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *_val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:589: warning: Member cin_ctl_display_id(FILE *out, cin_ctl_id_t val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:590: warning: Member cin_ctl_display_fpga_status(FILE *out, uint16_t val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:591: warning: Member cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:592: warning: Member cin_ctl_display_dcm_status(FILE *out, uint16_t *_val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:600: warning: Member cin_ctl_current_calc(uint16_t val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:601: warning: Member cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon_t *values) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:602: warning: Member cin_ctl_display_pwr(FILE *out, cin_ctl_pwr_mon_t *values) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:603: warning: Member cin_ctl_display_pwr_line(FILE *out, const char *msg, cin_ctl_pwr_val_t val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:604: warning: Member cin_ctl_calc_vi_status(cin_ctl_t *cin, uint16_t vreg, uint16_t ireg, double vfact, cin_ctl_pwr_val_t *vi) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:612: warning: Member cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:613: warning: Member cin_ctl_set_camera_pwr(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:614: warning: Member cin_ctl_set_bias(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:615: warning: Member cin_ctl_get_bias(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:616: warning: Member cin_ctl_set_clocks(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:617: warning: Member cin_ctl_get_clocks(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:618: warning: Member cin_ctl_set_trigger(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:619: warning: Member cin_ctl_get_trigger(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:620: warning: Member cin_ctl_set_focus(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:621: warning: Member cin_ctl_get_focus(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:622: warning: Member cin_ctl_get_triggering(cin_ctl_t *cin, int *trigger) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:623: warning: Member cin_ctl_int_trigger_start(cin_ctl_t *cin, int nimages) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:624: warning: Member cin_ctl_int_trigger_stop(cin_ctl_t *cin) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:625: warning: Member cin_ctl_ext_trigger_start(cin_ctl_t *cin, int trigger_mode) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:626: warning: Member cin_ctl_ext_trigger_stop(cin_ctl_t *cin) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:627: warning: Member cin_ctl_set_exposure_time(cin_ctl_t *cin, float e_time) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:628: warning: Member cin_ctl_set_trigger_delay(cin_ctl_t *cin, float t_time) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:629: warning: Member cin_ctl_set_cycle_time(cin_ctl_t *cin, float ftime) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:630: warning: Member cin_ctl_frame_count_reset(cin_ctl_t *cin) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:631: warning: Member cin_ctl_set_mux(cin_ctl_t *cin, int setting) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:632: warning: Member cin_ctl_get_mux(cin_ctl_t *cin, int *setting) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:633: warning: Member cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:639: warning: Member cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:645: warning: Member cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:651: warning: Member cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:652: warning: Member cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage) (function) of group cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:658: warning: Member cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:578: warning: Member cin_ctl_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:579: warning: Member cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:580: warning: Member cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:588: warning: Member cin_ctl_load_config(cin_ctl_t *cin, char *filename) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:589: warning: Member cin_ctl_load_firmware(cin_ctl_t *cin, char *filename) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:590: warning: Member cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:591: warning: Member cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:592: warning: Member cin_ctl_freeze_dco(cin_ctl_t *cin, int freeze) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:593: warning: Member cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:594: warning: Member cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *_val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:595: warning: Member cin_ctl_display_id(FILE *out, cin_ctl_id_t val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:596: warning: Member cin_ctl_display_fpga_status(FILE *out, uint16_t val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:597: warning: Member cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:598: warning: Member cin_ctl_display_dcm_status(FILE *out, uint16_t *_val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:606: warning: Member cin_ctl_current_calc(uint16_t val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:607: warning: Member cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon_t *values) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:608: warning: Member cin_ctl_display_pwr(FILE *out, cin_ctl_pwr_mon_t *values) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:609: warning: Member cin_ctl_display_pwr_line(FILE *out, const char *msg, cin_ctl_pwr_val_t val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:610: warning: Member cin_ctl_calc_vi_status(cin_ctl_t *cin, uint16_t vreg, uint16_t ireg, double vfact, cin_ctl_pwr_val_t *vi) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:618: warning: Member cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:619: warning: Member cin_ctl_set_camera_pwr(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:620: warning: Member cin_ctl_set_bias(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:621: warning: Member cin_ctl_get_bias(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:622: warning: Member cin_ctl_set_clocks(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:623: warning: Member cin_ctl_get_clocks(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:624: warning: Member cin_ctl_set_trigger(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:625: warning: Member cin_ctl_get_trigger(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:626: warning: Member cin_ctl_set_focus(cin_ctl_t *cin, int val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:627: warning: Member cin_ctl_get_focus(cin_ctl_t *cin, int *val) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:628: warning: Member cin_ctl_get_triggering(cin_ctl_t *cin, int *trigger) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:629: warning: Member cin_ctl_int_trigger_start(cin_ctl_t *cin, int nimages) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:630: warning: Member cin_ctl_int_trigger_stop(cin_ctl_t *cin) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:631: warning: Member cin_ctl_ext_trigger_start(cin_ctl_t *cin, int trigger_mode) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:632: warning: Member cin_ctl_ext_trigger_stop(cin_ctl_t *cin) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:633: warning: Member cin_ctl_set_exposure_time(cin_ctl_t *cin, float e_time) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:634: warning: Member cin_ctl_set_trigger_delay(cin_ctl_t *cin, float t_time) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:635: warning: Member cin_ctl_set_cycle_time(cin_ctl_t *cin, float ftime) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:636: warning: Member cin_ctl_frame_count_reset(cin_ctl_t *cin) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:637: warning: Member cin_ctl_set_mux(cin_ctl_t *cin, int setting) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:638: warning: Member cin_ctl_get_mux(cin_ctl_t *cin, int *setting) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:639: warning: Member cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:645: warning: Member cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:651: warning: Member cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:657: warning: Member cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:658: warning: Member cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage) (function) of group cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:664: warning: Member cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp) (function) of group cin_ctl is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:318: warning: Member ctl_port (variable) of class cin_ctl is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:319: warning: Member stream_port (variable) of class cin_ctl is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:322: warning: Member config (variable) of class cin_ctl is not documented.
@@ -378,26 +385,26 @@ Search for main page./home/travis/build/NSLS-II/libcin/src/cin.h:68: warning: Me
 /home/travis/build/NSLS-II/libcin/src/cin.h:273: warning: Member fcric_len (variable) of class cin_ctl_config is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:274: warning: Member bias[CIN_CONFIG_MAX_DATA][2] (variable) of class cin_ctl_config is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:275: warning: Member bias_len (variable) of class cin_ctl_config is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:435: warning: Member board_id (variable) of class cin_ctl_id is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:436: warning: Member serial_no (variable) of class cin_ctl_id is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:437: warning: Member fpga_ver (variable) of class cin_ctl_id is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:441: warning: Member board_id (variable) of class cin_ctl_id is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:442: warning: Member serial_no (variable) of class cin_ctl_id is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:443: warning: Member fpga_ver (variable) of class cin_ctl_id is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:296: warning: Member cp (variable) of class cin_ctl_listener is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:297: warning: Member ctl_fifo (variable) of class cin_ctl_listener is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:298: warning: Member thread_id (variable) of class cin_ctl_listener is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:446: warning: Member bus_12v0 (variable) of class cin_ctl_pwr_mon_t is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:447: warning: Member mgmt_3v3 (variable) of class cin_ctl_pwr_mon_t is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:448: warning: Member mgmt_2v5 (variable) of class cin_ctl_pwr_mon_t is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:449: warning: Member mgmt_1v2 (variable) of class cin_ctl_pwr_mon_t is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:450: warning: Member enet_1v0 (variable) of class cin_ctl_pwr_mon_t is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:451: warning: Member s3e_3v3 (variable) of class cin_ctl_pwr_mon_t is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:452: warning: Member gen_3v3 (variable) of class cin_ctl_pwr_mon_t is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:453: warning: Member gen_2v5 (variable) of class cin_ctl_pwr_mon_t is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:454: warning: Member v6_0v9 (variable) of class cin_ctl_pwr_mon_t is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:455: warning: Member v6_1v0 (variable) of class cin_ctl_pwr_mon_t is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:456: warning: Member v6_2v5 (variable) of class cin_ctl_pwr_mon_t is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:457: warning: Member fp (variable) of class cin_ctl_pwr_mon_t is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:441: warning: Member i (variable) of class cin_ctl_pwr_val is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:442: warning: Member v (variable) of class cin_ctl_pwr_val is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:452: warning: Member bus_12v0 (variable) of class cin_ctl_pwr_mon_t is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:453: warning: Member mgmt_3v3 (variable) of class cin_ctl_pwr_mon_t is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:454: warning: Member mgmt_2v5 (variable) of class cin_ctl_pwr_mon_t is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:455: warning: Member mgmt_1v2 (variable) of class cin_ctl_pwr_mon_t is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:456: warning: Member enet_1v0 (variable) of class cin_ctl_pwr_mon_t is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:457: warning: Member s3e_3v3 (variable) of class cin_ctl_pwr_mon_t is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:458: warning: Member gen_3v3 (variable) of class cin_ctl_pwr_mon_t is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:459: warning: Member gen_2v5 (variable) of class cin_ctl_pwr_mon_t is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:460: warning: Member v6_0v9 (variable) of class cin_ctl_pwr_mon_t is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:461: warning: Member v6_1v0 (variable) of class cin_ctl_pwr_mon_t is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:462: warning: Member v6_2v5 (variable) of class cin_ctl_pwr_mon_t is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:463: warning: Member fp (variable) of class cin_ctl_pwr_mon_t is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:447: warning: Member i (variable) of class cin_ctl_pwr_val is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:448: warning: Member v (variable) of class cin_ctl_pwr_val is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:387: warning: Member packet_fifo (variable) of class cin_data is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:388: warning: Member frame_fifo (variable) of class cin_data is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:389: warning: Member image_fifo (variable) of class cin_data is not documented.
@@ -408,13 +415,17 @@ Search for main page./home/travis/build/NSLS-II/libcin/src/cin.h:68: warning: Me
 /home/travis/build/NSLS-II/libcin/src/cin.h:397: warning: Member assembler_mutex (variable) of class cin_data is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:398: warning: Member descramble_mutex (variable) of class cin_data is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:399: warning: Member stats_mutex (variable) of class cin_data is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:403: warning: Member callbacks (variable) of class cin_data is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:406: warning: Member dp (variable) of class cin_data is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:406: warning: Member framerate (variable) of class cin_data is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:410: warning: Member dropped_packets (variable) of class cin_data is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:411: warning: Member mallformed_packets (variable) of class cin_data is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:412: warning: Member last_frame (variable) of class cin_data is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:415: warning: Member map (variable) of class cin_data is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:400: warning: Member framestore_mutex (variable) of class cin_data is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:404: warning: Member callbacks (variable) of class cin_data is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:407: warning: Member dp (variable) of class cin_data is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:407: warning: Member framerate (variable) of class cin_data is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:411: warning: Member dropped_packets (variable) of class cin_data is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:412: warning: Member mallformed_packets (variable) of class cin_data is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:413: warning: Member last_frame (variable) of class cin_data is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:416: warning: Member map (variable) of class cin_data is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:419: warning: Member framestore_mode (variable) of class cin_data is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:419: warning: Member framestore_trigger (variable) of class cin_data is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:421: warning: Member framestore_counter (variable) of class cin_data is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:371: warning: Member push)(cin_data_frame_t *) (variable) of class cin_data_callbacks is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:372: warning: Member pop)(cin_data_frame_t *) (variable) of class cin_data_callbacks is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:373: warning: Member frame (variable) of class cin_data_callbacks is not documented.
@@ -558,7 +569,7 @@ Generating file index...
 Generating file member index...
 Generating example index...
 finalizing index lists...
-lookup cache used 312/65536 hits=1386 misses=332
+lookup cache used 321/65536 hits=1442 misses=341
 finished...
 make -C doc/latex
 make[1]: Entering directory `/home/travis/build/NSLS-II/libcin/doc/latex'
@@ -804,8 +815,8 @@ Chapter 5.
 (./structcin__data__callbacks.tex) (./structcin__data__frame.tex [15])
 (./structcin__data__packet.tex) (./structcin__data__proc.tex)
 (./structcin__data__stats.tex [16]) (./structcin__data__threads.tex)
-(./structcin__map__t.tex) (./structcin__port.tex)
-(./structdescramble__map__t.tex [17]) (./structfifo.tex) [18]
+(./structcin__map__t.tex) (./structcin__port.tex [17])
+(./structdescramble__map__t.tex) (./structfifo.tex) [18]
 Chapter 6.
 (./cin_8h.tex (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd)
 Underfull \hbox (badness 10000) in paragraph at lines 4--11
@@ -815,328 +826,331 @@ Underfull \hbox (badness 10000) in paragraph at lines 4--11
 plicate ignored
 <to be read again> 
                    \relax 
-l.492 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int pwr)}
+l.501 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int pwr)}
                                                   \label{group__cin__ctl_ga9...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae4aaf3a1954eeeb18f77af9e33b4f3c0}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.495 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int pwr)}
+l.504 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int pwr)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga306beca3b918820661477130ba0b5182}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.498 ...-ctl\-\_\-t} $\ast$cin, int on\-\_\-off)}
+l.507 ...-ctl\-\_\-t} $\ast$cin, int on\-\_\-off)}
                                                   \label{group__cin__ctl_ga3...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gacd5a0ef09d2aded4d3e6e980eddeeecd}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.501 ...\-\_\-t} $\ast$cin, char $\ast$filename)}
+l.510 ...\-\_\-t} $\ast$cin, char $\ast$filename)}
                                                   \label{group__cin__ctl_gac...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga8b5f750265598579c7e4ccf39234b14d}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.504 ...\-\_\-t} $\ast$cin, char $\ast$filename)}
+l.513 ...\-\_\-t} $\ast$cin, char $\ast$filename)}
                                                   \label{group__cin__ctl_ga8...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga993ab986c4e2c70bd7f5299913aa3dec}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.507 ...-\_\-ctl\-\_\-t} $\ast$cin, int clkfreq)}
+l.516 ...-\_\-ctl\-\_\-t} $\ast$cin, int clkfreq)}
                                                   \label{group__cin__ctl_ga9...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga0a99b732a81f8e091c3647156155d09a}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.510 ...tl\-\_\-t} $\ast$cin, int $\ast$clkfreq)}
+l.519 ...tl\-\_\-t} $\ast$cin, int $\ast$clkfreq)}
                                                   \label{group__cin__ctl_ga0...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga997d355a8fe24e4933995a4c1dabfe6a}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.513 ...\-\_\-ctl\-\_\-t} $\ast$cin, int freeze)}
+l.522 ...\-\_\-ctl\-\_\-t} $\ast$cin, int freeze)}
                                                   \label{group__cin__ctl_ga9...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga2b17bbbde2a539c861c781fde50ddafd}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.516 ...\ast$cin, uint16\-\_\-t $\ast$\-\_\-val)}
+l.525 ...\ast$cin, uint16\-\_\-t $\ast$\-\_\-val)}
                                                   \label{group__cin__ctl_ga2...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga1bcc0c57bfe499acc7b89767c94d9b93}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.519 ...\_\-ctl\-\_\-id\-\_\-t} $\ast$\-\_\-val)}
+l.528 ...\_\-ctl\-\_\-id\-\_\-t} $\ast$\-\_\-val)}
                                                   \label{group__cin__ctl_ga1...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga2aa5a118ae10e33ca99a693ab6ea3384}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.522 ...l__id}{cin\-\_\-ctl\-\_\-id\-\_\-t} val)}
+l.531 ...l__id}{cin\-\_\-ctl\-\_\-id\-\_\-t} val)}
                                                   \label{group__cin__ctl_ga2...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga04b892ce2e9fdb6803304ce137f1bcb8}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.525 ...F\-I\-L\-E $\ast$out, uint16\-\_\-t val)}
+l.534 ...F\-I\-L\-E $\ast$out, uint16\-\_\-t val)}
                                                   \label{group__cin__ctl_ga0...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga762130f4d72af7725576613c5779f27d}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.528 ...\ast$cin, uint16\-\_\-t $\ast$\-\_\-val)}
+l.537 ...\ast$cin, uint16\-\_\-t $\ast$\-\_\-val)}
                                                   \label{group__cin__ctl_ga7...
-pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
-tl_ga8331d2e8ee388e47e1842d25d9c75ebe}) has been already used, duplicate ignore
-d
+[22]pdfTeX warning (ext4): destination with the same identifier (name{group__ci
+n__ctl_ga8331d2e8ee388e47e1842d25d9c75ebe}) has been already used, duplicate ig
+nored
 <to be read again> 
                    \relax 
-l.531 ...\ast$out, uint16\-\_\-t $\ast$\-\_\-val)}
+l.540 ...\ast$out, uint16\-\_\-t $\ast$\-\_\-val)}
                                                   \label{group__cin__ctl_ga8...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga0ec1d43cc2553c967bfca6f6a70ef8c1}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.534 ...\-current\-\_\-calc} (uint16\-\_\-t val)}
+l.543 ...\-current\-\_\-calc} (uint16\-\_\-t val)}
                                                   \label{group__cin__ctl_ga0...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gac368ad91dff323f4e48c7d5741d33a36}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.537 ...\-\_\-pwr\-\_\-mon\-\_\-t} $\ast$values)}
+l.546 ...\-\_\-pwr\-\_\-mon\-\_\-t} $\ast$values)}
                                                   \label{group__cin__ctl_gac...
-[22]pdfTeX warning (ext4): destination with the same identifier (name{group__ci
-n__ctl_gac801878f500a4e05738b7be009a1993b}) has been already used, duplicate ig
-nored
+pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
+tl_gac801878f500a4e05738b7be009a1993b}) has been already used, duplicate ignore
+d
 <to be read again> 
                    \relax 
-l.540 ...\-\_\-pwr\-\_\-mon\-\_\-t} $\ast$values)}
+l.549 ...\-\_\-pwr\-\_\-mon\-\_\-t} $\ast$values)}
                                                   \label{group__cin__ctl_gac...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae9487554511406af3a3b7ea7e61aa939}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.543 ...\-\_\-ctl\-\_\-pwr\-\_\-val\-\_\-t} val)}
+l.552 ...\-\_\-ctl\-\_\-pwr\-\_\-val\-\_\-t} val)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga0140edae04280f62f18cca629b075169}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.546 ...-ctl\-\_\-pwr\-\_\-val\-\_\-t} $\ast$vi)}
+l.555 ...-ctl\-\_\-pwr\-\_\-val\-\_\-t} $\ast$vi)}
                                                   \label{group__cin__ctl_ga0...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga92b27d6f05f4f1f81bf4cfb51cbad00e}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.549 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
+l.558 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
                                                   \label{group__cin__ctl_ga9...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gac1789851791ef22ed774a2c6079cef22}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.552 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
+l.561 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
                                                   \label{group__cin__ctl_gac...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gaf339d92456c935491d7783dbc5d0b10c}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.555 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
+l.564 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
                                                   \label{group__cin__ctl_gaf...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae4a65ed5e78a6d50af4a359f26120f7d}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.558 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
+l.567 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gab2ad6c1ba6c63b7bd217f8c74cb4aac5}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.561 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
+l.570 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
                                                   \label{group__cin__ctl_gab...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga370e279800873d395a98c9b2281e1e0e}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.564 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
+l.573 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
                                                   \label{group__cin__ctl_ga3...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gac89dd8640c883243ea45f2e6e1b47be4}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.567 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
+l.576 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
                                                   \label{group__cin__ctl_gac...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gadacd99ed5583428da539405202314ee2}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.570 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
+l.579 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
                                                   \label{group__cin__ctl_gad...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gafb8379c455084a79f95eda424c72a393}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.573 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
+l.582 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
                                                   \label{group__cin__ctl_gaf...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gaf78708af92b734e3b1074580286aebcc}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.576 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
+l.585 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
                                                   \label{group__cin__ctl_gaf...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga176d0e1bb374870f93b6dc6a7faf6228}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.579 ...tl\-\_\-t} $\ast$cin, int $\ast$trigger)}
+l.588 ...tl\-\_\-t} $\ast$cin, int $\ast$trigger)}
                                                   \label{group__cin__ctl_ga1...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga0872e9ec66f032ad78b4f2bc6ef11576}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.582 ...-\_\-ctl\-\_\-t} $\ast$cin, int nimages)}
+l.591 ...-\_\-ctl\-\_\-t} $\ast$cin, int nimages)}
                                                   \label{group__cin__ctl_ga0...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga60980b13f5ff8b41d617fda388102cca}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.585 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
+l.594 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
                                                   \label{group__cin__ctl_ga6...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae16421af69ed7296d5e005788a8842a9}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.588 ...\_\-t} $\ast$cin, int trigger\-\_\-mode)}
+l.597 ...\_\-t} $\ast$cin, int trigger\-\_\-mode)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gad0381cc231709636ec5254f466ea4b63}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.591 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
+l.600 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
                                                   \label{group__cin__ctl_gad...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga463539dd0764f2781d06750b2193343c}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.594 ...tl\-\_\-t} $\ast$cin, float e\-\_\-time)}
+l.603 ...tl\-\_\-t} $\ast$cin, float e\-\_\-time)}
                                                   \label{group__cin__ctl_ga4...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga8a2c75e9a23af2d918e2a2af80624edc}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.597 ...tl\-\_\-t} $\ast$cin, float t\-\_\-time)}
+l.606 ...tl\-\_\-t} $\ast$cin, float t\-\_\-time)}
                                                   \label{group__cin__ctl_ga8...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga859a6e8c6f51424c955ca8b71a292542}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.600 ...-\_\-ctl\-\_\-t} $\ast$cin, float ftime)}
+l.609 ...-\_\-ctl\-\_\-t} $\ast$cin, float ftime)}
                                                   \label{group__cin__ctl_ga8...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga5923252db71690cac8c24b41a2ba6ea0}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.603 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
+l.612 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
                                                   \label{group__cin__ctl_ga5...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae9bf180d21edc0474d7049d17cf2c84d}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.606 ...-\_\-ctl\-\_\-t} $\ast$cin, int setting)}
+l.615 ...-\_\-ctl\-\_\-t} $\ast$cin, int setting)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae1d141bc0a5395b51298c57623478747}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.609 ...tl\-\_\-t} $\ast$cin, int $\ast$setting)}
+l.618 ...tl\-\_\-t} $\ast$cin, int $\ast$setting)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gaa12fef8b0135c99b43047eb7b637809c}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.612 ...in\-\_\-ctl\-\_\-t} $\ast$cin, int gain)}
+l.621 ...in\-\_\-ctl\-\_\-t} $\ast$cin, int gain)}
                                                   \label{group__cin__ctl_gaa...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga4625e3ed63eb77323f217984575ac16a}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.615 ..._\-ctl\-\_\-t} $\ast$cin, char $\ast$ip)}
+l.624 ..._\-ctl\-\_\-t} $\ast$cin, char $\ast$ip)}
                                                   \label{group__cin__ctl_ga4...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga2f1fd5316d579e946b39d4d068f0eebd}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.618 ...\-\_\-t} $\ast$cin, F\-I\-L\-E $\ast$fp)}
+l.627 ...\-\_\-t} $\ast$cin, F\-I\-L\-E $\ast$fp)}
                                                   \label{group__cin__ctl_ga2...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga90d16f522a23718ef53167b4943976f6}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.621 ...\-\_\-t} $\ast$cin, float $\ast$voltage)}
+l.630 ...\-\_\-t} $\ast$cin, float $\ast$voltage)}
                                                   \label{group__cin__ctl_ga9...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga87e3fb2c3ff76a12ecf26276fc7ba5d5}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.624 ...\-\_\-t} $\ast$cin, float $\ast$voltage)}
+l.633 ...\-\_\-t} $\ast$cin, float $\ast$voltage)}
                                                   \label{group__cin__ctl_ga8...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga1ef720e477bf7b7d2b6ae34984cc374d}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.627 ...n\-\_\-ctl\-\_\-t} $\ast$cin, int clamp)}
+l.636 ...n\-\_\-ctl\-\_\-t} $\ast$cin, int clamp)}
                                                   \label{group__cin__ctl_ga1...
 [23]
-Underfull \hbox (badness 10000) detected at line 689
+Underfull \hbox (badness 10000) detected at line 712
 [][][]
-[24])
-Underfull \hbox (badness 10000) in paragraph at lines 732--163
+[24]
+Underfull \hbox (badness 10000) detected at line 748
+[][][]
+)
+Underfull \hbox (badness 10000) in paragraph at lines 774--163
 
 [25]
 No file refman.ind.
@@ -1162,13 +1176,13 @@ fonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr
 ive/texmf-dist/fonts/type1/urw/helvetic/uhvbo8ac.pfb></usr/share/texlive/texmf-
 dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvro8a.pfb>
-Output written on refman.pdf (29 pages, 129332 bytes).
+Output written on refman.pdf (29 pages, 130690 bytes).
 Transcript written on refman.log.
 makeindex refman.idx
 This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
-Scanning input file refman.idx....done (34 entries accepted, 0 rejected).
-Sorting entries....done (187 comparisons).
-Generating output file refman.ind....done (79 lines written, 0 warnings).
+Scanning input file refman.idx....done (36 entries accepted, 0 rejected).
+Sorting entries....done (185 comparisons).
+Generating output file refman.ind....done (83 lines written, 0 warnings).
 Output written in refman.ind.
 Transcript written in refman.ilg.
 pdflatex refman
@@ -1519,8 +1533,8 @@ Chapter 5.
 (./structcin__data__callbacks.tex) (./structcin__data__frame.tex [15])
 (./structcin__data__packet.tex) (./structcin__data__proc.tex)
 (./structcin__data__stats.tex [16]) (./structcin__data__threads.tex)
-(./structcin__map__t.tex) (./structcin__port.tex)
-(./structdescramble__map__t.tex [17]) (./structfifo.tex) [18]
+(./structcin__map__t.tex) (./structcin__port.tex [17])
+(./structdescramble__map__t.tex) (./structfifo.tex) [18]
 Chapter 6.
 (./cin_8h.tex (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd)
 Underfull \hbox (badness 10000) in paragraph at lines 4--11
@@ -1530,328 +1544,331 @@ Underfull \hbox (badness 10000) in paragraph at lines 4--11
 plicate ignored
 <to be read again> 
                    \relax 
-l.492 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int pwr)}
+l.501 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int pwr)}
                                                   \label{group__cin__ctl_ga9...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae4aaf3a1954eeeb18f77af9e33b4f3c0}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.495 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int pwr)}
+l.504 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int pwr)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga306beca3b918820661477130ba0b5182}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.498 ...-ctl\-\_\-t} $\ast$cin, int on\-\_\-off)}
+l.507 ...-ctl\-\_\-t} $\ast$cin, int on\-\_\-off)}
                                                   \label{group__cin__ctl_ga3...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gacd5a0ef09d2aded4d3e6e980eddeeecd}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.501 ...\-\_\-t} $\ast$cin, char $\ast$filename)}
+l.510 ...\-\_\-t} $\ast$cin, char $\ast$filename)}
                                                   \label{group__cin__ctl_gac...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga8b5f750265598579c7e4ccf39234b14d}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.504 ...\-\_\-t} $\ast$cin, char $\ast$filename)}
+l.513 ...\-\_\-t} $\ast$cin, char $\ast$filename)}
                                                   \label{group__cin__ctl_ga8...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga993ab986c4e2c70bd7f5299913aa3dec}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.507 ...-\_\-ctl\-\_\-t} $\ast$cin, int clkfreq)}
+l.516 ...-\_\-ctl\-\_\-t} $\ast$cin, int clkfreq)}
                                                   \label{group__cin__ctl_ga9...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga0a99b732a81f8e091c3647156155d09a}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.510 ...tl\-\_\-t} $\ast$cin, int $\ast$clkfreq)}
+l.519 ...tl\-\_\-t} $\ast$cin, int $\ast$clkfreq)}
                                                   \label{group__cin__ctl_ga0...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga997d355a8fe24e4933995a4c1dabfe6a}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.513 ...\-\_\-ctl\-\_\-t} $\ast$cin, int freeze)}
+l.522 ...\-\_\-ctl\-\_\-t} $\ast$cin, int freeze)}
                                                   \label{group__cin__ctl_ga9...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga2b17bbbde2a539c861c781fde50ddafd}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.516 ...\ast$cin, uint16\-\_\-t $\ast$\-\_\-val)}
+l.525 ...\ast$cin, uint16\-\_\-t $\ast$\-\_\-val)}
                                                   \label{group__cin__ctl_ga2...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga1bcc0c57bfe499acc7b89767c94d9b93}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.519 ...\_\-ctl\-\_\-id\-\_\-t} $\ast$\-\_\-val)}
+l.528 ...\_\-ctl\-\_\-id\-\_\-t} $\ast$\-\_\-val)}
                                                   \label{group__cin__ctl_ga1...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga2aa5a118ae10e33ca99a693ab6ea3384}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.522 ...l__id}{cin\-\_\-ctl\-\_\-id\-\_\-t} val)}
+l.531 ...l__id}{cin\-\_\-ctl\-\_\-id\-\_\-t} val)}
                                                   \label{group__cin__ctl_ga2...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga04b892ce2e9fdb6803304ce137f1bcb8}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.525 ...F\-I\-L\-E $\ast$out, uint16\-\_\-t val)}
+l.534 ...F\-I\-L\-E $\ast$out, uint16\-\_\-t val)}
                                                   \label{group__cin__ctl_ga0...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga762130f4d72af7725576613c5779f27d}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.528 ...\ast$cin, uint16\-\_\-t $\ast$\-\_\-val)}
+l.537 ...\ast$cin, uint16\-\_\-t $\ast$\-\_\-val)}
                                                   \label{group__cin__ctl_ga7...
-pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
-tl_ga8331d2e8ee388e47e1842d25d9c75ebe}) has been already used, duplicate ignore
-d
+[22]pdfTeX warning (ext4): destination with the same identifier (name{group__ci
+n__ctl_ga8331d2e8ee388e47e1842d25d9c75ebe}) has been already used, duplicate ig
+nored
 <to be read again> 
                    \relax 
-l.531 ...\ast$out, uint16\-\_\-t $\ast$\-\_\-val)}
+l.540 ...\ast$out, uint16\-\_\-t $\ast$\-\_\-val)}
                                                   \label{group__cin__ctl_ga8...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga0ec1d43cc2553c967bfca6f6a70ef8c1}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.534 ...\-current\-\_\-calc} (uint16\-\_\-t val)}
+l.543 ...\-current\-\_\-calc} (uint16\-\_\-t val)}
                                                   \label{group__cin__ctl_ga0...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gac368ad91dff323f4e48c7d5741d33a36}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.537 ...\-\_\-pwr\-\_\-mon\-\_\-t} $\ast$values)}
+l.546 ...\-\_\-pwr\-\_\-mon\-\_\-t} $\ast$values)}
                                                   \label{group__cin__ctl_gac...
-[22]pdfTeX warning (ext4): destination with the same identifier (name{group__ci
-n__ctl_gac801878f500a4e05738b7be009a1993b}) has been already used, duplicate ig
-nored
+pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
+tl_gac801878f500a4e05738b7be009a1993b}) has been already used, duplicate ignore
+d
 <to be read again> 
                    \relax 
-l.540 ...\-\_\-pwr\-\_\-mon\-\_\-t} $\ast$values)}
+l.549 ...\-\_\-pwr\-\_\-mon\-\_\-t} $\ast$values)}
                                                   \label{group__cin__ctl_gac...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae9487554511406af3a3b7ea7e61aa939}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.543 ...\-\_\-ctl\-\_\-pwr\-\_\-val\-\_\-t} val)}
+l.552 ...\-\_\-ctl\-\_\-pwr\-\_\-val\-\_\-t} val)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga0140edae04280f62f18cca629b075169}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.546 ...-ctl\-\_\-pwr\-\_\-val\-\_\-t} $\ast$vi)}
+l.555 ...-ctl\-\_\-pwr\-\_\-val\-\_\-t} $\ast$vi)}
                                                   \label{group__cin__ctl_ga0...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga92b27d6f05f4f1f81bf4cfb51cbad00e}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.549 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
+l.558 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
                                                   \label{group__cin__ctl_ga9...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gac1789851791ef22ed774a2c6079cef22}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.552 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
+l.561 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
                                                   \label{group__cin__ctl_gac...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gaf339d92456c935491d7783dbc5d0b10c}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.555 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
+l.564 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
                                                   \label{group__cin__ctl_gaf...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae4a65ed5e78a6d50af4a359f26120f7d}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.558 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
+l.567 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gab2ad6c1ba6c63b7bd217f8c74cb4aac5}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.561 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
+l.570 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
                                                   \label{group__cin__ctl_gab...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga370e279800873d395a98c9b2281e1e0e}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.564 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
+l.573 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
                                                   \label{group__cin__ctl_ga3...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gac89dd8640c883243ea45f2e6e1b47be4}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.567 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
+l.576 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
                                                   \label{group__cin__ctl_gac...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gadacd99ed5583428da539405202314ee2}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.570 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
+l.579 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
                                                   \label{group__cin__ctl_gad...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gafb8379c455084a79f95eda424c72a393}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.573 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
+l.582 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
                                                   \label{group__cin__ctl_gaf...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gaf78708af92b734e3b1074580286aebcc}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.576 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
+l.585 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
                                                   \label{group__cin__ctl_gaf...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga176d0e1bb374870f93b6dc6a7faf6228}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.579 ...tl\-\_\-t} $\ast$cin, int $\ast$trigger)}
+l.588 ...tl\-\_\-t} $\ast$cin, int $\ast$trigger)}
                                                   \label{group__cin__ctl_ga1...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga0872e9ec66f032ad78b4f2bc6ef11576}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.582 ...-\_\-ctl\-\_\-t} $\ast$cin, int nimages)}
+l.591 ...-\_\-ctl\-\_\-t} $\ast$cin, int nimages)}
                                                   \label{group__cin__ctl_ga0...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga60980b13f5ff8b41d617fda388102cca}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.585 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
+l.594 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
                                                   \label{group__cin__ctl_ga6...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae16421af69ed7296d5e005788a8842a9}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.588 ...\_\-t} $\ast$cin, int trigger\-\_\-mode)}
+l.597 ...\_\-t} $\ast$cin, int trigger\-\_\-mode)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gad0381cc231709636ec5254f466ea4b63}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.591 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
+l.600 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
                                                   \label{group__cin__ctl_gad...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga463539dd0764f2781d06750b2193343c}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.594 ...tl\-\_\-t} $\ast$cin, float e\-\_\-time)}
+l.603 ...tl\-\_\-t} $\ast$cin, float e\-\_\-time)}
                                                   \label{group__cin__ctl_ga4...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga8a2c75e9a23af2d918e2a2af80624edc}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.597 ...tl\-\_\-t} $\ast$cin, float t\-\_\-time)}
+l.606 ...tl\-\_\-t} $\ast$cin, float t\-\_\-time)}
                                                   \label{group__cin__ctl_ga8...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga859a6e8c6f51424c955ca8b71a292542}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.600 ...-\_\-ctl\-\_\-t} $\ast$cin, float ftime)}
+l.609 ...-\_\-ctl\-\_\-t} $\ast$cin, float ftime)}
                                                   \label{group__cin__ctl_ga8...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga5923252db71690cac8c24b41a2ba6ea0}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.603 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
+l.612 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
                                                   \label{group__cin__ctl_ga5...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae9bf180d21edc0474d7049d17cf2c84d}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.606 ...-\_\-ctl\-\_\-t} $\ast$cin, int setting)}
+l.615 ...-\_\-ctl\-\_\-t} $\ast$cin, int setting)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae1d141bc0a5395b51298c57623478747}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.609 ...tl\-\_\-t} $\ast$cin, int $\ast$setting)}
+l.618 ...tl\-\_\-t} $\ast$cin, int $\ast$setting)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gaa12fef8b0135c99b43047eb7b637809c}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.612 ...in\-\_\-ctl\-\_\-t} $\ast$cin, int gain)}
+l.621 ...in\-\_\-ctl\-\_\-t} $\ast$cin, int gain)}
                                                   \label{group__cin__ctl_gaa...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga4625e3ed63eb77323f217984575ac16a}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.615 ..._\-ctl\-\_\-t} $\ast$cin, char $\ast$ip)}
+l.624 ..._\-ctl\-\_\-t} $\ast$cin, char $\ast$ip)}
                                                   \label{group__cin__ctl_ga4...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga2f1fd5316d579e946b39d4d068f0eebd}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.618 ...\-\_\-t} $\ast$cin, F\-I\-L\-E $\ast$fp)}
+l.627 ...\-\_\-t} $\ast$cin, F\-I\-L\-E $\ast$fp)}
                                                   \label{group__cin__ctl_ga2...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga90d16f522a23718ef53167b4943976f6}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.621 ...\-\_\-t} $\ast$cin, float $\ast$voltage)}
+l.630 ...\-\_\-t} $\ast$cin, float $\ast$voltage)}
                                                   \label{group__cin__ctl_ga9...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga87e3fb2c3ff76a12ecf26276fc7ba5d5}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.624 ...\-\_\-t} $\ast$cin, float $\ast$voltage)}
+l.633 ...\-\_\-t} $\ast$cin, float $\ast$voltage)}
                                                   \label{group__cin__ctl_ga8...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga1ef720e477bf7b7d2b6ae34984cc374d}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.627 ...n\-\_\-ctl\-\_\-t} $\ast$cin, int clamp)}
+l.636 ...n\-\_\-ctl\-\_\-t} $\ast$cin, int clamp)}
                                                   \label{group__cin__ctl_ga1...
 [23]
-Underfull \hbox (badness 10000) detected at line 689
+Underfull \hbox (badness 10000) detected at line 712
 [][][]
-[24])
-Underfull \hbox (badness 10000) in paragraph at lines 732--163
+[24]
+Underfull \hbox (badness 10000) detected at line 748
+[][][]
+)
+Underfull \hbox (badness 10000) in paragraph at lines 774--163
 
 [25] (./refman.ind [26]) (./refman.aux (./group__cin__data.aux))
 
@@ -1875,7 +1892,7 @@ fonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr
 ive/texmf-dist/fonts/type1/urw/helvetic/uhvbo8ac.pfb></usr/share/texlive/texmf-
 dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvro8a.pfb>
-Output written on refman.pdf (30 pages, 136782 bytes).
+Output written on refman.pdf (30 pages, 138758 bytes).
 Transcript written on refman.log.
 latex_count=8 ; \
 	while egrep -s 'Rerun (LaTeX|to get cross-references right)' refman.log && [ $latex_count -gt 0 ] ;\
@@ -1886,9 +1903,9 @@ latex_count=8 ; \
 	    done
 makeindex refman.idx
 This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
-Scanning input file refman.idx....done (34 entries accepted, 0 rejected).
-Sorting entries....done (187 comparisons).
-Generating output file refman.ind....done (79 lines written, 0 warnings).
+Scanning input file refman.idx....done (36 entries accepted, 0 rejected).
+Sorting entries....done (185 comparisons).
+Generating output file refman.ind....done (83 lines written, 0 warnings).
 Output written in refman.ind.
 Transcript written in refman.ilg.
 pdflatex refman
@@ -2239,8 +2256,8 @@ Chapter 5.
 (./structcin__data__callbacks.tex) (./structcin__data__frame.tex [15])
 (./structcin__data__packet.tex) (./structcin__data__proc.tex)
 (./structcin__data__stats.tex [16]) (./structcin__data__threads.tex)
-(./structcin__map__t.tex) (./structcin__port.tex)
-(./structdescramble__map__t.tex [17]) (./structfifo.tex) [18]
+(./structcin__map__t.tex) (./structcin__port.tex [17])
+(./structdescramble__map__t.tex) (./structfifo.tex) [18]
 Chapter 6.
 (./cin_8h.tex (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd)
 Underfull \hbox (badness 10000) in paragraph at lines 4--11
@@ -2250,328 +2267,331 @@ Underfull \hbox (badness 10000) in paragraph at lines 4--11
 plicate ignored
 <to be read again> 
                    \relax 
-l.492 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int pwr)}
+l.501 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int pwr)}
                                                   \label{group__cin__ctl_ga9...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae4aaf3a1954eeeb18f77af9e33b4f3c0}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.495 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int pwr)}
+l.504 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int pwr)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga306beca3b918820661477130ba0b5182}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.498 ...-ctl\-\_\-t} $\ast$cin, int on\-\_\-off)}
+l.507 ...-ctl\-\_\-t} $\ast$cin, int on\-\_\-off)}
                                                   \label{group__cin__ctl_ga3...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gacd5a0ef09d2aded4d3e6e980eddeeecd}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.501 ...\-\_\-t} $\ast$cin, char $\ast$filename)}
+l.510 ...\-\_\-t} $\ast$cin, char $\ast$filename)}
                                                   \label{group__cin__ctl_gac...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga8b5f750265598579c7e4ccf39234b14d}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.504 ...\-\_\-t} $\ast$cin, char $\ast$filename)}
+l.513 ...\-\_\-t} $\ast$cin, char $\ast$filename)}
                                                   \label{group__cin__ctl_ga8...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga993ab986c4e2c70bd7f5299913aa3dec}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.507 ...-\_\-ctl\-\_\-t} $\ast$cin, int clkfreq)}
+l.516 ...-\_\-ctl\-\_\-t} $\ast$cin, int clkfreq)}
                                                   \label{group__cin__ctl_ga9...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga0a99b732a81f8e091c3647156155d09a}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.510 ...tl\-\_\-t} $\ast$cin, int $\ast$clkfreq)}
+l.519 ...tl\-\_\-t} $\ast$cin, int $\ast$clkfreq)}
                                                   \label{group__cin__ctl_ga0...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga997d355a8fe24e4933995a4c1dabfe6a}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.513 ...\-\_\-ctl\-\_\-t} $\ast$cin, int freeze)}
+l.522 ...\-\_\-ctl\-\_\-t} $\ast$cin, int freeze)}
                                                   \label{group__cin__ctl_ga9...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga2b17bbbde2a539c861c781fde50ddafd}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.516 ...\ast$cin, uint16\-\_\-t $\ast$\-\_\-val)}
+l.525 ...\ast$cin, uint16\-\_\-t $\ast$\-\_\-val)}
                                                   \label{group__cin__ctl_ga2...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga1bcc0c57bfe499acc7b89767c94d9b93}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.519 ...\_\-ctl\-\_\-id\-\_\-t} $\ast$\-\_\-val)}
+l.528 ...\_\-ctl\-\_\-id\-\_\-t} $\ast$\-\_\-val)}
                                                   \label{group__cin__ctl_ga1...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga2aa5a118ae10e33ca99a693ab6ea3384}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.522 ...l__id}{cin\-\_\-ctl\-\_\-id\-\_\-t} val)}
+l.531 ...l__id}{cin\-\_\-ctl\-\_\-id\-\_\-t} val)}
                                                   \label{group__cin__ctl_ga2...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga04b892ce2e9fdb6803304ce137f1bcb8}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.525 ...F\-I\-L\-E $\ast$out, uint16\-\_\-t val)}
+l.534 ...F\-I\-L\-E $\ast$out, uint16\-\_\-t val)}
                                                   \label{group__cin__ctl_ga0...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga762130f4d72af7725576613c5779f27d}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.528 ...\ast$cin, uint16\-\_\-t $\ast$\-\_\-val)}
+l.537 ...\ast$cin, uint16\-\_\-t $\ast$\-\_\-val)}
                                                   \label{group__cin__ctl_ga7...
-pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
-tl_ga8331d2e8ee388e47e1842d25d9c75ebe}) has been already used, duplicate ignore
-d
+[22]pdfTeX warning (ext4): destination with the same identifier (name{group__ci
+n__ctl_ga8331d2e8ee388e47e1842d25d9c75ebe}) has been already used, duplicate ig
+nored
 <to be read again> 
                    \relax 
-l.531 ...\ast$out, uint16\-\_\-t $\ast$\-\_\-val)}
+l.540 ...\ast$out, uint16\-\_\-t $\ast$\-\_\-val)}
                                                   \label{group__cin__ctl_ga8...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga0ec1d43cc2553c967bfca6f6a70ef8c1}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.534 ...\-current\-\_\-calc} (uint16\-\_\-t val)}
+l.543 ...\-current\-\_\-calc} (uint16\-\_\-t val)}
                                                   \label{group__cin__ctl_ga0...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gac368ad91dff323f4e48c7d5741d33a36}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.537 ...\-\_\-pwr\-\_\-mon\-\_\-t} $\ast$values)}
+l.546 ...\-\_\-pwr\-\_\-mon\-\_\-t} $\ast$values)}
                                                   \label{group__cin__ctl_gac...
-[22]pdfTeX warning (ext4): destination with the same identifier (name{group__ci
-n__ctl_gac801878f500a4e05738b7be009a1993b}) has been already used, duplicate ig
-nored
+pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
+tl_gac801878f500a4e05738b7be009a1993b}) has been already used, duplicate ignore
+d
 <to be read again> 
                    \relax 
-l.540 ...\-\_\-pwr\-\_\-mon\-\_\-t} $\ast$values)}
+l.549 ...\-\_\-pwr\-\_\-mon\-\_\-t} $\ast$values)}
                                                   \label{group__cin__ctl_gac...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae9487554511406af3a3b7ea7e61aa939}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.543 ...\-\_\-ctl\-\_\-pwr\-\_\-val\-\_\-t} val)}
+l.552 ...\-\_\-ctl\-\_\-pwr\-\_\-val\-\_\-t} val)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga0140edae04280f62f18cca629b075169}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.546 ...-ctl\-\_\-pwr\-\_\-val\-\_\-t} $\ast$vi)}
+l.555 ...-ctl\-\_\-pwr\-\_\-val\-\_\-t} $\ast$vi)}
                                                   \label{group__cin__ctl_ga0...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga92b27d6f05f4f1f81bf4cfb51cbad00e}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.549 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
+l.558 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
                                                   \label{group__cin__ctl_ga9...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gac1789851791ef22ed774a2c6079cef22}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.552 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
+l.561 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
                                                   \label{group__cin__ctl_gac...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gaf339d92456c935491d7783dbc5d0b10c}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.555 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
+l.564 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
                                                   \label{group__cin__ctl_gaf...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae4a65ed5e78a6d50af4a359f26120f7d}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.558 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
+l.567 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gab2ad6c1ba6c63b7bd217f8c74cb4aac5}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.561 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
+l.570 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
                                                   \label{group__cin__ctl_gab...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga370e279800873d395a98c9b2281e1e0e}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.564 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
+l.573 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
                                                   \label{group__cin__ctl_ga3...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gac89dd8640c883243ea45f2e6e1b47be4}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.567 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
+l.576 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
                                                   \label{group__cin__ctl_gac...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gadacd99ed5583428da539405202314ee2}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.570 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
+l.579 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
                                                   \label{group__cin__ctl_gad...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gafb8379c455084a79f95eda424c72a393}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.573 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
+l.582 ...cin\-\_\-ctl\-\_\-t} $\ast$cin, int val)}
                                                   \label{group__cin__ctl_gaf...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gaf78708af92b734e3b1074580286aebcc}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.576 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
+l.585 ..._\-ctl\-\_\-t} $\ast$cin, int $\ast$val)}
                                                   \label{group__cin__ctl_gaf...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga176d0e1bb374870f93b6dc6a7faf6228}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.579 ...tl\-\_\-t} $\ast$cin, int $\ast$trigger)}
+l.588 ...tl\-\_\-t} $\ast$cin, int $\ast$trigger)}
                                                   \label{group__cin__ctl_ga1...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga0872e9ec66f032ad78b4f2bc6ef11576}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.582 ...-\_\-ctl\-\_\-t} $\ast$cin, int nimages)}
+l.591 ...-\_\-ctl\-\_\-t} $\ast$cin, int nimages)}
                                                   \label{group__cin__ctl_ga0...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga60980b13f5ff8b41d617fda388102cca}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.585 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
+l.594 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
                                                   \label{group__cin__ctl_ga6...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae16421af69ed7296d5e005788a8842a9}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.588 ...\_\-t} $\ast$cin, int trigger\-\_\-mode)}
+l.597 ...\_\-t} $\ast$cin, int trigger\-\_\-mode)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gad0381cc231709636ec5254f466ea4b63}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.591 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
+l.600 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
                                                   \label{group__cin__ctl_gad...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga463539dd0764f2781d06750b2193343c}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.594 ...tl\-\_\-t} $\ast$cin, float e\-\_\-time)}
+l.603 ...tl\-\_\-t} $\ast$cin, float e\-\_\-time)}
                                                   \label{group__cin__ctl_ga4...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga8a2c75e9a23af2d918e2a2af80624edc}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.597 ...tl\-\_\-t} $\ast$cin, float t\-\_\-time)}
+l.606 ...tl\-\_\-t} $\ast$cin, float t\-\_\-time)}
                                                   \label{group__cin__ctl_ga8...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga859a6e8c6f51424c955ca8b71a292542}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.600 ...-\_\-ctl\-\_\-t} $\ast$cin, float ftime)}
+l.609 ...-\_\-ctl\-\_\-t} $\ast$cin, float ftime)}
                                                   \label{group__cin__ctl_ga8...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga5923252db71690cac8c24b41a2ba6ea0}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.603 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
+l.612 ...in__ctl}{cin\-\_\-ctl\-\_\-t} $\ast$cin)}
                                                   \label{group__cin__ctl_ga5...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae9bf180d21edc0474d7049d17cf2c84d}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.606 ...-\_\-ctl\-\_\-t} $\ast$cin, int setting)}
+l.615 ...-\_\-ctl\-\_\-t} $\ast$cin, int setting)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gae1d141bc0a5395b51298c57623478747}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.609 ...tl\-\_\-t} $\ast$cin, int $\ast$setting)}
+l.618 ...tl\-\_\-t} $\ast$cin, int $\ast$setting)}
                                                   \label{group__cin__ctl_gae...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_gaa12fef8b0135c99b43047eb7b637809c}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.612 ...in\-\_\-ctl\-\_\-t} $\ast$cin, int gain)}
+l.621 ...in\-\_\-ctl\-\_\-t} $\ast$cin, int gain)}
                                                   \label{group__cin__ctl_gaa...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga4625e3ed63eb77323f217984575ac16a}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.615 ..._\-ctl\-\_\-t} $\ast$cin, char $\ast$ip)}
+l.624 ..._\-ctl\-\_\-t} $\ast$cin, char $\ast$ip)}
                                                   \label{group__cin__ctl_ga4...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga2f1fd5316d579e946b39d4d068f0eebd}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.618 ...\-\_\-t} $\ast$cin, F\-I\-L\-E $\ast$fp)}
+l.627 ...\-\_\-t} $\ast$cin, F\-I\-L\-E $\ast$fp)}
                                                   \label{group__cin__ctl_ga2...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga90d16f522a23718ef53167b4943976f6}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.621 ...\-\_\-t} $\ast$cin, float $\ast$voltage)}
+l.630 ...\-\_\-t} $\ast$cin, float $\ast$voltage)}
                                                   \label{group__cin__ctl_ga9...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga87e3fb2c3ff76a12ecf26276fc7ba5d5}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.624 ...\-\_\-t} $\ast$cin, float $\ast$voltage)}
+l.633 ...\-\_\-t} $\ast$cin, float $\ast$voltage)}
                                                   \label{group__cin__ctl_ga8...
 pdfTeX warning (ext4): destination with the same identifier (name{group__cin__c
 tl_ga1ef720e477bf7b7d2b6ae34984cc374d}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.627 ...n\-\_\-ctl\-\_\-t} $\ast$cin, int clamp)}
+l.636 ...n\-\_\-ctl\-\_\-t} $\ast$cin, int clamp)}
                                                   \label{group__cin__ctl_ga1...
 [23]
-Underfull \hbox (badness 10000) detected at line 689
+Underfull \hbox (badness 10000) detected at line 712
 [][][]
-[24])
-Underfull \hbox (badness 10000) in paragraph at lines 732--163
+[24]
+Underfull \hbox (badness 10000) detected at line 748
+[][][]
+)
+Underfull \hbox (badness 10000) in paragraph at lines 774--163
 
 [25] (./refman.ind [26]) (./refman.aux (./group__cin__data.aux))
 
@@ -2590,6 +2610,6 @@ fonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr
 ive/texmf-dist/fonts/type1/urw/helvetic/uhvbo8ac.pfb></usr/share/texlive/texmf-
 dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvro8a.pfb>
-Output written on refman.pdf (30 pages, 136809 bytes).
+Output written on refman.pdf (30 pages, 138929 bytes).
 Transcript written on refman.log.
 make[1]: Leaving directory `/home/travis/build/NSLS-II/libcin/doc/latex'

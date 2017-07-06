@@ -16,6 +16,7 @@ var searchData=
   ['cin_5fdata',['cin_data',['../structcin__data.html',1,'cin_data'],['../group__cin__data.html',1,'(Global Namespace)']]],
   ['cin_5fdata_5fcallbacks',['cin_data_callbacks',['../structcin__data__callbacks.html',1,'']]],
   ['cin_5fdata_5fframe',['cin_data_frame',['../structcin__data__frame.html',1,'']]],
+  ['cin_5fdata_5fframestore_5ftrigger',['cin_data_framestore_trigger',['../cin_8h.html#aadeeae6d9adf79a8a661bb1e668967e5',1,'data.c']]],
   ['cin_5fdata_5finit',['cin_data_init',['../cin_8h.html#a128d41b42ffc9da69892f05861929e1d',1,'data.c']]],
   ['cin_5fdata_5fpacket',['cin_data_packet',['../structcin__data__packet.html',1,'']]],
   ['cin_5fdata_5fproc',['cin_data_proc',['../structcin__data__proc.html',1,'']]],
