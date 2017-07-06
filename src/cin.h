@@ -715,7 +715,22 @@ void cin_data_stop_threads(cin_data_t *cin);
 #define CIN_DATA_FRAMESTORE_TRIGGER         1
 #define CIN_DATA_FRAMESTORE_SKIP            2
 
+/** Send a framestore (software) trigger
+ * 
+ * Send a software trigger to the CIN by timestamping the request time and allow images to be
+ * processed when recieved after this time. The function is enabled by setting the
+ * framestore mode to CIN_DATA_FRAMESTORE_TRIGGER. 
+ *
+ * @param cin handle to the cin_data library
+ * 
+ * @sa cin_data_set_framestore_mode, cin_data_set_framestore_counter
+ */
 
+void cin_data_framestore_trigger(cin_data_t *cin);
+void cin_data_set_framestore_counter(cin_data_t *cin, int count);
+void cin_data_get_framestore_counter(cin_data_t *cin, int *count);
+void cin_data_set_framestore_mode(cin_data_t *cin, int mode);
+void cin_data_get_framestore_mode(cin_data_t *cin, int *mode);
 
 struct cin_data_frame* cin_data_get_next_frame(cin_data_t *cin);
 void cin_data_release_frame(cin_data_t *cin, int free_mem);
