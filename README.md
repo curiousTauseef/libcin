@@ -9,4 +9,4 @@ Based on code avaliable at https://bitbucket.org/berkeleylab/lbl-fastccds
 
 Started at 23-ID (CSX) at NSLS-II
 
-Documentation avaliable at (http://nsls-ii-csx/githiub.io/libcin)
+Documentation avaliable at (http://github.io/nsls-ii/libcin)
