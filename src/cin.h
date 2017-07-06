@@ -707,8 +707,9 @@ void cin_data_stop_threads(cin_data_t *cin);
  *
  *--------------------------------------------------------------------------------------------------------*/
 
-/* @defgroup cin_data_framestore CIN Data Framestore Functions
- * Data group
+/** @defgroup cin_data_framestore CIN Data Framestore Functions
+ * Framestore Group
+ * @{
  */
 
 /** Send a framestore (software) trigger
@@ -766,7 +767,7 @@ void cin_data_framestore_disable(cin_data_t *cin);
  */
 void cin_data_framestore_trigger_enable(cin_data_t *cin);
 
-/* @} */ // End of cin_data group
+/** @} */ // End of cin_data group
 
 struct cin_data_frame* cin_data_get_next_frame(cin_data_t *cin);
 void cin_data_release_frame(cin_data_t *cin, int free_mem);
