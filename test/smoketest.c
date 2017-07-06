@@ -11,7 +11,7 @@ int main(int argc, char *argv[]){
   cin_data_t cin_data;
 
   cin_ctl_init(&cin_ctl, NULL, 0, 0, 0, 0);
-  cin_data_init(&cin_data, CIN_DATA_MODE_CALLBACK, 50, 50, 
+  cin_data_init(&cin_data, 50, 50, 
       NULL, 0, NULL, 0, 1024,
       NULL, NULL, NULL);
 
