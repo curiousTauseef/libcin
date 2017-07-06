@@ -34,6 +34,8 @@
 
 /* Profiling Functions */
 struct timespec timespec_diff(struct timespec start, struct timespec end);
+int timespec_after(struct timespec start, struct timespec end);
+
 struct timeval timeval_diff(struct timeval start, struct timeval end);
 
 #endif

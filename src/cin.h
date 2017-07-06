@@ -388,7 +388,7 @@ typedef struct cin_data {
   fifo *frame_fifo;
   fifo *image_fifo;
 
-  /* Thread Pointers */
+  /* Thread Information */
 
   cin_data_threads_t listen_thread;
   cin_data_threads_t assembler_thread;
@@ -397,6 +397,7 @@ typedef struct cin_data {
   pthread_mutex_t assembler_mutex;
   pthread_mutex_t descramble_mutex;
   pthread_mutex_t stats_mutex;
+  pthread_mutex_t framestore_mutex;
 
   /* Callbacks Buffer */
 
@@ -413,6 +414,11 @@ typedef struct cin_data {
 
   /* Current Descramble Map */
   descramble_map_t map;
+
+  /* Framestore mode info */
+  int framestore_mode;
+  struct timespec framestore_trigger;
+  int framestore_counter;
 
 } cin_data_t;
 // Callback functions
@@ -698,6 +704,18 @@ void cin_data_stop_threads(cin_data_t *cin);
 /* 
  * Send a cancel request to all threads.
  */
+
+/*--------------------------------------------------------------------------------------------------------
+ * 
+ * CIN DATA Software trigger and framestore modes
+ *
+ *--------------------------------------------------------------------------------------------------------*/
+
+#define CIN_DATA_FRAMESTORE_NONE            0
+#define CIN_DATA_FRAMESTORE_TRIGGER         1
+#define CIN_DATA_FRAMESTORE_SKIP            2
+
+
 
 struct cin_data_frame* cin_data_get_next_frame(cin_data_t *cin);
 void cin_data_release_frame(cin_data_t *cin, int free_mem);

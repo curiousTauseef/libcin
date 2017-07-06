@@ -236,6 +236,12 @@ int cin_data_init(cin_data_t *cin, int mode, int packet_buffer_len, int frame_bu
   cin->mallformed_packets = 0;
   cin->dropped_packets = 0;
 
+  /* Some framesore info */
+  cin->framestore_counter = 0;
+  cin->framestore_mode = 0;
+  cin->framestore_trigger.tv_sec = 0;
+  cin->framestore_trigger.tv_nsec = 0;
+
   /* Setup the descramble map */
 
   cin->map.map = malloc(sizeof(uint32_t) * CIN_DATA_MAX_STREAM);
@@ -254,6 +260,7 @@ int cin_data_init(cin_data_t *cin, int mode, int packet_buffer_len, int frame_bu
   pthread_mutex_init(&cin->listen_mutex, NULL);
   pthread_mutex_init(&cin->assembler_mutex, NULL);
   pthread_mutex_init(&cin->descramble_mutex, NULL);
+  pthread_mutex_init(&cin->framestore_mutex, NULL);
 
   /* Setup connections between processes */
 
@@ -409,6 +416,45 @@ void cin_data_stop_threads(cin_data_t *cin){
     pthread_cancel(cin->listen_thread.thread_id);
     DEBUG_COMMENT("Listener thread canceled\n");
   }
+}
+
+void cin_data_framestore_trigger(cin_data_t *cin){
+  struct timespec time;
+  clock_gettime(CLOCK_REALTIME, &time);
+
+  DEBUG_PRINT("Framestore trigger at %ld.%09ld\n", time.tv_sec, time.tv_nsec);
+
+  pthread_mutex_lock(&cin->framestore_mutex);
+  cin->framestore_trigger = time;
+  pthread_mutex_unlock(&cin->framestore_mutex);
+}
+
+void cin_data_set_framestore_counter(cin_data_t *cin, int count){
+  pthread_mutex_lock(&cin->framestore_mutex);
+  cin->framestore_counter = count;
+  DEBUG_PRINT("Set framestore counter to %d\n", cin->framestore_counter);
+  pthread_mutex_unlock(&cin->framestore_mutex);
+}
+
+void cin_data_get_framestore_counter(cin_data_t *cin, int *count){
+  pthread_mutex_lock(&cin->framestore_mutex);
+  *count = cin->framestore_counter;
+  DEBUG_PRINT("Framestore counter is %d\n", cin->framestore_counter);
+  pthread_mutex_unlock(&cin->framestore_mutex);
+}
+
+void cin_data_set_framestore_mode(cin_data_t *cin, int mode){
+  pthread_mutex_lock(&cin->framestore_mutex);
+  cin->framestore_mode = mode;
+  DEBUG_PRINT("Set framestore mode to %d\n", cin->framestore_mode);
+  pthread_mutex_unlock(&cin->framestore_mutex);
+}
+
+void cin_data_get_framestore_mode(cin_data_t *cin, int *mode){
+  pthread_mutex_lock(&cin->framestore_mutex);
+  *mode = cin->framestore_mode;
+  DEBUG_PRINT("Framestore is %d\n", cin->framestore_mode);
+  pthread_mutex_unlock(&cin->framestore_mutex);
 }
 
 /* -----------------------------------------------------------------------------------------
@@ -656,7 +702,31 @@ void *cin_data_assembler_thread(void *args){
 
       // If we are in a framestore mode only output 
       // if the framestore counter
-      (*proc->output_put)(proc->output_args);
+
+      int go = 0;
+
+      pthread_mutex_lock(&proc->parent->framestore_mutex);
+      if(proc->parent->framestore_mode == CIN_DATA_FRAMESTORE_TRIGGER){
+        if(timespec_after(proc->parent->framestore_trigger, this_frame_timestamp) &&
+           (proc->parent->framestore_counter != 0)){
+          go = 1;
+          proc->parent->framestore_counter--;
+        } else {
+          go = 0;
+        }
+      } else if(proc->parent->framestore_mode == CIN_DATA_FRAMESTORE_SKIP){
+        if(proc->parent->framestore_counter > 0){
+          go = 0;
+          proc->parent->framestore_counter--;
+        } else {
+          go = 1;
+        }
+      }
+      pthread_mutex_unlock(&proc->parent->framestore_mutex);
+
+      if(go){
+        (*proc->output_put)(proc->output_args);
+      }
       frame = NULL;
       last_packet_flag = 0;
     }

@@ -90,4 +90,14 @@ struct timeval timeval_diff(struct timeval start, struct timeval end){
   return temp;
 }
 
+int timespec_after(struct timespec a, struct timespec b){
+  /* Calculte if B is afetr A */
 
+  if(b.tv_sec > a.tv_sec){
+    return 1;
+  }
+  if((b.tv_sec == a.tv_sec) && (b.tv_nsec > a.tv_nsec)){
+    return 1;
+  }
+  return 0;
+}
