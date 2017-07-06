@@ -720,8 +720,7 @@ void cin_data_stop_threads(cin_data_t *cin);
  * after the trigger has occured.
  *
  * @param cin handle to the cin_data library
- * @param count [in] number of frames to trigger
- * @sa cin_data_set_framestore_disable
+ * @param count number of frames to trigger
  *
  */
 void cin_data_framestore_trigger(cin_data_t *cin, int count);
@@ -733,7 +732,7 @@ void cin_data_framestore_trigger(cin_data_t *cin, int count);
  * usually done to stop the first few frames from being over exposed. 
  *
  * @param cin handle to the cin_data library
- * @sa cin_data_set_framestore_mode, cin_data_set_framestore_counter
+ * 
  */
 void cin_data_framestore_skip(cin_data_t *cin, int count);
 
@@ -744,7 +743,7 @@ void cin_data_framestore_skip(cin_data_t *cin, int count);
  *
  * @param cin handle to the cin_data library
  * @returns Number of frames to go in trigger 
- * @sa cin_data_framestore_trigger
+ * 
  */
 int cin_data_get_framestore_counter(cin_data_t *cin);
 
@@ -754,7 +753,7 @@ int cin_data_get_framestore_counter(cin_data_t *cin);
  * then the images will start to be processed. 
  *
  * @param cin Handle to the cin library
- * @sa cin_data_framestore_trigger cin_data_framestore_skip
+ * 
  */
 void cin_data_framestore_disable(cin_data_t *cin);
 
@@ -764,7 +763,7 @@ void cin_data_framestore_disable(cin_data_t *cin);
  * to the function to (software) trigger the camera.
  *
  * @param cin Handle to the cin library
- * @sa cin_data_framestore_trigger 
+ * 
  */
 void cin_data_framestore_trigger_enable(cin_data_t *cin);
 
