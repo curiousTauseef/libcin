@@ -679,36 +679,41 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;<span class="comment"> *</span></div>
 <div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;<span class="comment"> *--------------------------------------------------------------------------------------------------------*/</span></div>
 <div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;</div>
-<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;<span class="keywordtype">void</span> <a class="code" href="cin_8h.html#a66d8e0e63f2bb83a98177a828f3061b9">cin_data_framestore_trigger</a>(<a class="code" href="structcin__data.html">cin_data_t</a> *cin, <span class="keywordtype">int</span> count);</div>
-<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;</div>
-<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;<span class="keywordtype">void</span> <a class="code" href="cin_8h.html#a4c4ccc7ec34ae559c28622d6b48017e8">cin_data_framestore_skip</a>(<a class="code" href="structcin__data.html">cin_data_t</a> *cin, <span class="keywordtype">int</span> count);</div>
-<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;</div>
-<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;<span class="keywordtype">int</span> <a class="code" href="cin_8h.html#ab1ca9b95c7cfcd50a443156835cc6408">cin_data_get_framestore_counter</a>(<a class="code" href="structcin__data.html">cin_data_t</a> *cin);</div>
-<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;</div>
-<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;<span class="keywordtype">void</span> <a class="code" href="cin_8h.html#a4bf11587b2e32826e28ada5c2f656c63">cin_data_framestore_disable</a>(<a class="code" href="structcin__data.html">cin_data_t</a> *cin);</div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;</div>
-<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;<span class="keywordtype">void</span> <a class="code" href="cin_8h.html#a58c152e17f298b5b5c82a01a9b80d366">cin_data_framestore_trigger_enable</a>(<a class="code" href="structcin__data.html">cin_data_t</a> *cin);</div>
-<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160; <span class="comment">// End of cin_data group</span></div>
-<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;</div>
-<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;<span class="keyword">struct </span><a class="code" href="structcin__data__frame.html">cin_data_frame</a>* cin_data_get_next_frame(<a class="code" href="structcin__data.html">cin_data_t</a> *cin);</div>
-<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;<span class="keywordtype">void</span> cin_data_release_frame(<a class="code" href="structcin__data.html">cin_data_t</a> *cin, <span class="keywordtype">int</span> free_mem);</div>
-<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;</div>
-<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;<span class="keyword">struct </span><a class="code" href="structcin__data__frame.html">cin_data_frame</a>* cin_data_get_buffered_frame(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;<span class="keywordtype">void</span> cin_data_release_buffered_frame(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;</div>
-<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;<span class="keywordtype">void</span> cin_data_compute_stats(<a class="code" href="structcin__data.html">cin_data_t</a> *cin, <a class="code" href="structcin__data__stats.html">cin_data_stats_t</a> *stats);</div>
-<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;<span class="keywordtype">void</span> cin_data_show_stats(FILE *fp,<a class="code" href="structcin__data__stats.html">cin_data_stats_t</a> stats);</div>
-<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;<span class="keywordtype">void</span> cin_data_reset_stats(<a class="code" href="structcin__data.html">cin_data_t</a> *cin);</div>
+<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;<span class="comment">/* @defgroup cin_data_framestore CIN Data Framestore Functions</span></div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;<span class="comment"> * Data group</span></div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;</div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;<span class="keywordtype">void</span> <a class="code" href="cin_8h.html#a66d8e0e63f2bb83a98177a828f3061b9">cin_data_framestore_trigger</a>(<a class="code" href="structcin__data.html">cin_data_t</a> *cin, <span class="keywordtype">int</span> count);</div>
+<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;</div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;<span class="keywordtype">void</span> <a class="code" href="cin_8h.html#a4c4ccc7ec34ae559c28622d6b48017e8">cin_data_framestore_skip</a>(<a class="code" href="structcin__data.html">cin_data_t</a> *cin, <span class="keywordtype">int</span> count);</div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;</div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;<span class="keywordtype">int</span> <a class="code" href="cin_8h.html#ab1ca9b95c7cfcd50a443156835cc6408">cin_data_get_framestore_counter</a>(<a class="code" href="structcin__data.html">cin_data_t</a> *cin);</div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;</div>
+<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;<span class="keywordtype">void</span> <a class="code" href="cin_8h.html#a4bf11587b2e32826e28ada5c2f656c63">cin_data_framestore_disable</a>(<a class="code" href="structcin__data.html">cin_data_t</a> *cin);</div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;</div>
+<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;<span class="keywordtype">void</span> <a class="code" href="cin_8h.html#a58c152e17f298b5b5c82a01a9b80d366">cin_data_framestore_trigger_enable</a>(<a class="code" href="structcin__data.html">cin_data_t</a> *cin);</div>
+<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;</div>
+<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;<span class="comment">/* @} */</span> <span class="comment">// End of cin_data group</span></div>
+<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;</div>
+<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;<span class="keyword">struct </span><a class="code" href="structcin__data__frame.html">cin_data_frame</a>* cin_data_get_next_frame(<a class="code" href="structcin__data.html">cin_data_t</a> *cin);</div>
+<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;<span class="keywordtype">void</span> cin_data_release_frame(<a class="code" href="structcin__data.html">cin_data_t</a> *cin, <span class="keywordtype">int</span> free_mem);</div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;</div>
+<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;<span class="keyword">struct </span><a class="code" href="structcin__data__frame.html">cin_data_frame</a>* cin_data_get_buffered_frame(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;<span class="keywordtype">void</span> cin_data_release_buffered_frame(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;</div>
+<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;<span class="keywordtype">void</span> cin_data_compute_stats(<a class="code" href="structcin__data.html">cin_data_t</a> *cin, <a class="code" href="structcin__data__stats.html">cin_data_stats_t</a> *stats);</div>
+<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;<span class="keywordtype">void</span> cin_data_show_stats(FILE *fp,<a class="code" href="structcin__data__stats.html">cin_data_stats_t</a> stats);</div>
+<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;<span class="keywordtype">void</span> cin_data_reset_stats(<a class="code" href="structcin__data.html">cin_data_t</a> *cin);</div>
+<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;</div>
 <div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;</div>
-<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;</div>
-<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;<span class="keywordtype">int</span> cin_data_set_descramble_params(<a class="code" href="structcin__data.html">cin_data_t</a> *cin, <span class="keywordtype">int</span> rows, <span class="keywordtype">int</span> overscan);</div>
-<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;<span class="keywordtype">void</span> cin_data_get_descramble_params(<a class="code" href="structcin__data.html">cin_data_t</a> *cin, <span class="keywordtype">int</span> *rows, <span class="keywordtype">int</span> *overscan, <span class="keywordtype">int</span> *xsize, <span class="keywordtype">int</span> *ysize);</div>
-<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;</div>
-<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
-<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;<span class="preprocessor"></span>}</div>
-<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;<span class="preprocessor">#endif //__CIN_H__</span></div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;<span class="keywordtype">int</span> cin_data_set_descramble_params(<a class="code" href="structcin__data.html">cin_data_t</a> *cin, <span class="keywordtype">int</span> rows, <span class="keywordtype">int</span> overscan);</div>
+<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;<span class="keywordtype">void</span> cin_data_get_descramble_params(<a class="code" href="structcin__data.html">cin_data_t</a> *cin, <span class="keywordtype">int</span> *rows, <span class="keywordtype">int</span> *overscan, <span class="keywordtype">int</span> *xsize, <span class="keywordtype">int</span> *ysize);</div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;</div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;<span class="preprocessor"></span>}</div>
+<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;<span class="preprocessor">#endif //__CIN_H__</span></div>
 <div class="ttc" id="structdescramble__map__t_html"><div class="ttname"><a href="structdescramble__map__t.html">descramble_map_t</a></div><div class="ttdef"><b>Definition:</b> cin.h:376</div></div>
 <div class="ttc" id="cin_8h_html_a128d41b42ffc9da69892f05861929e1d"><div class="ttname"><a href="cin_8h.html#a128d41b42ffc9da69892f05861929e1d">cin_data_init</a></div><div class="ttdeci">int cin_data_init(cin_data_t *cin, int mode, int packet_buffer_len, int frame_buffer_len, char *ipaddr, uint16_t port, char *cin_ipaddr, uint16_t cin_port, int rcvbuf, cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr)</div><div class="ttdef"><b>Definition:</b> data.c:206</div></div>
 <div class="ttc" id="cin_8h_html_a58c152e17f298b5b5c82a01a9b80d366"><div class="ttname"><a href="cin_8h.html#a58c152e17f298b5b5c82a01a9b80d366">cin_data_framestore_trigger_enable</a></div><div class="ttdeci">void cin_data_framestore_trigger_enable(cin_data_t *cin)</div><div class="ttdef"><b>Definition:</b> data.c:421</div></div>
@@ -744,7 +749,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 </div>
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 6 2017 18:56:14 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 6 2017 19:09:18 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
