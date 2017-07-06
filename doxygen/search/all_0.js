@@ -16,7 +16,6 @@ var searchData=
   ['cin_5fdata',['cin_data',['../structcin__data.html',1,'']]],
   ['cin_5fdata_5fcallbacks',['cin_data_callbacks',['../structcin__data__callbacks.html',1,'']]],
   ['cin_5fdata_5fframe',['cin_data_frame',['../structcin__data__frame.html',1,'']]],
-  ['cin_20data_20framestore_20functions',['CIN Data Framestore Functions',['../group__cin__data__framestore.html',1,'']]],
   ['cin_5fdata_5fframestore_5fdisable',['cin_data_framestore_disable',['../cin_8h.html#a4bf11587b2e32826e28ada5c2f656c63',1,'data.c']]],
   ['cin_5fdata_5fframestore_5fskip',['cin_data_framestore_skip',['../cin_8h.html#a4c4ccc7ec34ae559c28622d6b48017e8',1,'cin.h']]],
   ['cin_5fdata_5fframestore_5ftrigger',['cin_data_framestore_trigger',['../cin_8h.html#a66d8e0e63f2bb83a98177a828f3061b9',1,'data.c']]],
