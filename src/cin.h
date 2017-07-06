@@ -50,8 +50,6 @@
 #include <sys/time.h>   // For timespec
 #include <pthread.h>
 
-#include "descramble.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -375,6 +373,13 @@ typedef struct cin_data_callbacks {
   cin_data_frame_t *frame;
 } cin_data_callbacks_t;
 
+typedef struct {
+  uint32_t *map;
+  int      size_x; // COLS
+  int      size_y; // ROWS
+  int      overscan;
+  int      rows;
+} descramble_map_t;
 
 typedef struct cin_data {
 

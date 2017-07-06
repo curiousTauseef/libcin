@@ -32,18 +32,9 @@
 #ifndef _DESCRAMBLE_H
 #define _DESCRAMBLE_H
 
-typedef struct {
-  uint32_t *map;
-  int      size_x; // COLS
-  int      size_y; // ROWS
-  int      overscan;
-  int      rows;
-} descramble_map_t;
-
 // Function prototypes
 
 int cin_data_descramble_init(descramble_map_t *map);
 int cin_data_descramble_frame(descramble_map_t *map, 
                               uint16_t *out, uint16_t *in);
-
 #endif

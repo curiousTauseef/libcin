@@ -468,7 +468,11 @@ void *cin_data_assembler_thread(void *args){
     if(buffer_len > packet_len){
       /* This packet is too big, dump the frame and continue */
       ERROR_COMMENT("Recieved packet too large");
+
+      pthread_mutex_lock(&proc->parent->stats_mutex);
       proc->parent->mallformed_packets++;
+      pthread_mutex_unlock(&proc->parent->stats_mutex);
+
       (*proc->input_put)(proc->input_args, proc->reader);
       continue;
     } else if(buffer_len < 60) {
@@ -487,7 +491,11 @@ void *cin_data_assembler_thread(void *args){
     if((*header & CIN_DATA_MAGIC_PACKET_MASK) != CIN_DATA_MAGIC_PACKET) {
       /* This is not a valid packet ... dump the packet and continue */
       ERROR_COMMENT("Packet does not match magic\n");
+
+      pthread_mutex_lock(&proc->parent->stats_mutex);
       proc->parent->mallformed_packets++;
+      pthread_mutex_unlock(&proc->parent->stats_mutex);
+
       (*proc->input_put)(proc->input_args, proc->reader);
       continue;
     }
@@ -521,8 +529,12 @@ void *cin_data_assembler_thread(void *args){
         ERROR_PRINT("Missed end of frame magic on frame %d\n", last_frame);
         frame->number = last_frame;
         frame->timestamp = last_frame_timestamp;
+
+        pthread_mutex_lock(&proc->parent->stats_mutex);
         proc->parent->last_frame = last_frame;
         proc->parent->mallformed_packets++;
+        pthread_mutex_unlock(&proc->parent->stats_mutex);
+        
         (*proc->output_put)(proc->output_args);
         frame = NULL;
       }
@@ -537,14 +549,18 @@ void *cin_data_assembler_thread(void *args){
       memset(frame->data, 0x0, CIN_DATA_MAX_STREAM * 2);
 
       /* Set all the last frame stuff */
+
+      pthread_mutex_lock(&proc->parent->stats_mutex);
+      proc->parent->framerate = timespec_diff(last_frame_timestamp,this_frame_timestamp);
+      pthread_mutex_unlock(&proc->parent->stats_mutex);
+
       last_frame = this_frame;
+      last_frame_timestamp  = this_frame_timestamp;
+      this_frame_timestamp  = buffer->timestamp;
+
       last_packet = -1;
       this_packet_msb = 0;
       last_packet_msb = 0;
-        
-      last_frame_timestamp  = this_frame_timestamp;
-      this_frame_timestamp  = buffer->timestamp;
-      proc->parent->framerate = timespec_diff(last_frame_timestamp,this_frame_timestamp);
 
       // Now check the packet length, if it is not correct reset here.
 
@@ -567,14 +583,19 @@ void *cin_data_assembler_thread(void *args){
     if(this_packet == last_packet){
       ERROR_PRINT("Duplicate packet (frame = %d, packet = 0x%x)\n", 
                   this_frame, this_packet + this_packet_msb);
+      pthread_mutex_lock(&proc->parent->stats_mutex);
       proc->parent->mallformed_packets++;
+      pthread_mutex_unlock(&proc->parent->stats_mutex);
       (*proc->input_put)(proc->input_args, proc->reader);
       continue;
     }
 
     skipped = (this_packet + this_packet_msb) - (last_packet + last_packet_msb + 1);
     if(skipped > 0){
+      pthread_mutex_lock(&proc->parent->stats_mutex);
       proc->parent->dropped_packets += skipped;
+      pthread_mutex_unlock(&proc->parent->stats_mutex);
+
       // Do some bounds checking
       if(((this_packet + this_packet_msb + 1) * packet_len) <
          (CIN_DATA_MAX_STREAM * 2)){
@@ -592,7 +613,9 @@ void *cin_data_assembler_thread(void *args){
       } else {
         // Out of bounds packet
         ERROR_COMMENT("Packet out of bounds\n");
+        pthread_mutex_lock(&proc->parent->stats_mutex);
         proc->parent->mallformed_packets++;
+        pthread_mutex_unlock(&proc->parent->stats_mutex);
       }
     }
 
@@ -612,7 +635,9 @@ void *cin_data_assembler_thread(void *args){
     } else {
       ERROR_PRINT("Packet count out of bounds (frame = %d, packet = 0x%x)\n", 
                   this_frame, this_packet + this_packet_msb);
+      pthread_mutex_lock(&proc->parent->stats_mutex);
       proc->parent->mallformed_packets++;
+      pthread_mutex_unlock(&proc->parent->stats_mutex);
       (*proc->input_put)(proc->input_args, proc->reader);
       continue;
     }
@@ -624,7 +649,10 @@ void *cin_data_assembler_thread(void *args){
       
       frame->number = this_frame;
       frame->timestamp = this_frame_timestamp;
+
+      pthread_mutex_lock(&proc->parent->stats_mutex);
       proc->parent->last_frame = this_frame;
+      pthread_mutex_unlock(&proc->parent->stats_mutex);
 
       // If we are in a framestore mode only output 
       // if the framestore counter
@@ -648,13 +676,24 @@ void *cin_data_assembler_thread(void *args){
 }
 
 void cin_data_reset_stats(cin_data_t *cin){
+
+  // Lock all mutexes 
   pthread_mutex_lock(&cin->stats_mutex);
+  pthread_mutex_lock(&cin->packet_fifo->mutex);
+  pthread_mutex_lock(&cin->frame_fifo->mutex);
+  pthread_mutex_lock(&cin->image_fifo->mutex);
+
   cin->dropped_packets = 0;
   cin->mallformed_packets = 0;
   cin->packet_fifo->overruns = 0;
   cin->frame_fifo->overruns = 0;
   cin->image_fifo->overruns = 0;
+
+  // Unlock all mutexes 
   pthread_mutex_unlock(&cin->stats_mutex);
+  pthread_mutex_unlock(&cin->packet_fifo->mutex);
+  pthread_mutex_unlock(&cin->frame_fifo->mutex);
+  pthread_mutex_unlock(&cin->image_fifo->mutex);
 }
 
 void cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats){
@@ -662,10 +701,7 @@ void cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats){
 
   pthread_mutex_lock(&cin->stats_mutex);
 
-  static unsigned int last_frame = 0;
-  //static unsigned long int n = 0; // Note this will rollover .. then this breaks!
-
-  if((unsigned int)cin->last_frame != last_frame){
+  if(cin->last_frame){
     // Compute framerate
 
     framerate  =  (double)cin->framerate.tv_nsec * 1e-9;
@@ -679,14 +715,18 @@ void cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats){
     framerate = 0; 
   }
 
+  // TODO This is probably not accurate... it is not all CIN_DATA_MAX_STREAM!
   datarate = framerate * CIN_DATA_MAX_STREAM * sizeof(uint16_t);
   datarate = datarate / (1024 * 1024); // Convert to Mb.s^-1
 
-  last_frame = (int)cin->last_frame;
-  stats->last_frame = last_frame;
-
+  stats->last_frame = (int)cin->last_frame;
   stats->framerate = framerate;
   stats->datarate = datarate;
+
+  // Lock the fifo mutexes
+  pthread_mutex_lock(&cin->packet_fifo->mutex);
+  pthread_mutex_lock(&cin->frame_fifo->mutex);
+  pthread_mutex_lock(&cin->image_fifo->mutex);
 
   stats->packet_percent_full = fifo_percent_full(cin->packet_fifo);
   stats->frame_percent_full = fifo_percent_full(cin->frame_fifo);
@@ -700,7 +740,11 @@ void cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats){
   stats->dropped_packets = cin->dropped_packets;
   stats->mallformed_packets = cin->mallformed_packets;
 
+  // Unlock all mutexes
   pthread_mutex_unlock(&cin->stats_mutex);
+  pthread_mutex_unlock(&cin->packet_fifo->mutex);
+  pthread_mutex_unlock(&cin->frame_fifo->mutex);
+  pthread_mutex_unlock(&cin->image_fifo->mutex);
 }
 
 void cin_data_show_stats(FILE *fp, cin_data_stats_t stats){
