@@ -43,6 +43,9 @@ extern "C" {
 /* Definitions */
 
 #define MAX_THREADS             20
+#define CIN_DATA_FRAMESTORE_NONE            0       /** Disable framestore mode */
+#define CIN_DATA_FRAMESTORE_TRIGGER         1       /** Software triggering mode in framestore */
+#define CIN_DATA_FRAMESTORE_SKIP            2      /** Framestore initial skip mode */
 
 /* Datastructures */
 

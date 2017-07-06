@@ -678,10 +678,6 @@ int cin_config_read_file(cin_ctl_t *cin, const char *file);
  * ---------------------------------------------------------------------
  */
 
-/** @defgroup cin_data CIN Data Routines
- * Data group
- */
-
 /** Initialize the cin data library
  *
  * Initialize the data handeling routines and start the threads for listening.
@@ -711,26 +707,58 @@ void cin_data_stop_threads(cin_data_t *cin);
  *
  *--------------------------------------------------------------------------------------------------------*/
 
-#define CIN_DATA_FRAMESTORE_NONE            0
-#define CIN_DATA_FRAMESTORE_TRIGGER         1
-#define CIN_DATA_FRAMESTORE_SKIP            2
+/** @defgroup cin_data_framestore CIN Data Framestore Functions
+ * Data group
+ */
 
 /** Send a framestore (software) trigger
  * 
  * Send a software trigger to the CIN by timestamping the request time and allow images to be
  * processed when recieved after this time. The function is enabled by setting the
- * framestore mode to CIN_DATA_FRAMESTORE_TRIGGER. 
+ * framestore mode to CIN_DATA_FRAMESTORE_TRIGGER. The count option sets the number of frames
+ * to trigger. A value of -1 indicated that the trigger should not count images but run indefinately
+ * after the trigger has occured.
  *
  * @param cin handle to the cin_data library
- * 
+ * @param count [in] number of frames to trigger
+ * @sa cin_data_set_framestore_disable
+ *
+ */
+void cin_data_framestore_trigger(cin_data_t *cin, int count);
+
+/** Enable framestore skip mode
+ *
+ * Enable the framestore skip mode. This function should be called before hardware triggering the camera.
+ * This causes the data processing to skip @param count frames from the first images to be read. This is
+ * usually done to stop the first few frames from being over exposed. 
+ *
+ * @param cin handle to the cin_data library
  * @sa cin_data_set_framestore_mode, cin_data_set_framestore_counter
  */
+void cin_data_framestore_skip(cin_data_t *cin, int count);
 
-void cin_data_framestore_trigger(cin_data_t *cin);
-void cin_data_set_framestore_counter(cin_data_t *cin, int count);
-void cin_data_get_framestore_counter(cin_data_t *cin, int *count);
-void cin_data_set_framestore_mode(cin_data_t *cin, int mode);
-void cin_data_get_framestore_mode(cin_data_t *cin, int *mode);
+/** Get the value of the framestore counter
+ * 
+ * Return the number of frames in the framestore counter. In trigger mode, this returns the number of frames
+ * to go. In skip mode, this returns the number of frames that have to be skipped.
+ *
+ * @param cin handle to the cin_data library
+ * @returns Number of frames to go in trigger 
+ * @sa cin_data_framestore_trigger
+ */
+int cin_data_get_framestore_counter(cin_data_t *cin);
+
+/** Disable the framestore modes
+ *
+ * This function disables the framestore modes (software trigger and skip). If the camera is hardware triggering
+ * then the images will start to be processed. 
+ *
+ * @param cin Handle to the cin library
+ * @sa cin_data_framestore_trigger cin_data_framestore_skiup
+ */
+void cin_data_framestore_disable(cin_data_t *cin);
+
+/** @} */ // End of cin_data group
 
 struct cin_data_frame* cin_data_get_next_frame(cin_data_t *cin);
 void cin_data_release_frame(cin_data_t *cin, int free_mem);
@@ -746,7 +774,6 @@ void cin_data_reset_stats(cin_data_t *cin);
 int cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan);
 void cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize);
 
-/** @} */ // End of cin_data group
 #ifdef __cplusplus
 }
 #endif

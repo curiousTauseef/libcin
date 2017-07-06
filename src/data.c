@@ -418,45 +418,50 @@ void cin_data_stop_threads(cin_data_t *cin){
   }
 }
 
-void cin_data_framestore_trigger(cin_data_t *cin){
+void cin_data_framestore_trigger(cin_data_t *cin, int count){
   struct timespec time;
   clock_gettime(CLOCK_REALTIME, &time);
 
-  DEBUG_PRINT("Framestore trigger at %ld.%09ld\n", time.tv_sec, time.tv_nsec);
-
   pthread_mutex_lock(&cin->framestore_mutex);
   cin->framestore_trigger = time;
-  pthread_mutex_unlock(&cin->framestore_mutex);
-}
-
-void cin_data_set_framestore_counter(cin_data_t *cin, int count){
-  pthread_mutex_lock(&cin->framestore_mutex);
   cin->framestore_counter = count;
-  DEBUG_PRINT("Set framestore counter to %d\n", cin->framestore_counter);
+  cin->framestore_mode = CIN_DATA_FRAMESTORE_TRIGGER;
+  DEBUG_PRINT("Framestore trigger at %ld.%09ld mode set to %d.\n", 
+      cin->framestore_trigger.tv_sec, cin->framestore_trigger.tv_nsec,
+      cin->framestore_mode);
   pthread_mutex_unlock(&cin->framestore_mutex);
 }
 
-void cin_data_get_framestore_counter(cin_data_t *cin, int *count){
+void cin_data_set_framestore_skip(cin_data_t *cin, int count){
   pthread_mutex_lock(&cin->framestore_mutex);
-  *count = cin->framestore_counter;
+  if(count != 0){
+    cin->framestore_counter = count;
+    cin->framestore_mode = CIN_DATA_FRAMESTORE_SKIP;
+  } else {
+    cin->framestore_mode = CIN_DATA_FRAMESTORE_NONE;
+  }
+  DEBUG_PRINT("Set framestore counter to %d mode to %d\n", 
+      cin->framestore_counter, cin->framestore_mode);
+  pthread_mutex_unlock(&cin->framestore_mutex);
+}
+
+int cin_data_get_framestore_counter(cin_data_t *cin){
+  int count;
+
+  pthread_mutex_lock(&cin->framestore_mutex);
+  count = cin->framestore_counter;
   DEBUG_PRINT("Framestore counter is %d\n", cin->framestore_counter);
   pthread_mutex_unlock(&cin->framestore_mutex);
+
+  return count;
 }
 
-void cin_data_set_framestore_mode(cin_data_t *cin, int mode){
+void cin_data_framestore_disable(cin_data_t *cin){
   pthread_mutex_lock(&cin->framestore_mutex);
-  cin->framestore_mode = mode;
-  DEBUG_PRINT("Set framestore mode to %d\n", cin->framestore_mode);
+  cin->framestore_mode = CIN_DATA_FRAMESTORE_NONE;
+  DEBUG_PRINT("Framestore mode set to %d (Disabled)\n", cin->framestore_mode);
   pthread_mutex_unlock(&cin->framestore_mutex);
 }
-
-void cin_data_get_framestore_mode(cin_data_t *cin, int *mode){
-  pthread_mutex_lock(&cin->framestore_mutex);
-  *mode = cin->framestore_mode;
-  DEBUG_PRINT("Framestore is %d\n", cin->framestore_mode);
-  pthread_mutex_unlock(&cin->framestore_mutex);
-}
-
 /* -----------------------------------------------------------------------------------------
  *
  * MAIN Thread Routines
