@@ -289,15 +289,15 @@ Search for main page./home/travis/build/NSLS-II/libcin/src/cin.h:68: warning: Me
 /home/travis/build/NSLS-II/libcin/src/cin.h:672: warning: Member cin_config_read_file(cin_ctl_t *cin, const char *file) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:695: warning: Member cin_data_wait_for_threads(cin_data_t *cin) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:699: warning: Member cin_data_stop_threads(cin_data_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:771: warning: Member cin_data_get_next_frame(cin_data_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:772: warning: Member cin_data_release_frame(cin_data_t *cin, int free_mem) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:774: warning: Member cin_data_get_buffered_frame(void) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:775: warning: Member cin_data_release_buffered_frame(void) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:777: warning: Member cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:778: warning: Member cin_data_show_stats(FILE *fp, cin_data_stats_t stats) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:779: warning: Member cin_data_reset_stats(cin_data_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:782: warning: Member cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:783: warning: Member cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:772: warning: Member cin_data_get_next_frame(cin_data_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:773: warning: Member cin_data_release_frame(cin_data_t *cin, int free_mem) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:775: warning: Member cin_data_get_buffered_frame(void) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:776: warning: Member cin_data_release_buffered_frame(void) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:778: warning: Member cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:779: warning: Member cin_data_show_stats(FILE *fp, cin_data_stats_t stats) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:780: warning: Member cin_data_reset_stats(cin_data_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:783: warning: Member cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:784: warning: Member cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:57: warning: Member cin_build_git_time (variable) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:58: warning: Member cin_build_git_sha (variable) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:59: warning: Member cin_build_version (variable) of file cin.h is not documented.
@@ -562,7 +562,7 @@ Generating file index...
 Generating file member index...
 Generating example index...
 finalizing index lists...
-lookup cache used 321/65536 hits=1442 misses=341
+lookup cache used 321/65536 hits=1447 misses=341
 finished...
 make -C doc/latex
 make[1]: Entering directory `/home/travis/build/NSLS-II/libcin/doc/latex'
@@ -659,6 +659,10 @@ Chapter 1.
 
 LaTeX Warning: Reference `group__cin__ctl' on page 1 undefined on input line 3.
 
+
+
+LaTeX Warning: Reference `group__cin__data__framestore' on page 1 undefined on 
+input line 4.
 
 ) [1] [2]
 Chapter 2.
@@ -796,21 +800,24 @@ Underfull \hbox (badness 10000) detected at line 289
 [9]
 Underfull \hbox (badness 10000) detected at line 314
 [][][]
-) [10]
+) [10] (./group__cin__data__framestore.tex [11]
+Underfull \hbox (badness 10000) detected at line 107
+[][][]
+) [12]
 Chapter 5.
 (./structcin__ctl.tex) (./structcin__ctl__config.tex) (./structcin__ctl__id.tex
-[11]) (./structcin__ctl__listener.tex) (./structcin__ctl__pwr__mon__t.tex)
-(./structcin__ctl__pwr__val.tex [12]) (./structcin__data.tex)
-(./structcin__data__callbacks.tex) (./structcin__data__frame.tex [13])
+[13]) (./structcin__ctl__listener.tex) (./structcin__ctl__pwr__mon__t.tex)
+(./structcin__ctl__pwr__val.tex [14]) (./structcin__data.tex)
+(./structcin__data__callbacks.tex) (./structcin__data__frame.tex [15])
 (./structcin__data__packet.tex) (./structcin__data__proc.tex)
-(./structcin__data__stats.tex [14]) (./structcin__data__threads.tex)
-(./structcin__map__t.tex) (./structcin__port.tex [15])
-(./structdescramble__map__t.tex) (./structfifo.tex) [16]
+(./structcin__data__stats.tex [16]) (./structcin__data__threads.tex)
+(./structcin__map__t.tex) (./structcin__port.tex [17])
+(./structdescramble__map__t.tex) (./structfifo.tex) [18]
 Chapter 6.
 (./cin_8h.tex (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd)
 Underfull \hbox (badness 10000) in paragraph at lines 4--11
 
-[17] [18] [19]pdfTeX warning (ext4): destination with the same identifier (name
+[19] [20] [21]pdfTeX warning (ext4): destination with the same identifier (name
 {group__cin__ctl_ga9f27eb66007f765775675978cea33e3b}) has been already used, du
 plicate ignored
 <to be read again> 
@@ -922,7 +929,7 @@ d
                    \relax 
 l.537 ...\-\_\-pwr\-\_\-mon\-\_\-t} $\ast$values)}
                                                   \label{group__cin__ctl_gac...
-[20]pdfTeX warning (ext4): destination with the same identifier (name{group__ci
+[22]pdfTeX warning (ext4): destination with the same identifier (name{group__ci
 n__ctl_gac801878f500a4e05738b7be009a1993b}) has been already used, duplicate ig
 nored
 <to be read again> 
@@ -1132,18 +1139,15 @@ d
                    \relax 
 l.627 ...n\-\_\-ctl\-\_\-t} $\ast$cin, int clamp)}
                                                   \label{group__cin__ctl_ga1...
-[21]
+[23]
 Underfull \hbox (badness 10000) detected at line 699
 [][][]
-[22]
-Underfull \hbox (badness 10000) detected at line 803
-[][][]
-[23])
-Underfull \hbox (badness 10000) in paragraph at lines 829--162
+[24])
+Underfull \hbox (badness 10000) in paragraph at lines 742--163
 
-[24]
+[25]
 No file refman.ind.
-(./refman.aux)
+(./refman.aux (./group__cin__data__framestore.aux))
 
 Package rerunfilecheck Warning: File `refman.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
@@ -1165,13 +1169,13 @@ fonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr
 ive/texmf-dist/fonts/type1/urw/helvetic/uhvbo8ac.pfb></usr/share/texlive/texmf-
 dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvro8a.pfb>
-Output written on refman.pdf (28 pages, 131785 bytes).
+Output written on refman.pdf (29 pages, 132995 bytes).
 Transcript written on refman.log.
 makeindex refman.idx
 This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
-Scanning input file refman.idx....done (43 entries accepted, 0 rejected).
-Sorting entries....done (238 comparisons).
-Generating output file refman.ind....done (97 lines written, 0 warnings).
+Scanning input file refman.idx....done (44 entries accepted, 0 rejected).
+Sorting entries....done (259 comparisons).
+Generating output file refman.ind....done (104 lines written, 0 warnings).
 Output written in refman.ind.
 Transcript written in refman.ilg.
 pdflatex refman
@@ -1244,6 +1248,7 @@ Package hyperref Message: Driver: hpdftex.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def)
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def) (./refman.aux
+(./group__cin__data__framestore.aux)
 
 LaTeX Warning: Label `group__cin__ctl_ga9f27eb66007f765775675978cea33e3b' multi
 ply defined.
@@ -1513,21 +1518,24 @@ Underfull \hbox (badness 10000) detected at line 289
 
 Underfull \hbox (badness 10000) detected at line 314
 [][][]
-) [10]
+) [10] (./group__cin__data__framestore.tex [11]
+Underfull \hbox (badness 10000) detected at line 107
+[][][]
+) [12]
 Chapter 5.
 (./structcin__ctl.tex) (./structcin__ctl__config.tex) (./structcin__ctl__id.tex
-[11]) (./structcin__ctl__listener.tex) (./structcin__ctl__pwr__mon__t.tex)
-(./structcin__ctl__pwr__val.tex [12]) (./structcin__data.tex)
-(./structcin__data__callbacks.tex) (./structcin__data__frame.tex [13])
+[13]) (./structcin__ctl__listener.tex) (./structcin__ctl__pwr__mon__t.tex)
+(./structcin__ctl__pwr__val.tex [14]) (./structcin__data.tex)
+(./structcin__data__callbacks.tex) (./structcin__data__frame.tex [15])
 (./structcin__data__packet.tex) (./structcin__data__proc.tex)
-(./structcin__data__stats.tex [14]) (./structcin__data__threads.tex)
-(./structcin__map__t.tex) (./structcin__port.tex [15])
-(./structdescramble__map__t.tex) (./structfifo.tex) [16]
+(./structcin__data__stats.tex [16]) (./structcin__data__threads.tex)
+(./structcin__map__t.tex) (./structcin__port.tex [17])
+(./structdescramble__map__t.tex) (./structfifo.tex) [18]
 Chapter 6.
 (./cin_8h.tex (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd)
 Underfull \hbox (badness 10000) in paragraph at lines 4--11
 
-[17] [18] [19]pdfTeX warning (ext4): destination with the same identifier (name
+[19] [20] [21]pdfTeX warning (ext4): destination with the same identifier (name
 {group__cin__ctl_ga9f27eb66007f765775675978cea33e3b}) has been already used, du
 plicate ignored
 <to be read again> 
@@ -1639,7 +1647,7 @@ d
                    \relax 
 l.537 ...\-\_\-pwr\-\_\-mon\-\_\-t} $\ast$values)}
                                                   \label{group__cin__ctl_gac...
-[20]pdfTeX warning (ext4): destination with the same identifier (name{group__ci
+[22]pdfTeX warning (ext4): destination with the same identifier (name{group__ci
 n__ctl_gac801878f500a4e05738b7be009a1993b}) has been already used, duplicate ig
 nored
 <to be read again> 
@@ -1849,16 +1857,13 @@ d
                    \relax 
 l.627 ...n\-\_\-ctl\-\_\-t} $\ast$cin, int clamp)}
                                                   \label{group__cin__ctl_ga1...
-[21]
+[23]
 Underfull \hbox (badness 10000) detected at line 699
 [][][]
-[22]
-Underfull \hbox (badness 10000) detected at line 803
-[][][]
-[23])
-Underfull \hbox (badness 10000) in paragraph at lines 829--162
+[24])
+Underfull \hbox (badness 10000) in paragraph at lines 742--163
 
-[24] (./refman.ind [25]) (./refman.aux)
+[25] (./refman.ind [26]) (./refman.aux (./group__cin__data__framestore.aux))
 
 Package rerunfilecheck Warning: File `refman.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
@@ -1880,7 +1885,7 @@ fonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr
 ive/texmf-dist/fonts/type1/urw/helvetic/uhvbo8ac.pfb></usr/share/texlive/texmf-
 dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvro8a.pfb>
-Output written on refman.pdf (29 pages, 140548 bytes).
+Output written on refman.pdf (30 pages, 142547 bytes).
 Transcript written on refman.log.
 latex_count=8 ; \
 	while egrep -s 'Rerun (LaTeX|to get cross-references right)' refman.log && [ $latex_count -gt 0 ] ;\
@@ -1891,9 +1896,9 @@ latex_count=8 ; \
 	    done
 makeindex refman.idx
 This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
-Scanning input file refman.idx....done (43 entries accepted, 0 rejected).
-Sorting entries....done (238 comparisons).
-Generating output file refman.ind....done (97 lines written, 0 warnings).
+Scanning input file refman.idx....done (44 entries accepted, 0 rejected).
+Sorting entries....done (259 comparisons).
+Generating output file refman.ind....done (104 lines written, 0 warnings).
 Output written in refman.ind.
 Transcript written in refman.ilg.
 pdflatex refman
@@ -1966,6 +1971,7 @@ Package hyperref Message: Driver: hpdftex.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def)
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def) (./refman.aux
+(./group__cin__data__framestore.aux)
 
 LaTeX Warning: Label `group__cin__ctl_ga9f27eb66007f765775675978cea33e3b' multi
 ply defined.
@@ -2235,21 +2241,24 @@ Underfull \hbox (badness 10000) detected at line 289
 
 Underfull \hbox (badness 10000) detected at line 314
 [][][]
-) [10]
+) [10] (./group__cin__data__framestore.tex [11]
+Underfull \hbox (badness 10000) detected at line 107
+[][][]
+) [12]
 Chapter 5.
 (./structcin__ctl.tex) (./structcin__ctl__config.tex) (./structcin__ctl__id.tex
-[11]) (./structcin__ctl__listener.tex) (./structcin__ctl__pwr__mon__t.tex)
-(./structcin__ctl__pwr__val.tex [12]) (./structcin__data.tex)
-(./structcin__data__callbacks.tex) (./structcin__data__frame.tex [13])
+[13]) (./structcin__ctl__listener.tex) (./structcin__ctl__pwr__mon__t.tex)
+(./structcin__ctl__pwr__val.tex [14]) (./structcin__data.tex)
+(./structcin__data__callbacks.tex) (./structcin__data__frame.tex [15])
 (./structcin__data__packet.tex) (./structcin__data__proc.tex)
-(./structcin__data__stats.tex [14]) (./structcin__data__threads.tex)
-(./structcin__map__t.tex) (./structcin__port.tex [15])
-(./structdescramble__map__t.tex) (./structfifo.tex) [16]
+(./structcin__data__stats.tex [16]) (./structcin__data__threads.tex)
+(./structcin__map__t.tex) (./structcin__port.tex [17])
+(./structdescramble__map__t.tex) (./structfifo.tex) [18]
 Chapter 6.
 (./cin_8h.tex (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd)
 Underfull \hbox (badness 10000) in paragraph at lines 4--11
 
-[17] [18] [19]pdfTeX warning (ext4): destination with the same identifier (name
+[19] [20] [21]pdfTeX warning (ext4): destination with the same identifier (name
 {group__cin__ctl_ga9f27eb66007f765775675978cea33e3b}) has been already used, du
 plicate ignored
 <to be read again> 
@@ -2361,7 +2370,7 @@ d
                    \relax 
 l.537 ...\-\_\-pwr\-\_\-mon\-\_\-t} $\ast$values)}
                                                   \label{group__cin__ctl_gac...
-[20]pdfTeX warning (ext4): destination with the same identifier (name{group__ci
+[22]pdfTeX warning (ext4): destination with the same identifier (name{group__ci
 n__ctl_gac801878f500a4e05738b7be009a1993b}) has been already used, duplicate ig
 nored
 <to be read again> 
@@ -2571,16 +2580,13 @@ d
                    \relax 
 l.627 ...n\-\_\-ctl\-\_\-t} $\ast$cin, int clamp)}
                                                   \label{group__cin__ctl_ga1...
-[21]
+[23]
 Underfull \hbox (badness 10000) detected at line 699
 [][][]
-[22]
-Underfull \hbox (badness 10000) detected at line 803
-[][][]
-[23])
-Underfull \hbox (badness 10000) in paragraph at lines 829--162
+[24])
+Underfull \hbox (badness 10000) in paragraph at lines 742--163
 
-[24] (./refman.ind [25]) (./refman.aux)
+[25] (./refman.ind [26]) (./refman.aux (./group__cin__data__framestore.aux))
 
 LaTeX Warning: There were undefined references.
 
@@ -2597,6 +2603,6 @@ fonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr
 ive/texmf-dist/fonts/type1/urw/helvetic/uhvbo8ac.pfb></usr/share/texlive/texmf-
 dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvro8a.pfb>
-Output written on refman.pdf (29 pages, 140555 bytes).
+Output written on refman.pdf (30 pages, 142652 bytes).
 Transcript written on refman.log.
 make[1]: Leaving directory `/home/travis/build/NSLS-II/libcin/doc/latex'
