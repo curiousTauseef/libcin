@@ -754,9 +754,20 @@ int cin_data_get_framestore_counter(cin_data_t *cin);
  * then the images will start to be processed. 
  *
  * @param cin Handle to the cin library
- * @sa cin_data_framestore_trigger cin_data_framestore_skiup
+ * @sa cin_data_framestore_trigger cin_data_framestore_skip
  */
 void cin_data_framestore_disable(cin_data_t *cin);
+
+
+/** Enable the framestore trigger mode
+ *
+ * This function enables the framestore trigger mode. It cases the images to not be processed pending a call
+ * to the function to (software) trigger the camera.
+ *
+ * @param cin Handle to the cin library
+ * @sa cin_data_framestore_trigger 
+ */
+void cin_data_framestore_trigger_enable(cin_data_t *cin);
 
 /** @} */ // End of cin_data group
 

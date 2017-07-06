@@ -418,6 +418,15 @@ void cin_data_stop_threads(cin_data_t *cin){
   }
 }
 
+void cin_data_framestore_trigger_enable(cin_data_t *cin){
+  pthread_mutex_lock(&cin->framestore_mutex);
+  cin->framestore_counter = 0;
+  cin->framestore_mode = CIN_DATA_FRAMESTORE_TRIGGER;
+  DEBUG_PRINT("Framestore trigger enabled, mode set to %d.\n", 
+      cin->framestore_mode);
+  pthread_mutex_unlock(&cin->framestore_mutex);
+}
+
 void cin_data_framestore_trigger(cin_data_t *cin, int count){
   struct timespec time;
   clock_gettime(CLOCK_REALTIME, &time);
