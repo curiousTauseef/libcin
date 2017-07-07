@@ -822,27 +822,6 @@ int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *val){
   return 0;
 }
 
-void cin_ctl_display_id(FILE *out, cin_ctl_id_t val){
-  fprintf(out, "FPGA Status :\n\n");
-  fprintf(out, "  Board ID         : 0x%04X\n", val.board_id);
-  fprintf(out, "  Serial Number    : 0x%04X\n", val.serial_no);
-  fprintf(out, "  CFG FPGA Ver.    : 0x%04X\n", val.fpga_ver);
-}
-
-void cin_ctl_display_fpga_status(FILE *out, uint16_t fpga_status){
-  fprintf(out, "  CFG FPGA Status  : 0x%04X\n\n", fpga_status);
-  if(fpga_status & CIN_CTL_FPGA_STS_CFG){
-    fprintf(out, "  ** Frame FPGA Configuration Done\n");
-  } else {
-    fprintf(out, "  ** Frame FPGA NOT CONFIGURED!\n");
-  }
-  if(fpga_status & CIN_CTL_FPGA_STS_FP_PWR){
-    fprintf(out, "  ** FP Power Supply Unlocked\n");
-  } else {
-    fprintf(out, "  ** FP Power Supply Locked Off\n");
-  }
-}
-
 int cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val){
   int _status;
 
@@ -854,26 +833,6 @@ int cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val){
 
   DEBUG_PRINT("CFG DCM Status   :  0x%04X\n", *_val);
   return 0; 
-}
-
-void cin_ctl_display_dcm_status(FILE *out, uint16_t *_val){
-  fprintf(out, "CFG DCM Status :\n\n");
-  fprintf(out, "  DCM Status       : 0x%04X\n\n", *_val);
-  if(*_val & CIN_CTL_DCM_STS_ATCA){
-    fprintf(out, "  ** ATCA 48V Alarm Active\n");
-  } else {
-    fprintf(out, "  ** ATCA 48V OK\n");
-  }
-  if(*_val & CIN_CTL_DCM_STS_LOCKED){
-    fprintf(out, "  ** CFG Clock DCM Locked\n");
-  } else {
-    fprintf(out, "  ** CFG Clock DCM NOT Locked\n");
-  }
-  if(*_val & CIN_CTL_DCM_STS_OVERIDE){
-    fprintf(out, "  ** FP Power Supply Interlock Overide Enabled\n");
-  } else {
-    fprintf(out, "  ** FP Power Supply Interlock Active\n");
-  }
 }
 
 double cin_ctl_current_calc(uint16_t val){
@@ -985,30 +944,6 @@ int cin_ctl_get_power_status(cin_ctl_t *cin, int full,
   }
 
   return 0;
-}
-
-void cin_ctl_display_pwr(FILE *out, cin_ctl_pwr_mon_t *values){
-  fprintf(out,"CIN Power values :\n\n");
-  cin_ctl_display_pwr_line(out,"  V12P_BUS Power   :", values->bus_12v0);
-  fprintf(out,"\n");
-  cin_ctl_display_pwr_line(out,"  V3P3_MGMT Power  :", values->mgmt_3v3);
-  cin_ctl_display_pwr_line(out,"  V2P5_MGMT Power  :", values->mgmt_2v5);
-  cin_ctl_display_pwr_line(out,"  V1P2_MGMT Power  :", values->mgmt_1v2);
-  cin_ctl_display_pwr_line(out,"  V1P0_ENET Power  :", values->enet_1v0);
-  fprintf(out,"\n");
-  cin_ctl_display_pwr_line(out,"  V3P3_S3E Power   :", values->s3e_3v3);
-  cin_ctl_display_pwr_line(out,"  V3P3_GEN Power   :", values->gen_3v3);
-  cin_ctl_display_pwr_line(out,"  V2P5_GEN Power   :", values->gen_2v5);
-  fprintf(out,"\n");
-  cin_ctl_display_pwr_line(out,"  V0P9_V6 Power    :", values->v6_0v9);
-  cin_ctl_display_pwr_line(out,"  V1P0_V6 Power    :", values->v6_1v0);
-  cin_ctl_display_pwr_line(out,"  V2P5_V6 Power    :", values->v6_2v5);
-  fprintf(out,"\n");
-  cin_ctl_display_pwr_line(out,"  V_FP Power       :", values->fp);
-}
-
-void cin_ctl_display_pwr_line(FILE *out,const char* msg, cin_ctl_pwr_val_t val){
-  fprintf(out,"%s %0.2f V @ %0.2f A \n", msg, val.v, val.i);
 }
 
 /******************* CIN Control *************************/

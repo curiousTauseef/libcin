@@ -463,7 +463,7 @@ typedef struct {
 
 void cin_report(FILE *fp, int details);
 
-/** @defgroup cin_ctl Cin Control Routines
+/** @defgroup cin_ctl_init Cin Control Initialization Routines
  *
  * @{
  */
@@ -508,11 +508,18 @@ int cin_ctl_init(cin_ctl_t *cin,
  */
 int cin_ctl_destroy(cin_ctl_t *cin);
 
+/** @} */
+
 /*--------------------------------------------------------------------------------------------------------
  * 
  * CIN Read Write Routines
  *
  *--------------------------------------------------------------------------------------------------------*/
+
+/** @defgroup cin_ctl_rw Cin Control Read/Rwite Routines
+ *
+ * @{
+ */
 
 /*!
  * Read register from CIN
@@ -564,6 +571,11 @@ int cin_ctl_stream_write(cin_ctl_t *cin, char* val,int size);
  */
 int cin_ctl_write_with_readback(cin_ctl_t *cin, uint16_t reg, uint16_t val);
 
+/** @} */
+
+/** @defgroup cin_ctl_rw Cin Control Read/Rwite Routines
+ * @{
+ */
 /*--------------------------------------------------------------------------------------------------------
  * 
  * CIN Read Write Routines
@@ -574,6 +586,8 @@ int cin_ctl_pwr(cin_ctl_t *cin, int pwr);
 int cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr);
 int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off);
 
+/** @} */
+
 /*--------------------------------------------------------------------------------------------------------
  * 
  * CIN Configuration-Status
@@ -582,15 +596,11 @@ int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off);
 
 int cin_ctl_load_config(cin_ctl_t *cin,char *filename);
 int cin_ctl_load_firmware(cin_ctl_t *cin, char *filename);
-int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq);
 int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq);
-int cin_ctl_freeze_dco(cin_ctl_t *cin, int freeze);
+int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq);
 int cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val);
 int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *_val);
-void cin_ctl_display_id(FILE *out, cin_ctl_id_t val);
-void cin_ctl_display_fpga_status(FILE *out, uint16_t val);
 int cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val);
-void cin_ctl_display_dcm_status(FILE *out, uint16_t *_val);
 
 /*--------------------------------------------------------------------------------------------------------
  * 
@@ -598,13 +608,7 @@ void cin_ctl_display_dcm_status(FILE *out, uint16_t *_val);
  *
  *--------------------------------------------------------------------------------------------------------*/
 
-double cin_ctl_current_calc(uint16_t val);
 int cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon_t *values);
-void cin_ctl_display_pwr(FILE *out, cin_ctl_pwr_mon_t *values);
-void cin_ctl_display_pwr_line(FILE *out,const char* msg, cin_ctl_pwr_val_t val);
-int cin_ctl_calc_vi_status(cin_ctl_t *cin, 
-                           uint16_t vreg, uint16_t ireg, double vfact,
-                           cin_ctl_pwr_val_t *vi);
 
 /*------------------------
  * CIN Control
@@ -631,6 +635,7 @@ int cin_ctl_set_cycle_time(cin_ctl_t *cin,float ftime);
 int cin_ctl_frame_count_reset(cin_ctl_t *cin);
 int cin_ctl_set_mux(cin_ctl_t *cin, int setting);
 int cin_ctl_get_mux(cin_ctl_t *cin, int *setting);
+int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp);
 int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain);
 
 /*------------------------
@@ -651,14 +656,6 @@ int cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp);
 
 int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage);
 int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage);
-
-/*------------------------
- * CIN FCRIC Clamp
- *------------------------*/
-
-int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp);
-
-/** @} */ // End of cin_ctl group
 
 /*------------------------
  * CIN Config File
