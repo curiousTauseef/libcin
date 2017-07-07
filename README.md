@@ -26,9 +26,9 @@ Installation
 Installation of the library is like most unix based source packages:
 
 ```
-$./make
-$./make doc
-$./make test
-$./make install
-'''
+./make
+./make doc
+./make test
+./make install
 
+```
