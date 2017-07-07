@@ -53,12 +53,12 @@ License
 -------
 
 This project is licensed under the BSD License - see the
-[LICENSE.md](http://github.com/NSLS-II/libcin/blob/master/LICENSE.md) file for details
+[LICENSE](http://github.com/NSLS-II/libcin/blob/master/LICENSE) file for details
 
 Acknowledgments
 ---------------
 
 A huge thanks to Peter Dennes, John Joseph and the detector team at LBNL and
-the team at Sydor Instruments
+the team at Sydor Instruments.
 
 
