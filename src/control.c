@@ -143,6 +143,9 @@ int cin_ctl_destroy(cin_ctl_t *cin){
 
 int cin_ctl_init_port(cin_port_t *cp){
 
+  DEBUG_PRINT("Client address = %s:%d\n", cp->cliaddr, cp->cliport);
+  DEBUG_PRINT("Server address = %s:%d\n", cp->srvaddr, cp->srvport);
+
   cp->sockfd = socket(AF_INET, SOCK_DGRAM, 0);
   if (cp->sockfd < 0) {
     ERROR_COMMENT("socket() failed.\n");
