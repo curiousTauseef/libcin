@@ -70,6 +70,7 @@ extern const char *cin_build_version;
 #define CIN_CTL_CLI_PORT                   50200
 #define CIN_CTL_SVR_FRMW_PORT              49202
 #define CIN_CTL_CLI_FRMW_PORT              50202
+#define CIN_CTL_RCVBUF                     10  // Mb 
 
 #define CIN_CTL_MAX_READ_TRIES             10
 #define CIN_CTL_MAX_WRITE_TRIES            5
@@ -287,6 +288,7 @@ typedef struct cin_ctl_listener {
   struct cin_port *cp;
   fifo ctl_fifo;
   pthread_t thread_id;
+  pthread_barrier_t barrier;
 } cin_ctl_listener_t;
 
 typedef struct cin_port {

@@ -44,6 +44,7 @@
 #include "cinregisters.h"
 #include "control.h"
 #include "config.h"
+#include "common.h"
 #include "fifo.h"
   
 /**************************** INITIALIZATION **************************/
@@ -97,8 +98,11 @@ int cin_ctl_init(cin_ctl_t *cin,
   } else {
     cin->stream_port.cliport = iport;
   }
+  
+  cin->ctl_port.rcvbuf = CIN_CTL_RCVBUF;
+  cin->stream_port.rcvbuf = CIN_CTL_RCVBUF;
 
-  if(cin_ctl_init_port(&(cin->ctl_port)) || cin_ctl_init_port(&(cin->stream_port))){
+  if(cin_init_port(&(cin->ctl_port)) || cin_init_port(&(cin->stream_port))){
      ERROR_COMMENT("Unable to open commuincations\n");
      return -1;
   }
@@ -108,6 +112,8 @@ int cin_ctl_init(cin_ctl_t *cin,
   // Now initialize a listener thread for UDP communications
 
   cin_ctl_listener_t *listener = malloc(sizeof(cin_ctl_listener_t));
+  cin->listener = listener;
+
   if(!listener){
     ERROR_COMMENT("Unable to create listener (MALLOC Failed)\n");
     return -1;
@@ -123,11 +129,20 @@ int cin_ctl_init(cin_ctl_t *cin,
   pthread_mutexattr_init(&cin->access_attr);
   pthread_mutexattr_settype(&cin->access_attr, PTHREAD_MUTEX_RECURSIVE);
   pthread_mutex_init(&cin->access, &cin->access_attr);
+  pthread_barrier_init(&listener->barrier, NULL, 2);
 
   pthread_create(&listener->thread_id, NULL, 
                  cin_ctl_listen_thread, (void*)listener);
-  cin->listener = listener;
   
+  // Now wait for the listening thread to start
+
+  DEBUG_COMMENT("Waiting for listening thread to start ....\n");
+
+  pthread_barrier_wait(&listener->barrier);
+  pthread_barrier_destroy(&listener->barrier);
+
+  DEBUG_COMMENT("Listening thread has started.\n");
+
   // SBW : Do we need to wait for listener to start?
   return(0);
 }
@@ -141,51 +156,6 @@ int cin_ctl_destroy(cin_ctl_t *cin){
 
 /**************************** UDP Socket ******************************/
 
-int cin_ctl_init_port(cin_port_t *cp){
-
-  DEBUG_PRINT("Client address = %s:%d\n", cp->cliaddr, cp->cliport);
-  DEBUG_PRINT("Server address = %s:%d\n", cp->srvaddr, cp->srvport);
-
-  cp->sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-  if (cp->sockfd < 0) {
-    ERROR_COMMENT("socket() failed.\n");
-      return -1;
-  }
-
-  int i = 1;
-  if(setsockopt(cp->sockfd, SOL_SOCKET, SO_REUSEADDR, 
-                (void *)&i, sizeof i) < 0) {
-    ERROR_COMMENT("setsockopt() failed.\n");
-    return -1;
-  }
-
-  // initialize CIN (server) and client (us!) sockaddr structs
-  memset(&cp->sin_srv, 0, sizeof(struct sockaddr_in));
-  memset(&cp->sin_cli, 0, sizeof(struct sockaddr_in));
-
-  cp->sin_srv.sin_family = AF_INET;
-  cp->sin_srv.sin_port = htons(cp->srvport);
-  cp->sin_cli.sin_family = AF_INET;
-  cp->sin_cli.sin_port = htons(cp->cliport);
-  cp->slen = sizeof(struct sockaddr_in);
-
-  if(inet_aton(cp->srvaddr, &cp->sin_srv.sin_addr) == 0) {
-    ERROR_COMMENT("inet_aton() Failed.\n");
-    return 1;
-  }
-
-  if(inet_aton(cp->cliaddr, &cp->sin_cli.sin_addr) == 0) {
-    ERROR_COMMENT("inet_aton() Failed.\n");
-    return 1;
-  }
-
-  if(bind(cp->sockfd, (struct sockaddr *)&cp->sin_cli, sizeof(cp->sin_cli))){
-    ERROR_COMMENT("Bind failed.\n");
-    return -1;
-  }
-
-  return 0;
-}
 
 uint32_t cin_ctl_get_packet(cin_ctl_t *cin, uint32_t *val){
   int i;
@@ -209,28 +179,25 @@ uint32_t cin_ctl_get_packet(cin_ctl_t *cin, uint32_t *val){
 void *cin_ctl_listen_thread(void* args){
   uint32_t *buffer;
   uint32_t val;
-  cin_port_t *cp;
-  fifo *ctl_fifo;
   int i;
+  cin_ctl_listener_t *data = (cin_ctl_listener_t*)args;
 
   // Parse the data structure passed to the thread
 
-  ctl_fifo = &((cin_ctl_listener_t*)args)->ctl_fifo;
-  cp       = ((cin_ctl_listener_t*)args)->cp;
-
   DEBUG_COMMENT("Started listener thread.\n");
 
+  pthread_barrier_wait(&data->barrier);
   while(1){
-    buffer = (uint32_t*)fifo_get_head(ctl_fifo);
-    i = recvfrom(cp->sockfd, &val, sizeof(val), 0,
-                 (struct sockaddr*)&cp->sin_cli,
-                 (socklen_t*)&cp->slen);
+    buffer = (uint32_t*)fifo_get_head(&data->ctl_fifo);
+    i = recvfrom(data->cp->sockfd, &val, sizeof(val), 0,
+                 (struct sockaddr*)&data->cp->sin_cli,
+                 (socklen_t*)&data->cp->slen);
     if(i != -1){
       *buffer = ntohl(val);
 #ifdef __DEBUG_STREAM__
       DEBUG_PRINT("Received %d bytes value  = %08lX\n", i, (long int)(*buffer));
 #endif
-      fifo_advance_head(ctl_fifo);
+      fifo_advance_head(&data->ctl_fifo);
     } else {
       DEBUG_COMMENT("Timeout\n");
     }

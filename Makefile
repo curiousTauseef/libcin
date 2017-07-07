@@ -81,7 +81,7 @@ lib/libcin.so: $(LIBOBJECTS)
 # Now create 
 
 LDFLAGS=-L./lib
-LDLIBS=-lcin -lconfig -lpthread -lrt -lbsd
+LDLIBS=-Wl,-Bstatic -lcin -Wl,-Bdynamic -lconfig -lpthread -lrt -lbsd
 
 bin/cinregdump: src/cinregdump.o lib/libcin.so  src/cin.h
 	$(CC) $(LDFLAGS) src/cinregdump.o -o $@ $(LDLIBS) 

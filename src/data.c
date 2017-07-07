@@ -62,120 +62,6 @@
 
 //int cin_init
 
-int cin_data_init_port(cin_data_t *cin,
-                       char* ipaddr, uint16_t port,
-                       char* cin_ipaddr, uint16_t cin_port,
-                       int rcvbuf) {
-
-  cin_port_t *dp = &cin->dp;
-
-  if(ipaddr == NULL){
-    dp->cliaddr = "0.0.0.0";
-  } else {
-    dp->cliaddr = ipaddr;
-  }
-
-  if(port == 0){
-    dp->cliport = CIN_DATA_PORT;
-  } else {
-    dp->cliport = port;
-  }
-
-  if(cin_ipaddr == NULL){
-    dp->srvaddr = CIN_DATA_IP;
-  } else {
-    dp->srvaddr = cin_ipaddr;
-  }
-
-  if(cin_port == 0){
-    dp->srvport = CIN_DATA_CTL_PORT;
-  } else {
-    dp->srvport = cin_port;
-  }
-
-  if(rcvbuf == 0){
-    dp->rcvbuf = CIN_DATA_RCVBUF;
-  } else {
-    dp->rcvbuf = rcvbuf;
-  }
-  dp->rcvbuf = dp->rcvbuf * 1024 * 1024; // Convert to Mb
-  
-  // Do debur prints
-
-  DEBUG_PRINT("Client address = %s:%d\n", dp->cliaddr, dp->cliport);
-  DEBUG_PRINT("Server address = %s:%d\n", dp->srvaddr, dp->srvport);
-
-  dp->sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-  if(dp->sockfd < 0) {
-    ERROR_COMMENT("CIN data port - socket() failed !!!");
-    return 1;
-  }
-
-  DEBUG_PRINT("Opened socket :%d\n", dp->sockfd);
-
-  int i = 1;
-  if(setsockopt(dp->sockfd, SOL_SOCKET, SO_REUSEADDR, \
-                (void *)&i, sizeof i) < 0) {
-    ERROR_COMMENT("CIN data port - setsockopt() failed !!!");
-    return 1;
-  }
-
-  /* initialize CIN (server) and client (us!) sockaddr structs */
-
-  memset(&dp->sin_srv, 0, sizeof(struct sockaddr_in));
-  memset(&dp->sin_cli, 0, sizeof(struct sockaddr_in));
-
-  dp->sin_srv.sin_family = AF_INET;
-  dp->sin_srv.sin_port = htons(dp->srvport);
-  dp->sin_cli.sin_family = AF_INET;
-  dp->sin_cli.sin_port = htons(dp->cliport);
-  dp->slen = sizeof(struct sockaddr_in);
-
-  if(inet_aton(dp->srvaddr, &dp->sin_srv.sin_addr) == 0) {
-    ERROR_COMMENT("CIN data port - inet_aton() failed!!");
-    return 1;
-  }
-
-  if(inet_aton(dp->cliaddr, &dp->sin_cli.sin_addr) == 0) {
-    ERROR_COMMENT("CIN data port - inet_aton() failed!!");
-    return 1;
-  }
-
-  /* Bind to the socket to get CIN traffic */
-
-  if((bind(dp->sockfd, (struct sockaddr *)&dp->sin_cli , sizeof(dp->sin_cli))) == -1){
-    ERROR_COMMENT("CIN data port - cannot bind");
-    return 1;
-  }
-
-  /* Set the receieve buffers for the socket */
-
-  DEBUG_PRINT("Requesting recieve buffer of %d Mb\n", dp->rcvbuf / (1024*1024));
-
-  if(setsockopt(dp->sockfd, SOL_SOCKET, SO_RCVBUF, 
-                &dp->rcvbuf, sizeof(dp->rcvbuf)) == -1){
-    ERROR_COMMENT("CIN data port - unable to set receive buffer :");
-  } 
-
-  socklen_t rcvbuf_rb_len = sizeof(dp->rcvbuf_rb);
-  if(getsockopt(dp->sockfd, SOL_SOCKET, SO_RCVBUF,
-                &dp->rcvbuf_rb, &rcvbuf_rb_len) == -1){
-    ERROR_COMMENT("CIN data port - unable to get receive buffer :");
-  }
-
-  DEBUG_PRINT("Recieve buffer = %d Mb\n", dp->rcvbuf_rb / (1024 * 1024));
-
-  int zero = 0;
-  if(setsockopt(dp->sockfd, SOL_SOCKET, SO_TIMESTAMP,
-                &zero, sizeof(zero)) == -1){
-    ERROR_COMMENT("Unable to set sockopt SO_TIMESTAMP");
-  } else {
-    DEBUG_COMMENT("Set SO_TIMESTAMP to zero\n");
-  }
-                
-  return 0;
-}
-
 int cin_data_read(cin_port_t *dp, unsigned char* buffer){
   /* Read from the UDP stream */
   return recvfrom(dp->sockfd, buffer, 
@@ -219,11 +105,41 @@ int cin_data_init(cin_data_t *cin, int packet_buffer_len, int frame_buffer_len,
   DEBUG_PRINT("build version = %s\n", cin_build_version);
 
   // First open communications .....
-  
-  if(cin_data_init_port(cin, ipaddr, port, cin_ipaddr, cin_port, rcvbuf)){
-    return 2;
+
+  if(ipaddr == NULL){
+    cin->dp.cliaddr = "0.0.0.0";
+  } else {
+    cin->dp.cliaddr = ipaddr;
   }
 
+  if(port == 0){
+    cin->dp.cliport = CIN_DATA_PORT;
+  } else {
+    cin->dp.cliport = port;
+  }
+
+  if(cin_ipaddr == NULL){
+    cin->dp.srvaddr = CIN_DATA_IP;
+  } else {
+    cin->dp.srvaddr = cin_ipaddr;
+  }
+
+  if(cin_port == 0){
+    cin->dp.srvport = CIN_DATA_CTL_PORT;
+  } else {
+    cin->dp.srvport = cin_port;
+  }
+
+  if(rcvbuf == 0){
+    cin->dp.rcvbuf = CIN_DATA_RCVBUF;
+  } else {
+    cin->dp.rcvbuf = rcvbuf;
+  }
+
+  if(cin_init_port(&cin->dp)){
+    return -1;
+  }
+  
   /* Initialize buffers */
   int rtn;
   if((rtn = cin_data_init_buffers(cin, packet_buffer_len, frame_buffer_len)) != 0){

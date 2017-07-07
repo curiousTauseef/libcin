@@ -78,11 +78,6 @@ typedef struct cin_data_proc {
 
 /* Templates for functions */
 
-int cin_data_init_port(cin_data_t *cin,
-                       char* ipaddr, uint16_t port,
-                       char* cin_ipaddr, uint16_t cin_port,
-                       int rcvbuf);
-
 /* Thread Handeling */
 
 int cin_data_thread_start(cin_data_threads_t *thread, 

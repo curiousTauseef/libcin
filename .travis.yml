@@ -18,7 +18,6 @@ before_install:
  - sudo apt-get install libconfig-dev
  - sudo apt-get install libbsd-dev
  - sudo apt-get install texlive-latex-base texlive-latex-extra texlive-fonts-recommended
- - export LD_LIBRARY_PATH=`pwd`/lib
 
 after_success:
   - cd $TRAVIS_BUILD_DIR

@@ -38,4 +38,5 @@ int timespec_after(struct timespec start, struct timespec end);
 
 struct timeval timeval_diff(struct timeval start, struct timeval end);
 
+int cin_init_port(cin_port_t *cp);
 #endif
