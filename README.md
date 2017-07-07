@@ -36,16 +36,16 @@ Versioning
 ----------
 
 For the versions available, see the [tags on this
-repository](https://github.com/NSLS-II/libcin/tags). 
+repository](http://github.com/NSLS-II/libcin/tags). 
 
 
 Authors
 -------
 
-* **Stuart B. Wilkins** - [stuwilkins](https://github.com/stuwilkins)
+* **Stuart B. Wilkins** - [stuwilkins](http://github.com/stuwilkins)
 
 See also the list of
-[contributors](https://github.com/NSLS-II/libcin/contributors) who participated
+[contributors](http://github.com/NSLS-II/libcin/contributors) who participated
 in this project.
 
 
