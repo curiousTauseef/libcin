@@ -30,11 +30,22 @@ Installation of the library is like most unix based source packages:
 ./make doc
 ./make test
 ./make install
+```
 
 Authors
 -------
 
 * **Stuart B. Wilkins** - [stuwilkins](https://github.com/stuwilkins)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/NSLS-II/libcin/contributors) who participated in this project.
 
+
+License
+-------
+
+This project is licensed under the BSD License - see the [LICENSE.md](LICENSE.md) file for details
+
+Acknowledgments
+---------------
+
+A huge thanks to Peter Dennes, John Joseph and the detector team at LBNL
