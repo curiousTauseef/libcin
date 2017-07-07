@@ -58,4 +58,7 @@ This project is licensed under the BSD License - see the
 Acknowledgments
 ---------------
 
-A huge thanks to Peter Dennes, John Joseph and the detector team at LBNL
+A huge thanks to Peter Dennes, John Joseph and the detector team at LBNL and
+the team at Sydor Instruments
+
+
