@@ -76,7 +76,7 @@ lib/libcin.a: $(LIBOBJECTS)
 	$(AR) -rcs $@ $(LIBOBJECTS)
 
 lib/libcin.so: $(LIBOBJECTS)
-	$(CC) $(CFLAGS) -Isrc -shared -o $@ $(LIBOBJECTS)
+	$(CC) $(CFLAGS) -shared -o $@ $(LIBOBJECTS)
 
 # Now create 
 
