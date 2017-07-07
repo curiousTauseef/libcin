@@ -5,7 +5,7 @@ var searchData=
   ['cin_5fctl_5fconfig',['cin_ctl_config',['../structcin__ctl__config.html',1,'']]],
   ['cin_5fctl_5fdestroy',['cin_ctl_destroy',['../group__cin__ctl.html#ga888fd017426a3718a875f6bdb5078b81',1,'cin_ctl_destroy(cin_ctl_t *cin):&#160;control.c'],['../group__cin__ctl.html#ga888fd017426a3718a875f6bdb5078b81',1,'cin_ctl_destroy(cin_ctl_t *cin):&#160;control.c']]],
   ['cin_5fctl_5fid',['cin_ctl_id',['../structcin__ctl__id.html',1,'']]],
-  ['cin_5fctl_5finit',['cin_ctl_init',['../group__cin__ctl.html#ga4f73558e9eadda6262b9c71bdf8b41be',1,'cin_ctl_init(cin_ctl_t *cin, const char *ipaddr, uint16_t oport, uint16_t iport, uint16_t soport, uint16_t siport):&#160;control.c'],['../group__cin__ctl.html#ga4f73558e9eadda6262b9c71bdf8b41be',1,'cin_ctl_init(cin_ctl_t *cin, const char *ipaddr, uint16_t oport, uint16_t iport, uint16_t soport, uint16_t siport):&#160;control.c']]],
+  ['cin_5fctl_5finit',['cin_ctl_init',['../group__cin__ctl.html#gac700bdbc5bd68e128fe446e23576b70e',1,'cin_ctl_init(cin_ctl_t *cin, const char *ipaddr, const char *bind_addr, uint16_t oport, uint16_t iport, uint16_t soport, uint16_t siport):&#160;control.c'],['../group__cin__ctl.html#gac700bdbc5bd68e128fe446e23576b70e',1,'cin_ctl_init(cin_ctl_t *cin, const char *ipaddr, const char *bind_addr, uint16_t oport, uint16_t iport, uint16_t soport, uint16_t siport):&#160;control.c']]],
   ['cin_5fctl_5flistener',['cin_ctl_listener',['../structcin__ctl__listener.html',1,'']]],
   ['cin_5fctl_5fpwr_5fmon_5ft',['cin_ctl_pwr_mon_t',['../structcin__ctl__pwr__mon__t.html',1,'']]],
   ['cin_5fctl_5fpwr_5fval',['cin_ctl_pwr_val',['../structcin__ctl__pwr__val.html',1,'']]],
