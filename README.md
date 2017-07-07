@@ -31,4 +31,10 @@ Installation of the library is like most unix based source packages:
 ./make test
 ./make install
 
-```
+Authors
+-------
+
+* **Stuart B. Wilkins** - [stuwilkins](https://github.com/stuwilkins)
+
+See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+
