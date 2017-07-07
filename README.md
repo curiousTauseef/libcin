@@ -53,7 +53,7 @@ License
 -------
 
 This project is licensed under the BSD License - see the
-[LICENSE.md](http://github.com/NSLS-II/libcin/LICENSE.md) file for details
+[LICENSE.md](http://github.com/NSLS-II/libcin/blob/master/LICENSE.md) file for details
 
 Acknowledgments
 ---------------
