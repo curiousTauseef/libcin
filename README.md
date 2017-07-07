@@ -1,12 +1,14 @@
-[![Build Status](https://travis-ci.org/NSLS-II/libcin.svg?branch=master)](https://travis-ci.org/NSLS-II/libcin) Main 
+FastCCD Communication Library (libcin)
+======================================
 
-libcin contains code to support the control and frame ports of the
-Berkeley FCCD 
+Introduction
+------------
 
-(https://sites.google.com/a/lbl.gov/fast-ccd-camera-systems).
+This library, based in C is designed to control the FastCCD detector from
+Lawrence Berkeley National Laboratory. It controls both camera control functions
+and data acquisition (frame acquisition). It is separated into two distinct
+parts, the control part ,`cin_ctl`, and the data (image) part named `cin_data`.
+It was written in part for use with areaDetector.
 
-Based on code avaliable at https://bitbucket.org/berkeleylab/lbl-fastccds
-
-Started at 23-ID (CSX) at NSLS-II
-
-Documentation avaliable at (http://github.io/nsls-ii/libcin)
+Installation
+------------
