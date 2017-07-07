@@ -167,6 +167,14 @@ int cin_init_port(cin_port_t *port){
   DEBUG_PRINT("Recieve buffer returns %d Mb (%d)\n",
       port->rcvbuf_rb / (1024*1024), port->rcvbuf_rb );
 
+  if(port->rcvbuf_rb/2 != port->rcvbuf){
+    ERROR_PRINT("WARNING : Unable to set RCVBUFFER to size %d Mb (%d bytes)\n",
+      port->rcvbuf / (1024*1024), port->rcvbuf );
+    ERROR_PRINT("WARNING : RCVBUFFER is set to %d Mb (%d bytes)\n",
+      port->rcvbuf_rb / (1024*1024), port->rcvbuf_rb );
+  }
+
+
   int zero = 0;
   if(setsockopt(port->sockfd, SOL_SOCKET, SO_TIMESTAMP,
                 &zero, sizeof(zero)) == -1){
