@@ -48,20 +48,30 @@
   
 /**************************** INITIALIZATION **************************/
 
-int cin_ctl_init(cin_ctl_t *cin, const char* ipaddr, 
-                 uint16_t oport, uint16_t iport,
+int cin_ctl_init(cin_ctl_t *cin, 
+                 const char* ipaddr, const char *bind_addr,
+                 uint16_t oport, uint16_t iport, 
                  uint16_t soport, uint16_t siport) {
   
   // Initialize the config
 
   cin_config_init(&(cin->config));
 
+
   if(ipaddr == NULL){ 
-    cin->ctl_port.srvaddr = strdup(CIN_CTL_IP); 
-    cin->stream_port.srvaddr = strdup(CIN_CTL_IP); 
+    cin->ctl_port.srvaddr = CIN_CTL_IP; 
+    cin->stream_port.srvaddr = CIN_CTL_IP; 
   } else {
     cin->ctl_port.srvaddr = strdup(ipaddr); 
     cin->stream_port.srvaddr = strdup(ipaddr); 
+  }
+
+  if(bind_addr == NULL){ 
+    cin->ctl_port.cliaddr = "0.0.0.0";
+    cin->stream_port.cliaddr = "0.0.0.0";
+  } else {
+    cin->ctl_port.cliaddr = strdup(bind_addr); 
+    cin->stream_port.cliaddr = strdup(bind_addr); 
   }
    
   if(oport == 0){ 
@@ -135,45 +145,42 @@ int cin_ctl_init_port(cin_port_t *cp){
 
   cp->sockfd = socket(AF_INET, SOCK_DGRAM, 0);
   if (cp->sockfd < 0) {
-    ERROR_COMMENT("CIN control port - socket() failed !!!\n");
-      // Should this return (-1) ?
+    ERROR_COMMENT("socket() failed.\n");
+      return -1;
   }
-
-  DEBUG_PRINT("Opened socket as stream %d\n", cp->sockfd);
 
   int i = 1;
   if(setsockopt(cp->sockfd, SOL_SOCKET, SO_REUSEADDR, 
                 (void *)&i, sizeof i) < 0) {
-    ERROR_COMMENT("CIN control port - setsockopt() failed !!!\n");
+    ERROR_COMMENT("setsockopt() failed.\n");
     return -1;
   }
 
-  DEBUG_COMMENT("setsockopt() sucsessful\n");
-    
   // initialize CIN (server) and client (us!) sockaddr structs
   memset(&cp->sin_srv, 0, sizeof(struct sockaddr_in));
+  memset(&cp->sin_cli, 0, sizeof(struct sockaddr_in));
+
   cp->sin_srv.sin_family = AF_INET;
   cp->sin_srv.sin_port = htons(cp->srvport);
-  cp->slen = sizeof(struct sockaddr_in);
-  DEBUG_PRINT("IP %s\n", cp->srvaddr);
-  if(inet_aton(cp->srvaddr, &(cp->sin_srv.sin_addr)) == 0) {
-    ERROR_COMMENT("CIN control port - inet_aton() failed!!");
-    return -1;
-  }
-
-  DEBUG_COMMENT("inet_aton() sucsessful\n");
-
-  memset(&cp->sin_cli, 0, sizeof(struct sockaddr_in));
   cp->sin_cli.sin_family = AF_INET;
   cp->sin_cli.sin_port = htons(cp->cliport);
-  cp->sin_cli.sin_addr.s_addr = htonl(INADDR_ANY);
+  cp->slen = sizeof(struct sockaddr_in);
+
+  if(inet_aton(cp->srvaddr, &cp->sin_srv.sin_addr) == 0) {
+    ERROR_COMMENT("inet_aton() Failed.\n");
+    return 1;
+  }
+
+  if(inet_aton(cp->cliaddr, &cp->sin_cli.sin_addr) == 0) {
+    ERROR_COMMENT("inet_aton() Failed.\n");
+    return 1;
+  }
 
   if(bind(cp->sockfd, (struct sockaddr *)&cp->sin_cli, sizeof(cp->sin_cli))){
     ERROR_COMMENT("Bind failed.\n");
     return -1;
   }
 
-  DEBUG_COMMENT("Created port.\n");
   return 0;
 }
 

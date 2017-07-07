@@ -482,6 +482,7 @@ void cin_report(FILE *fp, int details);
  *
  * @param cin handle to cin library
  * @param ipaddr ip address of CIN base address
+ * @param bind_addr ip address to bind to
  * @param oport output udp port of cin 
  * @param iport input udp port of cin 
  * @param soport stream output udp port of cin
@@ -489,7 +490,8 @@ void cin_report(FILE *fp, int details);
  *
  * @return Returns 0 on sucsess non-zero if error
  */
-int cin_ctl_init(cin_ctl_t *cin, const char* ipaddr, 
+int cin_ctl_init(cin_ctl_t *cin, 
+                 const char* ipaddr, const char *bind_addr,
                  uint16_t oport, uint16_t iport,
                  uint16_t soport, uint16_t siport);
 
