@@ -8,7 +8,7 @@
         <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
         <meta name="generator" content="Doxygen 1.8.13"/>
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-        <title>libcin: Main Page</title>
+        <title>libcin: FastCCD Communication Library (libcin)</title>
         <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
         <script type="text/javascript" src="dynsections.js"></script>
         <link href="search/search.css" rel="stylesheet" type="text/css"/>
@@ -65,15 +65,32 @@ $(function() {
 
 <div class="header">
   <div class="headertitle">
-<div class="title">libcin Documentation</div>  </div>
+<div class="title">FastCCD Communication Library (libcin) </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a href="https://travis-ci.org/NSLS-II/libcin"></a> Main</p>
-<p>libcin contains code to support the control and frame ports of the Berkeley FCCD</p>
-<p>(<a href="https://sites.google.com/a/lbl.gov/fast-ccd-camera-systems">https://sites.google.com/a/lbl.gov/fast-ccd-camera-systems</a>).</p>
-<p>Based on code avaliable at <a href="https://bitbucket.org/berkeleylab/lbl-fastccds">https://bitbucket.org/berkeleylab/lbl-fastccds</a></p>
-<p>Started at 23-ID (CSX) at NSLS-II</p>
-<p>Documentation avaliable at (<a href="http://github.io/nsls-ii/libcin">http://github.io/nsls-ii/libcin</a>) </p>
+<div class="textblock"><h2>Introduction </h2>
+<p>This library, based in C is designed to control the FastCCD detector from Lawrence Berkeley National Laboratory. It controls both camera control functions and data acquisition (frame acquisition). It is separated into two distinct parts, the control part ,<code><a class="el" href="structcin__ctl.html">cin_ctl</a></code>, and the data (image) part named <code><a class="el" href="structcin__data.html">cin_data</a></code>. It was written in part for use with areaDetector.</p>
+<h2>Prerequisites </h2>
+<p>The library relies on the following:</p>
+<ul>
+<li><code>libbsd</code> (Used for string manipulation)</li>
+<li><code>libconfig</code> (Used for nice config files)</li>
+<li><code>libpthread</code> (Used for threading)</li>
+<li><code>librt</code> (Used for time functions)</li>
+</ul>
+<h2>Installation </h2>
+<p>Installation of the library is like most unix based source packages:</p>
+<div class="fragment"><div class="line">./make</div><div class="line">./make doc</div><div class="line">./make test</div><div class="line">./make install</div></div><!-- fragment --><h2>Versioning </h2>
+<p>For the versions available, see the <a href="https://github.com/NSLS-II/libcin/tags">tags on this repository</a>.</p>
+<h2>Authors </h2>
+<ul>
+<li><b>Stuart B. Wilkins</b> - <a href="https://github.com/stuwilkins">stuwilkins</a></li>
+</ul>
+<p>See also the list of <a href="https://github.com/NSLS-II/libcin/contributors">contributors</a> who participated in this project.</p>
+<h2>License </h2>
+<p>This project is licensed under the BSD License - see the http://github.com/NSLS-II/libcin/blob/master/LICENSE.md "LICENSE.md" file for details</p>
+<h2>Acknowledgments </h2>
+<p>A huge thanks to Peter Dennes, John Joseph and the detector team at LBNL and the team at Sydor Instruments </p>
 </div></div><!-- contents -->
 <!-- HTML footer for doxygen 1.8.8-->
 <!-- start footer part -->
@@ -83,7 +100,7 @@ $(function() {
 </div>
 </div>
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 6 2017 23:15:04 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jul 7 2017 00:54:52 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>
