@@ -36,7 +36,7 @@ Versioning
 ----------
 
 For the versions available, see the [tags on this
-repository](https://github.com/your/project/tags). 
+repository](https://github.com/NSLS-II/libcin/tags). 
 
 
 Authors
@@ -53,7 +53,7 @@ License
 -------
 
 This project is licensed under the BSD License - see the
-[LICENSE.md](LICENSE.md) file for details
+[LICENSE.md](http://github.com/NSLS-II/libcin/LICENSE.md) file for details
 
 Acknowledgments
 ---------------
