@@ -32,18 +32,28 @@ Installation of the library is like most unix based source packages:
 ./make install
 ```
 
+Versioning
+----------
+
+For the versions available, see the [tags on this
+repository](https://github.com/your/project/tags). 
+
+
 Authors
 -------
 
 * **Stuart B. Wilkins** - [stuwilkins](https://github.com/stuwilkins)
 
-See also the list of [contributors](https://github.com/NSLS-II/libcin/contributors) who participated in this project.
+See also the list of
+[contributors](https://github.com/NSLS-II/libcin/contributors) who participated
+in this project.
 
 
 License
 -------
 
-This project is licensed under the BSD License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the BSD License - see the
+[LICENSE.md](LICENSE.md) file for details
 
 Acknowledgments
 ---------------
