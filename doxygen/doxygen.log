@@ -1,8 +1,8 @@
 warning: Tag `SYMBOL_CACHE_SIZE' at line 336 of file `Doxyfile' has become obsolete.
          To avoid this warning please remove this line from your configuration file or upgrade it using "doxygen -u"
-warning: Tag `XML_SCHEMA' at line 1402 of file `Doxyfile' has become obsolete.
+warning: Tag `XML_SCHEMA' at line 1406 of file `Doxyfile' has become obsolete.
          To avoid this warning please remove this line from your configuration file or upgrade it using "doxygen -u"
-warning: Tag `XML_DTD' at line 1408 of file `Doxyfile' has become obsolete.
+warning: Tag `XML_DTD' at line 1412 of file `Doxyfile' has become obsolete.
          To avoid this warning please remove this line from your configuration file or upgrade it using "doxygen -u"
 /home/travis/build/NSLS-II/libcin/src/cin.h:255: warning: Compound cin_ctl_config is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:292: warning: Compound cin_port is not documented.
