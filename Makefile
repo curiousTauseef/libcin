@@ -117,8 +117,8 @@ INSTALL_DATA = $(INSTALL) -m 644
 INSTALL_PROGRAM = ${INSTALL} -m 755
 prefix = /usr/local
 includedir = $(prefix)/include
-bindir = $(exec_prefix)/bin
-libdir = $(exec_prefix)/lib
+bindir = $(prefix)/bin
+libdir = $(prefix)/lib
 
 .PHONY :install
 install: all
