@@ -30,7 +30,7 @@
 
 */
 #include <stdio.h>
-#include "version.h"
+#include "cin.h"
 
 void cin_report(FILE *fp, int details)
 {

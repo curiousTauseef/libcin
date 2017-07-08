@@ -30,32 +30,28 @@
 #
 #
 CC=gcc
-CFLAGS=-Wall -O3 -g --pic
+CFLAGS=-Wall -O3 -g --pic -I./src -I./data
 
 LIBOBJECTS= src/data.o src/fifo.o src/control.o src/descramble.o \
-		    src/common.o src/version.o src/report.o src/config.o
+		    src/common.o src/report.o src/config.o \
+			src/embedded.o
 
-REQUIRED_DIRS = lib bin doc
+REQUIRED_DIRS = lib bin doc data
 _MKDIR := $(shell for d in $(REQUIRED_DIRS) ; do\
 	[ -d $$d ] || mkdir -p $$d;            \
 	done )
+
+FIRMWARE=top_frame_fpga-v1019j.bit
 
 all: lib/libcin.so lib/libcin.a bin/cinregdump test/smoketest test/configtest
 
 GIT = git
 AWK = awk
-.PHONY: src/version.c
-src/version.o: 
-	$(GIT) rev-parse HEAD | $(AWK) ' BEGIN {print "#include \"version.h\""} {print "const char *cin_build_git_sha = \"" $$0"\";"} END {}' > src/version.c
-	date | $(AWK) 'BEGIN {} {print "const char *cin_build_git_time = \""$$0"\";"} END {} ' >> src/version.c
-	$(GIT) describe --dirty --always | $(AWK) 'BEGIN {} {print "const char *cin_build_version = \""$$0"\";"} END {} ' >> src/version.c
-	cat src/version.c
-	$(CC) $(CFLAGS) src/version.c -c -o $@ 
 
-src/data.o: src/data.h src/fifo.h src/version.h \
+src/data.o: src/data.h src/fifo.h \
             src/descramble.h src/cin.h src/common.h
 
-src/fifo.o: src/fifo.h src/cin.h src/version.h
+src/fifo.o: src/fifo.h src/cin.h
 
 src/control.o: src/control.h src/cin.h src/cin_register_map.h src/fclk_program.h \
 	           src/fifo.h src/cinregisters.h src/config.h src/common.h
@@ -69,6 +65,22 @@ src/report.o: src/report.h src/cin.h
 src/cinregdump.o: src/cin.h
 
 src/config.o: src/cin.h src/config.h
+
+src/embedded.o: data/version.h data/firmware.h
+
+#
+# Create the firmware and embed.
+#
+data/version.h: 
+	$(GIT) rev-parse HEAD | $(AWK) 'BEGIN {} {print "const char *cin_build_git_sha = \"" $$0"\";"} END {}' > data/version.h
+	date | $(AWK) 'BEGIN {} {print "const char *cin_build_git_time = \""$$0"\";"} END {} ' >> data/version.h
+	$(GIT) describe --dirty --always | $(AWK) 'BEGIN {} {print "const char *cin_build_version = \""$$0"\";"} END {} ' >> data/version.h
+	cat data/version.h
+
+data/firmware.h:
+	xxd --include config/$(FIRMWARE) > data/firmware.h
+	sed -i 's/char.*\[\]/char firmware[]/g' data/firmware.h
+	sed -i 's/int.*_len/firmware_len/g' data/firmware.h
 
 # create dynamically and statically-linked libs.
 
@@ -86,7 +98,6 @@ LDLIBS=-Wl,-Bstatic -lcin -Wl,-Bdynamic -lconfig -lpthread -lrt -lbsd
 bin/cinregdump: src/cinregdump.o lib/libcin.so  src/cin.h
 	$(CC) $(LDFLAGS) src/cinregdump.o -o $@ $(LDLIBS) 
 
-CFLAGS+=-I./src
 test/smoketest: test/smoketest.o lib/libcin.so  src/cin.h
 	$(CC) $(LDFLAGS) test/smoketest.o -o $@ $(LDLIBS) 
 
@@ -105,6 +116,7 @@ clean:
 	-$(RM) -rf lib
 	-$(RM) -rf bin
 	-$(RM) -rf doc
+	-$(RM) -rf data
 	-$(RM) -rf src/*.o
 	-$(RM) -rf utils/*.o
 	-$(RM) -rf test/*.o

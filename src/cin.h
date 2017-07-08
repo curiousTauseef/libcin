@@ -556,7 +556,7 @@ int cin_ctl_write(cin_ctl_t *cin, uint16_t reg, uint16_t val, int wait);
  *
  * @return Returns 0 on sucsess non-zero if error
  */
-int cin_ctl_stream_write(cin_ctl_t *cin, char* val,int size);
+int cin_ctl_stream_write(cin_ctl_t *cin, unsigned char* val,int size);
 /*!
  * Write register to CIN with readback verification
  *
@@ -595,7 +595,8 @@ int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off);
  *--------------------------------------------------------------------------------------------------------*/
 
 int cin_ctl_load_config(cin_ctl_t *cin,char *filename);
-int cin_ctl_load_firmware(cin_ctl_t *cin, char *filename);
+int cin_ctl_load_firmware(cin_ctl_t *cin);
+int cin_ctl_load_firmware_file(cin_ctl_t *cin, char *filename);
 int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq);
 int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq);
 int cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val);
@@ -637,25 +638,12 @@ int cin_ctl_set_mux(cin_ctl_t *cin, int setting);
 int cin_ctl_get_mux(cin_ctl_t *cin, int *setting);
 int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp);
 int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain);
-
-/*------------------------
- * CIN TCP/IP Settings
- *------------------------*/
-
-int cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip);
-
-/*------------------------
- * CIN Register Dump
- *------------------------*/
-
-int cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp);
-
-/*------------------------
- * CIN Bias Voltages
- *------------------------*/
-
 int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage);
 int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage);
+int cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip);
+
+
+int cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp);
 
 /*------------------------
  * CIN Config File

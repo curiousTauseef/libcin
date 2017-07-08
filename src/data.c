@@ -50,7 +50,6 @@
 #include "fifo.h"
 #include "data.h"
 #include "descramble.h"
-#include "version.h"
 #include "common.h"
 
 /* -------------------------------------------------------------------------------

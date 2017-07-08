@@ -46,6 +46,9 @@
 #include "config.h"
 #include "common.h"
 #include "fifo.h"
+
+extern unsigned char firmware[];
+extern unsigned firmware_len;
   
 /**************************** INITIALIZATION **************************/
 
@@ -306,7 +309,7 @@ error:
   return _status;
 }
 
-int cin_ctl_stream_write(cin_ctl_t *cin, char *val,int size) {
+int cin_ctl_stream_write(cin_ctl_t *cin, unsigned char *val,int size) {
  
    int rc;
    cin_port_t *cp = &(cin->stream_port);
@@ -548,10 +551,10 @@ error:
   return -1;
 }
 
-int cin_ctl_load_firmware(cin_ctl_t *cin, char *filename){
+int cin_ctl_load_firmware_file(cin_ctl_t *cin, char *filename){
    
   uint32_t num_e;
-  char buffer[128];
+  unsigned char buffer[128];
   int _status = -1; 
 
   // Lock the mutex for exclusive access to the CIN
@@ -583,6 +586,65 @@ int cin_ctl_load_firmware(cin_ctl_t *cin, char *filename){
     usleep(200);   /*for UDP flow control*/ 
   }
   fclose(file);
+
+  DEBUG_COMMENT("Done.\n");
+  
+  sleep(1);
+
+  DEBUG_COMMENT("Resetting Frame FPGA\n");
+
+  _status=cin_ctl_write(cin, REG_FRM_RESET, 0x0001, 0);
+  if(_status != 0){
+    goto error;
+  } 
+
+  sleep(1); 
+
+  _status=cin_ctl_write(cin,REG_FRM_RESET,0x0000, 0);
+  if(_status != 0){
+    goto error;
+  } 
+
+  sleep(1);
+  DEBUG_COMMENT("Done.\n");
+
+  uint16_t _fpga_status;
+  _status = cin_ctl_get_cfg_fpga_status(cin, &_fpga_status);
+  _status |= !(_fpga_status & CIN_CTL_FPGA_STS_CFG);
+  if(_status){
+    DEBUG_COMMENT("FPGA Failed to configure.\n");
+    goto error;
+  }
+  
+  pthread_mutex_unlock(&cin->access);
+  DEBUG_COMMENT("FPGA Configured OK\n");
+  return 0;
+   
+error:
+  pthread_mutex_unlock(&cin->access);
+  return _status;
+}
+
+int cin_ctl_load_firmware(cin_ctl_t *cin){
+   
+  int _status = -1; 
+
+  // Lock the mutex for exclusive access to the CIN
+
+  pthread_mutex_lock(&cin->access);
+
+  _status = cin_ctl_write(cin, REG_COMMAND, CMD_PROGRAM_FRAME, 0); 
+  if (_status != 0){
+    ERROR_COMMENT("Failed to program CIN\n");
+    goto error;
+  }   
+
+  sleep(1);
+  _status = cin_ctl_stream_write(cin, firmware, firmware_len);       
+  if (_status != 0){
+    ERROR_COMMENT("Error writing firmware to CIN\n");
+    goto error;
+  }
 
   DEBUG_COMMENT("Done.\n");
   
