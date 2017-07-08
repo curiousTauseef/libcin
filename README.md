@@ -32,6 +32,27 @@ Installation of the library is like most unix based source packages:
 ./make install
 ```
 
+TCP/IP Stack Tuning
+-------------------
+In order for the CIN data to operate efficiently, the 10G interface on the host computer 
+needs to be tuned. This needs to be done by adding the following to the file 
+`/etc/sysctl.conf`. 
+```
+# 2147483647 = 2048 Mb
+net.core.rmem_max=2147483647
+net.core.wmem_max=2147483647
+# increase the length of the processor input queue
+net.core.netdev_max_backlog = 250000
+# recommended for hosts with jumbo frames enabled
+net.ipv4.tcp_mtu_probing=1
+```
+
+These can be reread by the system without rebooting by entering the command:
+
+```
+$sudo sysctl --system
+```
+
 Versioning
 ----------
 
