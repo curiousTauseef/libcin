@@ -43,7 +43,7 @@ _MKDIR := $(shell for d in $(REQUIRED_DIRS) ; do\
 
 FIRMWARE=top_frame_fpga-v1019j.bit
 
-all: lib/libcin.so lib/libcin.a bin/cinregdump test/smoketest test/configtest
+all: lib/libcin.so lib/libcin.a bin/cinregdump bin/convert_config test/smoketest test/configtest
 
 GIT = git
 AWK = awk
@@ -62,11 +62,13 @@ src/common.o: src/cin.h src/common.h
 
 src/report.o: src/report.h src/cin.h
 
-src/cinregdump.o: src/cin.h
-
 src/config.o: src/cin.h src/config.h
 
 src/embedded.o: data/version.h data/firmware.h
+
+utils/cinregdump.o: src/cin.h
+
+utils/convert_config.o: src/cin.h
 
 #
 # Create the firmware and embed.
@@ -95,8 +97,11 @@ lib/libcin.so: $(LIBOBJECTS)
 LDFLAGS=-L./lib
 LDLIBS=-Wl,-Bstatic -lcin -Wl,-Bdynamic -lconfig -lpthread -lrt -lbsd
 
-bin/cinregdump: src/cinregdump.o lib/libcin.so  src/cin.h
-	$(CC) $(LDFLAGS) src/cinregdump.o -o $@ $(LDLIBS) 
+bin/cinregdump: utils/cinregdump.o lib/libcin.so  src/cin.h
+	$(CC) $(LDFLAGS) utils/cinregdump.o -o $@ $(LDLIBS) 
+
+bin/convert_config: utils/convert_config.o lib/libcin.so  src/cin.h
+	$(CC) $(LDFLAGS) utils/convert_config.o -o $@ $(LDLIBS) 
 
 test/smoketest: test/smoketest.o lib/libcin.so  src/cin.h
 	$(CC) $(LDFLAGS) test/smoketest.o -o $@ $(LDLIBS) 
@@ -120,7 +125,6 @@ clean:
 	-$(RM) -rf src/*.o
 	-$(RM) -rf utils/*.o
 	-$(RM) -rf test/*.o
-	-$(RM) -rf utils/cinregdump
 	-$(RM) -rf test/smoketest
 	-$(RM) -rf test/configtest
 

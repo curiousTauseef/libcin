@@ -1513,8 +1513,8 @@ int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage){
   uint16_t _val;
 
   for(n=0;n<NUM_BIAS_VOLTAGE;n++){
-    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS_REG, 0x0030 + (2 * n), 1);
-    _status |= cin_ctl_read(cin, REG_BIASREGISTERDATAOUT_REG, &_val);
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, 0x0030 + (2 * n), 1);
+    _status |= cin_ctl_read(cin, REG_BIASREGISTERDATAOUT, &_val);
     voltage[n] = (float)(_val & 0x0FFF) * bias_voltage_range[n] / 4096.0;
   } 
 
@@ -1561,8 +1561,8 @@ int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage){
   for(n=0;n<NUM_BIAS_VOLTAGE;n++){
     _val =  (int)((voltage[n] / bias_voltage_range[n]) * 0x0FFF) & 0x0FFF;
     _val |= ((n << 14) & 0xC000);
-    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS_REG, (2 * n), 1);
-    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA_REG	, _val, 1);
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, (2 * n), 1);
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA	, _val, 1);
     _status |= cin_ctl_write(cin, REG_FRM_COMMAND, 0x0102, 1);
   } 
 
