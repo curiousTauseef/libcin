@@ -6,6 +6,8 @@
 #include "cin.h"
 
 uint16_t fcric_regs[] = {0x821D, 0x821E, 0x821F, 0x8001};
+uint16_t cin_timing_regs[] = {0x8200, 0x8201, 0x8001};
+
 
 char *strstrip(char *s)
 {
@@ -49,7 +51,7 @@ int read_file(const char *filename, uint16_t vals[][2], int *n_vals)
     _line[strlen(_line)-1]='\0';   
     char *__line = strstrip(_line);
     if ('#' == __line[0] || '\0' == __line[0]){
-      fprintf(stdout," --- Ignore line : %s\n", __line); //DEBUG 
+      fprintf(stderr," --- Ignore line : %s\n", __line); //DEBUG 
     } else { 
       sscanf (__line,"%4s %4s",_regstr,_valstr);
       vals[n][0]=strtoul(_regstr,NULL,16);
@@ -67,7 +69,7 @@ int parse_fcric_data(uint16_t vals[][2], int n_vals, uint16_t *pvals, int *n_pva
   // Check length
   if(n_vals != 164)
   {
-    fprintf(stderr, "--- FCRIC File is of correct length\n");
+    fprintf(stderr, "!!! FCRIC File is not of correct length.");
     return -1;
   }
   
@@ -113,6 +115,36 @@ int parse_fcric_data(uint16_t vals[][2], int n_vals, uint16_t *pvals, int *n_pva
   fprintf(stderr, "--- FCRIC File Parsed OK - %d values\n", x);
   return 0;
 
+}
+
+int parse_timing_data(uint16_t vals[][2], int n_vals, uint16_t *pvals, int *n_pvals)
+{
+  int i;
+  int x = 0;
+  for(i=0;i<n_vals-1;i++){
+    if(vals[i][0] != cin_timing_regs[i % 3]){
+      fprintf(stderr, "!!! Error at line %d (%04X,%04X)\n", i,
+          vals[i][0], fcric_regs[i % 3]);
+      return -1;
+    } else {
+      if(((i % 3) == 2) && (vals[i][1] != 0x0103)){
+        fprintf(stderr, "!!! Error at line %d (%04X vs %04X)\n", i, vals[i][1], 0x0103);
+        return -1;
+      } 
+      if(((i % 3) == 0) && (vals[i][1] != ((i / 3) * 2))){
+        fprintf(stderr, "!!! Error at line %d (%04X vs %04X)\n", i, vals[i][1], ((i/3) * 2));
+        return -1;
+      }
+      if((i % 3) == 1)
+      {
+        pvals[x] = vals[i][1];
+        x++;
+      }
+    }
+  }
+
+  *n_pvals = x;
+  return 0;
 }
 
 void dump_data(FILE *fp, const char *name, uint16_t *val, int n_val)
@@ -191,16 +223,22 @@ int main(int argc, char *argv[])
 
   // Now process file
   
+  uint16_t vals[10000][2];
+  uint16_t pvals[10000];
+  int n_vals = 0;
+  int n_pvals = 0;
+
+  read_file(argv[optind], vals, &n_vals);
+
   if(fflag){
-    uint16_t vals[1000][2];
-    uint16_t pvals[1000];
-    int n_vals;
-    int n_pvals;
-    read_file(argv[optind], vals, &n_vals);
     parse_fcric_data(vals, n_vals, pvals, &n_pvals);
-    dump_data(stdout, "fcric_200", pvals, n_pvals);
   }
 
+  if(tflag){
+    parse_timing_data(vals, n_vals, pvals, &n_pvals);
+  }
+
+  dump_data(stdout, "fcric_200", pvals, n_pvals);
   return 0;
 }
 
