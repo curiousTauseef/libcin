@@ -64,14 +64,14 @@ src/report.o: src/report.h src/cin.h
 
 src/config.o: src/cin.h src/config.h
 
-src/embedded.o: data/version.h data/firmware.h
+src/embedded.o: data/version.h data/firmware.h data/timing.h 
 
 utils/cinregdump.o: src/cin.h
 
-utils/convert_config.o: src/cin.h
+utils/convert_config.o:
 
 #
-# Create the firmware and embed.
+# Create version strings
 #
 data/version.h: 
 	$(GIT) rev-parse HEAD | $(AWK) 'BEGIN {} {print "const char *cin_build_git_sha = \"" $$0"\";"} END {}' > data/version.h
@@ -79,10 +79,19 @@ data/version.h:
 	$(GIT) describe --dirty --always | $(AWK) 'BEGIN {} {print "const char *cin_build_version = \""$$0"\";"} END {} ' >> data/version.h
 	cat data/version.h
 
+#
+# Create the firmware and embed.
+#
 data/firmware.h:
 	xxd --include config/$(FIRMWARE) > data/firmware.h
 	sed -i 's/char.*\[\]/char firmware[]/g' data/firmware.h
 	sed -i 's/int.*_len/firmware_len/g' data/firmware.h
+
+#
+# Create the firmware and embed.
+#
+data/timing.h: bin/convert_config
+	bin/convert_config -n timing -t config/timing.txt > data/timing.h
 
 # create dynamically and statically-linked libs.
 
@@ -100,8 +109,8 @@ LDLIBS=-Wl,-Bstatic -lcin -Wl,-Bdynamic -lconfig -lpthread -lrt -lbsd
 bin/cinregdump: utils/cinregdump.o lib/libcin.so  src/cin.h
 	$(CC) $(LDFLAGS) utils/cinregdump.o -o $@ $(LDLIBS) 
 
-bin/convert_config: utils/convert_config.o lib/libcin.so  src/cin.h
-	$(CC) $(LDFLAGS) utils/convert_config.o -o $@ $(LDLIBS) 
+bin/convert_config: utils/convert_config.o 
+	$(CC) utils/convert_config.o -o $@ 
 
 test/smoketest: test/smoketest.o lib/libcin.so  src/cin.h
 	$(CC) $(LDFLAGS) test/smoketest.o -o $@ $(LDLIBS) 
