@@ -1,7 +1,7 @@
 /* vim: set ts=2 sw=2 tw=0 noet :
    
    libcin : Driver for LBNL FastCCD 
-   Copyright (c) 2014, Stuart B. Wilkins, Daron Chabot
+ *  Copyright (c) 2014, Brookhaven Science Associates, Brookhaven National Laboratory
    All rights reserved.
    
    Redistribution and use in source and binary forms, with or without

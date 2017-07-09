@@ -6,7 +6,7 @@
  *
  * @section LICENSE
  *  
- *  Copyright (c) 2014, Stuart B. Wilkins
+ *  Copyright (c) 2014, Brookhaven Science Associates, Brookhaven National Laboratory
  *  All rights reserved.
  *  
  *  Redistribution and use in source and binary forms, with or without
