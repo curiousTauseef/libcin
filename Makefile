@@ -91,7 +91,7 @@ data/firmware.h:
 # Create the firmware and embed.
 #
 data/timing.h: bin/convert_config
-	bin/convert_config -n timing -t config/timing.txt > data/timing.h
+	bin/convert_config -n timing -t config/timing.txt data/timing.h
 
 # create dynamically and statically-linked libs.
 

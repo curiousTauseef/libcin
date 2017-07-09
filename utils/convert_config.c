@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include "cin.h"
+#include <stdint.h>     // for uint16_t
 
 uint16_t cin_fcric_regs[] = {0x821D, 0x821E, 0x821F, 0x8001};
 uint16_t cin_bias_timing_regs[] = {0x8200, 0x8201, 0x8001};
@@ -50,7 +50,7 @@ int read_file(const char *filename, uint16_t vals[][2], int *n_vals)
     _line[strlen(_line)-1]='\0';   
     char *__line = strstrip(_line);
     if ('#' == __line[0] || '\0' == __line[0]){
-      fprintf(stderr," --- Ignore line : %s\n", __line); //DEBUG 
+      fprintf(stderr, "--- Ignore line : %s\n", __line); //DEBUG 
     } else { 
       sscanf (__line,"%4s %4s",_regstr,_valstr);
       vals[n][0]=strtoul(_regstr,NULL,16);
@@ -59,6 +59,7 @@ int read_file(const char *filename, uint16_t vals[][2], int *n_vals)
     }
   }
 
+  fclose(fp);
   *n_vals = n;
   return 0;
 }
@@ -164,8 +165,8 @@ void dump_data(FILE *fp, const char *name, uint16_t *val, int n_val)
     }
   }
 
-  fprintf(fp, "0x%04X\n}\n", val[i]);
-  fprintf(fp, "const int %s_len = %d\n", name, i+1);
+  fprintf(fp, "0x%04X\n};\n", val[i]);
+  fprintf(fp, "const int %s_len = %d;\n", name, i+1);
 }
 
 int main(int argc, char *argv[])
@@ -220,7 +221,7 @@ int main(int argc, char *argv[])
     errflg++;
   }
 
-  if((argc - optind) != 1){
+  if((argc - optind) != 2){
     errflg++;
   }
 
@@ -235,6 +236,9 @@ int main(int argc, char *argv[])
   uint16_t pvals[10000];
   int n_vals = 0;
   int n_pvals = 0;
+
+  fprintf(stderr, "--- Input file %s\n", argv[optind]);
+  fprintf(stderr, "--- Output file %s\n", argv[optind+1]);
 
   if(read_file(argv[optind], vals, &n_vals))
   {
@@ -262,7 +266,15 @@ int main(int argc, char *argv[])
     }
   }
 
-  dump_data(stdout, name, pvals, n_pvals);
+  FILE *fp = fopen(argv[optind+1], "w");
+  if(fp == NULL)
+  {
+    fprintf(stderr, "!!! Unable to open file %s for write.\n", argv[optind]);
+    return 30;
+  }
+  dump_data(fp, name, pvals, n_pvals);
+  fclose(fp);
+
   return 0;
 }
 
