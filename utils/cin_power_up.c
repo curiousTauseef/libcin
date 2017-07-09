@@ -34,5 +34,10 @@ int main(int argc, char *argv[])
     return -1;
   }
 
+  if(cin_ctl_set_timing_regs(&cin, cin_config_timing, cin_config_timing_len))
+  {
+    return -1;
+  }
+
   return 0;
 }

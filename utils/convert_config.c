@@ -182,7 +182,7 @@ void dump_data(FILE *fp, const char *name, uint16_t *val, int n_val)
 {
   int i;
 
-  fprintf(fp, "const uint16_t %s[] = {\n", name);
+  fprintf(fp, "uint16_t %s[] = {\n", name);
   for(i=0;i<n_val-1;i++)
   {
     if((i % 8) == 0)
@@ -197,7 +197,7 @@ void dump_data(FILE *fp, const char *name, uint16_t *val, int n_val)
   }
 
   fprintf(fp, "0x%04X\n};\n", val[i]);
-  fprintf(fp, "const int %s_len = %d;\n", name, i+1);
+  fprintf(fp, "int %s_len = %d;\n", name, i+1);
 }
 
 int main(int argc, char *argv[])

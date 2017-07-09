@@ -252,13 +252,13 @@ void cin_set_error_print(int error);
  */
 
 extern uint16_t cin_config_timing[];
-extern const int cin_config_timing_len; 
+extern int cin_config_timing_len; 
 extern unsigned char cin_config_firmware[];
 extern unsigned cin_config_firmware_len;
 extern uint16_t cin_config_bias[];
-extern const int cin_config_bias_len;
+extern int cin_config_bias_len;
 extern uint16_t cin_config_fcric_200[];
-extern const int cin_config_fcric_200_len;
+extern int cin_config_fcric_200_len;
 
 #define CIN_CONFIG_MAX_STRING 256
 #define CIN_CONFIG_MAX_DATA 5000
@@ -638,6 +638,13 @@ int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage);
 
 /** @} */
 
+/** @defgroup cin_ctl_timing CIN COntrol Timing Routines
+ * Timing setup group
+ * @{
+ */
+int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len);
+
+/** @} */
 int cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val);
 int cin_ctl_set_camera_pwr(cin_ctl_t *cin, int val);
 int cin_ctl_set_clocks(cin_ctl_t *cin,int val);

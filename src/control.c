@@ -1589,13 +1589,23 @@ int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify)
 int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len)
 {
   int i;
+  DEBUG_PRINT("Writing to timing registers (%d values)\n", vals_len);
   for(i=0;i<vals_len;i++)
   {
     int _status = 0;
-    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, i * 2);
-    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA, vals[i]);
-    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_WR_CCD_BIAS_REG);
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, i * 2, 0);
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA, vals[i], 0);
+    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_WR_CCD_CLOCK_REG, 0);
+    if(_status)
+    {
+      ERROR_PRINT("Unable to write %04X to cin (line %d)\n", vals[i], i);
+      return -1;
+    }
   }
+
+  DEBUG_COMMENT("Done\n");
+
+  return cin_ctl_write(cin,REG_DETECTOR_CONFIG_REG6, 0x0000, 0);
 }
 
 /*******************  Register Dump of CIN    **********************/
