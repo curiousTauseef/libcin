@@ -75,7 +75,7 @@ $(function() {
 <h2>Installation </h2>
 <p>Installation of the library is like most unix based source packages:</p>
 <div class="fragment"><div class="line">./make</div><div class="line">./make doc</div><div class="line">./make test</div><div class="line">./make install</div></div><!-- fragment --><h2>TCP/IP Stack Tuning </h2>
-<p>In order for the CIN data to operate efficiently, the 10G interface on the host computer needs to be tuned. This needs to be done by adding the following to the file <code>/etc/sysctl.conf</code>. </p><div class="fragment"><div class="line"># 2147483647 = 2048 Mb</div><div class="line">net.core.rmem_max=2147483647</div><div class="line">net.core.wmem_max=2147483647</div><div class="line"># increase the length of the processor input queue</div><div class="line">net.core.netdev_max_backlog = 250000</div><div class="line"># recommended for hosts with jumbo frames enabled</div><div class="line">net.ipv4.tcp_mtu_probing=1</div></div><!-- fragment --><p>These can be reread by the system without rebooting by entering the command:</p>
+<p>In order for the CIN data to operate efficiently, the 10G interface on the host computer needs to be tuned. This needs to be done by adding the following to the file <code>/etc/sysctl.conf</code>. </p><div class="fragment"><div class="line"># Increase the maximum buffer that user programs can request</div><div class="line"># 2147483647 = 2048 Mb</div><div class="line">net.core.rmem_max=2147483647</div><div class="line">net.core.wmem_max=2147483647</div><div class="line"># Set a default value 10 times bigger</div><div class="line">net.core.rmem_default=1000000</div><div class="line">net.core.wmem_default=1000000</div><div class="line"># increase the length of the processor input queue</div><div class="line">net.core.netdev_max_backlog = 250000</div><div class="line"># recommended for hosts with jumbo frames enabled</div><div class="line">net.ipv4.tcp_mtu_probing=1</div></div><!-- fragment --><p>These can be reread by the system without rebooting by entering the command:</p>
 <div class="fragment"><div class="line">$sudo sysctl --system</div></div><!-- fragment --><h2>Versioning </h2>
 <p>For the versions available, see the <a href="http://github.com/NSLS-II/libcin/tags">tags on this repository</a>.</p>
 <h2>Authors </h2>
@@ -90,7 +90,7 @@ $(function() {
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jul 9 2017 02:33:05 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jul 9 2017 20:28:33 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

@@ -30,5 +30,6 @@ var searchData=
   ['cin_5fdata_5fstop_5fthreads',['cin_data_stop_threads',['../group__cin__data__init.html#gaaa244a5afff1c5c03034d23e45c3867b',1,'cin_data_stop_threads(cin_data_t *cin):&#160;data.c'],['../group__cin__data__init.html#gaaa244a5afff1c5c03034d23e45c3867b',1,'cin_data_stop_threads(cin_data_t *cin):&#160;data.c']]],
   ['cin_5fdata_5fthreads',['cin_data_threads',['../structcin__data__threads.html',1,'']]],
   ['cin_5fmap_5ft',['cin_map_t',['../structcin__map__t.html',1,'']]],
-  ['cin_5fport',['cin_port',['../structcin__port.html',1,'']]]
+  ['cin_5fport',['cin_port',['../structcin__port.html',1,'']]],
+  ['cin_5fregister_5fmap_2eh',['cin_register_map.h',['../cin__register__map_8h.html',1,'']]]
 ];
