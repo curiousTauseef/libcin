@@ -158,4 +158,3 @@ install: all
 
 test: all
 	./test/smoketest
-	./test/configtest ./test/test.cfg
