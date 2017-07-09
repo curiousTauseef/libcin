@@ -176,9 +176,10 @@ int main(int argc, char *argv[])
   int bflag = 0;
   int fflag = 0;
   int tflag = 0;
+  char *name = NULL;
 
   opterr = 0;
-  while ((c = getopt(argc, argv, "bft")) != -1)
+  while ((c = getopt(argc, argv, "bftn:")) != -1)
   {
     switch(c){
     case 'b':
@@ -202,17 +203,25 @@ int main(int argc, char *argv[])
         tflag++;
       }
       break;
+    case 'n':
+      name = optarg;
+      break;
     case '?':
       fprintf(stderr, "Unrecognized option: -%c\n\n", optopt);
       errflg++;
     }
   }
 
+  if(name == NULL)
+  {
+    name = "data";
+  }
+
   if(!(bflag || fflag || tflag)){
     errflg++;
   }
 
-  if((argc - optind) != 2){
+  if((argc - optind) != 1){
     errflg++;
   }
 
@@ -228,17 +237,26 @@ int main(int argc, char *argv[])
   int n_vals = 0;
   int n_pvals = 0;
 
-  read_file(argv[optind], vals, &n_vals);
+  if(read_file(argv[optind], vals, &n_vals))
+  {
+    return 10;
+  }
 
   if(fflag){
-    parse_fcric_data(vals, n_vals, pvals, &n_pvals);
+    if(parse_fcric_data(vals, n_vals, pvals, &n_pvals))
+    {
+      return 20;
+    }
   }
 
   if(tflag){
-    parse_timing_data(vals, n_vals, pvals, &n_pvals);
+    if(parse_timing_data(vals, n_vals, pvals, &n_pvals))
+    {
+      return 20;
+    }
   }
 
-  dump_data(stdout, "fcric_200", pvals, n_pvals);
+  dump_data(stdout, name, pvals, n_pvals);
   return 0;
 }
 
