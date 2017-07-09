@@ -43,7 +43,9 @@ _MKDIR := $(shell for d in $(REQUIRED_DIRS) ; do\
 
 FIRMWARE=top_frame_fpga-v1019j.bit
 
-all: lib/libcin.so lib/libcin.a bin/cinregdump bin/convert_config test/smoketest test/configtest
+all: lib/libcin.so lib/libcin.a\
+	bin/cin_power_up bin/cinregdump bin/convert_config \
+	test/smoketest test/configtest
 
 GIT = git
 AWK = awk
@@ -64,9 +66,11 @@ src/report.o: src/report.h src/cin.h
 
 src/config.o: src/cin.h src/config.h
 
-src/embedded.o: data/version.h data/firmware.h data/timing.h 
+src/embedded.o: data/version.h data/firmware.h data/timing.h data/fcric_200.h data/bias.h
 
 utils/cinregdump.o: src/cin.h
+
+utils/cin_power_up.o: src/cin.h
 
 utils/convert_config.o:
 
@@ -84,14 +88,20 @@ data/version.h:
 #
 data/firmware.h:
 	xxd --include config/$(FIRMWARE) > data/firmware.h
-	sed -i 's/char.*\[\]/char firmware[]/g' data/firmware.h
-	sed -i 's/int.*_len/firmware_len/g' data/firmware.h
+	sed -i 's/char.*\[\]/char cin_config_firmware[]/g' data/firmware.h
+	sed -i 's/int.*_len/cin_config_firmware_len/g' data/firmware.h
 
 #
 # Create the firmware and embed.
 #
 data/timing.h: bin/convert_config
-	bin/convert_config -n timing -t config/timing.txt data/timing.h
+	bin/convert_config -n cin_config_timing -t config/timing.txt data/timing.h
+
+data/fcric_200.h: bin/convert_config
+	bin/convert_config -n cin_config_fcric_200 -f config/fcric_200.txt data/fcric_200.h
+
+data/bias.h: bin/convert_config
+	bin/convert_config -n cin_config_bias -b config/bias.txt data/bias.h
 
 # create dynamically and statically-linked libs.
 
@@ -106,8 +116,11 @@ lib/libcin.so: $(LIBOBJECTS)
 LDFLAGS=-L./lib
 LDLIBS=-Wl,-Bstatic -lcin -Wl,-Bdynamic -lconfig -lpthread -lrt -lbsd
 
-bin/cinregdump: utils/cinregdump.o lib/libcin.so  src/cin.h
+bin/cinregdump: utils/cinregdump.o lib/libcin.a  src/cin.h
 	$(CC) $(LDFLAGS) utils/cinregdump.o -o $@ $(LDLIBS) 
+
+bin/cin_power_up: utils/cin_power_up.o lib/libcin.a  src/cin.h
+	$(CC) $(LDFLAGS) utils/cin_power_up.o -o $@ $(LDLIBS) 
 
 bin/convert_config: utils/convert_config.o 
 	$(CC) utils/convert_config.o -o $@ 

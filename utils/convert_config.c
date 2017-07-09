@@ -277,6 +277,7 @@ int main(int argc, char *argv[])
   }
 
   if(fflag){
+    fprintf(stderr, "--- Processing fCRIC File\n");
     if(parse_fcric_data(vals, n_vals, pvals, &n_pvals))
     {
       return 20;
@@ -284,6 +285,7 @@ int main(int argc, char *argv[])
   }
 
   if(tflag){
+    fprintf(stderr, "--- Processing TIMING File\n");
     if(parse_bias_timing_data(vals, n_vals, pvals, &n_pvals, 0x0103))
     {
       return 20;
@@ -291,6 +293,7 @@ int main(int argc, char *argv[])
   }
 
   if(bflag){
+    fprintf(stderr, "--- Processing BIAS File\n");
     if(parse_bias_timing_data(vals, n_vals, pvals, &n_pvals, 0x0102))
     {
       return 20;

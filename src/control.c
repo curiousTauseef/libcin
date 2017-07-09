@@ -47,9 +47,6 @@
 #include "common.h"
 #include "fifo.h"
 
-extern unsigned char firmware[];
-extern unsigned firmware_len;
-  
 /**************************** INITIALIZATION **************************/
 
 int cin_ctl_init(cin_ctl_t *cin, 
@@ -311,27 +308,40 @@ error:
 
 int cin_ctl_stream_write(cin_ctl_t *cin, unsigned char *val,int size) {
  
-   int rc;
-   cin_port_t *cp = &(cin->stream_port);
+  cin_port_t *cp = &(cin->stream_port);
     
   pthread_mutex_lock(&cin->access);
 
-   rc = sendto(cp->sockfd, val, size, 0,
-               (struct sockaddr*)&cp->sin_srv,
-               sizeof(cp->sin_srv));
+  unsigned char *_val = val;
+  int _size = size;
+  int _chunk;
+  while(_size > 0)
+  {
+    if(_size > CIN_CTL_STREAM_CHUNK)
+    {
+      _chunk = CIN_CTL_STREAM_CHUNK;
+    } else {
+      _chunk = _size;
+    }
+    if((_chunk != sendto(cp->sockfd, _val, _chunk, 0,
+                          (struct sockaddr*)&cp->sin_srv,
+                          sizeof(cp->sin_srv))))
+    {
+      ERROR_PRINT("sendto() failure %d vs %d!! errno = %d\n", _chunk, size, errno);
+      goto error;
+    }
+    _val += _chunk;
+    _size -= _chunk;
+    usleep(5); // For flow control
+  }
 
   pthread_mutex_unlock(&cin->access);
 
-   if (rc != size ) {
-      ERROR_COMMENT("sendto() failure!!");
-      goto error;
-   }
-
-   /*** TODO - implement write verification procedure ***/
-   return 0;  
+  /*** TODO - implement write verification procedure ***/
+  return 0;  
    
 error:   
-   ERROR_COMMENT("Write error");
+   ERROR_COMMENT("Write error\n");
    return -1;
 }                                      
 
@@ -554,85 +564,58 @@ error:
 int cin_ctl_load_firmware_file(cin_ctl_t *cin, char *filename){
    
   uint32_t num_e;
-  unsigned char buffer[128];
+  FILE *file = NULL;
+  unsigned char *buffer = NULL;
+  int buffer_max = 20000000;
   int _status = -1; 
 
-  // Lock the mutex for exclusive access to the CIN
+  if((buffer = (unsigned char *)malloc(buffer_max)) == NULL)
+  {
+    ERROR_COMMENT("Unable to allocate memory for firmware buffer\n");
+    goto error;
+  }
 
-  pthread_mutex_lock(&cin->access);
-
-  FILE *file= fopen(filename, "rb");
+  file = fopen(filename, "rb");
   if(file == NULL){ 
     ERROR_COMMENT("Failed to open file.\n");
     goto error;
   }
-            
+
   DEBUG_PRINT("Loading %s\n", filename);
 
-  _status = cin_ctl_write(cin, REG_COMMAND, CMD_PROGRAM_FRAME, 0); 
-  if (_status != 0){
-    ERROR_COMMENT("Failed to program CIN\n");
-    goto error;
-  }   
+  num_e = fread(buffer,buffer_max, sizeof(buffer), file);
 
-  sleep(1);
-  while ((num_e = fread(buffer,sizeof(char), sizeof(buffer), file)) != 0){    
-    _status = cin_ctl_stream_write(cin, buffer, num_e);       
-    if (_status != 0){
-      ERROR_COMMENT("Error writing firmware to CIN\n");
-      fclose(file);
-      goto error;
-    }
-    usleep(200);   /*for UDP flow control*/ 
-  }
   fclose(file);
 
-  DEBUG_COMMENT("Done.\n");
-  
-  sleep(1);
-
-  DEBUG_COMMENT("Resetting Frame FPGA\n");
-
-  _status=cin_ctl_write(cin, REG_FRM_RESET, 0x0001, 0);
-  if(_status != 0){
-    goto error;
-  } 
-
-  sleep(1); 
-
-  _status=cin_ctl_write(cin,REG_FRM_RESET,0x0000, 0);
-  if(_status != 0){
-    goto error;
-  } 
-
-  sleep(1);
-  DEBUG_COMMENT("Done.\n");
-
-  uint16_t _fpga_status;
-  _status = cin_ctl_get_cfg_fpga_status(cin, &_fpga_status);
-  _status |= !(_fpga_status & CIN_CTL_FPGA_STS_CFG);
-  if(_status){
-    DEBUG_COMMENT("FPGA Failed to configure.\n");
-    goto error;
-  }
-  
-  pthread_mutex_unlock(&cin->access);
-  DEBUG_COMMENT("FPGA Configured OK\n");
-  return 0;
-   
-error:
-  pthread_mutex_unlock(&cin->access);
+  _status = cin_ctl_load_firmware_data(cin, buffer, num_e);
   return _status;
+
+error:
+  if(buffer != NULL)
+  {
+    free(buffer);
+  }
+  if(file != NULL)
+  {
+    fclose(file);
+  }
+  return -1;
 }
 
-int cin_ctl_load_firmware(cin_ctl_t *cin){
-   
+int cin_ctl_load_firmware(cin_ctl_t *cin)
+{
+  return cin_ctl_load_firmware_data(cin, cin_config_firmware, cin_config_firmware_len);
+}
+
+int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len)
+{
   int _status = -1; 
 
   // Lock the mutex for exclusive access to the CIN
 
   pthread_mutex_lock(&cin->access);
 
+  DEBUG_COMMENT("Placing CIN in firmware program mode\n");
   _status = cin_ctl_write(cin, REG_COMMAND, CMD_PROGRAM_FRAME, 0); 
   if (_status != 0){
     ERROR_COMMENT("Failed to program CIN\n");
@@ -640,7 +623,8 @@ int cin_ctl_load_firmware(cin_ctl_t *cin){
   }   
 
   sleep(1);
-  _status = cin_ctl_stream_write(cin, firmware, firmware_len);       
+  DEBUG_PRINT("Starting to upload firmware (%d bytes)\n", data_len);
+  _status = cin_ctl_stream_write(cin, data, data_len);
   if (_status != 0){
     ERROR_COMMENT("Error writing firmware to CIN\n");
     goto error;
@@ -1032,6 +1016,8 @@ int cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val){
 
   return _status;
 }
+
+/******************* CIN Control *************************/
 
 int cin_ctl_set_bias(cin_ctl_t *cin,int val){
 
@@ -1510,19 +1496,36 @@ int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage){
 
   int n;
   int _status = 0;
-  uint16_t _val;
+  uint16_t _val[CIN_CTL_NUM_BIAS_VOLTAGE];
 
-  for(n=0;n<NUM_BIAS_VOLTAGE;n++){
-    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, 0x0030 + (2 * n), 1);
-    _status |= cin_ctl_read(cin, REG_BIASREGISTERDATAOUT, &_val);
-    voltage[n] = (float)(_val & 0x0FFF) * bias_voltage_range[n] / 4096.0;
+  if((_status = cin_ctl_get_bias_regs(cin, _val)))
+  {
+    ERROR_COMMENT("Unable to read bias registers\n");
+    return _status;
+  }
+
+  for(n=0;n<CIN_CTL_NUM_BIAS_VOLTAGE;n++){
+    voltage[n] = (float)(_val[n] & 0x0FFF) * bias_voltage_range[n] / 4096.0;
   } 
 
   return _status;
 }
 
-int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage){
+int cin_ctl_get_bias_regs(cin_ctl_t *cin, uint16_t *vals)
+{
+  int n;
+  int _status = 0;
 
+  for(n=0;n<CIN_CTL_NUM_BIAS_VOLTAGE;n++){
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, 0x0030 + (2 * n), 1);
+    _status |= cin_ctl_read(cin, REG_BIASREGISTERDATAOUT, &vals[n]);
+  }
+
+  return _status;
+}
+
+int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify)
+{
   int n;
   int _status = 0;
   int _val;
@@ -1558,15 +1561,41 @@ int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage){
   }
 
   _status = 0;
-  for(n=0;n<NUM_BIAS_VOLTAGE;n++){
-    _val =  (int)((voltage[n] / bias_voltage_range[n]) * 0x0FFF) & 0x0FFF;
-    _val |= ((n << 14) & 0xC000);
+  for(n=0;n<CIN_CTL_NUM_BIAS_VOLTAGE;n++){
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, (2 * n), 1);
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA	, _val, 1);
     _status |= cin_ctl_write(cin, REG_FRM_COMMAND, 0x0102, 1);
   } 
 
   return _status;
+}
+
+int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify)
+{
+  uint16_t _val[CIN_CTL_NUM_BIAS_VOLTAGE];
+  int status = 0;
+
+  int n;
+  for(n=0;n<CIN_CTL_NUM_BIAS_VOLTAGE;n++)
+  {
+    _val[n] =  (int)((voltage[n] / bias_voltage_range[n]) * 0x0FFF) & 0x0FFF;
+    _val[n] |= ((n << 14) & 0xC000);
+  }
+
+  status = cin_ctl_set_bias_regs(cin, _val, verify);
+  return status;
+}
+
+int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len)
+{
+  int i;
+  for(i=0;i<vals_len;i++)
+  {
+    int _status = 0;
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, i * 2);
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA, vals[i]);
+    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_WR_CCD_BIAS_REG);
+  }
 }
 
 /*******************  Register Dump of CIN    **********************/

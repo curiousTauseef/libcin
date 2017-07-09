@@ -2,3 +2,5 @@
 #include "version.h"
 #include "firmware.h"
 #include "timing.h"
+#include "bias.h"
+#include "fcric_200.h"

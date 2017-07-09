@@ -75,6 +75,7 @@ extern const char *cin_build_version;
 #define CIN_CTL_MAX_READ_TRIES             10
 #define CIN_CTL_MAX_WRITE_TRIES            5
 #define CIN_CTL_WRITE_SLEEP                2000 // microsecs
+#define CIN_CTL_STREAM_CHUNK               256
 
 #define CIN_CTL_POWER_ENABLE               0x001F
 #define CIN_CTL_POWER_DISABLE              0x0000
@@ -194,28 +195,28 @@ extern const char *cin_build_version;
  * -------------------------------------------------------------------------------
  */
 
-#define NUM_BIAS_VOLTAGE            20
+#define CIN_CTL_NUM_BIAS_VOLTAGE           20
 
-#define pt_posH                     0
-#define pt_negH                     1
-#define pt_posRG                    2
-#define pt_negRG                    3
-#define pt_posSW                    4
-#define pt_negSW                    5
-#define pt_posV                     6
-#define pt_negV                     7
-#define pt_posTG                    8
-#define pt_negTG                    9
-#define pt_posVF                    10
-#define pt_negVF                    11
-#define pt_NEDGE                    12
-#define pt_OTG                      13
-#define pt_VDDR                     14
-#define pt_VDD_OUT                  15
-#define pt_BUF_Base                 16
-#define pt_BUF_Delta                17
-#define pt_Spare1                   18
-#define pt_Spare2                   19
+#define CIN_CTL_BIAS_POSH                  0
+#define CIN_CTL_BIAS_NEGH                  1
+#define CIN_CTL_BIAS_POSRG                 2
+#define CIN_CTL_BIAS_NEGRG                 3
+#define CIN_CTL_BIAS_POSSW                 4
+#define CIN_CTL_BIAS_NEGSW                 5
+#define CIN_CTL_BIAS_POSV                  6
+#define CIN_CTL_BIAS_NEGV                  7
+#define CIN_CTL_BIAS_POSTG                 8
+#define CIN_CTL_BIAS_NEGTG                 9
+#define CIN_CTL_BIAS_POSVF                 10
+#define CIN_CTL_BIAS_NEGVF                 11
+#define CIN_CTL_BIAS_NEDGE                 12
+#define CIN_CTL_BIAS_OTG                   13
+#define CIN_CTL_BIAS_VDDR                  14
+#define CIN_CTL_BIAS_VDD_OUT               15
+#define CIN_CTL_BIAS_BUF_BASE              16
+#define CIN_CTL_BIAS_BUF_DELTA             17
+#define CIN_CTL_BIAS_SPARE1                18
+#define CIN_CTL_BIAS_SPARE2                19
 
 /* ---------------------------------------------------------------------
  *
@@ -250,6 +251,14 @@ void cin_set_error_print(int error);
  * ---------------------------------------------------------------------
  */
 
+extern uint16_t cin_config_timing[];
+extern const int cin_config_timing_len; 
+extern unsigned char cin_config_firmware[];
+extern unsigned cin_config_firmware_len;
+extern uint16_t cin_config_bias[];
+extern const int cin_config_bias_len;
+extern uint16_t cin_config_fcric_200[];
+extern const int cin_config_fcric_200_len;
 
 #define CIN_CONFIG_MAX_STRING 256
 #define CIN_CONFIG_MAX_DATA 5000
@@ -597,6 +606,7 @@ int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off);
 int cin_ctl_load_config(cin_ctl_t *cin,char *filename);
 int cin_ctl_load_firmware(cin_ctl_t *cin);
 int cin_ctl_load_firmware_file(cin_ctl_t *cin, char *filename);
+int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len);
 int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq);
 int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq);
 int cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val);
@@ -615,10 +625,21 @@ int cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon
  * CIN Control
  *------------------------*/
 
-int cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val);
-int cin_ctl_set_camera_pwr(cin_ctl_t *cin, int val);
+/** @defgroup cin_ctl_bias CIN Control Bias Routines
+ * Initialization group
+ * @{
+ */
 int cin_ctl_set_bias(cin_ctl_t *cin,int val);
 int cin_ctl_get_bias(cin_ctl_t *cin, int *val);
+int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify);
+int cin_ctl_get_bias_regs(cin_ctl_t * cin, uint16_t *vals);
+int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify);
+int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage);
+
+/** @} */
+
+int cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val);
+int cin_ctl_set_camera_pwr(cin_ctl_t *cin, int val);
 int cin_ctl_set_clocks(cin_ctl_t *cin,int val);
 int cin_ctl_get_clocks(cin_ctl_t *cin, int *val);
 int cin_ctl_set_trigger(cin_ctl_t *cin,int val);
@@ -638,8 +659,6 @@ int cin_ctl_set_mux(cin_ctl_t *cin, int setting);
 int cin_ctl_get_mux(cin_ctl_t *cin, int *setting);
 int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp);
 int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain);
-int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage);
-int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage);
 int cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip);
 
 
