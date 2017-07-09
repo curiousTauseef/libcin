@@ -38,9 +38,13 @@ In order for the CIN data to operate efficiently, the 10G interface on the host 
 needs to be tuned. This needs to be done by adding the following to the file 
 `/etc/sysctl.conf`. 
 ```
+# Increase the maximum buffer that user programs can request
 # 2147483647 = 2048 Mb
 net.core.rmem_max=2147483647
 net.core.wmem_max=2147483647
+# Set a default value 10 times bigger
+net.core.rmem_default=1000000
+net.core.wmem_default=1000000
 # increase the length of the processor input queue
 net.core.netdev_max_backlog = 250000
 # recommended for hosts with jumbo frames enabled

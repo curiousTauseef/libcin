@@ -1,34 +1,43 @@
-/* vim: set ts=2 sw=2 tw=0 noet :
-   
-   libcin : Driver for LBNL FastCCD 
+/* vim: set ts=2 sw=2 tw=0 noet : */
+/**
+ * @file 
+ * @author Stuart B. Wilkins <swilkins@bnl.gov> 
+ *
+ * @section LICENSE
+ *  
  *  Copyright (c) 2014, Brookhaven Science Associates, Brookhaven National Laboratory
-   All rights reserved.
+ *  All rights reserved.
+ *  
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met: 
+ *  
+ *  1. Redistributions of source code must retain the above copyright notice, this
+ *     list of conditions and the following disclaimer. 
+ *  2. Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution. 
+ *  
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ *  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ *  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ *  ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ *  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *  
+ *  The views and conclusions contained in the software and documentation are those
+ *  of the authors and should not be interpreted as representing official policies, 
+ *  either expressed or implied, of the FreeBSD Project.
+ *  
+ *  @section DESCRIPTION
+ *
+ *  Control and Frame FPGA Register Map
+ *
+ */
    
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions are met: 
-   
-   1. Redistributions of source code must retain the above copyright notice, this
-      list of conditions and the following disclaimer. 
-   2. Redistributions in binary form must reproduce the above copyright notice,
-      this list of conditions and the following disclaimer in the documentation
-      and/or other materials provided with the distribution. 
-   
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-   ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-   WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-   DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-   ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-   (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-   ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-   
-   The views and conclusions contained in the software and documentation are those
-   of the authors and should not be interpreted as representing official policies, 
-   either expressed or implied, of the FreeBSD Project.
-
-*/
 #ifndef CIN_REGISTER_MAP_H
 #define CIN_REGISTER_MAP_H
 
@@ -176,13 +185,13 @@
 #define REG_FRM_STREAM_TYPE              0x8003
 
 /* List of Commands */
-#define CMD_SEND_SYNC_PULSE              0x0100 /* ISSUES A SYNC PULSE */
+#define CMD_SEND_SYNC_PULSE              0x0100 /** ISSUES A SYNC PULSE */
 #define CMD_SYNC_DETECTOR2READOUT        0x0101 /* COMMAND TO SYNC DETECTOR AND READOUT (SEE IMAGE PROCESSING) */
-#define CMD_IP_RESET                     0x0102 /* RESET IMAGE PROCESSING REGISTERS (N/A) */
-#define CMD_WR_CCD_BIAS_REG              0x0103 /* WRITE CCD BIAS REGISTERS */
-#define CMD_WR_CCD_CLOCK_REG             0x0104 /* WRITE CCD CLOCK REGISTER */
-#define CMD_SEND_FCRIC_CONFIG            0x0105 /* SEND CONFIG DATA TO FRIC */
-#define CMD_RESET_FRAME_COUNT            0x0106 /* RESET STATISTICS/DEBUG COUNTERS */
+//#define CMD_IP_RESET                     0x0102 /* RESET IMAGE PROCESSING REGISTERS (N/A) */
+#define CMD_WR_CCD_BIAS_REG              0x0102 /** WRITE CCD BIAS REGISTERS */
+#define CMD_WR_CCD_CLOCK_REG             0x0103 /** WRITE CCD CLOCK REGISTER */
+#define CMD_SEND_FCRIC_CONFIG            0x0105 /** SEND CONFIG DATA TO FRIC */
+#define CMD_RESET_FRAME_COUNT            0x0106 /** RESET STATISTICS/DEBUG COUNTERS */
 
 /* Ethernet Interface */
 #define REG_IF_MAC_FAB1B0                0x8010
