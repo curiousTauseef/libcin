@@ -332,7 +332,7 @@ int cin_ctl_stream_write(cin_ctl_t *cin, unsigned char *val,int size) {
     }
     _val += _chunk;
     _size -= _chunk;
-    usleep(5); // For flow control
+    usleep(CIN_CTL_STREAM_SLEEP); // For flow control
   }
 
   pthread_mutex_unlock(&cin->access);
@@ -681,11 +681,14 @@ int cin_ctl_freeze_dco(cin_ctl_t *cin, int freeze){
 
   _status |= cin_ctl_write(cin,REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
 
+  usleep(500000);
+
   if(!freeze){
     // Start the DCO up
     _status |= cin_ctl_write(cin,REG_FCLK_I2C_ADDRESS, 0xB087, 1);
     _status |= cin_ctl_write(cin,REG_FCLK_I2C_DATA_WR, 0xF040, 1);
     _status |= cin_ctl_write(cin,REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
+    usleep(500000);
   }
 
   if(!_status){
@@ -704,13 +707,20 @@ int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq){
 
     case CIN_CTL_FCLK_125:
       _status = cin_ctl_freeze_dco(cin, 1);
+      usleep(10000);
       if(!_status){
-        _status  = cin_ctl_write(cin, REG_FCLK_SET0, 0xF002, 0);
-        _status |= cin_ctl_write(cin, REG_FCLK_SET1, 0xF042, 0);
-        _status |= cin_ctl_write(cin, REG_FCLK_SET2, 0xF0BC, 0);
-        _status |= cin_ctl_write(cin, REG_FCLK_SET3, 0xF019, 0);
-        _status |= cin_ctl_write(cin, REG_FCLK_SET4, 0xF06D, 0);
-        _status |= cin_ctl_write(cin, REG_FCLK_SET5, 0xF08F, 0);
+        _status  = cin_ctl_write(cin, REG_FCLK_SET0, 0xF002, 1);
+      usleep(10000);
+        _status |= cin_ctl_write(cin, REG_FCLK_SET1, 0xF042, 1);
+      usleep(10000);
+        _status |= cin_ctl_write(cin, REG_FCLK_SET2, 0xF0BC, 1);
+      usleep(10000);
+        _status |= cin_ctl_write(cin, REG_FCLK_SET3, 0xF019, 1);
+      usleep(10000);
+        _status |= cin_ctl_write(cin, REG_FCLK_SET4, 0xF06D, 1);
+      usleep(10000);
+        _status |= cin_ctl_write(cin, REG_FCLK_SET5, 0xF08F, 1);
+      usleep(10000);
       }
       if(!_status){
         _status = cin_ctl_freeze_dco(cin, 0);
@@ -718,7 +728,7 @@ int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq){
       break;
 
     case CIN_CTL_FCLK_200:
-      _status = cin_ctl_write(cin, REG_FCLK_I2C_DATA_WR, CMD_FCLK_200, 0);
+      _status = cin_ctl_write(cin, REG_FCLK_I2C_DATA_WR, CMD_FCLK_200, 1);
       break;
 
     default:
@@ -747,6 +757,8 @@ int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq){
     return _status;
   }
 
+  DEBUG_PRINT("FCLK Status = 0x%04X\n", _val);
+
   if((_val & 0xF000) == 0xF000){
     /* Not standard clock frequency */
     int i;
@@ -757,8 +769,11 @@ int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq){
 
     for(i=0;i<CIN_FCLK_READ_N;i++){
       _status |= cin_ctl_write(cin, REG_FCLK_I2C_ADDRESS, CIN_FCLK_READ[i], 1);
+      usleep(10000);
       _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
+      usleep(10000);
       _status |= cin_ctl_read(cin, REG_FCLK_I2C_DATA_RD, &_reg[i]);
+      usleep(10000);
     }
 
     // Print Reisters to debug stream
@@ -817,16 +832,19 @@ int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq){
   }
 
   if((_val & CMD_FCLK_125) == CMD_FCLK_125){
+    DEBUG_COMMENT("FCLK = 125 MHz\n");
     *clkfreq = CIN_CTL_FCLK_125;
     return 0;
   } 
 
   if((_val & CMD_FCLK_200) == CMD_FCLK_200){
+    DEBUG_COMMENT("FCLK = 200 MHz\n");
     *clkfreq = CIN_CTL_FCLK_200;
     return 0;		     
   }
 
   if((_val & CMD_FCLK_250) == CMD_FCLK_250){
+    DEBUG_COMMENT("FCLK = 250 MHz\n");
     *clkfreq = CIN_CTL_FCLK_250;
     return 0;
   }
@@ -851,15 +869,23 @@ int cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val){
 int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *val){
   int _status;
 
-  _status  = cin_ctl_read(cin, REG_BOARD_ID, &val->board_id);
-  DEBUG_PRINT("CIN Board ID     :  0x%04X\n",val->board_id);
+  _status  = cin_ctl_read(cin, REG_BOARD_ID, &val->base_board_id);
+  DEBUG_PRINT("CIN Board ID     :  0x%04X\n",val->base_board_id);
 
-  _status |= cin_ctl_read(cin,REG_HW_SERIAL_NUM, &val->serial_no);
-  DEBUG_PRINT("HW Serial Number :  0x%04X\n",val->serial_no);
+  _status |= cin_ctl_read(cin,REG_HW_SERIAL_NUM, &val->base_serial_no);
+  DEBUG_PRINT("HW Serial Number :  0x%04X\n",val->base_serial_no);
 
-  _status |= cin_ctl_read(cin,REG_FPGA_VERSION, &val->fpga_ver);
-  DEBUG_PRINT("CFG FPGA Version :  0x%04X\n\n",val->fpga_ver);
+  _status |= cin_ctl_read(cin,REG_FPGA_VERSION, &val->base_fpga_ver);
+  DEBUG_PRINT("CFG FPGA Version :  0x%04X\n",val->base_fpga_ver);
 
+  _status  = cin_ctl_read(cin, REG_FRM_BOARD_ID, &val->fabric_board_id);
+  DEBUG_PRINT("CIN Board ID     :  0x%04X\n",val->fabric_board_id);
+
+  _status |= cin_ctl_read(cin,REG_FRM_HW_SERIAL_NUM, &val->fabric_serial_no);
+  DEBUG_PRINT("HW Serial Number :  0x%04X\n",val->fabric_serial_no);
+
+  _status |= cin_ctl_read(cin,REG_FRM_FPGA_VERSION, &val->fabric_fpga_ver);
+  DEBUG_PRINT("CFG FPGA Version :  0x%04X\n",val->fabric_fpga_ver);
   if(_status){
     ERROR_COMMENT("Unable to read CIN ID\n");
     return -1;
@@ -1593,9 +1619,9 @@ int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len)
   for(i=0;i<vals_len;i++)
   {
     int _status = 0;
-    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, i * 2, 0);
-    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA, vals[i], 0);
-    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_WR_CCD_CLOCK_REG, 0);
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, i * 2, 1);
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA, vals[i], 1);
+    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_WR_CCD_CLOCK_REG, 1);
     if(_status)
     {
       ERROR_PRINT("Unable to write %04X to cin (line %d)\n", vals[i], i);
@@ -1606,6 +1632,26 @@ int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len)
   DEBUG_COMMENT("Done\n");
 
   return cin_ctl_write(cin,REG_DETECTOR_CONFIG_REG6, 0x0000, 0);
+}
+
+int cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals)
+{
+  int i;
+  for(i=0;i<510;i++)
+  {
+    int _status = 0;
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, (2 * i), 1);
+    _status |= cin_ctl_read(cin, REG_CLOCKREGISTERDATAOUT, &vals[i]);
+    if(_status)
+    {
+      ERROR_PRINT("Unable to write %04X to cin (line %d)\n", vals[i], i);
+      return -1;
+    }
+  }
+
+  DEBUG_COMMENT("Done\n");
+
+  return 0;
 }
 
 /*******************  Register Dump of CIN    **********************/

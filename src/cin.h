@@ -74,8 +74,9 @@ extern const char *cin_build_version;
 
 #define CIN_CTL_MAX_READ_TRIES             10
 #define CIN_CTL_MAX_WRITE_TRIES            5
-#define CIN_CTL_WRITE_SLEEP                2000 // microsecs
+#define CIN_CTL_WRITE_SLEEP                100 // microsecs
 #define CIN_CTL_STREAM_CHUNK               256
+#define CIN_CTL_STREAM_SLEEP               25
 
 #define CIN_CTL_POWER_ENABLE               0x001F
 #define CIN_CTL_POWER_DISABLE              0x0000
@@ -440,9 +441,12 @@ typedef void (*cin_data_callback) (cin_data_frame_t *);
  */
 
 typedef struct cin_ctl_id {
-  uint16_t board_id;
-  uint16_t serial_no;
-  uint16_t fpga_ver;
+  uint16_t base_board_id;
+  uint16_t base_serial_no;
+  uint16_t base_fpga_ver;
+  uint16_t fabric_board_id;
+  uint16_t fabric_serial_no;
+  uint16_t fabric_fpga_ver;
 } cin_ctl_id_t;
 
 typedef struct cin_ctl_pwr_val {
@@ -643,6 +647,7 @@ int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage);
  * @{
  */
 int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len);
+int cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals);
 
 /** @} */
 int cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val);
