@@ -41,15 +41,47 @@ float bias_voltage_range[CIN_CTL_NUM_BIAS_VOLTAGE] = {
 };
 
 #define NUM_CLAMP_REG 8
-uint16_t fcric_clamp_reg[NUM_CLAMP_REG] =     { 0x0048, 0x0049, 0x0050, 0x0051, 
-                                                0x0058, 0x0059, 0x005A, 0x005B};
-uint16_t fcric_clamp_reg_on[NUM_CLAMP_REG] =  { 0x0001, 0x00FF, 0x0001, 0x00FF, 
-                                                0x00FF, 0x0001, 0x00FF, 0x0001};
-uint16_t fcric_clamp_reg_off[NUM_CLAMP_REG] = { 0x00C7, 0x004C, 0x00B4, 0x0002, 
-                                                0x0001, 0x004C, 0x0064, 0x005B};
+uint16_t fcric_clamp_reg[NUM_CLAMP_REG] =     
+{ 
+  0x0048, 0x0049, 0x0050, 0x0051, 0x0058, 0x0059, 0x005A, 0x005B
+};
+uint16_t fcric_clamp_reg_on[NUM_CLAMP_REG] =  
+{ 
+  0x0001, 0x00FF, 0x0001, 0x00FF, 0x00FF, 0x0001, 0x00FF, 0x0001
+};
+uint16_t fcric_clamp_reg_off[NUM_CLAMP_REG] = 
+{ 
+  0x00C7, 0x004C, 0x00B4, 0x0002, 0x0001, 0x004C, 0x0064, 0x005B
+};
 
 uint16_t cin_fcric_regs[] = {0x821D, 0x821E, 0x821F, 0x8001};
 uint16_t cin_bias_timing_regs[] = {0x8200, 0x8201, 0x8001};
+
+#define CIN_FCLK_NUM_REG 6
+
+uint16_t CIN_FCLK_REG[] = 
+{ 
+    0xB007, 0xB008, 0xB009, 0xB00A, 0xB00B, 0xB00C 
+};
+
+#define CIN_FCLK_PROGRAM_125        0
+#define CIN_FCLK_PROGRAM_180        1
+#define CIN_FCLK_PROGRAM_200        2
+#define CIN_FCLK_PROGRAM_250        3
+
+uint16_t CIN_FCLK_PROGRAM[][CIN_FCLK_NUM_REG] = 
+{
+  { 0xF002, 0xF042, 0xF0BC, 0xF019, 0xF06D, 0xF08F }, // 125 MHz
+  { 0xF060, 0xF0C2, 0xF0C1, 0xF0B9, 0xF08A, 0xF0EF }, // 180 MHz
+  { 0xF060, 0xF0C3, 0xF010, 0xF023, 0xF07D, 0xF0ED }, // 200 MHz
+  { 0xF020, 0xF0C2, 0xF0BC, 0xF019, 0xF06D, 0xF08F }, // 250 MHz
+};
+
+#define CIN_FCLK_READ_N 7
+uint16_t CIN_FCLK_READ[] = 
+{ 
+  0xB189, 0xB107, 0xB108, 0xB109, 0xB10A, 0xB10B, 0xB10C 
+};
 
 void *cin_ctl_listen_thread(void* args);
 uint32_t cin_ctl_get_packet(cin_ctl_t *cin, uint32_t *val);

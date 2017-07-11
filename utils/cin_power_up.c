@@ -38,9 +38,7 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  //sleep(10);
-
-  cin_ctl_set_fclk(&cin, CIN_CTL_FCLK_125);
+  cin_ctl_set_fclk(&cin, CIN_CTL_FCLK_125_C);
   int fclk;
   cin_ctl_get_fclk(&cin, &fclk);
 
