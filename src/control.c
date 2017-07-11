@@ -361,6 +361,7 @@ int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val) {
       goto error;
     }
 
+    usleep(100000);
     _status = cin_ctl_write(cin, REG_COMMAND, CMD_READ_REG, 1);
     if (_status != 0){
       goto error;
@@ -681,14 +682,14 @@ int cin_ctl_freeze_dco(cin_ctl_t *cin, int freeze){
 
   _status |= cin_ctl_write(cin,REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
 
-  usleep(500000);
+  sleep(1);
 
   if(!freeze){
     // Start the DCO up
     _status |= cin_ctl_write(cin,REG_FCLK_I2C_ADDRESS, 0xB087, 1);
     _status |= cin_ctl_write(cin,REG_FCLK_I2C_DATA_WR, 0xF040, 1);
     _status |= cin_ctl_write(cin,REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
-    usleep(500000);
+    sleep(1);
   }
 
   if(!_status){
@@ -699,30 +700,37 @@ int cin_ctl_freeze_dco(cin_ctl_t *cin, int freeze){
   return _status; 
 }
 
+int cin_ctl_set_fclk_regs(cin_ctl_t *cin, int clkfreq)
+{
+  int _status = 0;
+
+  int i;
+  for(i=0;i<CIN_FCLK_NUM_REG;i++)
+  {
+    _status |= cin_ctl_write(cin,REG_FCLK_I2C_ADDRESS, CIN_FCLK_REG[i], 1);
+    _status |= cin_ctl_write(cin,REG_FCLK_I2C_DATA_WR, CIN_FCLK_PROGRAM[clkfreq][i], 1);
+    _status |= cin_ctl_write(cin,REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
+    usleep(200000);
+  }
+
+  return _status;
+}
+
 int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq){
 
   int _status = 0;
 
-  switch(clkfreq){
-
+  switch(clkfreq)
+  {
     case CIN_CTL_FCLK_125:
       _status = cin_ctl_freeze_dco(cin, 1);
-      usleep(10000);
-      if(!_status){
-        _status  = cin_ctl_write(cin, REG_FCLK_SET0, 0xF002, 1);
-      usleep(10000);
-        _status |= cin_ctl_write(cin, REG_FCLK_SET1, 0xF042, 1);
-      usleep(10000);
-        _status |= cin_ctl_write(cin, REG_FCLK_SET2, 0xF0BC, 1);
-      usleep(10000);
-        _status |= cin_ctl_write(cin, REG_FCLK_SET3, 0xF019, 1);
-      usleep(10000);
-        _status |= cin_ctl_write(cin, REG_FCLK_SET4, 0xF06D, 1);
-      usleep(10000);
-        _status |= cin_ctl_write(cin, REG_FCLK_SET5, 0xF08F, 1);
-      usleep(10000);
+      usleep(200000);
+      if(!_status)
+      {
+        cin_ctl_set_fclk_regs(cin, clkfreq);
       }
-      if(!_status){
+      if(!_status)
+      {
         _status = cin_ctl_freeze_dco(cin, 0);
       }
       break;

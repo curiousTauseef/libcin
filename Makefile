@@ -30,7 +30,7 @@
 #
 #
 CC=gcc
-CFLAGS=-Wall -O3 -g --pic -I./src -I./data
+CFLAGS=-Wall -O3 -g --pic -I./src -I./data -D__DEBUG_STREAM__
 
 LIBOBJECTS= src/data.o src/fifo.o src/control.o src/descramble.o \
 		    src/common.o src/report.o src/config.o \

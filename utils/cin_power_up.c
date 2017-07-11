@@ -38,15 +38,21 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  if(cin_ctl_set_timing_regs(&cin, cin_config_timing, cin_config_timing_len))
-  {
-    return -1;
-  }
+  //sleep(10);
 
-  cin_ctl_id_t cin_id;
-  if(cin_ctl_get_id(&cin, &cin_id))
-  {
-    return -1;
-  }
+  cin_ctl_set_fclk(&cin, CIN_CTL_FCLK_125);
+  int fclk;
+  cin_ctl_get_fclk(&cin, &fclk);
+
+  //if(cin_ctl_set_timing_regs(&cin, cin_config_timing, cin_config_timing_len))
+  //{
+  //  return -1;
+  //}
+
+  //cin_ctl_id_t cin_id;
+  //if(cin_ctl_get_id(&cin, &cin_id))
+  //{
+  //  return -1;
+  //}
   return 0;
 }
