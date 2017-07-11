@@ -146,7 +146,7 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>CIN_CTL_STREAM_CHUNK</b>&#160;&#160;&#160;256</td></tr>
 <tr class="separator:af2231745d59465e432f87dd101d915b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a400f95a27e8212e8a12f4eb68b86f482"><td class="memItemLeft" align="right" valign="top"><a id="a400f95a27e8212e8a12f4eb68b86f482"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>CIN_CTL_STREAM_SLEEP</b>&#160;&#160;&#160;25</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>CIN_CTL_STREAM_SLEEP</b>&#160;&#160;&#160;10</td></tr>
 <tr class="separator:a400f95a27e8212e8a12f4eb68b86f482"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af699afd7121376c187de8e4289e199e0"><td class="memItemLeft" align="right" valign="top"><a id="af699afd7121376c187de8e4289e199e0"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>CIN_CTL_POWER_ENABLE</b>&#160;&#160;&#160;0x001F</td></tr>
@@ -560,8 +560,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>cin_report</b> (FILE 
 <tr class="separator:gac700bdbc5bd68e128fe446e23576b70e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga888fd017426a3718a875f6bdb5078b81"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__init.html#ga888fd017426a3718a875f6bdb5078b81">cin_ctl_destroy</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin)</td></tr>
 <tr class="separator:ga888fd017426a3718a875f6bdb5078b81"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0bc2500271d8f7ff30c3479993906f29"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__rw.html#ga0bc2500271d8f7ff30c3479993906f29">cin_ctl_read</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, uint16_t reg, uint16_t *val)</td></tr>
-<tr class="separator:ga0bc2500271d8f7ff30c3479993906f29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga067c8576865a0bbf6bd82c9f9213b553"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__rw.html#ga067c8576865a0bbf6bd82c9f9213b553">cin_ctl_read</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, uint16_t reg, uint16_t *val, int wait)</td></tr>
+<tr class="separator:ga067c8576865a0bbf6bd82c9f9213b553"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac9b282b5280a34b0abb9ea0dcc6e3308"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__rw.html#gac9b282b5280a34b0abb9ea0dcc6e3308">cin_ctl_write</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, uint16_t reg, uint16_t val, int wait)</td></tr>
 <tr class="separator:gac9b282b5280a34b0abb9ea0dcc6e3308"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2bddf0e6425752fc7a29c531e52e9421"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__rw.html#ga2bddf0e6425752fc7a29c531e52e9421">cin_ctl_stream_write</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, unsigned char *val, int size)</td></tr>
@@ -805,7 +805,7 @@ DESCRIPTION</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jul 11 2017 19:46:13 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 11 2017 23:02:30 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

@@ -252,60 +252,60 @@ Building full member lists rec/home/travis/build/NSLS-II/libcin/src/cin.h:68: wa
 /home/travis/build/NSLS-II/libcin/src/cin.h:233: warning: Member cin_set_debug_print(int debug) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:234: warning: Member cin_set_error_print(int error) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:477: warning: Member cin_report(FILE *fp, int details) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:598: warning: Member cin_ctl_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:599: warning: Member cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:600: warning: Member cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off) (function) of group cin_ctl_rw is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:610: warning: Member cin_ctl_load_config(cin_ctl_t *cin, char *filename) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:611: warning: Member cin_ctl_load_firmware(cin_ctl_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:612: warning: Member cin_ctl_load_firmware_file(cin_ctl_t *cin, char *filename) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:613: warning: Member cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:614: warning: Member cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:615: warning: Member cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:616: warning: Member cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:617: warning: Member cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *_val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:618: warning: Member cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:626: warning: Member cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon_t *values) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:636: warning: Member cin_ctl_set_bias(cin_ctl_t *cin, int val) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:637: warning: Member cin_ctl_get_bias(cin_ctl_t *cin, int *val) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:638: warning: Member cin_ctl_set_bias_regs(cin_ctl_t *cin, uint16_t *vals, int verify) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:639: warning: Member cin_ctl_get_bias_regs(cin_ctl_t *cin, uint16_t *vals) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:640: warning: Member cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:641: warning: Member cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:649: warning: Member cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len) (function) of group cin_ctl_timing is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:650: warning: Member cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals) (function) of group cin_ctl_timing is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:653: warning: Member cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:654: warning: Member cin_ctl_set_camera_pwr(cin_ctl_t *cin, int val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:655: warning: Member cin_ctl_set_clocks(cin_ctl_t *cin, int val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:656: warning: Member cin_ctl_get_clocks(cin_ctl_t *cin, int *val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:657: warning: Member cin_ctl_set_trigger(cin_ctl_t *cin, int val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:658: warning: Member cin_ctl_get_trigger(cin_ctl_t *cin, int *val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:659: warning: Member cin_ctl_set_focus(cin_ctl_t *cin, int val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:660: warning: Member cin_ctl_get_focus(cin_ctl_t *cin, int *val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:661: warning: Member cin_ctl_get_triggering(cin_ctl_t *cin, int *trigger) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:662: warning: Member cin_ctl_int_trigger_start(cin_ctl_t *cin, int nimages) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:663: warning: Member cin_ctl_int_trigger_stop(cin_ctl_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:664: warning: Member cin_ctl_ext_trigger_start(cin_ctl_t *cin, int trigger_mode) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:665: warning: Member cin_ctl_ext_trigger_stop(cin_ctl_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:666: warning: Member cin_ctl_set_exposure_time(cin_ctl_t *cin, float e_time) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:667: warning: Member cin_ctl_set_trigger_delay(cin_ctl_t *cin, float t_time) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:668: warning: Member cin_ctl_set_cycle_time(cin_ctl_t *cin, float ftime) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:669: warning: Member cin_ctl_frame_count_reset(cin_ctl_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:670: warning: Member cin_ctl_set_mux(cin_ctl_t *cin, int setting) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:671: warning: Member cin_ctl_get_mux(cin_ctl_t *cin, int *setting) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:672: warning: Member cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:673: warning: Member cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:674: warning: Member cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:677: warning: Member cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:683: warning: Member cin_config_read_file(cin_ctl_t *cin, const char *file) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:799: warning: Member cin_data_get_next_frame(cin_data_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:800: warning: Member cin_data_release_frame(cin_data_t *cin, int free_mem) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:802: warning: Member cin_data_get_buffered_frame(void) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:803: warning: Member cin_data_release_buffered_frame(void) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:805: warning: Member cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:806: warning: Member cin_data_show_stats(FILE *fp, cin_data_stats_t stats) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:807: warning: Member cin_data_reset_stats(cin_data_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:810: warning: Member cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:811: warning: Member cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:599: warning: Member cin_ctl_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:600: warning: Member cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:601: warning: Member cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off) (function) of group cin_ctl_rw is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:611: warning: Member cin_ctl_load_config(cin_ctl_t *cin, char *filename) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:612: warning: Member cin_ctl_load_firmware(cin_ctl_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:613: warning: Member cin_ctl_load_firmware_file(cin_ctl_t *cin, char *filename) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:614: warning: Member cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:615: warning: Member cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:616: warning: Member cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:617: warning: Member cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:618: warning: Member cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *_val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:619: warning: Member cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:627: warning: Member cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon_t *values) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:637: warning: Member cin_ctl_set_bias(cin_ctl_t *cin, int val) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:638: warning: Member cin_ctl_get_bias(cin_ctl_t *cin, int *val) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:639: warning: Member cin_ctl_set_bias_regs(cin_ctl_t *cin, uint16_t *vals, int verify) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:640: warning: Member cin_ctl_get_bias_regs(cin_ctl_t *cin, uint16_t *vals) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:641: warning: Member cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:642: warning: Member cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:650: warning: Member cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len) (function) of group cin_ctl_timing is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:651: warning: Member cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals) (function) of group cin_ctl_timing is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:654: warning: Member cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:655: warning: Member cin_ctl_set_camera_pwr(cin_ctl_t *cin, int val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:656: warning: Member cin_ctl_set_clocks(cin_ctl_t *cin, int val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:657: warning: Member cin_ctl_get_clocks(cin_ctl_t *cin, int *val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:658: warning: Member cin_ctl_set_trigger(cin_ctl_t *cin, int val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:659: warning: Member cin_ctl_get_trigger(cin_ctl_t *cin, int *val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:660: warning: Member cin_ctl_set_focus(cin_ctl_t *cin, int val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:661: warning: Member cin_ctl_get_focus(cin_ctl_t *cin, int *val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:662: warning: Member cin_ctl_get_triggering(cin_ctl_t *cin, int *trigger) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:663: warning: Member cin_ctl_int_trigger_start(cin_ctl_t *cin, int nimages) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:664: warning: Member cin_ctl_int_trigger_stop(cin_ctl_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:665: warning: Member cin_ctl_ext_trigger_start(cin_ctl_t *cin, int trigger_mode) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:666: warning: Member cin_ctl_ext_trigger_stop(cin_ctl_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:667: warning: Member cin_ctl_set_exposure_time(cin_ctl_t *cin, float e_time) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:668: warning: Member cin_ctl_set_trigger_delay(cin_ctl_t *cin, float t_time) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:669: warning: Member cin_ctl_set_cycle_time(cin_ctl_t *cin, float ftime) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:670: warning: Member cin_ctl_frame_count_reset(cin_ctl_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:671: warning: Member cin_ctl_set_mux(cin_ctl_t *cin, int setting) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:672: warning: Member cin_ctl_get_mux(cin_ctl_t *cin, int *setting) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:673: warning: Member cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:674: warning: Member cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:675: warning: Member cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:678: warning: Member cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:684: warning: Member cin_config_read_file(cin_ctl_t *cin, const char *file) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:800: warning: Member cin_data_get_next_frame(cin_data_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:801: warning: Member cin_data_release_frame(cin_data_t *cin, int free_mem) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:803: warning: Member cin_data_get_buffered_frame(void) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:804: warning: Member cin_data_release_buffered_frame(void) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:806: warning: Member cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:807: warning: Member cin_data_show_stats(FILE *fp, cin_data_stats_t stats) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:808: warning: Member cin_data_reset_stats(cin_data_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:811: warning: Member cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:812: warning: Member cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:57: warning: Member cin_build_git_time (variable) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:58: warning: Member cin_build_git_sha (variable) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:59: warning: Member cin_build_version (variable) of file cin.h is not documented.
@@ -576,17 +576,17 @@ Building full member lists rec/home/travis/build/NSLS-II/libcin/src/cin.h:68: wa
 /home/travis/build/NSLS-II/libcin/src/cin_register_map.h:383: warning: Member REG_DEBUGCOUNTER03_REG (macro definition) of file cin_register_map.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin_register_map.h:384: warning: Member REG_DEBUGCOUNTER04_REG (macro definition) of file cin_register_map.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin_register_map.h:392: warning: Member CMD_READ_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:598: warning: Member cin_ctl_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:599: warning: Member cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:600: warning: Member cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off) (function) of group cin_ctl_rw is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:636: warning: Member cin_ctl_set_bias(cin_ctl_t *cin, int val) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:637: warning: Member cin_ctl_get_bias(cin_ctl_t *cin, int *val) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:638: warning: Member cin_ctl_set_bias_regs(cin_ctl_t *cin, uint16_t *vals, int verify) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:639: warning: Member cin_ctl_get_bias_regs(cin_ctl_t *cin, uint16_t *vals) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:640: warning: Member cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:641: warning: Member cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:649: warning: Member cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len) (function) of group cin_ctl_timing is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:650: warning: Member cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals) (function) of group cin_ctl_timing is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:599: warning: Member cin_ctl_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:600: warning: Member cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:601: warning: Member cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off) (function) of group cin_ctl_rw is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:637: warning: Member cin_ctl_set_bias(cin_ctl_t *cin, int val) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:638: warning: Member cin_ctl_get_bias(cin_ctl_t *cin, int *val) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:639: warning: Member cin_ctl_set_bias_regs(cin_ctl_t *cin, uint16_t *vals, int verify) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:640: warning: Member cin_ctl_get_bias_regs(cin_ctl_t *cin, uint16_t *vals) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:641: warning: Member cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:642: warning: Member cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:650: warning: Member cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len) (function) of group cin_ctl_timing is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:651: warning: Member cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals) (function) of group cin_ctl_timing is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:321: warning: Member ctl_port (variable) of class cin_ctl is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:322: warning: Member stream_port (variable) of class cin_ctl is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:325: warning: Member config (variable) of class cin_ctl is not documented.
@@ -786,7 +786,7 @@ Generating file member index...
 Generating example index...
 finalizing index lists...
 writing tag file...
-lookup cache used 401/65536 hits=2838 misses=421
+lookup cache used 401/65536 hits=2842 misses=421
 finished...
 make -C doc/latex
 make[1]: Entering directory `/home/travis/build/NSLS-II/libcin/doc/latex'
@@ -1054,33 +1054,33 @@ Underfull \hbox (badness 10000) detected at line 61
 ) [10] (./group__cin__ctl__rw.tex
 
 Package longtable Warning: Column widths have changed
-(longtable)                in table 5.3 on input line 45.
+(longtable)                in table 5.3 on input line 47.
 
 
-Underfull \hbox (badness 10000) detected at line 46
+Underfull \hbox (badness 10000) detected at line 48
 [][][]
 [11]
 
 Package longtable Warning: Column widths have changed
-(longtable)                in table 5.4 on input line 65.
+(longtable)                in table 5.4 on input line 67.
 
 
-Underfull \hbox (badness 10000) detected at line 68
+Underfull \hbox (badness 10000) detected at line 70
 [][][]
 
 Package longtable Warning: Column widths have changed
-(longtable)                in table 5.5 on input line 89.
+(longtable)                in table 5.5 on input line 91.
 
 
-Underfull \hbox (badness 10000) detected at line 92
+Underfull \hbox (badness 10000) detected at line 94
 [][][]
 [12]
 
 Package longtable Warning: Column widths have changed
-(longtable)                in table 5.6 on input line 111.
+(longtable)                in table 5.6 on input line 113.
 
 
-Underfull \hbox (badness 10000) detected at line 114
+Underfull \hbox (badness 10000) detected at line 116
 [][][]
 ) [13] (./group__cin__ctl__bias.tex) [14] (./group__cin__ctl__timing.tex)
 [15] (./group__cin__data__init.tex
@@ -1185,7 +1185,7 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (42 pages, 191347 bytes).
+Output written on refman.pdf (42 pages, 191447 bytes).
 Transcript written on refman.log.
 makeindex refman.idx
 This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
@@ -1356,16 +1356,16 @@ Underfull \hbox (badness 10000) detected at line 31
 Underfull \hbox (badness 10000) detected at line 61
 [][][]
 ) [10] (./group__cin__ctl__rw.tex
-Underfull \hbox (badness 10000) detected at line 46
+Underfull \hbox (badness 10000) detected at line 48
 [][][]
 [11]
-Underfull \hbox (badness 10000) detected at line 68
+Underfull \hbox (badness 10000) detected at line 70
 [][][]
 
-Underfull \hbox (badness 10000) detected at line 92
+Underfull \hbox (badness 10000) detected at line 94
 [][][]
 [12]
-Underfull \hbox (badness 10000) detected at line 114
+Underfull \hbox (badness 10000) detected at line 116
 [][][]
 ) [13] (./group__cin__ctl__bias.tex) [14] (./group__cin__ctl__timing.tex)
 [15] (./group__cin__data__init.tex
@@ -1432,7 +1432,7 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (45 pages, 203004 bytes).
+Output written on refman.pdf (45 pages, 203116 bytes).
 Transcript written on refman.log.
 latex_count=8 ; \
 	while egrep -s 'Rerun (LaTeX|to get cross-references right)' refman.log && [ $latex_count -gt 0 ] ;\
@@ -1610,16 +1610,16 @@ Underfull \hbox (badness 10000) detected at line 31
 Underfull \hbox (badness 10000) detected at line 61
 [][][]
 ) [10] (./group__cin__ctl__rw.tex
-Underfull \hbox (badness 10000) detected at line 46
+Underfull \hbox (badness 10000) detected at line 48
 [][][]
 [11]
-Underfull \hbox (badness 10000) detected at line 68
+Underfull \hbox (badness 10000) detected at line 70
 [][][]
 
-Underfull \hbox (badness 10000) detected at line 92
+Underfull \hbox (badness 10000) detected at line 94
 [][][]
 [12]
-Underfull \hbox (badness 10000) detected at line 114
+Underfull \hbox (badness 10000) detected at line 116
 [][][]
 ) [13] (./group__cin__ctl__bias.tex) [14] (./group__cin__ctl__timing.tex)
 [15] (./group__cin__data__init.tex
@@ -1681,6 +1681,6 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (45 pages, 203173 bytes).
+Output written on refman.pdf (45 pages, 203278 bytes).
 Transcript written on refman.log.
 make[1]: Leaving directory `/home/travis/build/NSLS-II/libcin/doc/latex'

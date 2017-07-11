@@ -10,7 +10,7 @@ var searchData=
   ['cin_5fctl_5flistener',['cin_ctl_listener',['../structcin__ctl__listener.html',1,'']]],
   ['cin_5fctl_5fpwr_5fmon_5ft',['cin_ctl_pwr_mon_t',['../structcin__ctl__pwr__mon__t.html',1,'']]],
   ['cin_5fctl_5fpwr_5fval',['cin_ctl_pwr_val',['../structcin__ctl__pwr__val.html',1,'']]],
-  ['cin_5fctl_5fread',['cin_ctl_read',['../group__cin__ctl__rw.html#ga0bc2500271d8f7ff30c3479993906f29',1,'cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val):&#160;control.c'],['../group__cin__ctl__rw.html#ga0bc2500271d8f7ff30c3479993906f29',1,'cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val):&#160;control.c']]],
+  ['cin_5fctl_5fread',['cin_ctl_read',['../group__cin__ctl__rw.html#ga067c8576865a0bbf6bd82c9f9213b553',1,'cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait):&#160;control.c'],['../group__cin__ctl__rw.html#ga067c8576865a0bbf6bd82c9f9213b553',1,'cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait):&#160;control.c']]],
   ['cin_20control_20read_2frwite_20routines',['Cin Control Read/Rwite Routines',['../group__cin__ctl__rw.html',1,'']]],
   ['cin_5fctl_5fstream_5fwrite',['cin_ctl_stream_write',['../group__cin__ctl__rw.html#ga2bddf0e6425752fc7a29c531e52e9421',1,'cin_ctl_stream_write(cin_ctl_t *cin, unsigned char *val, int size):&#160;control.c'],['../group__cin__ctl__rw.html#ga2bddf0e6425752fc7a29c531e52e9421',1,'cin_ctl_stream_write(cin_ctl_t *cin, unsigned char *val, int size):&#160;control.c']]],
   ['cin_20control_20timing_20routines',['CIN COntrol Timing Routines',['../group__cin__ctl__timing.html',1,'']]],
