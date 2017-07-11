@@ -911,25 +911,21 @@ int cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val){
 }
 
 int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *val){
-  int _status;
+  int _status = 0;
 
   _status  = cin_ctl_read(cin, REG_BOARD_ID, &val->base_board_id, 0);
   DEBUG_PRINT("Base Board ID           :  0x%04X\n",val->base_board_id);
+  DEBUG_PRINT("Base HW Serial Number   :  0x%04X\n",val->base_serial_no);
+  DEBUG_PRINT("Base FPGA Version       :  0x%04X\n",val->base_fpga_ver);
+  DEBUG_PRINT("Fabric Board ID         :  0x%04X\n",val->fabric_board_id);
+  DEBUG_PRINT("Fabric HW Serial Number :  0x%04X\n",val->fabric_serial_no);
+  DEBUG_PRINT("Fabric FPGA Version     :  0x%04X\n",val->fabric_fpga_ver);
 
   _status |= cin_ctl_read(cin,REG_HW_SERIAL_NUM, &val->base_serial_no, 0);
-  DEBUG_PRINT("Base HW Serial Number   :  0x%04X\n",val->base_serial_no);
-
   _status |= cin_ctl_read(cin,REG_FPGA_VERSION, &val->base_fpga_ver, 0);
-  DEBUG_PRINT("Base FPGA Version       :  0x%04X\n",val->base_fpga_ver);
-
-  _status  = cin_ctl_read(cin, REG_FRM_BOARD_ID, &val->fabric_board_id, 0);
-  DEBUG_PRINT("Fabric Board ID         :  0x%04X\n",val->fabric_board_id);
-
+  _status |= cin_ctl_read(cin,REG_FRM_BOARD_ID, &val->fabric_board_id, 0);
   _status |= cin_ctl_read(cin,REG_FRM_HW_SERIAL_NUM, &val->fabric_serial_no, 0);
-  DEBUG_PRINT("Fabric HW Serial Number :  0x%04X\n",val->fabric_serial_no);
-
   _status |= cin_ctl_read(cin,REG_FRM_FPGA_VERSION, &val->fabric_fpga_ver, 0);
-  DEBUG_PRINT("Fabric FPGA Version     :  0x%04X\n",val->fabric_fpga_ver);
 
   if(_status){
     ERROR_COMMENT("Unable to read CIN ID\n");
