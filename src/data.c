@@ -89,7 +89,7 @@ int cin_data_write(cin_port_t *dp, char* buffer, int buffer_len){
 
 
 int cin_data_init(cin_data_t *cin, int packet_buffer_len, int frame_buffer_len,
-                  char* ipaddr, uint16_t port, char* cin_ipaddr, uint16_t cin_port, int rcvbuf,
+                  char* ipaddr, char* cin_ipaddr, uint16_t port, uint16_t cin_port, int rcvbuf,
                   cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr){
 
   /* Initialize and start all the threads to acquire data */
