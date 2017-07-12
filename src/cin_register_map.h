@@ -67,26 +67,26 @@
 #define REG_IF_STREAM_IN_PORT_NUM        0x001C
 #define REG_IF_STREAM_OUT_PORT_NUM       0x001D
 
-#define REG_ETH_RESET                    0x0020 /* Reset Eth Hardware 1=Rx, 2=Tx, 3=Both */
-#define REG_ETH_ENABLE                   0x0021 /* Enable Eth Hardware 1=Rx, 2=Tx, 3=Both */
-#define REG_PHY1_MDIO_CMD                0x0022 /* Start(1), RnW(1), WDRd(1), PHY Addr(5), REG Addr(5) */
+#define REG_ETH_RESET                    0x0020 /** Reset Eth Hardware 1=Rx, 2=Tx, 3=Both */
+#define REG_ETH_ENABLE                   0x0021 /** Enable Eth Hardware 1=Rx, 2=Tx, 3=Both */
+#define REG_PHY1_MDIO_CMD                0x0022 /** Start(1), RnW(1), WDRd(1), PHY Addr(5), REG Addr(5) */
 #define REG_PHY1_MDIO_CMD_DATA           0x0023
 #define REG_PHY1_MDIO_STATUS             0x0024
 #define REG_PHY1_MDIO_RD_ADDR            0x0025
 #define REG_PHY1_MDIO_RD_DATA            0x0026
-#define REG_MAC_CFG_VECTOR1              0x0027 /* Ethernet Hardware Conf */
+#define REG_MAC_CFG_VECTOR1              0x0027 /** Ethernet Hardware Conf */
 #define REG_PHY2_MDIO_CMD                0x0028
 #define REG_PHY2_MDIO_CMD_DATA           0x0029
 #define REG_PHY2_MDIO_STATUS             0x002A
 #define REG_PHY2_MDIO_RD_ADDR            0x002B
 #define REG_PHY2_MDIO_RD_DATA            0x002C
-#define REG_MAC_CFG_VECTOR2              0x002D /* Ethernet Hardware Conf */
+#define REG_MAC_CFG_VECTOR2              0x002D /** Ethernet Hardware Conf */
 
 /* Power Supply Control */
-#define CMD_PS_ENABLE                    0x0021 /* Enable Selected Power Modules */
-#define CMD_PS_POWERDOWN                 0x0022 /* Start power down sequence */
+#define CMD_PS_ENABLE                    0x0021 /** Enable Selected Power Modules */
+#define CMD_PS_POWERDOWN                 0x0022 /** Start power down sequence */
 
-#define REG_PS_ENABLE                    0x0030 /* Power Supply Enable: */
+#define REG_PS_ENABLE                    0x0030 /** Power Supply Enable: */
 
 /*
  b(0): 12V power bus enable
