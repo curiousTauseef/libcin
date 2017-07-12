@@ -471,15 +471,17 @@ error:
 
 int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off){
   int _status;
-  uint16_t _val1 = 0x0000;
-  uint16_t _val2 = 0xFFFF;
+  uint16_t _val1;
+  uint16_t _val2;
 
   if(on_off){
     _val1 = 0x0001;
-    DEBUG_COMMENT("Powering ON CIN Front Panel Boards\n");
     _val2 = 0x0000;
+    DEBUG_COMMENT("Enabeling FO Test Pattern\n");
   } else {
-    DEBUG_COMMENT("Powering ON CIN Front Panel Boards\n");
+    _val1 = 0x0000;
+    _val2 = 0xFFFF;
+    DEBUG_COMMENT("Disabeling FO Test Pattern\n");
   }
 
   _status  = cin_ctl_write(cin,CIN_CTL_FO_REG1, 0x9E00, 0);

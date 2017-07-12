@@ -608,27 +608,36 @@ int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off);
  *
  *--------------------------------------------------------------------------------------------------------*/
 
+/** @defgroup cin_ctl_firmware CIN Firmware Upload Routines
+ * Firmware upload routines
+ * @{
+ */
 int cin_ctl_load_config(cin_ctl_t *cin,char *filename);
 int cin_ctl_load_firmware(cin_ctl_t *cin);
 int cin_ctl_load_firmware_file(cin_ctl_t *cin, char *filename);
 int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len);
+/** @} */
+
+/** @defgroup cin_ctl_fclk CIN FCLK Configuration Routines
+ * Firmware upload routines
+ * @{
+ */
 int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq);
 int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq);
+int cin_ctl_set_fclk_regs(cin_ctl_t *cin, int clkfreq)
+/** @} */
+
+
+/** @defgroup cin_ctl_status CIN Status Routines
+ * Status Routines
+ * @{
+ */
 int cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val);
 int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *_val);
 int cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val);
-
-/*--------------------------------------------------------------------------------------------------------
- * 
- * CIN Power Status
- *
- *--------------------------------------------------------------------------------------------------------*/
-
 int cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon_t *values);
+/** @} */
 
-/*------------------------
- * CIN Control
- *------------------------*/
 
 /** @defgroup cin_ctl_bias CIN Control Bias Routines
  * Initialization group
@@ -640,8 +649,8 @@ int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify);
 int cin_ctl_get_bias_regs(cin_ctl_t * cin, uint16_t *vals);
 int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify);
 int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage);
-
 /** @} */
+
 
 /** @defgroup cin_ctl_timing CIN COntrol Timing Routines
  * Timing setup group
@@ -649,8 +658,8 @@ int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage);
  */
 int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len);
 int cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals);
-
 /** @} */
+
 int cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val);
 int cin_ctl_set_camera_pwr(cin_ctl_t *cin, int val);
 int cin_ctl_set_clocks(cin_ctl_t *cin,int val);

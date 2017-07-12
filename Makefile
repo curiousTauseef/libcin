@@ -56,7 +56,7 @@ src/data.o: src/data.h src/fifo.h \
 
 src/fifo.o: src/fifo.h src/cin.h
 
-src/control.o: src/control.h src/cin.h src/cin_register_map.h src/fclk_program.h \
+src/control.o: src/control.h src/cin.h src/cin_register_map.h \
 	           src/fifo.h src/cinregisters.h src/config.h src/common.h
 
 src/descramble.o: src/descramble.h src/cin.h
