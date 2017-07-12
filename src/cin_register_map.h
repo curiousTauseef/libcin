@@ -41,11 +41,6 @@
 #ifndef CIN_REGISTER_MAP_H
 #define CIN_REGISTER_MAP_H
 
-/* ============================================================================
-*		CIN Registers
-* ============================================================================
-* -----------------------------------< Configuration FPGA Registers >
-*/
 
 /* Command Registers */
 #define REG_COMMAND                      0x0001

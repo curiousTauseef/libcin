@@ -624,7 +624,7 @@ int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len
  */
 int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq);
 int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq);
-int cin_ctl_set_fclk_regs(cin_ctl_t *cin, int clkfreq)
+int cin_ctl_set_fclk_regs(cin_ctl_t *cin, int clkfreq);
 /** @} */
 
 
