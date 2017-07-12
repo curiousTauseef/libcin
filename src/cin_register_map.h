@@ -1,5 +1,5 @@
-/* vim: set ts=2 sw=2 tw=0 noet : */
-/**
+/**<vim: set ts=2 sw=2 tw=0 noet : */
+/**<
  * @file 
  * @author Stuart B. Wilkins <swilkins@bnl.gov> 
  *
@@ -42,17 +42,17 @@
 #define CIN_REGISTER_MAP_H
 
 
-/* Command Registers */
+/**<Command Registers */
 #define REG_COMMAND                      0x0001
 #define REG_READ_ADDRESS                 0x0002
 #define REG_STREAM_TYPE                  0x0003
 
-/* FCLK Values */
+/**<FCLK Values */
 #define CMD_FCLK_125                     0xB000
 #define CMD_FCLK_200                     0x7000
 #define CMD_FCLK_250                     0x3000
 
-/* Ethernet Interface */
+/**<Ethernet Interface */
 #define REG_IF_MAC0                      0x0010
 #define REG_IF_MAC1                      0x0011
 #define REG_IF_MAC2                      0x0012
@@ -62,26 +62,26 @@
 #define REG_IF_STREAM_IN_PORT_NUM        0x001C
 #define REG_IF_STREAM_OUT_PORT_NUM       0x001D
 
-#define REG_ETH_RESET                    0x0020 /** Reset Eth Hardware 1=Rx, 2=Tx, 3=Both */
-#define REG_ETH_ENABLE                   0x0021 /** Enable Eth Hardware 1=Rx, 2=Tx, 3=Both */
-#define REG_PHY1_MDIO_CMD                0x0022 /** Start(1), RnW(1), WDRd(1), PHY Addr(5), REG Addr(5) */
+#define REG_ETH_RESET                    0x0020 /**< Reset Eth Hardware 1=Rx, 2=Tx, 3=Both */
+#define REG_ETH_ENABLE                   0x0021 /**< Enable Eth Hardware 1=Rx, 2=Tx, 3=Both */
+#define REG_PHY1_MDIO_CMD                0x0022 /**< Start(1), RnW(1), WDRd(1), PHY Addr(5), REG Addr(5) */
 #define REG_PHY1_MDIO_CMD_DATA           0x0023
 #define REG_PHY1_MDIO_STATUS             0x0024
 #define REG_PHY1_MDIO_RD_ADDR            0x0025
 #define REG_PHY1_MDIO_RD_DATA            0x0026
-#define REG_MAC_CFG_VECTOR1              0x0027 /** Ethernet Hardware Conf */
+#define REG_MAC_CFG_VECTOR1              0x0027 /**< Ethernet Hardware Conf */
 #define REG_PHY2_MDIO_CMD                0x0028
 #define REG_PHY2_MDIO_CMD_DATA           0x0029
 #define REG_PHY2_MDIO_STATUS             0x002A
 #define REG_PHY2_MDIO_RD_ADDR            0x002B
 #define REG_PHY2_MDIO_RD_DATA            0x002C
-#define REG_MAC_CFG_VECTOR2              0x002D /** Ethernet Hardware Conf */
+#define REG_MAC_CFG_VECTOR2              0x002D /**< Ethernet Hardware Conf */
 
-/* Power Supply Control */
-#define CMD_PS_ENABLE                    0x0021 /** Enable Selected Power Modules */
-#define CMD_PS_POWERDOWN                 0x0022 /** Start power down sequence */
+/**<Power Supply Control */
+#define CMD_PS_ENABLE                    0x0021 /**< Enable Selected Power Modules */
+#define CMD_PS_POWERDOWN                 0x0022 /**< Start power down sequence */
 
-#define REG_PS_ENABLE                    0x0030 /** Power Supply Enable: */
+#define REG_PS_ENABLE                    0x0030 /**< Power Supply Enable: */
 
 /*
  b(0): 12V power bus enable
@@ -92,31 +92,31 @@
  b(5): 5.0v front panel enable
 */
 
-#define REG_PS_SYNC_DIV0                 0x0031 /* 2.5V Gen */
-#define REG_PS_SYNC_DIV1                 0x0032 /* 3.3V Gen */
-#define REG_PS_SYNC_DIV2                 0x0033 /* 2.5V Frame */
-#define REG_PS_SYNC_DIV3                 0x0034 /* 0.9V Frame */
-#define REG_PS_SYNC_DIV4                 0x0035 /* 5.0V FP */
+#define REG_PS_SYNC_DIV0                 0x0031 /**<2.5V Gen */
+#define REG_PS_SYNC_DIV1                 0x0032 /**<3.3V Gen */
+#define REG_PS_SYNC_DIV2                 0x0033 /**<2.5V Frame */
+#define REG_PS_SYNC_DIV3                 0x0034 /**<0.9V Frame */
+#define REG_PS_SYNC_DIV4                 0x0035 /**<5.0V FP */
 
-/* Frame FPGA Control */
+/**<Frame FPGA Control */
 #define CMD_PROGRAM_FRAME                0x0041
-#define REG_FRM_RESET                    0x0036 /* Frame Reset */
-#define REG_FRM_10GbE_SEL                0x0037; /* 10GbE Link Select */
+#define REG_FRM_RESET                    0x0036 /**<Frame Reset */
+#define REG_FRM_10GbE_SEL                0x0037; /**<10GbE Link Select */
 
-/* Clock Enables */
-#define CMD_ENABLE_CLKS                  0x0031 /* Enable selected Frame FPGA clock crystals */
-#define CMD_DISABLE_CLKS                 0x0032 /* Disable Frame FPGA clock crystals */
-#define REG_CLOCK_EN_REG                 0x0038 /* Clock Enable Register */
+/**<Clock Enables */
+#define CMD_ENABLE_CLKS                  0x0031 /**<Enable selected Frame FPGA clock crystals */
+#define CMD_DISABLE_CLKS                 0x0032 /**<Disable Frame FPGA clock crystals */
+#define REG_CLOCK_EN_REG                 0x0038 /**<Clock Enable Register */
 
-/* Programmable Si570 Clock Registers */
+/**<Programmable Si570 Clock Registers */
 #define REG_SI570_REG0                   0x0039
 #define REG_SI570_REG1                   0x003A
 #define REG_SI570_REG2                   0x003B
 #define REG_SI570_REG3                   0x003C
 
-/* Power Monitor Registers */
-#define CMD_MON_STOP                     0x0011 /* Stop voltage and current monitor */
-#define CMD_MON_START                    0x0012 /* Start voltage and current monitor */
+/**<Power Monitor Registers */
+#define CMD_MON_STOP                     0x0011 /**<Stop voltage and current monitor */
+#define CMD_MON_START                    0x0012 /**<Start voltage and current monitor */
 
 #define REG_VMON_ADC1_CH1                0x0040 /*	V12P_BUS Voltage Monitor */
 #define REG_IMON_ADC1_CH0                0x0041 /*	V12P_BUS Current Monitor */
@@ -147,14 +147,14 @@
 #define REG_VMON_ADC0_CHF                0x005A /*	V5P0_FP Voltage Monitor (1/2) */
 #define REG_IMON_ADC0_CHF                0x005B /*	V5P0_FP Current Monitor (1/2) */
 
-/* Status Registers */
+/**<Status Registers */
 #define REG_DCM_STATUS                   0x0080
 #define REG_FPGA_STATUS                  0x0081
 #define REG_BOARD_ID                     0x008D
 #define REG_HW_SERIAL_NUM                0x008E
 #define REG_FPGA_VERSION                 0x008F
 
-/* Sandbox Registers */
+/**<Sandbox Registers */
 #define REG_SANDBOX_REG00                0x00F0
 #define REG_SANDBOX_REG01                0x00F1
 #define REG_SANDBOX_REG02                0x00F2
@@ -172,23 +172,23 @@
 #define REG_SANDBOX_REG0E                0x00FE
 #define REG_SANDBOX_REG0F                0x00FF
 
-/* ---------------------------------< Frame FPGA Registers > */
+/**<---------------------------------< Frame FPGA Registers > */
 
-/* Command Registers */
+/**<Command Registers */
 #define REG_FRM_COMMAND                  0x8001
 #define REG_FRM_READ_ADDRESS             0x8002
 #define REG_FRM_STREAM_TYPE              0x8003
 
-/* List of Commands */
-#define CMD_SEND_SYNC_PULSE              0x0100 /** ISSUES A SYNC PULSE */
-#define CMD_SYNC_DETECTOR2READOUT        0x0101 /* COMMAND TO SYNC DETECTOR AND READOUT (SEE IMAGE PROCESSING) */
-//#define CMD_IP_RESET                     0x0102 /* RESET IMAGE PROCESSING REGISTERS (N/A) */
-#define CMD_WR_CCD_BIAS_REG              0x0102 /** WRITE CCD BIAS REGISTERS */
-#define CMD_WR_CCD_CLOCK_REG             0x0103 /** WRITE CCD CLOCK REGISTER */
-#define CMD_SEND_FCRIC_CONFIG            0x0105 /** SEND CONFIG DATA TO FRIC */
-#define CMD_RESET_FRAME_COUNT            0x0106 /** RESET STATISTICS/DEBUG COUNTERS */
+/**<List of Commands */
+#define CMD_SEND_SYNC_PULSE              0x0100 /**< ISSUES A SYNC PULSE */
+#define CMD_SYNC_DETECTOR2READOUT        0x0101 /**<COMMAND TO SYNC DETECTOR AND READOUT (SEE IMAGE PROCESSING) */
+//#define CMD_IP_RESET                     0x0102 /**<RESET IMAGE PROCESSING REGISTERS (N/A) */
+#define CMD_WR_CCD_BIAS_REG              0x0102 /**< WRITE CCD BIAS REGISTERS */
+#define CMD_WR_CCD_CLOCK_REG             0x0103 /**< WRITE CCD CLOCK REGISTER */
+#define CMD_SEND_FCRIC_CONFIG            0x0105 /**< SEND CONFIG DATA TO FRIC */
+#define CMD_RESET_FRAME_COUNT            0x0106 /**< RESET STATISTICS/DEBUG COUNTERS */
 
-/* Ethernet Interface */
+/**<Ethernet Interface */
 #define REG_IF_MAC_FAB1B0                0x8010
 #define REG_IF_MAC_FAB1B1                0x8011
 #define REG_IF_MAC_FAB1B2                0x8012
@@ -225,9 +225,9 @@
 #define REG_MAC_STATS2_FAB2B0            0x802D
 #define REG_MAC_STATS2_FAB2B1            0x802E
 
-/* SRAM Test Interface */
+/**<SRAM Test Interface */
 #define REG_SRAM_COMMAND                 0x8030
-/*  1 bit  [0]    >> Read NOT Write
+/**< 1 bit  [0]    >> Read NOT Write
  *  2 bits [3:2] >> Modes:
  *      --  Single RW 0x00
  *      --  Burst RW  0x01
@@ -247,15 +247,15 @@
 #define REG_SRAM_STATUS1                 0x803A
 #define REG_SRAM_STATUS0                 0x803B
 
-/* Programmable Clock */
-#define CMD_FCLK_COMMIT                  0x0012 /* Start I2C Write/Read */
-#define REG_FCLK_I2C_ADDRESS             0x8040 /* [ Slave Address(7), RD/WRn(1), Reg Adress(8) ] Slave adddress Hx58  -> HxB when shifted up by 1 */
-#define REG_FCLK_I2C_DATA_WR             0x8041 /* [ Clock Select(2), Clock Enable (1), 0(5), Write Data (8) ] */
-/*   Clock Select: (00): 250 MHz (01): 200 MHz (10): FPGA FCRIC Clk (11): Si570 Programmable */
-#define REG_FCLK_I2C_DATA_RD             0x8042 /* [ Read Failed (1), Write Failed(1), Toggle bit(1), 0(5), Read Data (8) ] */
+/**<Programmable Clock */
+#define CMD_FCLK_COMMIT                  0x0012 /**<Start I2C Write/Read */
+#define REG_FCLK_I2C_ADDRESS             0x8040 /**<[ Slave Address(7), RD/WRn(1), Reg Adress(8) ] Slave adddress Hx58  -> HxB when shifted up by 1 */
+#define REG_FCLK_I2C_DATA_WR             0x8041 /**<[ Clock Select(2), Clock Enable (1), 0(5), Write Data (8) ] */
+/**<  Clock Select: (00): 250 MHz (01): 200 MHz (10): FPGA FCRIC Clk (11): Si570 Programmable */
+#define REG_FCLK_I2C_DATA_RD             0x8042 /**<[ Read Failed (1), Write Failed(1), Toggle bit(1), 0(5), Read Data (8) ] */
 	
 #define REG_TRIGGERSELECT_REG            0x8050
-#define REG_TRIGGERMASK_REG              0x8051  /* [00]==SW Trigger, [01]==FP TrigIn2, [10]==FP TrigIn1, [11]==FP TrigIn1OR2 */
+#define REG_TRIGGERMASK_REG              0x8051  /**<[00]==SW Trigger, [01]==FP TrigIn2, [10]==FP TrigIn1, [11]==FP TrigIn1OR2 */
 #define REG_CCDFCLKSELECT_REG            0x8052
 #define REG_CDICLKDISABLE_REG            0x8053
 
@@ -266,14 +266,14 @@
 #define REG_FCLK_SET4                    0xB00B
 #define REG_FCLK_SET5                    0xB00C
 
-/* FRM Status */
+/**<FRM Status */
 #define REG_FRM_DCM_STATUS               0x8080
 #define REG_FRM_FPGA_STATUS              0x8081
 #define REG_FRM_BOARD_ID                 0x808D
 #define REG_FRM_HW_SERIAL_NUM            0x808E
 #define REG_FRM_FPGA_VERSION             0x808F
 	
-/* Sandbox Registers */
+/**<Sandbox Registers */
 #define REG_FRM_SANDBOX_REG00            0x80F0
 #define REG_FRM_SANDBOX_REG01            0x80F1
 #define REG_FRM_SANDBOX_REG02            0x80F2
@@ -291,7 +291,7 @@
 #define REG_FRM_SANDBOX_REG0E            0x80FE
 #define REG_FRM_SANDBOX_REG0F            0x80FF
 	
-/* Image Processing Registers */
+/**<Image Processing Registers */
 #define REG_DETECTOR_REVISION_REG        0x8100
 #define REG_DETECTOR_CONFIG_REG1         0x8101
 #define REG_DETECTOR_CONFIG_REG2         0x8102
@@ -316,13 +316,13 @@
 #define REG_CLOCKREGISTERDATAOUT         0x8202
 #define REG_BIASREGISTERDATAOUT          0x8203
 
-/* Bias Static Registers */
+/**<Bias Static Registers */
 #define REG_BIASCONFIGREGISTER0_REG      0x8204
 
-/* Clock Static Registers */
+/**<Clock Static Registers */
 #define REG_CLOCKCONFIGREGISTER0_REG     0x8205
 
-/* Bias Voltage */
+/**<Bias Voltage */
 
 #define REG_BIASPARAM_READ_START         0x3000
 
@@ -341,7 +341,7 @@
 #define REG_DELAYTOSHUTTERMSB_REG        0x820F
 #define REG_DELAYTOSHUTTERLSB_REG        0x8210
 
-/* Digitizer Registers */
+/**<Digitizer Registers */
 #define REG_FCRIC_MASK_REG1              0x8211
 #define REG_FCRIC_MASK_REG2              0x8212
 #define REG_FCRIC_MASK_REG3              0x8213
@@ -378,12 +378,12 @@
 #define REG_DEBUGCOUNTER03_REG           0x8232
 #define REG_DEBUGCOUNTER04_REG           0x8233
 
-/* ============================================================================
+/**<============================================================================
  *                                                       CIN Commands
  * ============================================================================
  */
 
-/* Common Commands */
-#define CMD_READ_REG                     0x0001 /* Read Register */
+/**<Common Commands */
+#define CMD_READ_REG                     0x0001 /**<Read Register */
 
-#endif /* CIN_REGISTER_MAP_H */
+#endif /**<CIN_REGISTER_MAP_H */
