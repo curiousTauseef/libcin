@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>libcin: Member List</title>
+<title>libcin: CIN Firmware Upload Routines</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -42,6 +42,7 @@ $(function() {
 });
 </script>
 <div id="main-nav"></div>
+</div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -56,19 +57,32 @@ $(function() {
 </iframe>
 </div>
 
-</div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">cin_data_packet Member List</div>  </div>
+<div class="title">CIN Firmware Upload Routines</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>This is the complete list of members for <a class="el" href="structcin__data__packet.html">cin_data_packet</a>, including all inherited members.</p>
-<table class="directory">
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>data</b> (defined in <a class="el" href="structcin__data__packet.html">cin_data_packet</a>)</td><td class="entry"><a class="el" href="structcin__data__packet.html">cin_data_packet</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>size</b> (defined in <a class="el" href="structcin__data__packet.html">cin_data_packet</a>)</td><td class="entry"><a class="el" href="structcin__data__packet.html">cin_data_packet</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>timestamp</b> (defined in <a class="el" href="structcin__data__packet.html">cin_data_packet</a>)</td><td class="entry"><a class="el" href="structcin__data__packet.html">cin_data_packet</a></td><td class="entry"></td></tr>
-</table></div><!-- contents -->
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:gacd5a0ef09d2aded4d3e6e980eddeeecd"><td class="memItemLeft" align="right" valign="top"><a id="gacd5a0ef09d2aded4d3e6e980eddeeecd"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_load_config</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, char *filename)</td></tr>
+<tr class="separator:gacd5a0ef09d2aded4d3e6e980eddeeecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3d1aca6f51fa1bd5475e885283e12000"><td class="memItemLeft" align="right" valign="top"><a id="ga3d1aca6f51fa1bd5475e885283e12000"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_load_firmware</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin)</td></tr>
+<tr class="separator:ga3d1aca6f51fa1bd5475e885283e12000"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1bcb49de08c44ee4d071675bf0f558b7"><td class="memItemLeft" align="right" valign="top"><a id="ga1bcb49de08c44ee4d071675bf0f558b7"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_load_firmware_file</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, char *filename)</td></tr>
+<tr class="separator:ga1bcb49de08c44ee4d071675bf0f558b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5171641956918a1deee285920b8be90e"><td class="memItemLeft" align="right" valign="top"><a id="ga5171641956918a1deee285920b8be90e"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_load_firmware_data</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, unsigned char *data, int data_len)</td></tr>
+<tr class="separator:ga5171641956918a1deee285920b8be90e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<p>Firmware upload routines </p>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated on Wed Jul 12 2017 01:07:29 for libcin by &#160;<a href="http://www.doxygen.org/index.html">

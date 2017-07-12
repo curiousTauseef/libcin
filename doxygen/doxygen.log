@@ -65,8 +65,6 @@ Preprocessing /home/travis/build/NSLS-II/libcin/src/descramble_map.h...
 Parsing file /home/travis/build/NSLS-II/libcin/src/descramble_map.h...
 Preprocessing /home/travis/build/NSLS-II/libcin/src/embedded.c...
 Parsing file /home/travis/build/NSLS-II/libcin/src/embedded.c...
-Preprocessing /home/travis/build/NSLS-II/libcin/src/fclk_program.h...
-Parsing file /home/travis/build/NSLS-II/libcin/src/fclk_program.h...
 Preprocessing /home/travis/build/NSLS-II/libcin/src/fifo.c...
 Parsing file /home/travis/build/NSLS-II/libcin/src/fifo.c...
 Preprocessing /home/travis/build/NSLS-II/libcin/src/fifo.h...
@@ -107,7 +105,12 @@ Sorting lists...
 Freeing entry tree
 Determining which enums are documented
 Computing member relations...
-Building full member lists rec/home/travis/build/NSLS-II/libcin/src/cin.h:68: warning: Member CIN_CTL_IP (macro definition) of file cin.h is not documented.
+Building full member lists recursively...
+Adding members to member groups.
+Computing member references...
+Inheriting documentation...
+Generating disk names...
+Adding sou/home/travis/build/NSLS-II/libcin/src/cin.h:68: warning: Member CIN_CTL_IP (macro definition) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:69: warning: Member CIN_CTL_SVR_PORT (macro definition) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:70: warning: Member CIN_CTL_CLI_PORT (macro definition) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:71: warning: Member CIN_CTL_SVR_FRMW_PORT (macro definition) of file cin.h is not documented.
@@ -255,57 +258,58 @@ Building full member lists rec/home/travis/build/NSLS-II/libcin/src/cin.h:68: wa
 /home/travis/build/NSLS-II/libcin/src/cin.h:599: warning: Member cin_ctl_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:600: warning: Member cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:601: warning: Member cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off) (function) of group cin_ctl_rw is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:611: warning: Member cin_ctl_load_config(cin_ctl_t *cin, char *filename) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:612: warning: Member cin_ctl_load_firmware(cin_ctl_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:613: warning: Member cin_ctl_load_firmware_file(cin_ctl_t *cin, char *filename) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:614: warning: Member cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:615: warning: Member cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:616: warning: Member cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:617: warning: Member cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:618: warning: Member cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *_val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:619: warning: Member cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:627: warning: Member cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon_t *values) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:637: warning: Member cin_ctl_set_bias(cin_ctl_t *cin, int val) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:638: warning: Member cin_ctl_get_bias(cin_ctl_t *cin, int *val) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:639: warning: Member cin_ctl_set_bias_regs(cin_ctl_t *cin, uint16_t *vals, int verify) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:640: warning: Member cin_ctl_get_bias_regs(cin_ctl_t *cin, uint16_t *vals) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:641: warning: Member cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:642: warning: Member cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:650: warning: Member cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len) (function) of group cin_ctl_timing is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:651: warning: Member cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals) (function) of group cin_ctl_timing is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:654: warning: Member cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:655: warning: Member cin_ctl_set_camera_pwr(cin_ctl_t *cin, int val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:656: warning: Member cin_ctl_set_clocks(cin_ctl_t *cin, int val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:657: warning: Member cin_ctl_get_clocks(cin_ctl_t *cin, int *val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:658: warning: Member cin_ctl_set_trigger(cin_ctl_t *cin, int val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:659: warning: Member cin_ctl_get_trigger(cin_ctl_t *cin, int *val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:660: warning: Member cin_ctl_set_focus(cin_ctl_t *cin, int val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:661: warning: Member cin_ctl_get_focus(cin_ctl_t *cin, int *val) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:662: warning: Member cin_ctl_get_triggering(cin_ctl_t *cin, int *trigger) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:663: warning: Member cin_ctl_int_trigger_start(cin_ctl_t *cin, int nimages) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:664: warning: Member cin_ctl_int_trigger_stop(cin_ctl_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:665: warning: Member cin_ctl_ext_trigger_start(cin_ctl_t *cin, int trigger_mode) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:666: warning: Member cin_ctl_ext_trigger_stop(cin_ctl_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:667: warning: Member cin_ctl_set_exposure_time(cin_ctl_t *cin, float e_time) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:668: warning: Member cin_ctl_set_trigger_delay(cin_ctl_t *cin, float t_time) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:669: warning: Member cin_ctl_set_cycle_time(cin_ctl_t *cin, float ftime) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:670: warning: Member cin_ctl_frame_count_reset(cin_ctl_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:671: warning: Member cin_ctl_set_mux(cin_ctl_t *cin, int setting) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:672: warning: Member cin_ctl_get_mux(cin_ctl_t *cin, int *setting) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:673: warning: Member cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:674: warning: Member cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:675: warning: Member cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:678: warning: Member cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:684: warning: Member cin_config_read_file(cin_ctl_t *cin, const char *file) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:800: warning: Member cin_data_get_next_frame(cin_data_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:801: warning: Member cin_data_release_frame(cin_data_t *cin, int free_mem) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:803: warning: Member cin_data_get_buffered_frame(void) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:804: warning: Member cin_data_release_buffered_frame(void) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:806: warning: Member cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:807: warning: Member cin_data_show_stats(FILE *fp, cin_data_stats_t stats) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:808: warning: Member cin_data_reset_stats(cin_data_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:811: warning: Member cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:812: warning: Member cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:615: warning: Member cin_ctl_load_config(cin_ctl_t *cin, char *filename) (function) of group cin_ctl_firmware is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:616: warning: Member cin_ctl_load_firmware(cin_ctl_t *cin) (function) of group cin_ctl_firmware is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:617: warning: Member cin_ctl_load_firmware_file(cin_ctl_t *cin, char *filename) (function) of group cin_ctl_firmware is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:618: warning: Member cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len) (function) of group cin_ctl_firmware is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:625: warning: Member cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq) (function) of group cin_ctl_fclk is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:626: warning: Member cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq) (function) of group cin_ctl_fclk is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:627: warning: Member cin_ctl_set_fclk_regs(cin_ctl_t *cin, int clkfreq) (function) of group cin_ctl_fclk is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:635: warning: Member cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val) (function) of group cin_ctl_status is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:636: warning: Member cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *_val) (function) of group cin_ctl_status is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:637: warning: Member cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val) (function) of group cin_ctl_status is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:638: warning: Member cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon_t *values) (function) of group cin_ctl_status is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:646: warning: Member cin_ctl_set_bias(cin_ctl_t *cin, int val) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:647: warning: Member cin_ctl_get_bias(cin_ctl_t *cin, int *val) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:648: warning: Member cin_ctl_set_bias_regs(cin_ctl_t *cin, uint16_t *vals, int verify) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:649: warning: Member cin_ctl_get_bias_regs(cin_ctl_t *cin, uint16_t *vals) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:650: warning: Member cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:651: warning: Member cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:659: warning: Member cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len) (function) of group cin_ctl_timing is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:660: warning: Member cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals) (function) of group cin_ctl_timing is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:663: warning: Member cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:664: warning: Member cin_ctl_set_camera_pwr(cin_ctl_t *cin, int val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:665: warning: Member cin_ctl_set_clocks(cin_ctl_t *cin, int val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:666: warning: Member cin_ctl_get_clocks(cin_ctl_t *cin, int *val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:667: warning: Member cin_ctl_set_trigger(cin_ctl_t *cin, int val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:668: warning: Member cin_ctl_get_trigger(cin_ctl_t *cin, int *val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:669: warning: Member cin_ctl_set_focus(cin_ctl_t *cin, int val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:670: warning: Member cin_ctl_get_focus(cin_ctl_t *cin, int *val) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:671: warning: Member cin_ctl_get_triggering(cin_ctl_t *cin, int *trigger) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:672: warning: Member cin_ctl_int_trigger_start(cin_ctl_t *cin, int nimages) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:673: warning: Member cin_ctl_int_trigger_stop(cin_ctl_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:674: warning: Member cin_ctl_ext_trigger_start(cin_ctl_t *cin, int trigger_mode) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:675: warning: Member cin_ctl_ext_trigger_stop(cin_ctl_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:676: warning: Member cin_ctl_set_exposure_time(cin_ctl_t *cin, float e_time) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:677: warning: Member cin_ctl_set_trigger_delay(cin_ctl_t *cin, float t_time) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:678: warning: Member cin_ctl_set_cycle_time(cin_ctl_t *cin, float ftime) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:679: warning: Member cin_ctl_frame_count_reset(cin_ctl_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:680: warning: Member cin_ctl_set_mux(cin_ctl_t *cin, int setting) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:681: warning: Member cin_ctl_get_mux(cin_ctl_t *cin, int *setting) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:682: warning: Member cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:683: warning: Member cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:684: warning: Member cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:687: warning: Member cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:693: warning: Member cin_config_read_file(cin_ctl_t *cin, const char *file) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:809: warning: Member cin_data_get_next_frame(cin_data_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:810: warning: Member cin_data_release_frame(cin_data_t *cin, int free_mem) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:812: warning: Member cin_data_get_buffered_frame(void) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:813: warning: Member cin_data_release_buffered_frame(void) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:815: warning: Member cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:816: warning: Member cin_data_show_stats(FILE *fp, cin_data_stats_t stats) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:817: warning: Member cin_data_reset_stats(cin_data_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:820: warning: Member cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:821: warning: Member cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:57: warning: Member cin_build_git_time (variable) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:58: warning: Member cin_build_git_sha (variable) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:59: warning: Member cin_build_version (variable) of file cin.h is not documented.
@@ -319,274 +323,285 @@ Building full member lists rec/home/travis/build/NSLS-II/libcin/src/cin.h:68: wa
 /home/travis/build/NSLS-II/libcin/src/cin.h:260: warning: Member cin_config_bias_len (variable) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:261: warning: Member cin_config_fcric_200[] (variable) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:262: warning: Member cin_config_fcric_200_len (variable) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:51: warning: Member REG_COMMAND (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:52: warning: Member REG_READ_ADDRESS (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:53: warning: Member REG_STREAM_TYPE (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:56: warning: Member CMD_FCLK_125 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:57: warning: Member CMD_FCLK_200 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:58: warning: Member CMD_FCLK_250 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:61: warning: Member REG_IF_MAC0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:62: warning: Member REG_IF_MAC1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:63: warning: Member REG_IF_MAC2 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:64: warning: Member REG_IF_IP0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:65: warning: Member REG_IF_IP1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:66: warning: Member REG_IF_CMD_PORT_NUM (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:67: warning: Member REG_IF_STREAM_IN_PORT_NUM (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:68: warning: Member REG_IF_STREAM_OUT_PORT_NUM (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:70: warning: Member REG_ETH_RESET (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:71: warning: Member REG_ETH_ENABLE (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:72: warning: Member REG_PHY1_MDIO_CMD (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:73: warning: Member REG_PHY1_MDIO_CMD_DATA (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:74: warning: Member REG_PHY1_MDIO_STATUS (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:75: warning: Member REG_PHY1_MDIO_RD_ADDR (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:76: warning: Member REG_PHY1_MDIO_RD_DATA (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:77: warning: Member REG_MAC_CFG_VECTOR1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:78: warning: Member REG_PHY2_MDIO_CMD (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:79: warning: Member REG_PHY2_MDIO_CMD_DATA (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:80: warning: Member REG_PHY2_MDIO_STATUS (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:81: warning: Member REG_PHY2_MDIO_RD_ADDR (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:82: warning: Member REG_PHY2_MDIO_RD_DATA (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:83: warning: Member REG_MAC_CFG_VECTOR2 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:86: warning: Member CMD_PS_ENABLE (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:87: warning: Member CMD_PS_POWERDOWN (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:89: warning: Member REG_PS_ENABLE (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:100: warning: Member REG_PS_SYNC_DIV0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:101: warning: Member REG_PS_SYNC_DIV1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:102: warning: Member REG_PS_SYNC_DIV2 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:103: warning: Member REG_PS_SYNC_DIV3 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:104: warning: Member REG_PS_SYNC_DIV4 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:107: warning: Member CMD_PROGRAM_FRAME (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:108: warning: Member REG_FRM_RESET (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:109: warning: Member REG_FRM_10GbE_SEL (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:112: warning: Member CMD_ENABLE_CLKS (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:113: warning: Member CMD_DISABLE_CLKS (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:114: warning: Member REG_CLOCK_EN_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:117: warning: Member REG_SI570_REG0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:118: warning: Member REG_SI570_REG1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:119: warning: Member REG_SI570_REG2 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:120: warning: Member REG_SI570_REG3 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:123: warning: Member CMD_MON_STOP (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:124: warning: Member CMD_MON_START (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:126: warning: Member REG_VMON_ADC1_CH1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:127: warning: Member REG_IMON_ADC1_CH0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:128: warning: Member REG_VMON_ADC0_CH5 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:129: warning: Member REG_IMON_ADC0_CH5 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:130: warning: Member REG_VMON_ADC0_CH4 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:131: warning: Member REG_IMON_ADC0_CH4 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:132: warning: Member REG_VMON_ADC0_CH7 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:133: warning: Member REG_IMON_ADC0_CH7 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:134: warning: Member REG_VMON_ADC0_CH6 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:135: warning: Member REG_IMON_ADC0_CH6 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:136: warning: Member REG_VMON_ADC0_CH2 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:137: warning: Member REG_IMON_ADC0_CH2 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:138: warning: Member REG_VMON_ADC0_CH3 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:139: warning: Member REG_IMON_ADC0_CH3 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:140: warning: Member REG_VMON_ADC0_CH8 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:141: warning: Member REG_IMON_ADC0_CH8 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:142: warning: Member REG_VMON_ADC0_CH9 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:143: warning: Member REG_IMON_ADC0_CH9 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:144: warning: Member REG_VMON_ADC0_CHE (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:145: warning: Member REG_IMON_ADC0_CHE (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:146: warning: Member REG_VMON_ADC0_CHD (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:147: warning: Member REG_IMON_ADC0_CHD (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:148: warning: Member REG_VMON_ADC0_CHB (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:149: warning: Member REG_IMON_ADC0_CHB (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:150: warning: Member REG_VMON_ADC0_CHC (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:151: warning: Member REG_IMON_ADC0_CHC (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:152: warning: Member REG_VMON_ADC0_CHF (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:153: warning: Member REG_IMON_ADC0_CHF (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:156: warning: Member REG_DCM_STATUS (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:157: warning: Member REG_FPGA_STATUS (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:158: warning: Member REG_BOARD_ID (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:159: warning: Member REG_HW_SERIAL_NUM (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:160: warning: Member REG_FPGA_VERSION (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:163: warning: Member REG_SANDBOX_REG00 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:164: warning: Member REG_SANDBOX_REG01 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:165: warning: Member REG_SANDBOX_REG02 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:166: warning: Member REG_SANDBOX_REG03 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:167: warning: Member REG_SANDBOX_REG04 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:168: warning: Member REG_SANDBOX_REG05 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:169: warning: Member REG_SANDBOX_REG06 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:170: warning: Member REG_SANDBOX_REG07 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:171: warning: Member REG_SANDBOX_REG08 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:172: warning: Member REG_SANDBOX_REG09 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:173: warning: Member REG_SANDBOX_REG0A (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:174: warning: Member REG_SANDBOX_REG0B (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:175: warning: Member REG_SANDBOX_REG0C (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:176: warning: Member REG_SANDBOX_REG0D (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:177: warning: Member REG_SANDBOX_REG0E (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:178: warning: Member REG_SANDBOX_REG0F (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:183: warning: Member REG_FRM_COMMAND (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:184: warning: Member REG_FRM_READ_ADDRESS (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:185: warning: Member REG_FRM_STREAM_TYPE (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:188: warning: Member CMD_SEND_SYNC_PULSE (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:189: warning: Member CMD_SYNC_DETECTOR2READOUT (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:191: warning: Member CMD_WR_CCD_BIAS_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:192: warning: Member CMD_WR_CCD_CLOCK_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:193: warning: Member CMD_SEND_FCRIC_CONFIG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:194: warning: Member CMD_RESET_FRAME_COUNT (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:197: warning: Member REG_IF_MAC_FAB1B0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:198: warning: Member REG_IF_MAC_FAB1B1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:199: warning: Member REG_IF_MAC_FAB1B2 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:200: warning: Member REG_IF_IP_FAB1B0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:201: warning: Member REG_IF_IP_FAB1B1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:202: warning: Member REG_IF_CMD_PORT_NUM_FAB1B (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:203: warning: Member REG_IF_STREAM_IN_PORT_NUM_FAB1B (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:204: warning: Member REG_IF_STREAM_OUT_PORT_NUM_FAB1B (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:206: warning: Member REG_XAUI_FAB1B (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:208: warning: Member REG_MAC_CONFIG_VEC_FAB1B0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:209: warning: Member REG_MAC_CONFIG_VEC_FAB1B1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:210: warning: Member REG_MAC_STATS1_FAB1B0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:211: warning: Member REG_MAC_STATS1_FAB1B1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:212: warning: Member REG_MAC_STATS2_FAB1B0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:213: warning: Member REG_MAC_STATS2_FAB1B1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:215: warning: Member REG_IF_MAC_FAB2B0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:216: warning: Member REG_IF_MAC_FAB2B1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:217: warning: Member REG_IF_MAC_FAB2B2 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:218: warning: Member REG_IF_IP_FAB2B0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:219: warning: Member REG_IF_IP_FAB2B1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:220: warning: Member REG_IF_CMD_PORT_NUM_FAB2B (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:221: warning: Member REG_IF_STREAM_IN_PORT_NUM_FAB2B (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:222: warning: Member REG_IF_STREAM_OUT_PORT_NUM_FAB2B (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:224: warning: Member REG_XAUI_FAB2B (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:226: warning: Member REG_MAC_CONFIG_VEC_FAB2B0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:227: warning: Member REG_MAC_CONFIG_VEC_FAB2B1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:228: warning: Member REG_MAC_STATS1_FAB2B0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:229: warning: Member REG_MAC_STATS1_FAB2B1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:230: warning: Member REG_MAC_STATS2_FAB2B0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:231: warning: Member REG_MAC_STATS2_FAB2B1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:234: warning: Member REG_SRAM_COMMAND (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:243: warning: Member REG_SRAM_START_ADDR1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:244: warning: Member REG_SRAM_START_ADDR0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:245: warning: Member REG_SRAM_STOP_ADDR1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:246: warning: Member REG_SRAM_STOP_ADDR0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:247: warning: Member REG_SRAM_FRAME_DATA_OUT1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:248: warning: Member REG_SRAM_FRAME_DATA_OUT0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:249: warning: Member REG_SRAM_FRAME_DATA_IN1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:250: warning: Member REG_SRAM_FRAME_DATA_IN0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:251: warning: Member REG_SRAM_FRAME_DV (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:252: warning: Member REG_SRAM_STATUS1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:253: warning: Member REG_SRAM_STATUS0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:256: warning: Member CMD_FCLK_COMMIT (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:257: warning: Member REG_FCLK_I2C_ADDRESS (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:258: warning: Member REG_FCLK_I2C_DATA_WR (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:260: warning: Member REG_FCLK_I2C_DATA_RD (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:262: warning: Member REG_TRIGGERSELECT_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:263: warning: Member REG_TRIGGERMASK_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:264: warning: Member REG_CCDFCLKSELECT_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:265: warning: Member REG_CDICLKDISABLE_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:267: warning: Member REG_FCLK_SET0 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:268: warning: Member REG_FCLK_SET1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:269: warning: Member REG_FCLK_SET2 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:270: warning: Member REG_FCLK_SET3 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:271: warning: Member REG_FCLK_SET4 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:272: warning: Member REG_FCLK_SET5 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:275: warning: Member REG_FRM_DCM_STATUS (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:276: warning: Member REG_FRM_FPGA_STATUS (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:277: warning: Member REG_FRM_BOARD_ID (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:278: warning: Member REG_FRM_HW_SERIAL_NUM (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:279: warning: Member REG_FRM_FPGA_VERSION (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:282: warning: Member REG_FRM_SANDBOX_REG00 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:283: warning: Member REG_FRM_SANDBOX_REG01 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:284: warning: Member REG_FRM_SANDBOX_REG02 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:285: warning: Member REG_FRM_SANDBOX_REG03 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:286: warning: Member REG_FRM_SANDBOX_REG04 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:287: warning: Member REG_FRM_SANDBOX_REG05 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:288: warning: Member REG_FRM_SANDBOX_REG06 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:289: warning: Member REG_FRM_SANDBOX_REG07 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:290: warning: Member REG_FRM_SANDBOX_REG08 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:291: warning: Member REG_FRM_SANDBOX_REG09 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:292: warning: Member REG_FRM_SANDBOX_REG0A (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:293: warning: Member REG_FRM_SANDBOX_REG0B (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:294: warning: Member REG_FRM_SANDBOX_REG0C (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:295: warning: Member REG_FRM_SANDBOX_REG0D (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:296: warning: Member REG_FRM_SANDBOX_REG0E (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:297: warning: Member REG_FRM_SANDBOX_REG0F (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:300: warning: Member REG_DETECTOR_REVISION_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:301: warning: Member REG_DETECTOR_CONFIG_REG1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:302: warning: Member REG_DETECTOR_CONFIG_REG2 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:303: warning: Member REG_DETECTOR_CONFIG_REG3 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:304: warning: Member REG_DETECTOR_CONFIG_REG4 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:305: warning: Member REG_DETECTOR_CONFIG_REG5 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:306: warning: Member REG_DETECTOR_CONFIG_REG6 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:307: warning: Member REG_DETECTOR_CONFIG_REG7 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:308: warning: Member REG_DETECTOR_CONFIG_REG8 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:309: warning: Member REG_IMG_PROC_REVISION_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:310: warning: Member REG_IMG_PROC_CONFIG_REG1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:311: warning: Member REG_IMG_PROC_CONFIG_REG2 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:312: warning: Member REG_IMG_PROC_CONFIG_REG3 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:313: warning: Member REG_IMG_PROC_CONFIG_REG4 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:314: warning: Member REG_IMG_PROC_CONFIG_REG5 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:315: warning: Member REG_IMG_PROC_CONFIG_REG6 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:316: warning: Member REG_IMG_PROC_CONFIG_REG7 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:317: warning: Member REG_IMG_PROC_CONFIG_REG8 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:319: warning: Member REG_BIASANDCLOCKREGISTERADDRESS (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:320: warning: Member REG_BIASANDCLOCKREGISTERDATA (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:321: warning: Member REG_CLOCKREGISTERDATAOUT (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:322: warning: Member REG_BIASREGISTERDATAOUT (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:325: warning: Member REG_BIASCONFIGREGISTER0_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:328: warning: Member REG_CLOCKCONFIGREGISTER0_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:332: warning: Member REG_BIASPARAM_READ_START (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:334: warning: Member REG_EXPOSURETIMEMSB_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:335: warning: Member REG_EXPOSURETIMELSB_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:336: warning: Member REG_ALTEXPOSURETIMEMSB_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:337: warning: Member REG_ALTEXPOSURETIMELSB_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:339: warning: Member REG_TRIGGERREPETITIONTIMEMSB_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:340: warning: Member REG_TRIGGERREPETITIONTIMELSB_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:341: warning: Member REG_DELAYTOEXPOSUREMSB_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:342: warning: Member REG_DELAYTOEXPOSURELSB_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:343: warning: Member REG_NUMBEROFEXPOSURE_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:344: warning: Member REG_SHUTTERTIMEMSB_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:345: warning: Member REG_SHUTTERTIMELSB_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:346: warning: Member REG_DELAYTOSHUTTERMSB_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:347: warning: Member REG_DELAYTOSHUTTERLSB_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:350: warning: Member REG_FCRIC_MASK_REG1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:351: warning: Member REG_FCRIC_MASK_REG2 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:352: warning: Member REG_FCRIC_MASK_REG3 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:353: warning: Member REG_LVDS_OVERFLOW_ERROR_REG1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:354: warning: Member REG_LVDS_OVERFLOW_ERROR_REG2 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:355: warning: Member REG_LVDS_OVERFLOW_ERROR_REG3 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:356: warning: Member REG_LVDS_PARITY_ERROR_REG1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:357: warning: Member REG_LVDS_PARITY_ERROR_REG2 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:358: warning: Member REG_LVDS_PARITY_ERROR_REG3 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:359: warning: Member REG_LVDS_STOP_BIT_ERROR_REG1 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:360: warning: Member REG_LVDS_STOP_BIT_ERROR_REG2 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:361: warning: Member REG_LVDS_STOP_BIT_ERROR_REG3 (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:362: warning: Member REG_FCRIC_WRITE0_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:363: warning: Member REG_FCRIC_WRITE1_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:364: warning: Member REG_FCRIC_WRITE2_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:365: warning: Member REG_FCRIC_READ0_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:366: warning: Member REG_FCRIC_READ1_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:367: warning: Member REG_FCRIC_READ2_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:368: warning: Member REG_DEBUGVIDEO0_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:369: warning: Member REG_DEBUGVIDEO1_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:370: warning: Member REG_DEBUGVIDEO2_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:371: warning: Member REG_DEBUGVIDEO3_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:372: warning: Member REG_DEBUGVIDEO4_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:373: warning: Member REG_DEBUGVIDEO5_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:374: warning: Member REG_DEBUGVIDEO6_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:375: warning: Member REG_DEBUGVIDEO7_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:376: warning: Member REG_DEBUGVIDEO8_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:377: warning: Member REG_DEBUGVIDEO9_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:378: warning: Member REG_DEBUGVIDEO10_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:379: warning: Member REG_DEBUGVIDEO11_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:380: warning: Member REG_DEBUGCOUNTER00_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:381: warning: Member REG_DEBUGCOUNTER01_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:382: warning: Member REG_DEBUGCOUNTER02_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:383: warning: Member REG_DEBUGCOUNTER03_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:384: warning: Member REG_DEBUGCOUNTER04_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:392: warning: Member CMD_READ_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:46: warning: Member REG_COMMAND (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:47: warning: Member REG_READ_ADDRESS (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:48: warning: Member REG_STREAM_TYPE (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:51: warning: Member CMD_FCLK_125 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:52: warning: Member CMD_FCLK_200 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:53: warning: Member CMD_FCLK_250 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:56: warning: Member REG_IF_MAC0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:57: warning: Member REG_IF_MAC1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:58: warning: Member REG_IF_MAC2 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:59: warning: Member REG_IF_IP0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:60: warning: Member REG_IF_IP1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:61: warning: Member REG_IF_CMD_PORT_NUM (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:62: warning: Member REG_IF_STREAM_IN_PORT_NUM (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:63: warning: Member REG_IF_STREAM_OUT_PORT_NUM (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:65: warning: Member REG_ETH_RESET (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:66: warning: Member REG_ETH_ENABLE (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:67: warning: Member REG_PHY1_MDIO_CMD (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:68: warning: Member REG_PHY1_MDIO_CMD_DATA (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:69: warning: Member REG_PHY1_MDIO_STATUS (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:70: warning: Member REG_PHY1_MDIO_RD_ADDR (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:71: warning: Member REG_PHY1_MDIO_RD_DATA (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:72: warning: Member REG_MAC_CFG_VECTOR1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:73: warning: Member REG_PHY2_MDIO_CMD (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:74: warning: Member REG_PHY2_MDIO_CMD_DATA (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:75: warning: Member REG_PHY2_MDIO_STATUS (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:76: warning: Member REG_PHY2_MDIO_RD_ADDR (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:77: warning: Member REG_PHY2_MDIO_RD_DATA (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:78: warning: Member REG_MAC_CFG_VECTOR2 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:81: warning: Member CMD_PS_ENABLE (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:82: warning: Member CMD_PS_POWERDOWN (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:84: warning: Member REG_PS_ENABLE (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:95: warning: Member REG_PS_SYNC_DIV0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:96: warning: Member REG_PS_SYNC_DIV1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:97: warning: Member REG_PS_SYNC_DIV2 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:98: warning: Member REG_PS_SYNC_DIV3 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:99: warning: Member REG_PS_SYNC_DIV4 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:102: warning: Member CMD_PROGRAM_FRAME (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:103: warning: Member REG_FRM_RESET (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:104: warning: Member REG_FRM_10GbE_SEL (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:107: warning: Member CMD_ENABLE_CLKS (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:108: warning: Member CMD_DISABLE_CLKS (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:109: warning: Member REG_CLOCK_EN_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:112: warning: Member REG_SI570_REG0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:113: warning: Member REG_SI570_REG1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:114: warning: Member REG_SI570_REG2 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:115: warning: Member REG_SI570_REG3 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:118: warning: Member CMD_MON_STOP (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:119: warning: Member CMD_MON_START (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:121: warning: Member REG_VMON_ADC1_CH1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:122: warning: Member REG_IMON_ADC1_CH0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:123: warning: Member REG_VMON_ADC0_CH5 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:124: warning: Member REG_IMON_ADC0_CH5 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:125: warning: Member REG_VMON_ADC0_CH4 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:126: warning: Member REG_IMON_ADC0_CH4 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:127: warning: Member REG_VMON_ADC0_CH7 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:128: warning: Member REG_IMON_ADC0_CH7 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:129: warning: Member REG_VMON_ADC0_CH6 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:130: warning: Member REG_IMON_ADC0_CH6 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:131: warning: Member REG_VMON_ADC0_CH2 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:132: warning: Member REG_IMON_ADC0_CH2 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:133: warning: Member REG_VMON_ADC0_CH3 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:134: warning: Member REG_IMON_ADC0_CH3 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:135: warning: Member REG_VMON_ADC0_CH8 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:136: warning: Member REG_IMON_ADC0_CH8 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:137: warning: Member REG_VMON_ADC0_CH9 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:138: warning: Member REG_IMON_ADC0_CH9 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:139: warning: Member REG_VMON_ADC0_CHE (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:140: warning: Member REG_IMON_ADC0_CHE (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:141: warning: Member REG_VMON_ADC0_CHD (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:142: warning: Member REG_IMON_ADC0_CHD (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:143: warning: Member REG_VMON_ADC0_CHB (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:144: warning: Member REG_IMON_ADC0_CHB (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:145: warning: Member REG_VMON_ADC0_CHC (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:146: warning: Member REG_IMON_ADC0_CHC (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:147: warning: Member REG_VMON_ADC0_CHF (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:148: warning: Member REG_IMON_ADC0_CHF (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:151: warning: Member REG_DCM_STATUS (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:152: warning: Member REG_FPGA_STATUS (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:153: warning: Member REG_BOARD_ID (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:154: warning: Member REG_HW_SERIAL_NUM (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:155: warning: Member REG_FPGA_VERSION (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:158: warning: Member REG_SANDBOX_REG00 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:159: warning: Member REG_SANDBOX_REG01 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:160: warning: Member REG_SANDBOX_REG02 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:161: warning: Member REG_SANDBOX_REG03 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:162: warning: Member REG_SANDBOX_REG04 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:163: warning: Member REG_SANDBOX_REG05 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:164: warning: Member REG_SANDBOX_REG06 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:165: warning: Member REG_SANDBOX_REG07 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:166: warning: Member REG_SANDBOX_REG08 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:167: warning: Member REG_SANDBOX_REG09 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:168: warning: Member REG_SANDBOX_REG0A (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:169: warning: Member REG_SANDBOX_REG0B (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:170: warning: Member REG_SANDBOX_REG0C (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:171: warning: Member REG_SANDBOX_REG0D (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:172: warning: Member REG_SANDBOX_REG0E (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:173: warning: Member REG_SANDBOX_REG0F (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:178: warning: Member REG_FRM_COMMAND (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:179: warning: Member REG_FRM_READ_ADDRESS (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:180: warning: Member REG_FRM_STREAM_TYPE (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:183: warning: Member CMD_SEND_SYNC_PULSE (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:184: warning: Member CMD_SYNC_DETECTOR2READOUT (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:186: warning: Member CMD_WR_CCD_BIAS_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:187: warning: Member CMD_WR_CCD_CLOCK_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:188: warning: Member CMD_SEND_FCRIC_CONFIG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:189: warning: Member CMD_RESET_FRAME_COUNT (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:192: warning: Member REG_IF_MAC_FAB1B0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:193: warning: Member REG_IF_MAC_FAB1B1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:194: warning: Member REG_IF_MAC_FAB1B2 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:195: warning: Member REG_IF_IP_FAB1B0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:196: warning: Member REG_IF_IP_FAB1B1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:197: warning: Member REG_IF_CMD_PORT_NUM_FAB1B (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:198: warning: Member REG_IF_STREAM_IN_PORT_NUM_FAB1B (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:199: warning: Member REG_IF_STREAM_OUT_PORT_NUM_FAB1B (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:201: warning: Member REG_XAUI_FAB1B (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:203: warning: Member REG_MAC_CONFIG_VEC_FAB1B0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:204: warning: Member REG_MAC_CONFIG_VEC_FAB1B1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:205: warning: Member REG_MAC_STATS1_FAB1B0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:206: warning: Member REG_MAC_STATS1_FAB1B1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:207: warning: Member REG_MAC_STATS2_FAB1B0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:208: warning: Member REG_MAC_STATS2_FAB1B1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:210: warning: Member REG_IF_MAC_FAB2B0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:211: warning: Member REG_IF_MAC_FAB2B1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:212: warning: Member REG_IF_MAC_FAB2B2 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:213: warning: Member REG_IF_IP_FAB2B0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:214: warning: Member REG_IF_IP_FAB2B1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:215: warning: Member REG_IF_CMD_PORT_NUM_FAB2B (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:216: warning: Member REG_IF_STREAM_IN_PORT_NUM_FAB2B (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:217: warning: Member REG_IF_STREAM_OUT_PORT_NUM_FAB2B (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:219: warning: Member REG_XAUI_FAB2B (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:221: warning: Member REG_MAC_CONFIG_VEC_FAB2B0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:222: warning: Member REG_MAC_CONFIG_VEC_FAB2B1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:223: warning: Member REG_MAC_STATS1_FAB2B0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:224: warning: Member REG_MAC_STATS1_FAB2B1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:225: warning: Member REG_MAC_STATS2_FAB2B0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:226: warning: Member REG_MAC_STATS2_FAB2B1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:229: warning: Member REG_SRAM_COMMAND (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:238: warning: Member REG_SRAM_START_ADDR1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:239: warning: Member REG_SRAM_START_ADDR0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:240: warning: Member REG_SRAM_STOP_ADDR1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:241: warning: Member REG_SRAM_STOP_ADDR0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:242: warning: Member REG_SRAM_FRAME_DATA_OUT1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:243: warning: Member REG_SRAM_FRAME_DATA_OUT0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:244: warning: Member REG_SRAM_FRAME_DATA_IN1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:245: warning: Member REG_SRAM_FRAME_DATA_IN0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:246: warning: Member REG_SRAM_FRAME_DV (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:247: warning: Member REG_SRAM_STATUS1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:248: warning: Member REG_SRAM_STATUS0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:251: warning: Member CMD_FCLK_COMMIT (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:252: warning: Member REG_FCLK_I2C_ADDRESS (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:253: warning: Member REG_FCLK_I2C_DATA_WR (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:255: warning: Member REG_FCLK_I2C_DATA_RD (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:257: warning: Member REG_TRIGGERSELECT_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:258: warning: Member REG_TRIGGERMASK_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:259: warning: Member REG_CCDFCLKSELECT_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:260: warning: Member REG_CDICLKDISABLE_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:262: warning: Member REG_FCLK_SET0 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:263: warning: Member REG_FCLK_SET1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:264: warning: Member REG_FCLK_SET2 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:265: warning: Member REG_FCLK_SET3 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:266: warning: Member REG_FCLK_SET4 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:267: warning: Member REG_FCLK_SET5 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:270: warning: Member REG_FRM_DCM_STATUS (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:271: warning: Member REG_FRM_FPGA_STATUS (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:272: warning: Member REG_FRM_BOARD_ID (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:273: warning: Member REG_FRM_HW_SERIAL_NUM (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:274: warning: Member REG_FRM_FPGA_VERSION (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:277: warning: Member REG_FRM_SANDBOX_REG00 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:278: warning: Member REG_FRM_SANDBOX_REG01 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:279: warning: Member REG_FRM_SANDBOX_REG02 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:280: warning: Member REG_FRM_SANDBOX_REG03 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:281: warning: Member REG_FRM_SANDBOX_REG04 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:282: warning: Member REG_FRM_SANDBOX_REG05 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:283: warning: Member REG_FRM_SANDBOX_REG06 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:284: warning: Member REG_FRM_SANDBOX_REG07 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:285: warning: Member REG_FRM_SANDBOX_REG08 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:286: warning: Member REG_FRM_SANDBOX_REG09 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:287: warning: Member REG_FRM_SANDBOX_REG0A (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:288: warning: Member REG_FRM_SANDBOX_REG0B (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:289: warning: Member REG_FRM_SANDBOX_REG0C (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:290: warning: Member REG_FRM_SANDBOX_REG0D (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:291: warning: Member REG_FRM_SANDBOX_REG0E (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:292: warning: Member REG_FRM_SANDBOX_REG0F (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:295: warning: Member REG_DETECTOR_REVISION_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:296: warning: Member REG_DETECTOR_CONFIG_REG1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:297: warning: Member REG_DETECTOR_CONFIG_REG2 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:298: warning: Member REG_DETECTOR_CONFIG_REG3 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:299: warning: Member REG_DETECTOR_CONFIG_REG4 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:300: warning: Member REG_DETECTOR_CONFIG_REG5 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:301: warning: Member REG_DETECTOR_CONFIG_REG6 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:302: warning: Member REG_DETECTOR_CONFIG_REG7 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:303: warning: Member REG_DETECTOR_CONFIG_REG8 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:304: warning: Member REG_IMG_PROC_REVISION_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:305: warning: Member REG_IMG_PROC_CONFIG_REG1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:306: warning: Member REG_IMG_PROC_CONFIG_REG2 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:307: warning: Member REG_IMG_PROC_CONFIG_REG3 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:308: warning: Member REG_IMG_PROC_CONFIG_REG4 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:309: warning: Member REG_IMG_PROC_CONFIG_REG5 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:310: warning: Member REG_IMG_PROC_CONFIG_REG6 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:311: warning: Member REG_IMG_PROC_CONFIG_REG7 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:312: warning: Member REG_IMG_PROC_CONFIG_REG8 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:314: warning: Member REG_BIASANDCLOCKREGISTERADDRESS (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:315: warning: Member REG_BIASANDCLOCKREGISTERDATA (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:316: warning: Member REG_CLOCKREGISTERDATAOUT (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:317: warning: Member REG_BIASREGISTERDATAOUT (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:320: warning: Member REG_BIASCONFIGREGISTER0_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:323: warning: Member REG_CLOCKCONFIGREGISTER0_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:327: warning: Member REG_BIASPARAM_READ_START (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:329: warning: Member REG_EXPOSURETIMEMSB_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:330: warning: Member REG_EXPOSURETIMELSB_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:331: warning: Member REG_ALTEXPOSURETIMEMSB_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:332: warning: Member REG_ALTEXPOSURETIMELSB_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:334: warning: Member REG_TRIGGERREPETITIONTIMEMSB_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:335: warning: Member REG_TRIGGERREPETITIONTIMELSB_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:336: warning: Member REG_DELAYTOEXPOSUREMSB_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:337: warning: Member REG_DELAYTOEXPOSURELSB_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:338: warning: Member REG_NUMBEROFEXPOSURE_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:339: warning: Member REG_SHUTTERTIMEMSB_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:340: warning: Member REG_SHUTTERTIMELSB_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:341: warning: Member REG_DELAYTOSHUTTERMSB_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:342: warning: Member REG_DELAYTOSHUTTERLSB_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:345: warning: Member REG_FCRIC_MASK_REG1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:346: warning: Member REG_FCRIC_MASK_REG2 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:347: warning: Member REG_FCRIC_MASK_REG3 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:348: warning: Member REG_LVDS_OVERFLOW_ERROR_REG1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:349: warning: Member REG_LVDS_OVERFLOW_ERROR_REG2 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:350: warning: Member REG_LVDS_OVERFLOW_ERROR_REG3 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:351: warning: Member REG_LVDS_PARITY_ERROR_REG1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:352: warning: Member REG_LVDS_PARITY_ERROR_REG2 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:353: warning: Member REG_LVDS_PARITY_ERROR_REG3 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:354: warning: Member REG_LVDS_STOP_BIT_ERROR_REG1 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:355: warning: Member REG_LVDS_STOP_BIT_ERROR_REG2 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:356: warning: Member REG_LVDS_STOP_BIT_ERROR_REG3 (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:357: warning: Member REG_FCRIC_WRITE0_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:358: warning: Member REG_FCRIC_WRITE1_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:359: warning: Member REG_FCRIC_WRITE2_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:360: warning: Member REG_FCRIC_READ0_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:361: warning: Member REG_FCRIC_READ1_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:362: warning: Member REG_FCRIC_READ2_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:363: warning: Member REG_DEBUGVIDEO0_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:364: warning: Member REG_DEBUGVIDEO1_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:365: warning: Member REG_DEBUGVIDEO2_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:366: warning: Member REG_DEBUGVIDEO3_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:367: warning: Member REG_DEBUGVIDEO4_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:368: warning: Member REG_DEBUGVIDEO5_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:369: warning: Member REG_DEBUGVIDEO6_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:370: warning: Member REG_DEBUGVIDEO7_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:371: warning: Member REG_DEBUGVIDEO8_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:372: warning: Member REG_DEBUGVIDEO9_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:373: warning: Member REG_DEBUGVIDEO10_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:374: warning: Member REG_DEBUGVIDEO11_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:375: warning: Member REG_DEBUGCOUNTER00_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:376: warning: Member REG_DEBUGCOUNTER01_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:377: warning: Member REG_DEBUGCOUNTER02_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:378: warning: Member REG_DEBUGCOUNTER03_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:379: warning: Member REG_DEBUGCOUNTER04_REG (macro definition) of file cin_register_map.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin_register_map.h:387: warning: Member CMD_READ_REG (macro definition) of file cin_register_map.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:599: warning: Member cin_ctl_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:600: warning: Member cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:601: warning: Member cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off) (function) of group cin_ctl_rw is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:637: warning: Member cin_ctl_set_bias(cin_ctl_t *cin, int val) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:638: warning: Member cin_ctl_get_bias(cin_ctl_t *cin, int *val) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:639: warning: Member cin_ctl_set_bias_regs(cin_ctl_t *cin, uint16_t *vals, int verify) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:640: warning: Member cin_ctl_get_bias_regs(cin_ctl_t *cin, uint16_t *vals) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:641: warning: Member cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:642: warning: Member cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage) (function) of group cin_ctl_bias is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:650: warning: Member cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len) (function) of group cin_ctl_timing is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:651: warning: Member cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals) (function) of group cin_ctl_timing is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:615: warning: Member cin_ctl_load_config(cin_ctl_t *cin, char *filename) (function) of group cin_ctl_firmware is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:616: warning: Member cin_ctl_load_firmware(cin_ctl_t *cin) (function) of group cin_ctl_firmware is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:617: warning: Member cin_ctl_load_firmware_file(cin_ctl_t *cin, char *filename) (function) of group cin_ctl_firmware is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:618: warning: Member cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len) (function) of group cin_ctl_firmware is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:625: warning: Member cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq) (function) of group cin_ctl_fclk is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:626: warning: Member cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq) (function) of group cin_ctl_fclk is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:627: warning: Member cin_ctl_set_fclk_regs(cin_ctl_t *cin, int clkfreq) (function) of group cin_ctl_fclk is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:635: warning: Member cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val) (function) of group cin_ctl_status is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:636: warning: Member cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *_val) (function) of group cin_ctl_status is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:637: warning: Member cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val) (function) of group cin_ctl_status is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:638: warning: Member cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon_t *values) (function) of group cin_ctl_status is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:646: warning: Member cin_ctl_set_bias(cin_ctl_t *cin, int val) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:647: warning: Member cin_ctl_get_bias(cin_ctl_t *cin, int *val) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:648: warning: Member cin_ctl_set_bias_regs(cin_ctl_t *cin, uint16_t *vals, int verify) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:649: warning: Member cin_ctl_get_bias_regs(cin_ctl_t *cin, uint16_t *vals) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:650: warning: Member cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:651: warning: Member cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage) (function) of group cin_ctl_bias is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:659: warning: Member cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len) (function) of group cin_ctl_timing is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:660: warning: Member cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals) (function) of group cin_ctl_timing is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:321: warning: Member ctl_port (variable) of class cin_ctl is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:322: warning: Member stream_port (variable) of class cin_ctl is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:325: warning: Member config (variable) of class cin_ctl is not documented.
@@ -714,12 +729,7 @@ Building full member lists rec/home/travis/build/NSLS-II/libcin/src/cin.h:68: wa
 /home/travis/build/NSLS-II/libcin/src/cin.h:291: warning: Member overruns (variable) of class fifo is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:292: warning: Member mutex (variable) of class fifo is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:293: warning: Member signal (variable) of class fifo is not documented.
-ursively...
-Adding members to member groups.
-Computing member references...
-Inheriting documentation...
-Generating disk names...
-Adding source references...
+rce references...
 Adding xrefitems...
 Sorting member lists...
 Computing dependencies between directories...
@@ -743,7 +753,6 @@ Generating code for file src/control.h...
 Generating code for file src/data.h...
 Generating code for file src/descramble.h...
 Generating code for file src/descramble_map.h...
-Generating code for file src/fclk_program.h...
 Generating code for file src/fifo.h...
 Generating code for file src/report.h...
 Generating file documentation...
@@ -786,7 +795,7 @@ Generating file member index...
 Generating example index...
 finalizing index lists...
 writing tag file...
-lookup cache used 401/65536 hits=2842 misses=421
+lookup cache used 402/65536 hits=2861 misses=422
 finished...
 make -C doc/latex
 make[1]: Entering directory `/home/travis/build/NSLS-II/libcin/doc/latex'
@@ -906,20 +915,32 @@ LaTeX Warning: Reference `group__cin__ctl__rw' on page 3 undefined on input lin
 e 4.
 
 
+LaTeX Warning: Reference `group__cin__ctl__firmware' on page 3 undefined on inp
+ut line 5.
+
+
+LaTeX Warning: Reference `group__cin__ctl__fclk' on page 3 undefined on input l
+ine 6.
+
+
+LaTeX Warning: Reference `group__cin__ctl__status' on page 3 undefined on input
+ line 7.
+
+
 LaTeX Warning: Reference `group__cin__ctl__bias' on page 3 undefined on input l
-ine 5.
+ine 8.
 
 
 LaTeX Warning: Reference `group__cin__ctl__timing' on page 3 undefined on input
- line 6.
+ line 9.
 
 
 LaTeX Warning: Reference `group__cin__data__init' on page 3 undefined on input 
-line 7.
+line 10.
 
 
 LaTeX Warning: Reference `group__cin__data__framestore' on page 3 undefined on 
-input line 8.
+input line 11.
 
 ) [3] [4]
 Chapter 3.
@@ -1024,14 +1045,10 @@ LaTeX Warning: Reference `descramble__map_8h' on page 7 undefined on input line
  11.
 
 
-LaTeX Warning: Reference `fclk__program_8h' on page 7 undefined on input line 1
-2.
+LaTeX Warning: Reference `fifo_8h' on page 7 undefined on input line 12.
 
 
-LaTeX Warning: Reference `fifo_8h' on page 7 undefined on input line 13.
-
-
-LaTeX Warning: Reference `report_8h' on page 7 undefined on input line 14.
+LaTeX Warning: Reference `report_8h' on page 7 undefined on input line 13.
 
 ) [7] [8]
 Chapter 5.
@@ -1082,25 +1099,26 @@ Package longtable Warning: Column widths have changed
 
 Underfull \hbox (badness 10000) detected at line 116
 [][][]
-) [13] (./group__cin__ctl__bias.tex) [14] (./group__cin__ctl__timing.tex)
-[15] (./group__cin__data__init.tex
+) [13] (./group__cin__ctl__firmware.tex) [14] (./group__cin__ctl__fclk.tex)
+[15] (./group__cin__ctl__status.tex) [16] (./group__cin__ctl__bias.tex)
+[17] (./group__cin__ctl__timing.tex) [18] (./group__cin__data__init.tex
 
 Package longtable Warning: Column widths have changed
 (longtable)                in table 5.7 on input line 50.
 
 
 Overfull \vbox (0.80386pt too high) has occurred while \output is active
-[16]
+[19]
 
 Package longtable Warning: Column widths have changed
 (longtable)                in table 5.8 on input line 65.
 
-) [17] (./group__cin__data__framestore.tex
+) [20] (./group__cin__data__framestore.tex
 
 Package longtable Warning: Column widths have changed
 (longtable)                in table 5.9 on input line 36.
 
-[18]
+[21]
 
 Package longtable Warning: Column widths have changed
 (longtable)                in table 5.10 on input line 51.
@@ -1113,7 +1131,7 @@ Package longtable Warning: Column widths have changed
 Package longtable Warning: Column widths have changed
 (longtable)                in table 5.12 on input line 83.
 
-[19]
+[22]
 
 Package longtable Warning: Column widths have changed
 (longtable)                in table 5.13 on input line 98.
@@ -1121,24 +1139,24 @@ Package longtable Warning: Column widths have changed
 
 Underfull \hbox (badness 10000) detected at line 99
 [][][]
-) [20]
+) [23] [24]
 Chapter 6.
 (./structcin__ctl.tex) (./structcin__ctl__config.tex) (./structcin__ctl__id.tex
-[21]) (./structcin__ctl__listener.tex) (./structcin__ctl__pwr__mon__t.tex)
-(./structcin__ctl__pwr__val.tex [22]) (./structcin__data.tex)
-(./structcin__data__callbacks.tex) (./structcin__data__frame.tex [23])
+[25]) (./structcin__ctl__listener.tex) (./structcin__ctl__pwr__mon__t.tex)
+(./structcin__ctl__pwr__val.tex [26]) (./structcin__data.tex)
+(./structcin__data__callbacks.tex) (./structcin__data__frame.tex [27])
 (./structcin__data__packet.tex) (./structcin__data__proc.tex)
-(./structcin__data__stats.tex [24]) (./structcin__data__threads.tex)
-(./structcin__map__t.tex) (./structcin__port.tex [25])
-(./structdescramble__map__t.tex) (./structfifo.tex) [26]
+(./structcin__data__stats.tex [28]) (./structcin__data__threads.tex)
+(./structcin__map__t.tex) (./structcin__port.tex [29])
+(./structdescramble__map__t.tex) (./structfifo.tex) [30]
 Chapter 7.
 (./cin_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--10
 
-[27] [28] [29] [30] [31]
-Underfull \hbox (badness 10000) detected at line 707
+[31] [32] [33] [34] [35]
+Underfull \hbox (badness 10000) detected at line 699
 [][][]
-) (./cin__register__map_8h.tex [32] [33] [34] [35] [36]
+) (./cin__register__map_8h.tex [36] [37] [38] [39] [40]
 Underfull \hbox (badness 10000) detected at line 780
 [][][]
 pdfTeX warning (ext4): destination with the same identifier (name{cin__register
@@ -1147,20 +1165,21 @@ __map_8h_LICENSE}) has been already used, duplicate ignored
                    \relax 
 l.783 ...ertarget{cin__register__map_8h_LICENSE}{}
                                                   \subsection{L\+I\+C\+E\+N\...
-[37]pdfTeX warning (ext4): destination with the same identifier (name{cin__regi
+[41]pdfTeX warning (ext4): destination with the same identifier (name{cin__regi
 ster__map_8h_DESCRIPTION}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.796 ...rget{cin__register__map_8h_DESCRIPTION}{}
                                                   \subsection{D\+E\+S\+C\+R\...
-) [38]
+) [42]
 No file refman.ind.
 
 Package longtable Warning: Table widths have changed. Rerun LaTeX.
 
-(./refman.aux (./group__cin__ctl__rw.aux) (./group__cin__ctl__bias.aux)
-(./group__cin__ctl__timing.aux) (./group__cin__data__init.aux)
-(./group__cin__data__framestore.aux))
+(./refman.aux (./group__cin__ctl__rw.aux) (./group__cin__ctl__firmware.aux)
+(./group__cin__ctl__fclk.aux) (./group__cin__ctl__status.aux)
+(./group__cin__ctl__bias.aux) (./group__cin__ctl__timing.aux)
+(./group__cin__data__init.aux) (./group__cin__data__framestore.aux))
 
 Package rerunfilecheck Warning: File `refman.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
@@ -1185,13 +1204,13 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (42 pages, 191447 bytes).
+Output written on refman.pdf (46 pages, 194825 bytes).
 Transcript written on refman.log.
 makeindex refman.idx
 This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
-Scanning input file refman.idx....done (51 entries accepted, 0 rejected).
-Sorting entries....done (289 comparisons).
-Generating output file refman.ind....done (82 lines written, 0 warnings).
+Scanning input file refman.idx....done (54 entries accepted, 0 rejected).
+Sorting entries....done (315 comparisons).
+Generating output file refman.ind....done (85 lines written, 0 warnings).
 Output written in refman.ind.
 Transcript written in refman.ilg.
 pdflatex refman
@@ -1279,263 +1298,10 @@ Package hyperref Message: Driver: hpdftex.
 (/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
 (/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty)
 (/usr/share/texlive/texmf-dist/tex/latex/caption/ltcaption.sty)) (./refman.aux
-(./group__cin__ctl__rw.aux) (./group__cin__ctl__bias.aux)
-(./group__cin__ctl__timing.aux) (./group__cin__data__init.aux)
-(./group__cin__data__framestore.aux)
-
-LaTeX Warning: Label `cin__register__map_8h_LICENSE' multiply defined.
-
-
-LaTeX Warning: Label `cin__register__map_8h_DESCRIPTION' multiply defined.
-
-) (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd)
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd)
-(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg))
-*geometry* driver: auto-detecting
-*geometry* detected driver: pdftex
-(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
-(./refman.out) (./refman.out) [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.
-map}] [2] (./refman.toc
-(/usr/share/texlive/texmf-dist/tex/latex/wasysym/uwasy.fd)
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd) [1]) [2] [3]
-[4]
-Chapter 1.
-(./index.tex (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd)
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1phv.fd) [1]) [2]
-Chapter 2.
-(./modules.tex) [3] [4]
-Chapter 3.
-(./annotated.tex) [5] [6]
-Chapter 4.
-(./files.tex
-
-LaTeX Warning: Reference `cinregisters_8h' on page 7 undefined on input line 5.
-
-
-
-LaTeX Warning: Reference `common_8h' on page 7 undefined on input line 6.
-
-
-LaTeX Warning: Reference `config_8h' on page 7 undefined on input line 7.
-
-
-LaTeX Warning: Reference `control_8h' on page 7 undefined on input line 8.
-
-
-LaTeX Warning: Reference `data_8h' on page 7 undefined on input line 9.
-
-
-LaTeX Warning: Reference `descramble_8h' on page 7 undefined on input line 10.
-
-
-LaTeX Warning: Reference `descramble__map_8h' on page 7 undefined on input line
- 11.
-
-
-LaTeX Warning: Reference `fclk__program_8h' on page 7 undefined on input line 1
-2.
-
-
-LaTeX Warning: Reference `fifo_8h' on page 7 undefined on input line 13.
-
-
-LaTeX Warning: Reference `report_8h' on page 7 undefined on input line 14.
-
-) [7] [8]
-Chapter 5.
-(./group__cin__ctl__init.tex
-Underfull \hbox (badness 10000) detected at line 31
-[][][]
-[9]
-Underfull \hbox (badness 10000) detected at line 61
-[][][]
-) [10] (./group__cin__ctl__rw.tex
-Underfull \hbox (badness 10000) detected at line 48
-[][][]
-[11]
-Underfull \hbox (badness 10000) detected at line 70
-[][][]
-
-Underfull \hbox (badness 10000) detected at line 94
-[][][]
-[12]
-Underfull \hbox (badness 10000) detected at line 116
-[][][]
-) [13] (./group__cin__ctl__bias.tex) [14] (./group__cin__ctl__timing.tex)
-[15] (./group__cin__data__init.tex
-Overfull \vbox (0.80386pt too high) has occurred while \output is active
-[16]) [17] (./group__cin__data__framestore.tex [18] [19]
-Underfull \hbox (badness 10000) detected at line 99
-[][][]
-) [20]
-Chapter 6.
-(./structcin__ctl.tex) (./structcin__ctl__config.tex) (./structcin__ctl__id.tex
-[21]) (./structcin__ctl__listener.tex) (./structcin__ctl__pwr__mon__t.tex)
-(./structcin__ctl__pwr__val.tex [22]) (./structcin__data.tex)
-(./structcin__data__callbacks.tex) (./structcin__data__frame.tex [23])
-(./structcin__data__packet.tex) (./structcin__data__proc.tex)
-(./structcin__data__stats.tex [24]) (./structcin__data__threads.tex)
-(./structcin__map__t.tex) (./structcin__port.tex [25])
-(./structdescramble__map__t.tex) (./structfifo.tex) [26]
-Chapter 7.
-(./cin_8h.tex
-Underfull \hbox (badness 10000) in paragraph at lines 3--10
-
-[27] [28] [29] [30] [31]
-Underfull \hbox (badness 10000) detected at line 707
-[][][]
-) (./cin__register__map_8h.tex [32] [33] [34] [35] [36]
-Underfull \hbox (badness 10000) detected at line 780
-[][][]
-pdfTeX warning (ext4): destination with the same identifier (name{cin__register
-__map_8h_LICENSE}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.783 ...ertarget{cin__register__map_8h_LICENSE}{}
-                                                  \subsection{L\+I\+C\+E\+N\...
-[37]pdfTeX warning (ext4): destination with the same identifier (name{cin__regi
-ster__map_8h_DESCRIPTION}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.796 ...rget{cin__register__map_8h_DESCRIPTION}{}
-                                                  \subsection{D\+E\+S\+C\+R\...
-) [38] (./refman.ind [39]) (./refman.aux (./group__cin__ctl__rw.aux)
+(./group__cin__ctl__rw.aux) (./group__cin__ctl__firmware.aux)
+(./group__cin__ctl__fclk.aux) (./group__cin__ctl__status.aux)
 (./group__cin__ctl__bias.aux) (./group__cin__ctl__timing.aux)
-(./group__cin__data__init.aux) (./group__cin__data__framestore.aux))
-
-Package rerunfilecheck Warning: File `refman.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: There were multiply-defined labels.
-
- )
-(see the transcript file for additional information){/usr/share/texlive/texmf-d
-ist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
-7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
-lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
-8a.pfb>
-Output written on refman.pdf (45 pages, 203116 bytes).
-Transcript written on refman.log.
-latex_count=8 ; \
-	while egrep -s 'Rerun (LaTeX|to get cross-references right)' refman.log && [ $latex_count -gt 0 ] ;\
-	    do \
-	      echo "Rerunning latex...." ;\
-	      pdflatex refman ;\
-	      latex_count=`expr $latex_count - 1` ;\
-	    done
-makeindex refman.idx
-This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
-Scanning input file refman.idx....done (51 entries accepted, 0 rejected).
-Sorting entries....done (289 comparisons).
-Generating output file refman.ind....done (82 lines written, 0 warnings).
-Output written in refman.ind.
-Transcript written in refman.ilg.
-pdflatex refman
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian)
- restricted \write18 enabled.
-entering extended mode
-(./refman.tex
-LaTeX2e <2011/06/27>
-Babel <3.9h> and hyphenation patterns for 2 languages loaded.
-(/usr/share/texlive/texmf-dist/tex/latex/base/book.cls
-Document Class: book 2007/10/19 v1.4h Standard LaTeX document class
-(/usr/share/texlive/texmf-dist/tex/latex/base/bk10.clo))
-(/usr/share/texlive/texmf-dist/tex/latex/base/fixltx2e.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty) (./doxygen.sty
-(/usr/share/texlive/texmf-dist/tex/latex/base/alltt.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/float/float.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/tools/verbatim.sty)
-(/usr/share/texmf/tex/latex/xcolor/xcolor.sty
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg)
-(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty))
-(/usr/share/texlive/texmf-dist/tex/latex/colortbl/colortbl.sty))
-(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/tabu/tabu.sty
-(/usr/share/texlive/texmf-dist/tex/latex/varwidth/varwidth.sty))
-(/usr/share/texlive/texmf-dist/tex/latex/tools/tabularx.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty))
-(/usr/share/texlive/texmf-dist/tex/latex/adjustbox/adjustbox.sty
-(/usr/share/texlive/texmf-dist/tex/latex/xkeyval/xkeyval.sty
-(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkeyval.tex
-(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/keyval.tex)))
-(/usr/share/texlive/texmf-dist/tex/latex/adjustbox/adjcalc.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/adjustbox/trimclip.sty
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg)))
-(/usr/share/texlive/texmf-dist/tex/latex/collectbox/collectbox.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/adjustbox/tc-pdftex.def))
-(/usr/share/texlive/texmf-dist/tex/latex/ifoddpage/ifoddpage.sty))
-(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
-(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
-(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
-(/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
-(/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
-(/usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/tools/multicol.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
-(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.def
-(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.dfu)))
-(/usr/share/texlive/texmf-dist/tex/latex/wasysym/wasysym.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
-(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def))
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/helvet.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/courier.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
-(/usr/share/texlive/texmf-dist/tex/latex/sectsty/sectsty.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty)
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifvtex.sty)
-(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty))
-(/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/tocloft/tocloft.sty)
-Writing index file refman.idx
-(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg)
-(/usr/share/texlive/texmf-dist/tex/latex/hyperref/backref.sty
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
-(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty))
-
-Package hyperref Message: Driver: hpdftex.
-
-(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def)
-(/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def)
-(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
-(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/caption/ltcaption.sty)) (./refman.aux
-(./group__cin__ctl__rw.aux) (./group__cin__ctl__bias.aux)
-(./group__cin__ctl__timing.aux) (./group__cin__data__init.aux)
-(./group__cin__data__framestore.aux)
+(./group__cin__data__init.aux) (./group__cin__data__framestore.aux)
 
 LaTeX Warning: Label `cin__register__map_8h_LICENSE' multiply defined.
 
@@ -1592,14 +1358,10 @@ LaTeX Warning: Reference `descramble__map_8h' on page 7 undefined on input line
  11.
 
 
-LaTeX Warning: Reference `fclk__program_8h' on page 7 undefined on input line 1
-2.
+LaTeX Warning: Reference `fifo_8h' on page 7 undefined on input line 12.
 
 
-LaTeX Warning: Reference `fifo_8h' on page 7 undefined on input line 13.
-
-
-LaTeX Warning: Reference `report_8h' on page 7 undefined on input line 14.
+LaTeX Warning: Reference `report_8h' on page 7 undefined on input line 13.
 
 ) [7] [8]
 Chapter 5.
@@ -1621,30 +1383,31 @@ Underfull \hbox (badness 10000) detected at line 94
 [12]
 Underfull \hbox (badness 10000) detected at line 116
 [][][]
-) [13] (./group__cin__ctl__bias.tex) [14] (./group__cin__ctl__timing.tex)
-[15] (./group__cin__data__init.tex
+) [13] (./group__cin__ctl__firmware.tex) [14] (./group__cin__ctl__fclk.tex)
+[15] (./group__cin__ctl__status.tex) [16] (./group__cin__ctl__bias.tex)
+[17] (./group__cin__ctl__timing.tex) [18] (./group__cin__data__init.tex
 Overfull \vbox (0.80386pt too high) has occurred while \output is active
-[16]) [17] (./group__cin__data__framestore.tex [18] [19]
+[19]) [20] (./group__cin__data__framestore.tex [21] [22]
 Underfull \hbox (badness 10000) detected at line 99
 [][][]
-) [20]
+) [23] [24]
 Chapter 6.
 (./structcin__ctl.tex) (./structcin__ctl__config.tex) (./structcin__ctl__id.tex
-[21]) (./structcin__ctl__listener.tex) (./structcin__ctl__pwr__mon__t.tex)
-(./structcin__ctl__pwr__val.tex [22]) (./structcin__data.tex)
-(./structcin__data__callbacks.tex) (./structcin__data__frame.tex [23])
+[25]) (./structcin__ctl__listener.tex) (./structcin__ctl__pwr__mon__t.tex)
+(./structcin__ctl__pwr__val.tex [26]) (./structcin__data.tex)
+(./structcin__data__callbacks.tex) (./structcin__data__frame.tex [27])
 (./structcin__data__packet.tex) (./structcin__data__proc.tex)
-(./structcin__data__stats.tex [24]) (./structcin__data__threads.tex)
-(./structcin__map__t.tex) (./structcin__port.tex [25])
-(./structdescramble__map__t.tex) (./structfifo.tex) [26]
+(./structcin__data__stats.tex [28]) (./structcin__data__threads.tex)
+(./structcin__map__t.tex) (./structcin__port.tex [29])
+(./structdescramble__map__t.tex) (./structfifo.tex) [30]
 Chapter 7.
 (./cin_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--10
 
-[27] [28] [29] [30] [31]
-Underfull \hbox (badness 10000) detected at line 707
+[31] [32] [33] [34] [35]
+Underfull \hbox (badness 10000) detected at line 699
 [][][]
-) (./cin__register__map_8h.tex [32] [33] [34] [35] [36]
+) (./cin__register__map_8h.tex [36] [37] [38] [39] [40]
 Underfull \hbox (badness 10000) detected at line 780
 [][][]
 pdfTeX warning (ext4): destination with the same identifier (name{cin__register
@@ -1653,15 +1416,22 @@ __map_8h_LICENSE}) has been already used, duplicate ignored
                    \relax 
 l.783 ...ertarget{cin__register__map_8h_LICENSE}{}
                                                   \subsection{L\+I\+C\+E\+N\...
-[37]pdfTeX warning (ext4): destination with the same identifier (name{cin__regi
+[41]pdfTeX warning (ext4): destination with the same identifier (name{cin__regi
 ster__map_8h_DESCRIPTION}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.796 ...rget{cin__register__map_8h_DESCRIPTION}{}
                                                   \subsection{D\+E\+S\+C\+R\...
-) [38] (./refman.ind [39]) (./refman.aux (./group__cin__ctl__rw.aux)
-(./group__cin__ctl__bias.aux) (./group__cin__ctl__timing.aux)
-(./group__cin__data__init.aux) (./group__cin__data__framestore.aux))
+) [42] (./refman.ind [43]) (./refman.aux (./group__cin__ctl__rw.aux)
+(./group__cin__ctl__firmware.aux) (./group__cin__ctl__fclk.aux)
+(./group__cin__ctl__status.aux) (./group__cin__ctl__bias.aux)
+(./group__cin__ctl__timing.aux) (./group__cin__data__init.aux)
+(./group__cin__data__framestore.aux))
+
+Package rerunfilecheck Warning: File `refman.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
 
 LaTeX Warning: There were undefined references.
 
@@ -1681,6 +1451,255 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (45 pages, 203278 bytes).
+Output written on refman.pdf (49 pages, 207905 bytes).
+Transcript written on refman.log.
+latex_count=8 ; \
+	while egrep -s 'Rerun (LaTeX|to get cross-references right)' refman.log && [ $latex_count -gt 0 ] ;\
+	    do \
+	      echo "Rerunning latex...." ;\
+	      pdflatex refman ;\
+	      latex_count=`expr $latex_count - 1` ;\
+	    done
+makeindex refman.idx
+This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
+Scanning input file refman.idx....done (54 entries accepted, 0 rejected).
+Sorting entries....done (315 comparisons).
+Generating output file refman.ind....done (85 lines written, 0 warnings).
+Output written in refman.ind.
+Transcript written in refman.ilg.
+pdflatex refman
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian)
+ restricted \write18 enabled.
+entering extended mode
+(./refman.tex
+LaTeX2e <2011/06/27>
+Babel <3.9h> and hyphenation patterns for 2 languages loaded.
+(/usr/share/texlive/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/bk10.clo))
+(/usr/share/texlive/texmf-dist/tex/latex/base/fixltx2e.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty) (./doxygen.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/float/float.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/verbatim.sty)
+(/usr/share/texmf/tex/latex/xcolor/xcolor.sty
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/colortbl/colortbl.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tabu/tabu.sty
+(/usr/share/texlive/texmf-dist/tex/latex/varwidth/varwidth.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/tools/tabularx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/adjustbox/adjustbox.sty
+(/usr/share/texlive/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/keyval.tex)))
+(/usr/share/texlive/texmf-dist/tex/latex/adjustbox/adjcalc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/adjustbox/trimclip.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg)))
+(/usr/share/texlive/texmf-dist/tex/latex/collectbox/collectbox.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/adjustbox/tc-pdftex.def))
+(/usr/share/texlive/texmf-dist/tex/latex/ifoddpage/ifoddpage.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu)))
+(/usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/multicol.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.dfu)))
+(/usr/share/texlive/texmf-dist/tex/latex/wasysym/wasysym.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def))
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/helvet.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/courier.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/sectsty/sectsty.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifvtex.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tocloft/tocloft.sty)
+Writing index file refman.idx
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/backref.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty))
+
+Package hyperref Message: Driver: hpdftex.
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/caption/ltcaption.sty)) (./refman.aux
+(./group__cin__ctl__rw.aux) (./group__cin__ctl__firmware.aux)
+(./group__cin__ctl__fclk.aux) (./group__cin__ctl__status.aux)
+(./group__cin__ctl__bias.aux) (./group__cin__ctl__timing.aux)
+(./group__cin__data__init.aux) (./group__cin__data__framestore.aux)
+
+LaTeX Warning: Label `cin__register__map_8h_LICENSE' multiply defined.
+
+
+LaTeX Warning: Label `cin__register__map_8h_DESCRIPTION' multiply defined.
+
+) (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd)
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg))
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(./refman.out) (./refman.out) [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.
+map}] [2] (./refman.toc
+(/usr/share/texlive/texmf-dist/tex/latex/wasysym/uwasy.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd) [1] [2]) [3]
+[4]
+Chapter 1.
+(./index.tex (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1phv.fd) [1]) [2]
+Chapter 2.
+(./modules.tex) [3] [4]
+Chapter 3.
+(./annotated.tex) [5] [6]
+Chapter 4.
+(./files.tex
+
+LaTeX Warning: Reference `cinregisters_8h' on page 7 undefined on input line 5.
+
+
+
+LaTeX Warning: Reference `common_8h' on page 7 undefined on input line 6.
+
+
+LaTeX Warning: Reference `config_8h' on page 7 undefined on input line 7.
+
+
+LaTeX Warning: Reference `control_8h' on page 7 undefined on input line 8.
+
+
+LaTeX Warning: Reference `data_8h' on page 7 undefined on input line 9.
+
+
+LaTeX Warning: Reference `descramble_8h' on page 7 undefined on input line 10.
+
+
+LaTeX Warning: Reference `descramble__map_8h' on page 7 undefined on input line
+ 11.
+
+
+LaTeX Warning: Reference `fifo_8h' on page 7 undefined on input line 12.
+
+
+LaTeX Warning: Reference `report_8h' on page 7 undefined on input line 13.
+
+) [7] [8]
+Chapter 5.
+(./group__cin__ctl__init.tex
+Underfull \hbox (badness 10000) detected at line 31
+[][][]
+[9]
+Underfull \hbox (badness 10000) detected at line 61
+[][][]
+) [10] (./group__cin__ctl__rw.tex
+Underfull \hbox (badness 10000) detected at line 48
+[][][]
+[11]
+Underfull \hbox (badness 10000) detected at line 70
+[][][]
+
+Underfull \hbox (badness 10000) detected at line 94
+[][][]
+[12]
+Underfull \hbox (badness 10000) detected at line 116
+[][][]
+) [13] (./group__cin__ctl__firmware.tex) [14] (./group__cin__ctl__fclk.tex)
+[15] (./group__cin__ctl__status.tex) [16] (./group__cin__ctl__bias.tex)
+[17] (./group__cin__ctl__timing.tex) [18] (./group__cin__data__init.tex
+Overfull \vbox (0.80386pt too high) has occurred while \output is active
+[19]) [20] (./group__cin__data__framestore.tex [21] [22]
+Underfull \hbox (badness 10000) detected at line 99
+[][][]
+) [23] [24]
+Chapter 6.
+(./structcin__ctl.tex) (./structcin__ctl__config.tex) (./structcin__ctl__id.tex
+[25]) (./structcin__ctl__listener.tex) (./structcin__ctl__pwr__mon__t.tex)
+(./structcin__ctl__pwr__val.tex [26]) (./structcin__data.tex)
+(./structcin__data__callbacks.tex) (./structcin__data__frame.tex [27])
+(./structcin__data__packet.tex) (./structcin__data__proc.tex)
+(./structcin__data__stats.tex [28]) (./structcin__data__threads.tex)
+(./structcin__map__t.tex) (./structcin__port.tex [29])
+(./structdescramble__map__t.tex) (./structfifo.tex) [30]
+Chapter 7.
+(./cin_8h.tex
+Underfull \hbox (badness 10000) in paragraph at lines 3--10
+
+[31] [32] [33] [34] [35]
+Underfull \hbox (badness 10000) detected at line 699
+[][][]
+) (./cin__register__map_8h.tex [36] [37] [38] [39] [40]
+Underfull \hbox (badness 10000) detected at line 780
+[][][]
+pdfTeX warning (ext4): destination with the same identifier (name{cin__register
+__map_8h_LICENSE}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.783 ...ertarget{cin__register__map_8h_LICENSE}{}
+                                                  \subsection{L\+I\+C\+E\+N\...
+[41]pdfTeX warning (ext4): destination with the same identifier (name{cin__regi
+ster__map_8h_DESCRIPTION}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.796 ...rget{cin__register__map_8h_DESCRIPTION}{}
+                                                  \subsection{D\+E\+S\+C\+R\...
+) [42] (./refman.ind [43]) (./refman.aux (./group__cin__ctl__rw.aux)
+(./group__cin__ctl__firmware.aux) (./group__cin__ctl__fclk.aux)
+(./group__cin__ctl__status.aux) (./group__cin__ctl__bias.aux)
+(./group__cin__ctl__timing.aux) (./group__cin__data__init.aux)
+(./group__cin__data__framestore.aux))
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
+ )
+(see the transcript file for additional information){/usr/share/texlive/texmf-d
+ist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
+7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
+lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
+8a.pfb>
+Output written on refman.pdf (49 pages, 207953 bytes).
 Transcript written on refman.log.
 make[1]: Leaving directory `/home/travis/build/NSLS-II/libcin/doc/latex'
