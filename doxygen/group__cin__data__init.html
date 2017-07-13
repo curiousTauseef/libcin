@@ -67,16 +67,42 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga2858d4227ac61d5f646dbff42398cdab"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__data__init.html#ga2858d4227ac61d5f646dbff42398cdab">cin_data_init</a> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin, int packet_buffer_len, int frame_buffer_len, char *ipaddr, uint16_t port, char *cin_ipaddr, uint16_t <a class="el" href="structcin__port.html">cin_port</a>, int rcvbuf, cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr)</td></tr>
-<tr class="separator:ga2858d4227ac61d5f646dbff42398cdab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaaa244a5afff1c5c03034d23e45c3867b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__data__init.html#gaaa244a5afff1c5c03034d23e45c3867b">cin_data_stop_threads</a> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin)</td></tr>
-<tr class="separator:gaaa244a5afff1c5c03034d23e45c3867b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga804892f6ff6b347d844cae599daa4eee"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__data__init.html#ga804892f6ff6b347d844cae599daa4eee">cin_data_init</a> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin, char *ipaddr, char *bind_ipaddr, uint16_t oport, uint16_t iport, int rcvbuf, int packet_buffer_len, int frame_buffer_len, cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr)</td></tr>
+<tr class="separator:ga804892f6ff6b347d844cae599daa4eee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga32085025ef9031752c1853a110f15dc4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__data__init.html#ga32085025ef9031752c1853a110f15dc4">cin_data_destroy</a> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin)</td></tr>
+<tr class="separator:ga32085025ef9031752c1853a110f15dc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Initialization group </p>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga2858d4227ac61d5f646dbff42398cdab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga2858d4227ac61d5f646dbff42398cdab">&#9670;&nbsp;</a></span>cin_data_init()</h2>
+<a id="ga32085025ef9031752c1853a110f15dc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga32085025ef9031752c1853a110f15dc4">&#9670;&nbsp;</a></span>cin_data_destroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cin_data_destroy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcin__data.html">cin_data_t</a> *&#160;</td>
+          <td class="paramname"><em>cin</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Close the cin data library and cleanup</p>
+<p>Stop all the processing threads and join them to the main thread. This function blocks until all threads have joined the main thread (program). This should be called to clean up the library before the program is exited</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cin</td><td>Handle to cin data library </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga804892f6ff6b347d844cae599daa4eee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga804892f6ff6b347d844cae599daa4eee">&#9670;&nbsp;</a></span>cin_data_init()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -90,6 +116,36 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>ipaddr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>bind_ipaddr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>oport</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>iport</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rcvbuf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>packet_buffer_len</em>, </td>
         </tr>
@@ -98,36 +154,6 @@ Functions</h2></td></tr>
           <td></td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>frame_buffer_len</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>ipaddr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>port</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>cin_ipaddr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>cin_port</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>rcvbuf</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -159,13 +185,13 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">cin</td><td>Handle to cin data library </td></tr>
+    <tr><td class="paramname">ipaddr</td><td>IP-Address of cin (if NULL defaults to standard) </td></tr>
+    <tr><td class="paramname">bind_addr</td><td>IP-Address to bind to (if NULL binds to 0.0.0.0) </td></tr>
+    <tr><td class="paramname">oport</td><td>UDP Port of CIN </td></tr>
+    <tr><td class="paramname">iport</td><td>UDP Port of host </td></tr>
+    <tr><td class="paramname">rcvbuf</td><td>TCP/IP Kernel recieve buffer size </td></tr>
     <tr><td class="paramname">packet_buffer_len</td><td>Length of packet buffer fifo (in units number of packets) </td></tr>
     <tr><td class="paramname">frame_buffer_len</td><td>Length of frame (assembler) buffer fifo (in units of number of frames) </td></tr>
-    <tr><td class="paramname">ipaddr</td><td>IP-Address to bind to (if NULL binds to 0.0.0.0) </td></tr>
-    <tr><td class="paramname">port</td><td>UDP Port of host </td></tr>
-    <tr><td class="paramname">cin_ipaddr</td><td>IP-Address of cin (if NULL defaults to standard) </td></tr>
-    <tr><td class="paramname"><a class="el" href="structcin__port.html">cin_port</a></td><td>UDP Port of CIN </td></tr>
-    <tr><td class="paramname">rcvbuf</td><td>TCP/IP Kernel recieve buffer size </td></tr>
     <tr><td class="paramname">push_callback</td><td>This function is called when a data structure is needed </td></tr>
     <tr><td class="paramname">pop_callback</td><td>This function is called when an image has been processed </td></tr>
     <tr><td class="paramname">usr_ptr</td><td>Pointer passed to callback functions </td></tr>
@@ -175,36 +201,10 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gaaa244a5afff1c5c03034d23e45c3867b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaaa244a5afff1c5c03034d23e45c3867b">&#9670;&nbsp;</a></span>cin_data_stop_threads()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cin_data_stop_threads </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structcin__data.html">cin_data_t</a> *&#160;</td>
-          <td class="paramname"><em>cin</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Stop all threads and wait</p>
-<p>Stop all the processing threads and join them to the main thread. This function blocks until all threads have joined the main thread (program). This should be called to clean up the library before the program is exited</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">cin</td><td>Handle to cin data library </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 12 2017 01:37:04 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 13 2017 13:23:54 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

@@ -560,6 +560,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>cin_report</b> (FILE 
 <tr class="separator:gac700bdbc5bd68e128fe446e23576b70e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga888fd017426a3718a875f6bdb5078b81"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__init.html#ga888fd017426a3718a875f6bdb5078b81">cin_ctl_destroy</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin)</td></tr>
 <tr class="separator:ga888fd017426a3718a875f6bdb5078b81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga46ff19d5b2ce89c428c82a5961425c67"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__init.html#ga46ff19d5b2ce89c428c82a5961425c67">cin_data_send_magic</a> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin)</td></tr>
+<tr class="separator:ga46ff19d5b2ce89c428c82a5961425c67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga067c8576865a0bbf6bd82c9f9213b553"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__rw.html#ga067c8576865a0bbf6bd82c9f9213b553">cin_ctl_read</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, uint16_t reg, uint16_t *val, int wait)</td></tr>
 <tr class="separator:ga067c8576865a0bbf6bd82c9f9213b553"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac9b282b5280a34b0abb9ea0dcc6e3308"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__rw.html#gac9b282b5280a34b0abb9ea0dcc6e3308">cin_ctl_write</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, uint16_t reg, uint16_t val, int wait)</td></tr>
@@ -706,10 +708,10 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_reg_dump</b> (
 <tr class="memitem:aae2885cb3a184540053bf30c0f37a697"><td class="memItemLeft" align="right" valign="top"><a id="aae2885cb3a184540053bf30c0f37a697"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_config_read_file</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, const char *file)</td></tr>
 <tr class="separator:aae2885cb3a184540053bf30c0f37a697"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2858d4227ac61d5f646dbff42398cdab"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__data__init.html#ga2858d4227ac61d5f646dbff42398cdab">cin_data_init</a> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin, int packet_buffer_len, int frame_buffer_len, char *ipaddr, uint16_t port, char *cin_ipaddr, uint16_t <a class="el" href="structcin__port.html">cin_port</a>, int rcvbuf, cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr)</td></tr>
-<tr class="separator:ga2858d4227ac61d5f646dbff42398cdab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaaa244a5afff1c5c03034d23e45c3867b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__data__init.html#gaaa244a5afff1c5c03034d23e45c3867b">cin_data_stop_threads</a> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin)</td></tr>
-<tr class="separator:gaaa244a5afff1c5c03034d23e45c3867b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga804892f6ff6b347d844cae599daa4eee"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__data__init.html#ga804892f6ff6b347d844cae599daa4eee">cin_data_init</a> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin, char *ipaddr, char *bind_ipaddr, uint16_t oport, uint16_t iport, int rcvbuf, int packet_buffer_len, int frame_buffer_len, cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr)</td></tr>
+<tr class="separator:ga804892f6ff6b347d844cae599daa4eee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga32085025ef9031752c1853a110f15dc4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__data__init.html#ga32085025ef9031752c1853a110f15dc4">cin_data_destroy</a> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin)</td></tr>
+<tr class="separator:ga32085025ef9031752c1853a110f15dc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga66d8e0e63f2bb83a98177a828f3061b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__data__framestore.html#ga66d8e0e63f2bb83a98177a828f3061b9">cin_data_framestore_trigger</a> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin, int count)</td></tr>
 <tr class="separator:ga66d8e0e63f2bb83a98177a828f3061b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga4c4ccc7ec34ae559c28622d6b48017e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__data__framestore.html#ga4c4ccc7ec34ae559c28622d6b48017e8">cin_data_framestore_skip</a> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin, int count)</td></tr>
@@ -808,7 +810,7 @@ DESCRIPTION</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 12 2017 01:37:04 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 13 2017 13:23:54 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>
