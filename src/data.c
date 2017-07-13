@@ -59,7 +59,6 @@
  * -------------------------------------------------------------------------------
  */
 
-//int cin_init
 
 int cin_data_read(cin_port_t *dp, unsigned char* buffer){
   /* Read from the UDP stream */
@@ -88,8 +87,9 @@ int cin_data_write(cin_port_t *dp, char* buffer, int buffer_len){
  */
 
 
-int cin_data_init(cin_data_t *cin, int packet_buffer_len, int frame_buffer_len,
-                  char* ipaddr, char* cin_ipaddr, uint16_t port, uint16_t cin_port, int rcvbuf,
+int cin_data_init(cin_data_t *cin, 
+                  char* ipaddr, char* bind_ipaddr, uint16_t oport, uint16_t iport, int rcvbuf,
+                  int packet_buffer_len, int frame_buffer_len,
                   cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr){
 
   /* Initialize and start all the threads to acquire data */
@@ -106,27 +106,27 @@ int cin_data_init(cin_data_t *cin, int packet_buffer_len, int frame_buffer_len,
   // First open communications .....
 
   if(ipaddr == NULL){
+    cin->dp.srvaddr = CIN_DATA_IP;
+  } else {
+    cin->dp.srvaddr = ipaddr;
+  }
+
+  if(bind_ipaddr == NULL){
     cin->dp.cliaddr = "0.0.0.0";
   } else {
     cin->dp.cliaddr = ipaddr;
   }
 
-  if(port == 0){
+  if(iport == 0){
     cin->dp.cliport = CIN_DATA_PORT;
   } else {
-    cin->dp.cliport = port;
+    cin->dp.cliport = oport;
   }
 
-  if(cin_ipaddr == NULL){
-    cin->dp.srvaddr = CIN_DATA_IP;
-  } else {
-    cin->dp.srvaddr = cin_ipaddr;
-  }
-
-  if(cin_port == 0){
+  if(oport == 0){
     cin->dp.srvport = CIN_DATA_CTL_PORT;
   } else {
-    cin->dp.srvport = cin_port;
+    cin->dp.srvport = iport;
   }
 
   if(rcvbuf == 0){
@@ -222,6 +222,16 @@ int cin_data_init(cin_data_t *cin, int packet_buffer_len, int frame_buffer_len,
                         (void *)cin_data_descramble_thread,
                         (void *)descramble);
   return 0;
+}
+
+void cin_data_destroy(cin_data_t *cin)
+{
+  // First stop all the threads
+
+  cin_data_stop_threads(cin);
+
+  // TODO cleanup memory by doing free()
+
 }
 
 int cin_data_init_buffers(cin_data_t *cin, int packet_buffer_len, int frame_buffer_len){

@@ -709,23 +709,24 @@ int cin_config_read_file(cin_ctl_t *cin, const char *file);
  * Initialize the data handeling routines and start the threads for listening.
  *
  * @param cin Handle to cin data library
+ * @param ipaddr IP-Address of cin (if NULL defaults to standard)
+ * @param bind_addr IP-Address to bind to (if NULL binds to 0.0.0.0)
+ * @param oport UDP Port of CIN 
+ * @param iport UDP Port of host
+ * @param rcvbuf TCP/IP Kernel recieve buffer size
  * @param packet_buffer_len Length of packet buffer fifo (in units number of packets)
  * @param frame_buffer_len Length of frame (assembler) buffer fifo (in units of number of frames)
- * @param ipaddr IP-Address to bind to (if NULL binds to 0.0.0.0)
- * @param port UDP Port of host
- * @param cin_ipaddr IP-Address of cin (if NULL defaults to standard)
- * @param cin_port UDP Port of CIN 
- * @param rcvbuf TCP/IP Kernel recieve buffer size
  * @param push_callback This function is called when a data structure is needed
  * @param pop_callback This function is called when an image has been processed
  * @param usr_ptr Pointer passed to callback functions
  *
  */
-int cin_data_init(cin_data_t *cin, int packet_buffer_len, int frame_buffer_len,
-                  char* ipaddr, uint16_t port, char* cin_ipaddr, uint16_t cin_port, int rcvbuf,
-                  cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr);
-
-/** Stop all threads and wait
+int cin_data_init(cin_data_t *cin, 
+                  char* ipaddr, char* bind_ipaddr, uint16_t oport, uint16_t iport, int rcvbuf,
+                  int packet_buffer_len, int frame_buffer_len,
+                  cin_data_callback push_callback, cin_data_callback pop_callback, 
+                  void *usr_ptr);
+/** Close the cin data library and cleanup
  *
  * Stop all the processing threads and join them to the main thread. This function blocks until all
  * threads have joined the main thread (program). This should be called to clean up the library before
@@ -733,7 +734,7 @@ int cin_data_init(cin_data_t *cin, int packet_buffer_len, int frame_buffer_len,
  *
  * @param cin Handle to cin data library
  */
-void cin_data_stop_threads(cin_data_t *cin);
+void cin_data_destroy(cin_data_t *cin);
 /**
  * @}
  */

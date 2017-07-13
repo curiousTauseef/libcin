@@ -101,6 +101,7 @@ void *cin_data_descramble_thread(void *args);
 void* cin_data_buffer_push(void *arg);
 void cin_data_buffer_pop(void *arg);
 
+void cin_data_stop_threads(cin_data_t *cin);
 
 int cin_data_send_magic(cin_data_t *cin);
 #ifdef __cplusplus
