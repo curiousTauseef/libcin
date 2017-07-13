@@ -521,6 +521,14 @@ int cin_ctl_init(cin_ctl_t *cin,
  */
 int cin_ctl_destroy(cin_ctl_t *cin);
 
+/*!
+ * Send a magic packet to the CIN to initialize data
+ *
+ * @param cin handle to cin library
+ *
+ * @return Returns 0 on sucsess non-zero if error
+ */
+int cin_data_send_magic(cin_data_t *cin);
 /** @} */
 
 /*--------------------------------------------------------------------------------------------------------
