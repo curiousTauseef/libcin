@@ -76,7 +76,7 @@ extern const char *cin_build_version;
 #define CIN_CTL_MAX_WRITE_TRIES            5
 #define CIN_CTL_WRITE_SLEEP                100 // microsecs
 #define CIN_CTL_STREAM_CHUNK               256
-#define CIN_CTL_STREAM_SLEEP               10
+#define CIN_CTL_STREAM_SLEEP               15
 
 #define CIN_CTL_POWER_ENABLE               0x001F
 #define CIN_CTL_POWER_DISABLE              0x0000
@@ -389,7 +389,6 @@ typedef struct cin_data {
   /* FIFO Elements */
   fifo *packet_fifo;  
   fifo *frame_fifo;
-  fifo *image_fifo;
 
   /* Thread Information */
 

@@ -33,24 +33,28 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  if(cin_ctl_set_fabric_address(&cin, "10.23.4.207"))
+  //if(cin_ctl_set_fabric_address(&cin, "10.23.4.207"))
+  //{
+  //  return -1;
+  //}
+
+  cin_ctl_set_fclk(&cin, CIN_CTL_FCLK_200);
+  int fclk;
+  cin_ctl_get_fclk(&cin, &fclk);
+
+  if(cin_ctl_set_timing_regs(&cin, cin_config_timing, cin_config_timing_len))
   {
     return -1;
   }
 
-  cin_ctl_set_fclk(&cin, CIN_CTL_FCLK_125_C);
-  int fclk;
-  cin_ctl_get_fclk(&cin, &fclk);
+  cin_ctl_id_t cin_id;
+  if(cin_ctl_get_id(&cin, &cin_id))
+  {
+    return -1;
+  }
+  cin_ctl_set_cycle_time(&cin, 1);
+  cin_ctl_set_exposure_time(&cin, 0.001);
+  cin_ctl_int_trigger_start(&cin, 0);
 
-  //if(cin_ctl_set_timing_regs(&cin, cin_config_timing, cin_config_timing_len))
-  //{
-  //  return -1;
-  //}
-
-  //cin_ctl_id_t cin_id;
-  //if(cin_ctl_get_id(&cin, &cin_id))
-  //{
-  //  return -1;
-  //}
   return 0;
 }

@@ -88,6 +88,17 @@ void fifo_flush(fifo *f){
   pthread_mutex_unlock(&f->mutex);
 }
 
+int fifo_overruns(fifo *f)
+{
+  int _overruns;
+  pthread_mutex_lock(&f->mutex);
+  _overruns = f->overruns;
+  pthread_mutex_unlock(&f->mutex);
+
+  return _overruns;
+}
+  
+
 long int fifo_used_bytes(fifo *f){
   long int bytes = 0;
 
@@ -96,7 +107,6 @@ long int fifo_used_bytes(fifo *f){
 
   pthread_mutex_lock(&f->mutex);
   for(i=0;i<f->readers;i++){
-    //DEBUG_PRINT("head = %p, tail = %p\n", f->head, f->tail[i]);
     if(f->head >= f->tail[i]){
       used = (long int)(f->head - f->tail[i]);  
     } else {
@@ -136,12 +146,9 @@ void *fifo_get_head(fifo *f){
 
 void fifo_advance_head(fifo *f){
   /* Increment the head pointet */
-
   pthread_mutex_lock(&f->mutex);
 
   /* Check all the tail pointers */
- 
-  //DEBUG_PRINT("Head = %p\n", f->head);
 
   int i;
   for(i=0;i<f->readers;i++){
@@ -163,8 +170,6 @@ void fifo_advance_head(fifo *f){
     f->head += f->elem_size;
     f->full = 0;
   }
-
-  //DEBUG_PRINT("Advanced head to %p\n", f->head);
 
 cleanup:
   pthread_cond_broadcast(&f->signal);

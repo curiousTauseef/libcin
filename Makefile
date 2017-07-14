@@ -46,7 +46,7 @@ FIRMWARE=top_frame_fpga-v3012.bit
 
 all: lib/libcin.so lib/libcin.a\
 	bin/cin_power_up bin/cinregdump bin/convert_config \
-	test/smoketest test/configtest
+	test/smoketest test/configtest test/datatest
 
 GIT = git
 AWK = awk
@@ -129,6 +129,9 @@ bin/convert_config: utils/convert_config.o
 test/smoketest: test/smoketest.o lib/libcin.so  src/cin.h
 	$(CC) $(LDFLAGS) test/smoketest.o -o $@ $(LDLIBS) 
 
+test/datatest: test/datatest.o lib/libcin.so  src/cin.h
+	$(CC) $(LDFLAGS) test/datatest.o -o $@ $(LDLIBS) 
+
 test/configtest: test/configtest.o lib/libcin.so  src/cin.h
 	$(CC) $(LDFLAGS) test/configtest.o -o $@ $(LDLIBS) 
 
@@ -149,6 +152,7 @@ clean:
 	-$(RM) -rf utils/*.o
 	-$(RM) -rf test/*.o
 	-$(RM) -rf test/smoketest
+	-$(RM) -rf test/datatest
 	-$(RM) -rf test/configtest
 
 INSTALL = install

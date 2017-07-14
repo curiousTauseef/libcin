@@ -916,6 +916,11 @@ int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *val){
   int _status = 0;
 
   _status  = cin_ctl_read(cin, REG_BOARD_ID, &val->base_board_id, 0);
+  _status |= cin_ctl_read(cin,REG_HW_SERIAL_NUM, &val->base_serial_no, 0);
+  _status |= cin_ctl_read(cin,REG_FPGA_VERSION, &val->base_fpga_ver, 0);
+  _status |= cin_ctl_read(cin,REG_FRM_BOARD_ID, &val->fabric_board_id, 0);
+  _status |= cin_ctl_read(cin,REG_FRM_HW_SERIAL_NUM, &val->fabric_serial_no, 0);
+  _status |= cin_ctl_read(cin,REG_FRM_FPGA_VERSION, &val->fabric_fpga_ver, 0);
   DEBUG_PRINT("Base Board ID           :  0x%04X\n",val->base_board_id);
   DEBUG_PRINT("Base HW Serial Number   :  0x%04X\n",val->base_serial_no);
   DEBUG_PRINT("Base FPGA Version       :  0x%04X\n",val->base_fpga_ver);
@@ -923,11 +928,6 @@ int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *val){
   DEBUG_PRINT("Fabric HW Serial Number :  0x%04X\n",val->fabric_serial_no);
   DEBUG_PRINT("Fabric FPGA Version     :  0x%04X\n",val->fabric_fpga_ver);
 
-  _status |= cin_ctl_read(cin,REG_HW_SERIAL_NUM, &val->base_serial_no, 0);
-  _status |= cin_ctl_read(cin,REG_FPGA_VERSION, &val->base_fpga_ver, 0);
-  _status |= cin_ctl_read(cin,REG_FRM_BOARD_ID, &val->fabric_board_id, 0);
-  _status |= cin_ctl_read(cin,REG_FRM_HW_SERIAL_NUM, &val->fabric_serial_no, 0);
-  _status |= cin_ctl_read(cin,REG_FRM_FPGA_VERSION, &val->fabric_fpga_ver, 0);
 
   if(_status){
     ERROR_COMMENT("Unable to read CIN ID\n");
@@ -1440,6 +1440,7 @@ int cin_ctl_frame_count_reset(cin_ctl_t *cin){
 /* Setting of IP Addresses */
 
 int cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip){
+  DEBUG_PRINT("Setting fabric address to %s\n", ip);
   return cin_ctl_set_address(cin, ip, REG_IF_IP_FAB1B0, REG_IF_IP_FAB1B1);
 }
 
@@ -1665,6 +1666,7 @@ int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len)
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, i * 2, 1);
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA, vals[i], 1);
     _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_WR_CCD_CLOCK_REG, 1);
+    usleep(20);
     if(_status)
     {
       ERROR_PRINT("Unable to write %04X to cin (line %d)\n", vals[i], i);

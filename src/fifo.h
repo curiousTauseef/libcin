@@ -77,6 +77,7 @@ long int fifo_used_bytes(fifo *f);
 double fifo_percent_full(fifo *f);
 long int fifo_used_elements(fifo *f);
 void fifo_flush(fifo *f);
+int fifo_overruns(fifo *f);
 #ifdef __cplusplus
 }
 #endif
