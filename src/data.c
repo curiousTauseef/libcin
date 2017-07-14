@@ -691,10 +691,6 @@ void cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats){
   stats->framerate = framerate;
   stats->datarate = datarate;
 
-  // Lock the fifo mutexes
-  //pthread_mutex_lock(&cin->packet_fifo->mutex);
-  //pthread_mutex_lock(&cin->frame_fifo->mutex);
-
   stats->packet_percent_full = fifo_percent_full(cin->packet_fifo);
   stats->frame_percent_full = fifo_percent_full(cin->frame_fifo);
   stats->packet_used = fifo_used_elements(cin->packet_fifo);
@@ -706,8 +702,6 @@ void cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats){
 
   // Unlock all mutexes
   pthread_mutex_unlock(&cin->stats_mutex);
-  //pthread_mutex_unlock(&cin->packet_fifo->mutex);
-  //pthread_mutex_unlock(&cin->frame_fifo->mutex);
 }
 
 void cin_data_show_stats(FILE *fp, cin_data_stats_t stats){

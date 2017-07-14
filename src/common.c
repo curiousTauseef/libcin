@@ -38,6 +38,41 @@
 
 #include "cin.h"
 #include "common.h"
+#include "control.h"
+#include "data.h"
+
+/* -----------------------------------------------------------------------------------------
+ *
+ * Routines for debug printing
+ *
+ * -----------------------------------------------------------------------------------------
+ */
+
+int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *data)
+{
+  if(cin_ctl_pwr(cin, 0))
+  {
+    return -1;
+  }
+  sleep(1);
+  if(cin_ctl_pwr(cin, 1))
+  {
+    return -1;
+  }
+  sleep(1);
+
+  if(cin_ctl_load_firmware(cin))
+  {
+    return -1;
+  }
+
+  if(cin_ctl_set_fclk(&cin, CIN_CTL_FCLK_200))
+  {
+    return -1;
+  };
+  int fclk;
+  cin_ctl_get_fclk(&cin, &fclk);
+}
 
 /* -----------------------------------------------------------------------------------------
  *
