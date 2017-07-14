@@ -17,21 +17,6 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  if(cin_ctl_pwr(&cin, 0))
-  {
-    return -1;
-  }
-  sleep(1);
-  if(cin_ctl_pwr(&cin, 1))
-  {
-    return -1;
-  }
-  sleep(1);
-
-  if(cin_ctl_load_firmware(&cin))
-  {
-    return -1;
-  }
 
   //if(cin_ctl_set_fabric_address(&cin, "10.23.4.207"))
   //{
