@@ -88,7 +88,7 @@ int cin_data_write(cin_port_t *dp, char* buffer, int buffer_len){
 
 
 int cin_data_init(cin_data_t *cin, 
-                  char* ipaddr, char* bind_ipaddr, uint16_t oport, uint16_t iport, int rcvbuf,
+                  char* addr, uint16_t port, char* bind_addr, uint16_t bind_port, int rcvbuf,
                   int packet_buffer_len, int frame_buffer_len,
                   cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr){
 
@@ -99,43 +99,20 @@ int cin_data_init(cin_data_t *cin,
   /* For DEBUG print out the process id */
 
   DEBUG_COMMENT("Starting cindata init.\n");
-  DEBUG_PRINT("build sha     = %s\n", cin_build_git_sha);
-  DEBUG_PRINT("build time    = %s\n", cin_build_git_time);
-  DEBUG_PRINT("build version = %s\n", cin_build_version);
+  DEBUG_PRINT("Build sha     = %s\n", cin_build_git_sha);
+  DEBUG_PRINT("Build time    = %s\n", cin_build_git_time);
+  DEBUG_PRINT("Build version = %s\n", cin_build_version);
 
   // First open communications .....
 
-  if(ipaddr == NULL){
-    cin->dp.srvaddr = CIN_DATA_IP;
-  } else {
-    cin->dp.srvaddr = ipaddr;
-  }
+  cin->addr       = cin_com_set_string(addr, CIN_DATA_IP);
+  cin->bind_addr  = cin_com_set_string(bind_addr, "0.0.0.0");
+  cin->port       = cin_com_set_int(port, CIN_DATA_CIN_PORT);
+  cin->bind_port  = cin_com_set_int(bind_port, CIN_DATA_BIND_PORT);
+  cin->recv_buf   = cin_com_set_int(rcvbuf, CIN_DATA_RCVBUF);
 
-  if(bind_ipaddr == NULL){
-    cin->dp.cliaddr = "0.0.0.0";
-  } else {
-    cin->dp.cliaddr = bind_ipaddr;
-  }
-
-  if(iport == 0){
-    cin->dp.cliport = CIN_DATA_PORT;
-  } else {
-    cin->dp.cliport = oport;
-  }
-
-  if(oport == 0){
-    cin->dp.srvport = CIN_DATA_CTL_PORT;
-  } else {
-    cin->dp.srvport = iport;
-  }
-
-  if(rcvbuf == 0){
-    cin->dp.rcvbuf = CIN_DATA_RCVBUF;
-  } else {
-    cin->dp.rcvbuf = rcvbuf;
-  }
-
-  if(cin_init_port(&cin->dp)){
+  if(cin_com_init_port(&cin->dp, cin->addr, cin->port, 
+                       cin->bind_addr, cin->bind_port, cin->recv_buf)){
     return -1;
   }
   
@@ -172,8 +149,6 @@ int cin_data_init(cin_data_t *cin,
   cin->assembler_thread.started = 0;
   cin->descramble_thread.started = 0;
   pthread_mutex_init(&cin->stats_mutex, NULL);
-  pthread_mutex_init(&cin->listen_mutex, NULL);
-  pthread_mutex_init(&cin->assembler_mutex, NULL);
   pthread_mutex_init(&cin->descramble_mutex, NULL);
   pthread_mutex_init(&cin->framestore_mutex, NULL);
 

@@ -34,9 +34,17 @@
 
 /* Profiling Functions */
 struct timespec timespec_diff(struct timespec start, struct timespec end);
+
 int timespec_after(struct timespec start, struct timespec end);
 
 struct timeval timeval_diff(struct timeval start, struct timeval end);
 
-int cin_init_port(cin_port_t *cp);
+int cin_com_init_port(cin_port_t *port, const char *cin_addr, int cin_port, 
+                       const char *bind_addr, int bind_port, int recv_buf);
+
+char *cin_com_set_string(char *val, char *def);
+
+int cin_com_set_int(int val, int def);
+
+int cin_com_set_fabric_comms(cin_ctl_t *cin_ctl, cin_data_t *cin_data);
 #endif

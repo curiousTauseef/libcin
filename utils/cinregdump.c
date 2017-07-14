@@ -9,7 +9,7 @@ int main(int argc, char *argv[]){
 
   cin_ctl_t cin;
 
-  if(cin_ctl_init(&cin, NULL, NULL, 0, 0, 0, 0)){
+  if(cin_ctl_init(&cin, NULL, 0, 0, NULL, 0, 0)){
     perror("Unable to initialize CIN port");
     return -1;
   }

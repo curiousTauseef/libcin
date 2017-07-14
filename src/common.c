@@ -32,14 +32,13 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
 #include "cin.h"
 #include "common.h"
-#include "control.h"
-#include "data.h"
 
 /* -----------------------------------------------------------------------------------------
  *
@@ -48,30 +47,52 @@
  * -----------------------------------------------------------------------------------------
  */
 
-int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *data)
+int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data)
 {
-  if(cin_ctl_pwr(cin, 0))
-  {
-    return -1;
-  }
-  sleep(1);
-  if(cin_ctl_pwr(cin, 1))
+  // Power cycle the CIN
+
+  if(cin_ctl_pwr(cin_ctl, 0))
   {
     return -1;
   }
   sleep(1);
 
-  if(cin_ctl_load_firmware(cin))
+  if(cin_ctl_pwr(cin_ctl, 1))
+  {
+    return -1;
+  }
+  sleep(1);
+
+  // Load the firmware
+
+  if(cin_ctl_load_firmware(cin_ctl))
   {
     return -1;
   }
 
-  if(cin_ctl_set_fclk(&cin, CIN_CTL_FCLK_200))
+  // Get the ID of the CIN
+  cin_ctl_id_t cin_id;
+  if(cin_ctl_get_id(cin_ctl, &cin_id))
   {
     return -1;
-  };
-  int fclk;
-  cin_ctl_get_fclk(&cin, &fclk);
+  }
+
+  if(cin_com_set_fabric_comms(cin_ctl, cin_data))
+  {
+    return -1;
+  }
+
+  return 0;
+}
+
+int cin_com_set_fabric_comms(cin_ctl_t *cin_ctl, cin_data_t *cin_data)
+{
+  // Set the fabric comms depending on how the cin_data has been setup
+
+  cin_ctl_set_fabric_address(cin_ctl, cin_data->addr);
+  cin_data_send_magic(cin_data);
+
+  return 0;
 }
 
 /* -----------------------------------------------------------------------------------------
@@ -141,11 +162,22 @@ int timespec_after(struct timespec a, struct timespec b){
   return 0;
 }
 
-int cin_init_port(cin_port_t *port){
+/* -----------------------------------------------------------------------------------------
+ *
+ * IP Communication Routines
+ *
+ * -----------------------------------------------------------------------------------------
+ */
 
-  DEBUG_PRINT("Client address = %s:%d\n", port->cliaddr, port->cliport);
-  DEBUG_PRINT("Server address = %s:%d\n", port->srvaddr, port->srvport);
+int cin_com_init_port(cin_port_t *port, const char *cin_addr, int cin_port, 
+                       const char *bind_addr, int bind_port, int recv_buf)
+{
 
+  DEBUG_PRINT("CIN address     = %s:%d\n", cin_addr, cin_port);
+  DEBUG_PRINT("Bind to address = %s:%d\n", bind_addr, bind_port);
+
+  // Open Datagram (UDP) Socket
+  
   port->sockfd = socket(AF_INET, SOCK_DGRAM, 0);
   if (port->sockfd < 0) {
     ERROR_COMMENT("socket() failed.\n");
@@ -159,56 +191,70 @@ int cin_init_port(cin_port_t *port){
     return -1;
   }
 
-  // initialize CIN (server) and client (us!) sockaddr structs
+  // According to convention
+  // srv -> CIN 
+  // cli -> host computer
+  
   memset(&port->sin_srv, 0, sizeof(struct sockaddr_in));
   memset(&port->sin_cli, 0, sizeof(struct sockaddr_in));
 
+  // htons is used to correct the endian for IP comms
+  // family is always AF_INET
+  
   port->sin_srv.sin_family = AF_INET;
-  port->sin_srv.sin_port = htons(port->srvport);
+  port->sin_srv.sin_port = htons(cin_port);
   port->sin_cli.sin_family = AF_INET;
-  port->sin_cli.sin_port = htons(port->cliport);
+  port->sin_cli.sin_port = htons(bind_port);
   port->slen = sizeof(struct sockaddr_in);
 
-  if(inet_aton(port->srvaddr, &port->sin_srv.sin_addr) == 0) {
+  // Use inet_aton to convert from ip4 dot format (string) to address
+  
+  if(inet_aton(cin_addr, &port->sin_srv.sin_addr) == 0) {
     ERROR_COMMENT("inet_aton() Failed.\n");
     return 1;
   }
 
-  if(inet_aton(port->cliaddr, &port->sin_cli.sin_addr) == 0) {
+  if(inet_aton(bind_addr, &port->sin_cli.sin_addr) == 0) {
     ERROR_COMMENT("inet_aton() Failed.\n");
     return 1;
   }
 
-  if(bind(port->sockfd, (struct sockaddr *)&port->sin_cli, sizeof(port->sin_cli))){
+  // 
+
+  if(bind(port->sockfd, (struct sockaddr *)&port->sin_cli, 
+        sizeof(port->sin_cli))){
     ERROR_COMMENT("Bind failed.\n");
     return -1;
   }
 
-  port->rcvbuf = port->rcvbuf * 1024 * 1024; // Convert to Mb
-  DEBUG_PRINT("Requesting recieve buffer of %d Mb (%d) \n", 
-      port->rcvbuf / (1024*1024), port->rcvbuf );
+  if(recv_buf)
+  {
+  
+    DEBUG_PRINT("Requesting recieve buffer of %d (%d Mb) \n", 
+                recv_buf, recv_buf / (1024 * 1024));
 
-  if(setsockopt(port->sockfd, SOL_SOCKET, SO_RCVBUF, 
-                &port->rcvbuf, sizeof(port->rcvbuf)) == -1){
-    ERROR_COMMENT("CIN data port - unable to set receive buffer :");
-  } 
+    if(setsockopt(port->sockfd, SOL_SOCKET, SO_RCVBUF, 
+                  &recv_buf, sizeof(recv_buf)) == -1){
+      ERROR_COMMENT("Unable to set receive buffer.");
+    } 
 
-  socklen_t rcvbuf_rb_len = sizeof(port->rcvbuf_rb);
-  if(getsockopt(port->sockfd, SOL_SOCKET, SO_RCVBUF,
-                &port->rcvbuf_rb, &rcvbuf_rb_len) == -1){
-    ERROR_COMMENT("CIN data port - unable to get receive buffer :");
+    int recv_buf_rb;
+    socklen_t rcvbuf_rb_len = sizeof(recv_buf_rb);
+    if(getsockopt(port->sockfd, SOL_SOCKET, SO_RCVBUF,
+                  &recv_buf_rb, &rcvbuf_rb_len) == -1){
+      ERROR_COMMENT("Unable to get receive buffer.");
+    }
+
+    DEBUG_PRINT("Recieve buffer returns %d (%d Mb)\n",
+        recv_buf_rb, recv_buf_rb / (1024*1024) );
+
+    if(recv_buf_rb/2 != recv_buf){
+      ERROR_PRINT("WARNING : Unable to set RCVBUFFER to size %d (%d Mb)\n",
+        recv_buf, recv_buf / (1024*1024));
+      ERROR_PRINT("WARNING : RCVBUFFER is set to %d Mb (%d bytes)\n",
+        recv_buf_rb, recv_buf_rb / (1024*1024));
+    }
   }
-
-  DEBUG_PRINT("Recieve buffer returns %d Mb (%d)\n",
-      port->rcvbuf_rb / (1024*1024), port->rcvbuf_rb );
-
-  if(port->rcvbuf_rb/2 != port->rcvbuf){
-    ERROR_PRINT("WARNING : Unable to set RCVBUFFER to size %d Mb (%d bytes)\n",
-      port->rcvbuf / (1024*1024), port->rcvbuf );
-    ERROR_PRINT("WARNING : RCVBUFFER is set to %d Mb (%d bytes)\n",
-      port->rcvbuf_rb / (1024*1024), port->rcvbuf_rb );
-  }
-
 
   int zero = 0;
   if(setsockopt(port->sockfd, SOL_SOCKET, SO_TIMESTAMP,
@@ -221,3 +267,38 @@ int cin_init_port(cin_port_t *port){
   return 0;
 }
 
+int cin_com_set_int(int val, int def)
+{
+  if(val == 0)
+  {
+    return def;
+  }
+
+  return val;
+}
+
+char *cin_com_set_string(char *val, char *def)
+{
+  char *_val, *_rtn;
+  if(val != NULL)
+  {
+    _val = val;
+  } else {
+    _val = def;
+  }
+
+  // Now copy
+
+  int slen;
+  slen = strlen(_val);
+ 
+  _rtn = malloc(sizeof(char) * slen);
+  if(_rtn == NULL)
+  {
+    return NULL;
+  }
+
+  strcpy(_rtn, _val);
+
+  return _rtn;
+}

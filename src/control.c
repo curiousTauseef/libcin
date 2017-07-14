@@ -1,7 +1,7 @@
 /* vim: set ts=2 sw=2 tw=0 noet :
    
    libcin : Driver for LBNL FastCCD 
- *  Copyright (c) 2014, Brookhaven Science Associates, Brookhaven National Laboratory
+   Copyright (c) 2014, Brookhaven Science Associates, Brookhaven National Laboratory
    All rights reserved.
    
    Redistribution and use in source and binary forms, with or without
@@ -49,59 +49,26 @@
 /**************************** INITIALIZATION **************************/
 
 int cin_ctl_init(cin_ctl_t *cin, 
-                 const char* ipaddr, const char *bind_addr,
-                 uint16_t oport, uint16_t iport, 
-                 uint16_t soport, uint16_t siport) {
-  
+                 char *addr, uint16_t port, uint16_t sport, 
+                 char *bind_addr, uint16_t bind_port, uint16_t bind_sport) 
+{ 
   // Initialize the config
 
   cin_config_init(&(cin->config));
 
+  cin->addr       = cin_com_set_string(addr, CIN_CTL_IP);
+  cin->bind_addr  = cin_com_set_string(bind_addr, "0.0.0.0");
+  cin->port       = cin_com_set_int(port, CIN_CTL_CIN_PORT);
+  cin->bind_port  = cin_com_set_int(bind_port, CIN_CTL_BIND_PORT);
+  cin->sport      = cin_com_set_int(sport, CIN_CTL_FRMW_CIN_PORT);
+  cin->bind_sport = cin_com_set_int(bind_sport, CIN_CTL_FRMW_BIND_PORT);
 
-  if(ipaddr == NULL){ 
-    cin->ctl_port.srvaddr = CIN_CTL_IP; 
-    cin->stream_port.srvaddr = CIN_CTL_IP; 
-  } else {
-    cin->ctl_port.srvaddr = strdup(ipaddr); 
-    cin->stream_port.srvaddr = strdup(ipaddr); 
-  }
-
-  if(bind_addr == NULL){ 
-    cin->ctl_port.cliaddr = "0.0.0.0";
-    cin->stream_port.cliaddr = "0.0.0.0";
-  } else {
-    cin->ctl_port.cliaddr = strdup(bind_addr); 
-    cin->stream_port.cliaddr = strdup(bind_addr); 
-  }
-   
-  if(oport == 0){ 
-    cin->ctl_port.srvport = CIN_CTL_SVR_PORT; 
-  } else {
-    cin->ctl_port.srvport = oport; 
-  }
-
-  if(iport == 0){
-    cin->ctl_port.cliport = CIN_CTL_CLI_PORT;
-  } else {
-    cin->ctl_port.cliport = iport;
-  }
-
-  if(siport == 0){
-    cin->stream_port.srvport = CIN_CTL_SVR_FRMW_PORT;
-  } else {
-    cin->stream_port.srvport = iport;
-  }
-
-  if(soport == 0){
-    cin->stream_port.cliport = CIN_CTL_CLI_FRMW_PORT;
-  } else {
-    cin->stream_port.cliport = iport;
-  }
-  
-  cin->ctl_port.rcvbuf = CIN_CTL_RCVBUF;
-  cin->stream_port.rcvbuf = CIN_CTL_RCVBUF;
-
-  if(cin_init_port(&(cin->ctl_port)) || cin_init_port(&(cin->stream_port))){
+  if(cin_com_init_port(&cin->ctl_port, 
+                       cin->addr, cin->port, 
+                       cin->bind_addr, cin->bind_port, 0) || 
+     cin_com_init_port(&cin->stream_port, 
+                       cin->addr, cin->sport, 
+                       cin->bind_addr, cin->bind_sport, 0)){
      ERROR_COMMENT("Unable to open commuincations\n");
      return -1;
   }
