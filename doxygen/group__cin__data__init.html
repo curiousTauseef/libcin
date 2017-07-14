@@ -67,8 +67,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga804892f6ff6b347d844cae599daa4eee"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__data__init.html#ga804892f6ff6b347d844cae599daa4eee">cin_data_init</a> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin, char *ipaddr, char *bind_ipaddr, uint16_t oport, uint16_t iport, int rcvbuf, int packet_buffer_len, int frame_buffer_len, cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr)</td></tr>
-<tr class="separator:ga804892f6ff6b347d844cae599daa4eee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga449ef662c9abc57186c1e5dee99dbc4c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__data__init.html#ga449ef662c9abc57186c1e5dee99dbc4c">cin_data_init</a> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin, char *addr, uint16_t port, char *bind_addr, uint16_t bind_port, int rcvbuf, int packet_buffer_len, int frame_buffer_len, cin_data_callback push_callback, cin_data_callback pop_callback, void *usr_ptr)</td></tr>
+<tr class="separator:ga449ef662c9abc57186c1e5dee99dbc4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga32085025ef9031752c1853a110f15dc4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__data__init.html#ga32085025ef9031752c1853a110f15dc4">cin_data_destroy</a> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin)</td></tr>
 <tr class="separator:ga32085025ef9031752c1853a110f15dc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -101,8 +101,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga804892f6ff6b347d844cae599daa4eee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga804892f6ff6b347d844cae599daa4eee">&#9670;&nbsp;</a></span>cin_data_init()</h2>
+<a id="ga449ef662c9abc57186c1e5dee99dbc4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga449ef662c9abc57186c1e5dee99dbc4c">&#9670;&nbsp;</a></span>cin_data_init()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -117,25 +117,25 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>ipaddr</em>, </td>
+          <td class="paramname"><em>addr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>port</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>bind_ipaddr</em>, </td>
+          <td class="paramname"><em>bind_addr</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>oport</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>iport</em>, </td>
+          <td class="paramname"><em>bind_port</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -185,10 +185,10 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">cin</td><td>Handle to cin data library </td></tr>
-    <tr><td class="paramname">ipaddr</td><td>IP-Address of cin (if NULL defaults to standard) </td></tr>
+    <tr><td class="paramname">addr</td><td>IP-Address of cin (if NULL defaults to standard) </td></tr>
+    <tr><td class="paramname">port</td><td>UDP Port of CIN </td></tr>
     <tr><td class="paramname">bind_addr</td><td>IP-Address to bind to (if NULL binds to 0.0.0.0) </td></tr>
-    <tr><td class="paramname">oport</td><td>UDP Port of CIN </td></tr>
-    <tr><td class="paramname">iport</td><td>UDP Port of host </td></tr>
+    <tr><td class="paramname">bind_port</td><td>UDP Port of host </td></tr>
     <tr><td class="paramname">rcvbuf</td><td>TCP/IP Kernel recieve buffer size </td></tr>
     <tr><td class="paramname">packet_buffer_len</td><td>Length of packet buffer fifo (in units number of packets) </td></tr>
     <tr><td class="paramname">frame_buffer_len</td><td>Length of frame (assembler) buffer fifo (in units of number of frames) </td></tr>
@@ -204,7 +204,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jul 14 2017 02:05:50 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jul 14 2017 21:05:11 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

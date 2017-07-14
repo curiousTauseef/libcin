@@ -83,12 +83,6 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a261ec834b97dd1cbc623f2bb5f2288dd"><td class="memItemLeft" align="right" valign="top"><a id="a261ec834b97dd1cbc623f2bb5f2288dd"></a>
 <a class="el" href="structcin__data__threads.html">cin_data_threads_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>descramble_thread</b></td></tr>
 <tr class="separator:a261ec834b97dd1cbc623f2bb5f2288dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a1bae0cd018e88a84b3b4d033ee3583"><td class="memItemLeft" align="right" valign="top"><a id="a2a1bae0cd018e88a84b3b4d033ee3583"></a>
-pthread_mutex_t&#160;</td><td class="memItemRight" valign="bottom"><b>listen_mutex</b></td></tr>
-<tr class="separator:a2a1bae0cd018e88a84b3b4d033ee3583"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf5f3014e7db8defdcb8b7fcd90ac96c"><td class="memItemLeft" align="right" valign="top"><a id="aaf5f3014e7db8defdcb8b7fcd90ac96c"></a>
-pthread_mutex_t&#160;</td><td class="memItemRight" valign="bottom"><b>assembler_mutex</b></td></tr>
-<tr class="separator:aaf5f3014e7db8defdcb8b7fcd90ac96c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d7c56ed19eba8648f08fc7870783a41"><td class="memItemLeft" align="right" valign="top"><a id="a2d7c56ed19eba8648f08fc7870783a41"></a>
 pthread_mutex_t&#160;</td><td class="memItemRight" valign="bottom"><b>descramble_mutex</b></td></tr>
 <tr class="separator:a2d7c56ed19eba8648f08fc7870783a41"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -101,6 +95,21 @@ pthread_mutex_t&#160;</td><td class="memItemRight" valign="bottom"><b>framestore
 <tr class="memitem:a462e88899cc617196dce631a2dde03ec"><td class="memItemLeft" align="right" valign="top"><a id="a462e88899cc617196dce631a2dde03ec"></a>
 <a class="el" href="structcin__data__callbacks.html">cin_data_callbacks_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>callbacks</b></td></tr>
 <tr class="separator:a462e88899cc617196dce631a2dde03ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ff6387771f783d5d7b61f122f14784e"><td class="memItemLeft" align="right" valign="top"><a id="a4ff6387771f783d5d7b61f122f14784e"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><b>addr</b></td></tr>
+<tr class="separator:a4ff6387771f783d5d7b61f122f14784e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46b5df291d3119676b590ed7d1cbf7a3"><td class="memItemLeft" align="right" valign="top"><a id="a46b5df291d3119676b590ed7d1cbf7a3"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><b>bind_addr</b></td></tr>
+<tr class="separator:a46b5df291d3119676b590ed7d1cbf7a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc486cf074257412f988aa747c011fc7"><td class="memItemLeft" align="right" valign="top"><a id="adc486cf074257412f988aa747c011fc7"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>port</b></td></tr>
+<tr class="separator:adc486cf074257412f988aa747c011fc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a186e56c9a7adac7c31f41eb7679f210a"><td class="memItemLeft" align="right" valign="top"><a id="a186e56c9a7adac7c31f41eb7679f210a"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>bind_port</b></td></tr>
+<tr class="separator:a186e56c9a7adac7c31f41eb7679f210a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0387545a11e46fc7a185ddee225c281a"><td class="memItemLeft" align="right" valign="top"><a id="a0387545a11e46fc7a185ddee225c281a"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>recv_buf</b></td></tr>
+<tr class="separator:a0387545a11e46fc7a185ddee225c281a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0f48e14343824921dc6d1700cf8acd1"><td class="memItemLeft" align="right" valign="top"><a id="ae0f48e14343824921dc6d1700cf8acd1"></a>
 <a class="el" href="structcin__port.html">cin_port_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>dp</b></td></tr>
 <tr class="separator:ae0f48e14343824921dc6d1700cf8acd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,7 +144,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>framestore_counter</b>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jul 14 2017 02:05:50 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jul 14 2017 21:05:11 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>
