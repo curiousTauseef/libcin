@@ -261,21 +261,7 @@ extern int cin_config_bias_len;
 extern uint16_t cin_config_fcric_200[];
 extern int cin_config_fcric_200_len;
 
-#define CIN_CONFIG_MAX_STRING 256
-#define CIN_CONFIG_MAX_DATA 5000
-typedef struct cin_ctl_config {
-  char name[CIN_CONFIG_MAX_STRING];
-  char firmware_filename[CIN_CONFIG_MAX_STRING];
-  int overscan;
-  int columns;
-  int fclk;
-  uint16_t timing[CIN_CONFIG_MAX_DATA][2];
-  int timing_len;
-  uint16_t fcric[CIN_CONFIG_MAX_DATA][2];
-  int fcric_len;
-  uint16_t bias[CIN_CONFIG_MAX_DATA][2];
-  int bias_len;
-} cin_ctl_config_t;
+#define CIN_CONFIG_MAX_STRING 40
 
 #define FIFO_MAX_READERS 10 
 
@@ -309,6 +295,18 @@ typedef struct cin_port {
   socklen_t slen; /* for recvfrom() */
 } cin_port_t;
 
+#define CIN_CONFIG_MAX_TIMING_DATA       880  /**< Max = 55 per state, 16 states */
+#define CIN_CONFIG_MAX_TIMING_MODES      20  /**< 20 states max */
+
+typedef struct cin_config_timing {
+  uint16_t *data;           /**< Pointer to timing data */
+  int data_len;             /**< timing data length */
+  char name[40];            /**< String for config name */
+  int rows;                 /**< Rows for this timing setup */
+  int cols;                 /**< Cols for this timing setup */
+  int overscan;             /**< Number of overscan cols for this setup */
+  int fclk_freq;            /**< FCLK Frequency to use */
+} cin_config_timing_t;
 
 typedef struct cin_ctl {
   // Store IP Address information
@@ -323,8 +321,9 @@ typedef struct cin_ctl {
   cin_port_t ctl_port;
   cin_port_t stream_port;
 
-  // Config information
-  cin_ctl_config_t config;
+  // Config information 
+  cin_config_timing_t timing[CIN_CONFIG_MAX_TIMING_MODES];
+  int timing_num;
 
   // Mutex for threaded access
   cin_ctl_listener_t *listener;

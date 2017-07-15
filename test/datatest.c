@@ -10,7 +10,7 @@ int main(int argc, char *argv[]){
 
   cin_data_t cin_data;
 
-  cin_data_init(&cin_data, NULL, NULL, 0, 0, 0, 
+  cin_data_init(&cin_data, NULL, 0, NULL, 0, 0, 
                            1000, 1000, NULL, NULL, NULL);
 
   while(1)

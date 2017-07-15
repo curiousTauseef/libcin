@@ -54,7 +54,8 @@ int cin_ctl_init(cin_ctl_t *cin,
 { 
   // Initialize the config
 
-  cin_config_init(&(cin->config));
+  cin_config_init(cin);
+  cin_config_find_timing(cin, "default");
 
   cin->addr       = cin_com_set_string(addr, CIN_CTL_IP);
   cin->bind_addr  = cin_com_set_string(bind_addr, "0.0.0.0");
@@ -754,12 +755,27 @@ int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq){
     return -1;
   }
 
+  // Now verrify that fclk has been set
+  
+  int _fclk;
+  if(cin_ctl_get_fclk(cin, &_fclk))
+  {
+    ERROR_COMMENT("Unable to read FCLK value.\n");
+    return -1;
+  }
+
+  if(_fclk != clkfreq)
+  {
+    ERROR_PRINT("Failed to set fclk frequency. Set %d got %d\n", clkfreq, _fclk);
+    return -1;
+  }
+
   DEBUG_PRINT("Set FCLK to %d\n", clkfreq);
   return 0;
 }
 
-int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq){ 
-
+int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq)
+{
   uint16_t _val;
   int _status;
 

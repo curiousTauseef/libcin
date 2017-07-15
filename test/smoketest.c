@@ -10,8 +10,8 @@ int main(int argc, char *argv[]){
   cin_ctl_t cin_ctl;
   cin_data_t cin_data;
 
-  cin_ctl_init(&cin_ctl, NULL, NULL, 0, 0, 0, 0);
-  cin_data_init(&cin_data, NULL, NULL, 0, 0, 0, 
+  cin_ctl_init(&cin_ctl, NULL, 0, 0, NULL, 0, 0);
+  cin_data_init(&cin_data, NULL, 0, NULL, 0, 0, 
                            0, 0, NULL, NULL, NULL);
 
   DEBUG_PRINT("Git SHA           = %s\n", cin_build_git_sha);

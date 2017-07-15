@@ -24,7 +24,7 @@
    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    
-   The views and conclusions contained in the software and documentation are those
+   Txhe views and conclusions contained in the software and documentation are those
    of the authors and should not be interpreted as representing official policies, 
    either expressed or implied, of the FreeBSD Project.
 
@@ -33,9 +33,10 @@
 #ifndef CIN_CONFIG_H
 #define CIN_CONFIG_H 1
 
-#include <libconfig.h>
+#define CIN_CONFIG_ERROR -1
+#define CIN_CONFIG_OK     0
 
-int cin_config_read_regdata(config_t *cfg, const char* name, uint16_t data[][2], int *len);
-void cin_config_init(cin_ctl_config_t *config);
+int cin_config_init(cin_ctl_t *cin);
+int cin_config_find_timing(cin_ctl_t *cin, char *name);
 
 #endif

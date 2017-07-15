@@ -46,7 +46,7 @@ FIRMWARE=top_frame_fpga-v3012.bit
 
 all: lib/libcin.so lib/libcin.a\
 	bin/cin_power_up bin/cinregdump bin/convert_config \
-	test/smoketest test/configtest test/datatest
+	test/smoketest test/datatest
 
 GIT = git
 AWK = awk
@@ -65,9 +65,9 @@ src/common.o: src/cin.h src/common.h
 
 src/report.o: src/report.h src/cin.h
 
-src/config.o: src/cin.h src/config.h
+src/config.o: src/cin.h src/config.h data/timing.h
 
-src/embedded.o: data/version.h data/firmware.h data/timing.h data/fcric_200.h data/bias.h config/$(FIRMWARE)
+src/embedded.o: data/version.h data/firmware.h data/fcric_200.h data/bias.h config/$(FIRMWARE)
 
 utils/cinregdump.o: src/cin.h
 
@@ -132,9 +132,6 @@ test/smoketest: test/smoketest.o lib/libcin.so  src/cin.h
 test/datatest: test/datatest.o lib/libcin.so  src/cin.h
 	$(CC) $(LDFLAGS) test/datatest.o -o $@ $(LDLIBS) 
 
-test/configtest: test/configtest.o lib/libcin.so  src/cin.h
-	$(CC) $(LDFLAGS) test/configtest.o -o $@ $(LDLIBS) 
-
 .PHONY :doc
 docs:
 	@doxygen 
@@ -153,7 +150,6 @@ clean:
 	-$(RM) -rf test/*.o
 	-$(RM) -rf test/smoketest
 	-$(RM) -rf test/datatest
-	-$(RM) -rf test/configtest
 
 INSTALL = install
 INSTALL_DATA = $(INSTALL) -m 644

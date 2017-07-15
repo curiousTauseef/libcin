@@ -38,14 +38,29 @@
 #include <arpa/inet.h>
 
 #include "cin.h"
+#include "config.h"
 #include "common.h"
 
 /* -----------------------------------------------------------------------------------------
  *
- * Routines for debug printing
+ * Routines for configuring the CIN
  *
  * -----------------------------------------------------------------------------------------
  */
+
+int cin_com_set_timing(cin_ctl_t *cin, char *name)
+{
+  int mode;
+  mode = cin_config_find_timing(cin, name);
+  if(mode == CIN_CONFIG_ERROR)
+  {
+    return -1;
+  }
+
+  cin_ctl_set_timing_regs(cin, cin->timing[mode].data, cin->timing[mode].data_len);
+
+  return 0;
+}
 
 int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data)
 {
@@ -80,6 +95,13 @@ int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data)
   if(cin_com_set_fabric_comms(cin_ctl, cin_data))
   {
     return -1;
+  }
+
+  if(mode != NULL)
+  {
+    if(cin_com_set_timing(cin_ctl, mode)){
+
+    }
   }
 
   return 0;
