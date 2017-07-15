@@ -1,12 +1,13 @@
 var indexSectionsWithContent =
 {
-  0: "cdfr",
+  0: "cdfnor",
   1: "cdf",
   2: "c",
   3: "c",
-  4: "cr",
-  5: "c",
-  6: "f"
+  4: "cdfnor",
+  5: "cr",
+  6: "c",
+  7: "f"
 };
 
 var indexSectionNames =
@@ -15,9 +16,10 @@ var indexSectionNames =
   1: "classes",
   2: "files",
   3: "functions",
-  4: "defines",
-  5: "groups",
-  6: "pages"
+  4: "variables",
+  5: "defines",
+  6: "groups",
+  7: "pages"
 };
 
 var indexSectionLabels =
@@ -26,8 +28,9 @@ var indexSectionLabels =
   1: "Classes",
   2: "Files",
   3: "Functions",
-  4: "Macros",
-  5: "Modules",
-  6: "Pages"
+  4: "Variables",
+  5: "Macros",
+  6: "Modules",
+  7: "Pages"
 };
 

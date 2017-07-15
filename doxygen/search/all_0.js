@@ -1,9 +1,11 @@
 var searchData=
 [
   ['cin_2eh',['cin.h',['../cin_8h.html',1,'']]],
+  ['cin_5fconfig_5fmax_5ftiming_5fdata',['CIN_CONFIG_MAX_TIMING_DATA',['../cin_8h.html#ae20233c6ecba127f19e1e77a9b3c3b9a',1,'cin.h']]],
+  ['cin_5fconfig_5fmax_5ftiming_5fmodes',['CIN_CONFIG_MAX_TIMING_MODES',['../cin_8h.html#a0b64fb98e95395acdf1e1a90498b23ce',1,'cin.h']]],
+  ['cin_5fconfig_5ftiming',['cin_config_timing',['../structcin__config__timing.html',1,'']]],
   ['cin_5fctl',['cin_ctl',['../structcin__ctl.html',1,'']]],
   ['cin_20control_20bias_20routines',['CIN Control Bias Routines',['../group__cin__ctl__bias.html',1,'']]],
-  ['cin_5fctl_5fconfig',['cin_ctl_config',['../structcin__ctl__config.html',1,'']]],
   ['cin_5fctl_5fdestroy',['cin_ctl_destroy',['../group__cin__ctl__init.html#ga888fd017426a3718a875f6bdb5078b81',1,'cin_ctl_destroy(cin_ctl_t *cin):&#160;control.c'],['../group__cin__ctl__init.html#ga888fd017426a3718a875f6bdb5078b81',1,'cin_ctl_destroy(cin_ctl_t *cin):&#160;control.c']]],
   ['cin_20fclk_20configuration_20routines',['CIN FCLK Configuration Routines',['../group__cin__ctl__fclk.html',1,'']]],
   ['cin_20firmware_20upload_20routines',['CIN Firmware Upload Routines',['../group__cin__ctl__firmware.html',1,'']]],
@@ -52,5 +54,6 @@ var searchData=
   ['cmd_5fsend_5fsync_5fpulse',['CMD_SEND_SYNC_PULSE',['../cin__register__map_8h.html#ab10bc1d11a1af992436e2e6676bed8cb',1,'cin_register_map.h']]],
   ['cmd_5fsync_5fdetector2readout',['CMD_SYNC_DETECTOR2READOUT',['../cin__register__map_8h.html#afde9e2b9c27df6aef069902a454598d0',1,'cin_register_map.h']]],
   ['cmd_5fwr_5fccd_5fbias_5freg',['CMD_WR_CCD_BIAS_REG',['../cin__register__map_8h.html#a5499023d7a81fea703bebf4e970165c6',1,'cin_register_map.h']]],
-  ['cmd_5fwr_5fccd_5fclock_5freg',['CMD_WR_CCD_CLOCK_REG',['../cin__register__map_8h.html#af4fbd82520bea4461fa0454457878e30',1,'cin_register_map.h']]]
+  ['cmd_5fwr_5fccd_5fclock_5freg',['CMD_WR_CCD_CLOCK_REG',['../cin__register__map_8h.html#af4fbd82520bea4461fa0454457878e30',1,'cin_register_map.h']]],
+  ['cols',['cols',['../structcin__config__timing.html#ac2fdfdc56bba9560d8f11be78fa28c10',1,'cin_config_timing']]]
 ];

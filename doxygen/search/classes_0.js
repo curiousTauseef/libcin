@@ -1,7 +1,7 @@
 var searchData=
 [
+  ['cin_5fconfig_5ftiming',['cin_config_timing',['../structcin__config__timing.html',1,'']]],
   ['cin_5fctl',['cin_ctl',['../structcin__ctl.html',1,'']]],
-  ['cin_5fctl_5fconfig',['cin_ctl_config',['../structcin__ctl__config.html',1,'']]],
   ['cin_5fctl_5fid',['cin_ctl_id',['../structcin__ctl__id.html',1,'']]],
   ['cin_5fctl_5flistener',['cin_ctl_listener',['../structcin__ctl__listener.html',1,'']]],
   ['cin_5fctl_5fpwr_5fmon_5ft',['cin_ctl_pwr_mon_t',['../structcin__ctl__pwr__mon__t.html',1,'']]],

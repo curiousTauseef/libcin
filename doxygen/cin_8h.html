@@ -84,13 +84,13 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcin__ctl__config.html">cin_ctl_config</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfifo.html">fifo</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcin__ctl__listener.html">cin_ctl_listener</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcin__port.html">cin_port</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcin__config__timing.html">cin_config_timing</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcin__ctl.html">cin_ctl</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -115,6 +115,12 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:afdff008d1b9ecb44793d66be32235005"><td class="memItemLeft" align="right" valign="top"><a id="afdff008d1b9ecb44793d66be32235005"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>CIN_OK</b>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:afdff008d1b9ecb44793d66be32235005"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04e1f567373fb69d414310b3908e027f"><td class="memItemLeft" align="right" valign="top"><a id="a04e1f567373fb69d414310b3908e027f"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>CIN_ERROR</b>&#160;&#160;&#160;-1</td></tr>
+<tr class="separator:a04e1f567373fb69d414310b3908e027f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb79e7a5d31b4ac0db7284b6eae08dde"><td class="memItemLeft" align="right" valign="top"><a id="afb79e7a5d31b4ac0db7284b6eae08dde"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>CIN_CTL_IP</b>&#160;&#160;&#160;&quot;192.168.1.207&quot;</td></tr>
 <tr class="separator:afb79e7a5d31b4ac0db7284b6eae08dde"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -497,26 +503,27 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>ERROR_PRINT</b>(fmt, ...)&#160;&#160;&#160;if(_error_print_flag) { fprintf(stderr, &quot;%s:%d:%s(): &quot; fmt, __FILE__, __LINE__, __func__, __VA_ARGS__); }</td></tr>
 <tr class="separator:ad9d18a195e7433cea959b4a2d6c01458"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0dc2195c2c408bf13f6694fc4400ff2a"><td class="memItemLeft" align="right" valign="top"><a id="a0dc2195c2c408bf13f6694fc4400ff2a"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>CIN_CONFIG_MAX_STRING</b>&#160;&#160;&#160;256</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>CIN_CONFIG_MAX_STRING</b>&#160;&#160;&#160;40</td></tr>
 <tr class="separator:a0dc2195c2c408bf13f6694fc4400ff2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6889b3f9cb8906dd19409b87dbcb3ba7"><td class="memItemLeft" align="right" valign="top"><a id="a6889b3f9cb8906dd19409b87dbcb3ba7"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>CIN_CONFIG_MAX_DATA</b>&#160;&#160;&#160;5000</td></tr>
-<tr class="separator:a6889b3f9cb8906dd19409b87dbcb3ba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec0a08a1f78045d40d199eec5e71ef08"><td class="memItemLeft" align="right" valign="top"><a id="aec0a08a1f78045d40d199eec5e71ef08"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>FIFO_MAX_READERS</b>&#160;&#160;&#160;10</td></tr>
 <tr class="separator:aec0a08a1f78045d40d199eec5e71ef08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae20233c6ecba127f19e1e77a9b3c3b9a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cin_8h.html#ae20233c6ecba127f19e1e77a9b3c3b9a">CIN_CONFIG_MAX_TIMING_DATA</a>&#160;&#160;&#160;880</td></tr>
+<tr class="separator:ae20233c6ecba127f19e1e77a9b3c3b9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b64fb98e95395acdf1e1a90498b23ce"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cin_8h.html#a0b64fb98e95395acdf1e1a90498b23ce">CIN_CONFIG_MAX_TIMING_MODES</a>&#160;&#160;&#160;20</td></tr>
+<tr class="separator:a0b64fb98e95395acdf1e1a90498b23ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a9677028031fa81c3edee4598edd6c41b"><td class="memItemLeft" align="right" valign="top"><a id="a9677028031fa81c3edee4598edd6c41b"></a>
-typedef struct <a class="el" href="structcin__ctl__config.html">cin_ctl_config</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_config_t</b></td></tr>
-<tr class="separator:a9677028031fa81c3edee4598edd6c41b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a979fd50d62f3814bbb2ee2888f36191b"><td class="memItemLeft" align="right" valign="top"><a id="a979fd50d62f3814bbb2ee2888f36191b"></a>
 typedef struct <a class="el" href="structcin__ctl__listener.html">cin_ctl_listener</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_listener_t</b></td></tr>
 <tr class="separator:a979fd50d62f3814bbb2ee2888f36191b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76eb7c8bb73dbd70c872c526a9fca766"><td class="memItemLeft" align="right" valign="top"><a id="a76eb7c8bb73dbd70c872c526a9fca766"></a>
 typedef struct <a class="el" href="structcin__port.html">cin_port</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cin_port_t</b></td></tr>
 <tr class="separator:a76eb7c8bb73dbd70c872c526a9fca766"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad879baa820565f5ab1e4356b1bd87e3"><td class="memItemLeft" align="right" valign="top"><a id="aad879baa820565f5ab1e4356b1bd87e3"></a>
+typedef struct <a class="el" href="structcin__config__timing.html">cin_config_timing</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cin_config_timing_t</b></td></tr>
+<tr class="separator:aad879baa820565f5ab1e4356b1bd87e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08a41711156c6dc053e031df03fa493d"><td class="memItemLeft" align="right" valign="top"><a id="a08a41711156c6dc053e031df03fa493d"></a>
 typedef struct <a class="el" href="structcin__ctl.html">cin_ctl</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_t</b></td></tr>
 <tr class="separator:a08a41711156c6dc053e031df03fa493d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -749,9 +756,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_data_set_descrambl
 <tr class="memitem:a9655cd2b343dedc951ff78f1305da188"><td class="memItemLeft" align="right" valign="top"><a id="a9655cd2b343dedc951ff78f1305da188"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>cin_data_get_descramble_params</b> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin, int *rows, int *overscan, int *xsize, int *ysize)</td></tr>
 <tr class="separator:a9655cd2b343dedc951ff78f1305da188"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f881c005e4d9cd137302d1579fdc0b4"><td class="memItemLeft" align="right" valign="top"><a id="a9f881c005e4d9cd137302d1579fdc0b4"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_com_boot</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *<a class="el" href="structcin__ctl.html">cin_ctl</a>, <a class="el" href="structcin__data.html">cin_data_t</a> *data)</td></tr>
-<tr class="separator:a9f881c005e4d9cd137302d1579fdc0b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae59bb37f758370c0af46447a7674bbf3"><td class="memItemLeft" align="right" valign="top"><a id="ae59bb37f758370c0af46447a7674bbf3"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_com_boot</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *<a class="el" href="structcin__ctl.html">cin_ctl</a>, <a class="el" href="structcin__data.html">cin_data_t</a> *<a class="el" href="structcin__data.html">cin_data</a>, char *mode)</td></tr>
+<tr class="separator:ae59bb37f758370c0af46447a7674bbf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -810,10 +817,41 @@ LICENSE</h1>
 <h1><a class="anchor" id="DESCRIPTION"></a>
 DESCRIPTION</h1>
 <p>header file for CIN communications </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ae20233c6ecba127f19e1e77a9b3c3b9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae20233c6ecba127f19e1e77a9b3c3b9a">&#9670;&nbsp;</a></span>CIN_CONFIG_MAX_TIMING_DATA</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CIN_CONFIG_MAX_TIMING_DATA&#160;&#160;&#160;880</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Max = 55 per state, 16 states </p>
+
+</div>
+</div>
+<a id="a0b64fb98e95395acdf1e1a90498b23ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b64fb98e95395acdf1e1a90498b23ce">&#9670;&nbsp;</a></span>CIN_CONFIG_MAX_TIMING_MODES</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CIN_CONFIG_MAX_TIMING_MODES&#160;&#160;&#160;20</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>20 states max </p>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jul 14 2017 21:05:28 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Jul 15 2017 16:00:35 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>
