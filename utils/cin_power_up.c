@@ -18,8 +18,7 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  if(cin_data_init(&cin_data, NULL, 0, NULL, 0, 0,
-        0, 0, 
+  if(cin_data_init(&cin_data, NULL, 0, NULL, 0, 0, 0, 0, 
         NULL, NULL, NULL))
   {
     perror("Unable to initialize CIN data library");

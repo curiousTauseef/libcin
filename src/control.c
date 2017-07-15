@@ -324,8 +324,10 @@ int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait)
   {
     fifo_flush(&cin->listener->ctl_fifo);     
 
+    DEBUG_PRINT("Try = %d : reading reg 0x%04X\n", tries, reg);
+
     _status = cin_ctl_write(cin, REG_READ_ADDRESS, reg, 1);
-    if (_status)
+    if (_status != CIN_OK)
     {
       goto error;
     }
@@ -336,12 +338,12 @@ int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait)
     }
 
     _status = cin_ctl_write(cin, REG_COMMAND, CMD_READ_REG, 1);
-    if (_status != 0)
+    if (_status != CIN_OK)
     {
       goto error;
     }
 
-    if(!cin_ctl_get_packet(cin, &buf))
+    if(cin_ctl_get_packet(cin, &buf) == CIN_OK)
     {
       break;
     }
@@ -353,6 +355,7 @@ int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait)
     goto error;
   }
 
+  DEBUG_PRINT("Read 0x%08X\n", buf);
 #ifdef __DEBUG_STREAM__
   DEBUG_PRINT("Got %04X from %04X\n", buf & 0xFFFF, (buf >> 16));
 #endif
@@ -381,7 +384,8 @@ int cin_ctl_pwr(cin_ctl_t *cin, int pwr){
   int _status;
   uint16_t _val;
 
-  if(pwr){
+  if(pwr)
+  {
     DEBUG_COMMENT("Powering ON CIN Board\n");
     _val = CIN_CTL_POWER_ENABLE;
   } else {
@@ -390,16 +394,17 @@ int cin_ctl_pwr(cin_ctl_t *cin, int pwr){
   }
 
   _status=cin_ctl_write_with_readback(cin,REG_PS_ENABLE, _val);
-  if (_status != 0){
-    goto error;
+  if (_status != CIN_OK)
+  {
+    return CIN_ERROR;
   }
   _status=cin_ctl_write(cin,REG_COMMAND, CMD_PS_ENABLE, 0);
-  if (_status != 0){
-    goto error;
+  if (_status != CIN_OK)
+  {
+    return CIN_ERROR;
   }
-   
-error:
-   return CIN_ERROR;
+
+  return CIN_OK;
 }
 
 int cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr){ 
@@ -1470,14 +1475,13 @@ int cin_ctl_set_mux(cin_ctl_t *cin, int setting){
 
 int cin_ctl_get_mux(cin_ctl_t *cin, int *setting){
 
-  int _status = cin_ctl_read(cin, REG_TRIGGERSELECT_REG, (uint16_t*)setting, 0);
-  if(_status){
+  if(cin_ctl_read(cin, REG_TRIGGERSELECT_REG, (uint16_t*)setting, 0) != CIN_OK)
+  {
     ERROR_COMMENT("Failed to read MUX setting\n");
     return CIN_ERROR;
   } 
 
   DEBUG_PRINT("Mux value is 0x%X\n", *setting);
-
   return CIN_OK;
 }
 
@@ -1485,7 +1489,7 @@ int cin_ctl_get_mux(cin_ctl_t *cin, int *setting){
 
 int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain){
   uint16_t _gain;
-  int _status = 0;
+  int _status = CIN_OK;
 
   if((gain == 0) || (gain == 2) || (gain == 3)){
     _gain = (uint16_t)gain;
@@ -1499,9 +1503,9 @@ int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain){
   _status |= cin_ctl_write(cin, REG_FCRIC_WRITE2_REG, _gain, 1);
   _status |= cin_ctl_write(cin, REG_FRM_COMMAND, 0x0105, 1);
 
-  if(_status){
+  if(_status != CIN_OK){
     ERROR_COMMENT("Unable to set gain settings\n");
-    return _status;
+    return CIN_ERROR;
   }
 
   return CIN_OK;
@@ -1514,7 +1518,7 @@ int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain){
 
 int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp){
   uint16_t *_onoff;
-  int _status = 0;
+  int _status = CIN_OK;
 
   if(clamp == 0){
     _onoff = fcric_clamp_reg_off;
@@ -1533,13 +1537,12 @@ int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp){
     _status |= cin_ctl_write(cin, REG_FRM_COMMAND, 0x0105, 1);
   }
 
-  if(_status){
+  if(_status != CIN_OK){
     ERROR_COMMENT("Unable to set clamp settings\n");
-    return _status;
+    return CIN_ERROR;
   }
 
   return CIN_OK;
-
 }
 
 
@@ -1548,33 +1551,38 @@ int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp){
 int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage){
 
   int n;
-  int _status = 0;
   uint16_t _val[CIN_CTL_NUM_BIAS_VOLTAGE];
 
-  if((_status = cin_ctl_get_bias_regs(cin, _val)))
+  if(cin_ctl_get_bias_regs(cin, _val) != CIN_OK)
   {
     ERROR_COMMENT("Unable to read bias registers\n");
-    return _status;
+    return CIN_ERROR;
   }
 
   for(n=0;n<CIN_CTL_NUM_BIAS_VOLTAGE;n++){
     voltage[n] = (float)(_val[n] & 0x0FFF) * bias_voltage_range[n] / 4096.0;
   } 
 
-  return _status;
+  return CIN_OK;
 }
 
 int cin_ctl_get_bias_regs(cin_ctl_t *cin, uint16_t *vals)
 {
   int n;
-  int _status = 0;
+  int _status = CIN_OK;
 
   for(n=0;n<CIN_CTL_NUM_BIAS_VOLTAGE;n++){
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, 0x0030 + (2 * n), 1);
     _status |= cin_ctl_read(cin, REG_BIASREGISTERDATAOUT, &vals[n], 0);
   }
 
-  return _status;
+  if(_status != CIN_OK)
+  {
+    ERROR_COMMENT("Unable to read bias voltages\n");
+    return CIN_ERROR;
+  }
+
+  return CIN_OK;
 }
 
 int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify)
@@ -1583,8 +1591,8 @@ int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify)
   int _status = 0;
   int _val;
 
-  _status = cin_ctl_get_bias(cin, &_val);
-  if(_status){
+  if(cin_ctl_get_bias(cin, &_val) != CIN_OK)
+  {
     ERROR_COMMENT("Unable to read bias status.\n");
     return CIN_ERROR;
   }
@@ -1593,8 +1601,8 @@ int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify)
     return CIN_ERROR;
   }
 
-  _status = cin_ctl_get_clocks(cin, &_val);
-  if(_status){
+  if(cin_ctl_get_clocks(cin, &_val) != CIN_OK)
+  {
     ERROR_COMMENT("Unable to read clock status.\n"); 
     return CIN_ERROR;
   }
@@ -1603,8 +1611,8 @@ int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify)
     return CIN_ERROR;
   }
   
-  _status = cin_ctl_get_triggering(cin, &_val);
-  if(_status){
+  if(cin_ctl_get_triggering(cin, &_val) != CIN_OK)
+  {
     ERROR_COMMENT("Unable to read triggering status.\n"); 
     return CIN_ERROR;
   }
@@ -1613,20 +1621,25 @@ int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify)
     return CIN_ERROR;
   }
 
-  _status = 0;
+  _status = CIN_OK;
   for(n=0;n<CIN_CTL_NUM_BIAS_VOLTAGE;n++){
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, (2 * n), 1);
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA	, _val, 1);
     _status |= cin_ctl_write(cin, REG_FRM_COMMAND, 0x0102, 1);
   } 
 
-  return _status;
+  if(_status != CIN_OK)
+  {
+    ERROR_COMMENT("Unable to set bias values\n");
+    return CIN_ERROR;
+  }
+
+  return CIN_OK;
 }
 
 int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify)
 {
   uint16_t _val[CIN_CTL_NUM_BIAS_VOLTAGE];
-  int status = 0;
 
   int n;
   for(n=0;n<CIN_CTL_NUM_BIAS_VOLTAGE;n++)
@@ -1635,8 +1648,13 @@ int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify)
     _val[n] |= ((n << 14) & 0xC000);
   }
 
-  status = cin_ctl_set_bias_regs(cin, _val, verify);
-  return status;
+  if(cin_ctl_set_bias_regs(cin, _val, verify) != CIN_OK)
+  {
+    ERROR_COMMENT("Unable to set bias regs\n");
+    return CIN_ERROR;
+  }
+
+  return CIN_OK;
 }
 
 int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len)
@@ -1645,12 +1663,12 @@ int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len)
   DEBUG_PRINT("Writing to timing registers (%d values)\n", vals_len);
   for(i=0;i<vals_len;i++)
   {
-    int _status = 0;
+    int _status = CIN_OK;
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, i * 2, 1);
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA, vals[i], 1);
     _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_WR_CCD_CLOCK_REG, 1);
     usleep(20);
-    if(_status)
+    if(_status != CIN_OK)
     {
       ERROR_PRINT("Unable to write %04X to cin (line %d)\n", vals[i], i);
       return CIN_ERROR;
@@ -1692,7 +1710,7 @@ int cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp)
 
   cin_map_t *rmap = cin_reg_map;
   
-  int status = 0;
+  int status = CIN_OK;
   while(rmap->name != NULL){
     uint16_t reg = rmap->reg;
     uint16_t val;

@@ -90,13 +90,13 @@ int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, char *mode)
 
   if(cin_ctl_pwr(cin_ctl, 0))
   {
-    return -1;
+    return CIN_ERROR;
   }
   sleep(1);
 
   if(cin_ctl_pwr(cin_ctl, 1))
   {
-    return -1;
+    return CIN_ERROR;
   }
   sleep(1);
 
@@ -104,32 +104,35 @@ int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, char *mode)
 
   if(cin_ctl_load_firmware(cin_ctl))
   {
-    return -1;
+    return CIN_ERROR;
   }
 
   // Get the ID of the CIN
   cin_ctl_id_t cin_id;
   if(cin_ctl_get_id(cin_ctl, &cin_id))
   {
-    return -1;
+    return CIN_ERROR;
   }
 
-  cin_ctl_fp_pwr(cin_ctl, 1);
+  if(cin_ctl_fp_pwr(cin_ctl, 1) != CIN_OK)
+  {
+    return CIN_ERROR;
+  }
 
   if(cin_com_set_fabric_comms(cin_ctl, cin_data))
   {
-    return -1;
+    return CIN_ERROR;
   }
 
   if(mode != NULL)
   {
     if(cin_com_set_timing(cin_ctl, cin_data, mode)){
-      return -1;
+      return CIN_ERROR;
     }
   }
 
 
-  return 0;
+  return CIN_OK;
 }
 
 int cin_com_set_fabric_comms(cin_ctl_t *cin_ctl, cin_data_t *cin_data)
@@ -139,7 +142,7 @@ int cin_com_set_fabric_comms(cin_ctl_t *cin_ctl, cin_data_t *cin_data)
   cin_ctl_set_fabric_address(cin_ctl, cin_data->addr);
   cin_data_send_magic(cin_data);
 
-  return 0;
+  return CIN_OK;
 }
 
 /* -----------------------------------------------------------------------------------------
@@ -201,12 +204,12 @@ int timespec_after(struct timespec a, struct timespec b){
   /* Calculte if B is afetr A */
 
   if(b.tv_sec > a.tv_sec){
-    return 1;
+    return CIN_ERROR;
   }
   if((b.tv_sec == a.tv_sec) && (b.tv_nsec > a.tv_nsec)){
-    return 1;
+    return CIN_ERROR;
   }
-  return 0;
+  return CIN_OK;
 }
 
 /* -----------------------------------------------------------------------------------------
@@ -228,14 +231,14 @@ int cin_com_init_port(cin_port_t *port, const char *cin_addr, int cin_port,
   port->sockfd = socket(AF_INET, SOCK_DGRAM, 0);
   if (port->sockfd < 0) {
     ERROR_COMMENT("socket() failed.\n");
-      return -1;
+      return CIN_ERROR;
   }
 
   int i = 1;
   if(setsockopt(port->sockfd, SOL_SOCKET, SO_REUSEADDR, 
                 (void *)&i, sizeof i) < 0) {
     ERROR_COMMENT("setsockopt() failed.\n");
-    return -1;
+    return CIN_ERROR;
   }
 
   // According to convention
@@ -258,12 +261,12 @@ int cin_com_init_port(cin_port_t *port, const char *cin_addr, int cin_port,
   
   if(inet_aton(cin_addr, &port->sin_srv.sin_addr) == 0) {
     ERROR_COMMENT("inet_aton() Failed.\n");
-    return 1;
+    return CIN_ERROR;
   }
 
   if(inet_aton(bind_addr, &port->sin_cli.sin_addr) == 0) {
     ERROR_COMMENT("inet_aton() Failed.\n");
-    return 1;
+    return CIN_ERROR;
   }
 
   // 
@@ -271,7 +274,7 @@ int cin_com_init_port(cin_port_t *port, const char *cin_addr, int cin_port,
   if(bind(port->sockfd, (struct sockaddr *)&port->sin_cli, 
         sizeof(port->sin_cli))){
     ERROR_COMMENT("Bind failed.\n");
-    return -1;
+    return CIN_ERROR;
   }
 
   if(recv_buf)
@@ -311,7 +314,7 @@ int cin_com_init_port(cin_port_t *port, const char *cin_addr, int cin_port,
     DEBUG_COMMENT("Set SO_TIMESTAMP to zero\n");
   }
 
-  return 0;
+  return CIN_OK;
 }
 
 int cin_com_set_int(int val, int def)
