@@ -55,7 +55,7 @@ int cin_ctl_init(cin_ctl_t *cin,
   // Initialize the config
 
   cin_config_init(cin);
-  cin_config_find_timing(cin, "default");
+  cin->current_timing = NULL;
 
   cin->addr       = cin_com_set_string(addr, CIN_CTL_IP);
   cin->bind_addr  = cin_com_set_string(bind_addr, "0.0.0.0");
@@ -71,7 +71,7 @@ int cin_ctl_init(cin_ctl_t *cin,
                        cin->addr, cin->sport, 
                        cin->bind_addr, cin->bind_sport, 0)){
      ERROR_COMMENT("Unable to open commuincations\n");
-     return -1;
+     return CIN_ERROR;
   }
 
   DEBUG_COMMENT("Opened ports\n");
@@ -83,13 +83,13 @@ int cin_ctl_init(cin_ctl_t *cin,
 
   if(!listener){
     ERROR_COMMENT("Unable to create listener (MALLOC Failed)\n");
-    return -1;
+    return CIN_ERROR;
   }
 
   listener->cp = &(cin->ctl_port);
   if(fifo_init(&listener->ctl_fifo, sizeof(uint32_t), 100,1)){
     ERROR_COMMENT("Failed to initialize fifo.\n");
-    return -1;
+    return CIN_ERROR;
   }
 
   // Initialize the mutex for sequential access
@@ -111,14 +111,14 @@ int cin_ctl_init(cin_ctl_t *cin,
   DEBUG_COMMENT("Listening thread has started.\n");
 
   // SBW : Do we need to wait for listener to start?
-  return(0);
+  return CIN_OK;
 }
 
 int cin_ctl_destroy(cin_ctl_t *cin){
   DEBUG_COMMENT("Closing comm ports\n");
   cin_ctl_close_ports(cin);
   DEBUG_COMMENT("Goodbye .....\n");
-  return 0;
+  return CIN_OK;
 }
 
 /**************************** UDP Socket ******************************/
@@ -133,12 +133,12 @@ uint32_t cin_ctl_get_packet(cin_ctl_t *cin, uint32_t *val){
     if(r){
       *val = *((uint32_t *)fifo_get_tail(&cin->listener->ctl_fifo, 0));
       fifo_advance_tail(&cin->listener->ctl_fifo, 0);
-      return 0;
+      return CIN_OK;
     }
     usleep(200);
   }
 
-  return -1;
+  return CIN_ERROR;
 }
 
 // This is to be run in a different thread
@@ -189,7 +189,7 @@ int cin_ctl_close_ports(cin_ctl_t *cin) {
     cin->stream_port.sockfd = 0;
   }
 
-  return 0;
+  return CIN_OK;
 }
 
 /*************************** CIN Read/Write ***************************/
@@ -229,11 +229,11 @@ int cin_ctl_write(cin_ctl_t *cin, uint16_t reg, uint16_t val, int wait){
   DEBUG_PRINT("Set register 0x%04X to 0x%04X\n", reg, val);
 #endif 
 
-  return 0;
+  return CIN_OK;
    
 error:  
   ERROR_COMMENT("Write error control port\n");
-  return (-1);
+  return CIN_ERROR;
 }
 
 int cin_ctl_write_with_readback(cin_ctl_t *cin, uint16_t reg, uint16_t val){
@@ -266,11 +266,11 @@ int cin_ctl_write_with_readback(cin_ctl_t *cin, uint16_t reg, uint16_t val){
   }
 
   pthread_mutex_unlock(&cin->access);
-  return 0;
+  return CIN_OK;
 
 error:
   pthread_mutex_unlock(&cin->access);
-  return _status;
+  return CIN_ERROR;
 }
 
 int cin_ctl_stream_write(cin_ctl_t *cin, unsigned char *val,int size) {
@@ -305,11 +305,11 @@ int cin_ctl_stream_write(cin_ctl_t *cin, unsigned char *val,int size) {
   pthread_mutex_unlock(&cin->access);
 
   /*** TODO - implement write verification procedure ***/
-  return 0;  
+  return CIN_OK;  
    
 error:   
    ERROR_COMMENT("Write error\n");
-   return -1;
+   return CIN_ERROR;
 }                                      
 
 int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait)
@@ -366,12 +366,12 @@ int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait)
 
   *val = (uint16_t)buf;
   pthread_mutex_unlock(&cin->access);
-  return 0;
+  return CIN_OK;
     
 error:  
    ERROR_COMMENT("Read error.\n");
    pthread_mutex_unlock(&cin->access);
-   return (-1);
+   return CIN_ERROR;
 }
 
  
@@ -399,7 +399,7 @@ int cin_ctl_pwr(cin_ctl_t *cin, int pwr){
   }
    
 error:
-   return _status;
+   return CIN_ERROR;
 }
 
 int cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr){ 
@@ -434,7 +434,7 @@ int cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr){
   }
    
 error:
-   return _status;
+   return CIN_ERROR;
 }
 
 int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off){
@@ -480,21 +480,21 @@ int cin_ctl_load_config(cin_ctl_t *cin,char *filename){
   _status = cin_ctl_get_bias(cin, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read bias status. Refusing to upload config\n");
-    return -1;
+    return CIN_ERROR;
   }
   if(_val){
     ERROR_COMMENT("Cannot upload with bias on.\n");
-    return -1;
+    return CIN_ERROR;
   }
 
   _status = cin_ctl_get_clocks(cin, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read clock status. Refusing to upload config\n");
-    return -1;
+    return CIN_ERROR;
   }
   if(_val){
     ERROR_COMMENT("Cannot upload with clocks on.\n");
-    return -1;
+    return CIN_ERROR;
   }
 
   FILE *file = fopen(filename, "r");
@@ -534,11 +534,11 @@ int cin_ctl_load_config(cin_ctl_t *cin,char *filename){
   pthread_mutex_unlock(&cin->access);
   
   fclose(file);
-  return 0;
+  return CIN_OK;
   
 error:
   pthread_mutex_unlock(&cin->access);
-  return -1;
+  return CIN_ERROR;
 }
 
 int cin_ctl_load_firmware_file(cin_ctl_t *cin, char *filename){
@@ -579,7 +579,7 @@ error:
   {
     fclose(file);
   }
-  return -1;
+  return CIN_ERROR;
 }
 
 int cin_ctl_load_firmware(cin_ctl_t *cin)
@@ -641,11 +641,11 @@ int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len
   
   pthread_mutex_unlock(&cin->access);
   DEBUG_COMMENT("FPGA Configured OK\n");
-  return 0;
+  return CIN_OK;
    
 error:
   pthread_mutex_unlock(&cin->access);
-  return _status;
+  return CIN_ERROR;
 }
 
 int cin_ctl_freeze_dco(cin_ctl_t *cin, int freeze){
@@ -746,13 +746,13 @@ int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq){
 
     default:
       ERROR_PRINT("Invalid clock frequency %d\n", clkfreq);
-      return -1;
+      return CIN_ERROR;
       break;
   }
 
   if(_status){
     ERROR_COMMENT("Unable to set FCLK frequency.\n");
-    return -1;
+    return CIN_ERROR;
   }
 
   // Now verrify that fclk has been set
@@ -761,17 +761,17 @@ int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq){
   if(cin_ctl_get_fclk(cin, &_fclk))
   {
     ERROR_COMMENT("Unable to read FCLK value.\n");
-    return -1;
+    return CIN_ERROR;
   }
 
   if(_fclk != clkfreq)
   {
     ERROR_PRINT("Failed to set fclk frequency. Set %d got %d\n", clkfreq, _fclk);
-    return -1;
+    return CIN_ERROR;
   }
 
   DEBUG_PRINT("Set FCLK to %d\n", clkfreq);
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq)
@@ -782,7 +782,7 @@ int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq)
   _status = cin_ctl_read(cin, REG_FCLK_I2C_DATA_WR, &_val, 0);
   if(_status){
     ERROR_COMMENT("Unable to get FCLK status.\n");
-    return _status;
+    return CIN_ERROR;
   }
 
   DEBUG_PRINT("FCLK Status = 0x%04X\n", _val);
@@ -829,25 +829,25 @@ int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq)
 
       *clkfreq = CIN_CTL_FCLK_156_C;
       DEBUG_PRINT("FCLK is at 156 MHz (%d)\n", *clkfreq);
-      return 0;
+      return CIN_OK;
 
     } else if((_hsd == 4) && (_n1 == 10)){
 
       *clkfreq = CIN_CTL_FCLK_125_C;
       DEBUG_PRINT("FCLK is at 125 MHz (%d)\n", *clkfreq);
-      return 0;
+      return CIN_OK;
 
     } else if((_hsd == 5) && (_n1 == 4)){
 
       *clkfreq = CIN_CTL_FCLK_250_C;
       DEBUG_PRINT("FCLK is at 150 MHz (%d)\n", *clkfreq);
-      return 0;
+      return CIN_OK;
         
     } else if((_hsd == 7) && (_n1 == 4)){
 
       *clkfreq = CIN_CTL_FCLK_200_C;
       DEBUG_PRINT("FCLK is at 200 MHz (%d)\n", *clkfreq);
-      return 0;
+      return CIN_OK;
 
     } else {
 
@@ -855,7 +855,7 @@ int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq)
       for(i=0;i<CIN_FCLK_READ_N;i++){
         ERROR_PRINT("FCLK REG 0x%04X = 0x%04X\n", CIN_FCLK_READ[i], _reg[i]);
       }
-      return -1;
+      return CIN_ERROR;
       
     }
   }
@@ -863,23 +863,23 @@ int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq)
   if((_val & CMD_FCLK_125) == CMD_FCLK_125){
     DEBUG_COMMENT("FCLK = 125 MHz\n");
     *clkfreq = CIN_CTL_FCLK_125;
-    return 0;
+    return CIN_OK;
   } 
 
   if((_val & CMD_FCLK_200) == CMD_FCLK_200){
     DEBUG_COMMENT("FCLK = 200 MHz\n");
     *clkfreq = CIN_CTL_FCLK_200;
-    return 0;		     
+    return CIN_OK;		     
   }
 
   if((_val & CMD_FCLK_250) == CMD_FCLK_250){
     DEBUG_COMMENT("FCLK = 250 MHz\n");
     *clkfreq = CIN_CTL_FCLK_250;
-    return 0;
+    return CIN_OK;
   }
 
   ERROR_PRINT("Recieved unknown clk. freq. 0x%X\n", _val);
-  return -1;
+  return CIN_ERROR;
 }  
 
 int cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val){
@@ -889,10 +889,10 @@ int cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val){
 
   if(_status){
     ERROR_COMMENT("Unable to read FPGA status\n");
-    return -1;
+    return CIN_ERROR;
   }
 
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *val){
@@ -914,10 +914,10 @@ int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *val){
 
   if(_status){
     ERROR_COMMENT("Unable to read CIN ID\n");
-    return -1;
+    return CIN_ERROR;
   }
 
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val){
@@ -926,11 +926,11 @@ int cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val){
   _status = cin_ctl_read(cin, REG_DCM_STATUS, _val, 0);
   if(_status){
     ERROR_COMMENT("Unable to read DCM status.\n");
-    return _status;
+    return CIN_ERROR;
   }
 
   DEBUG_PRINT("CFG DCM Status   :  0x%04X\n", *_val);
-  return 0; 
+  return CIN_OK; 
 }
 
 double cin_ctl_current_calc(uint16_t val){
@@ -955,7 +955,7 @@ int cin_ctl_calc_vi_status(cin_ctl_t *cin,
   _status = cin_ctl_read(cin, vreg, &_val, 0);
   if(_status){
     ERROR_COMMENT("Unable to read voltage.\n");
-    return _status;
+    return CIN_ERROR;
   }
 
   vi->v = vfact * _val;
@@ -963,12 +963,12 @@ int cin_ctl_calc_vi_status(cin_ctl_t *cin,
   _status = cin_ctl_read(cin, ireg, &_val, 0);
   if(_status){
     ERROR_COMMENT("Unable to read current.\n");
-    return _status;
+    return CIN_ERROR;
   }
 
   vi->i = cin_ctl_current_calc(_val);
 
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_get_power_status(cin_ctl_t *cin, int full,
@@ -981,14 +981,14 @@ int cin_ctl_get_power_status(cin_ctl_t *cin, int full,
   _status = cin_ctl_read(cin, REG_PS_ENABLE, &_val, 0);
   if(_status){
     ERROR_COMMENT("Unable to read power supply status\n");
-    return _status;
+    return CIN_ERROR;
   }
 
   if(!((_val & CIN_CTL_POWER_ENABLE) == CIN_CTL_POWER_ENABLE)) {
     // Power supply is off
     *pwr = 0;
     DEBUG_COMMENT("12V Power Supply is OFF\n");
-    return 0;
+    return CIN_OK;
   } 
   
   if(_val & CIN_CTL_FP_POWER_ENABLE){
@@ -1006,7 +1006,7 @@ int cin_ctl_get_power_status(cin_ctl_t *cin, int full,
   _current = 0.00002 * _val / 0.003;
   if(_status){
     ERROR_COMMENT("Unable to read ADC1 values.\n");
-    return _status;
+    return CIN_ERROR;
   }
   values->bus_12v0.v = _voltage;
   values->bus_12v0.i = _current;
@@ -1038,10 +1038,10 @@ int cin_ctl_get_power_status(cin_ctl_t *cin, int full,
                          0.00030516, &values->fp);
   if(_status){
     ERROR_COMMENT("Unable to read power values\n");
-    return _status;
+    return CIN_ERROR;
   }
 
-  return 0;
+  return CIN_OK;
 }
 
 /******************* CIN Control *************************/
@@ -1087,7 +1087,7 @@ int cin_ctl_set_bias(cin_ctl_t *cin,int val){
   }
 
   DEBUG_PRINT("Bias state set to %d\n", val);
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_get_bias(cin_ctl_t *cin, int *val){
@@ -1108,7 +1108,7 @@ int cin_ctl_get_bias(cin_ctl_t *cin, int *val){
   }
 
   DEBUG_PRINT("Bias value is %d\n", *val);
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_set_clocks(cin_ctl_t *cin,int val){
@@ -1128,7 +1128,7 @@ int cin_ctl_set_clocks(cin_ctl_t *cin,int val){
     _status = cin_ctl_write_with_readback(cin,REG_CLOCKCONFIGREGISTER0_REG, _val & ~0x0001);
   } else {
     ERROR_COMMENT("Illegal Clocks state: Only 0 or 1 allowed\n");
-    return -1;
+    return CIN_ERROR;
   }
 
   if(_status){
@@ -1137,7 +1137,7 @@ int cin_ctl_set_clocks(cin_ctl_t *cin,int val){
   }
 
   DEBUG_PRINT("Clocks set to %d\n", val);
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_get_clocks(cin_ctl_t *cin, int *val){
@@ -1158,7 +1158,7 @@ int cin_ctl_get_clocks(cin_ctl_t *cin, int *val){
   }
 
   DEBUG_PRINT("Clock value is %d\n", *val);
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_set_trigger(cin_ctl_t *cin,int val){
@@ -1166,7 +1166,7 @@ int cin_ctl_set_trigger(cin_ctl_t *cin,int val){
   int _status;
   if((val < 0) || (val > 3)){ 
     ERROR_COMMENT("Illegal Trigger state: Only values 0 to 3 allowed\n");
-    return -1;
+    return CIN_ERROR;
   }
 
   _status=cin_ctl_write_with_readback(cin,REG_TRIGGERMASK_REG, val);
@@ -1176,7 +1176,7 @@ int cin_ctl_set_trigger(cin_ctl_t *cin,int val){
   }
 
   DEBUG_PRINT("Trigger set to %d\n", val);
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_get_trigger(cin_ctl_t *cin, int *val){
@@ -1192,7 +1192,7 @@ int cin_ctl_get_trigger(cin_ctl_t *cin, int *val){
 
   *val = (int)_val;
   DEBUG_PRINT("Trigger value is %d\n", *val);
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_get_focus(cin_ctl_t *cin, int *val){
@@ -1210,7 +1210,7 @@ int cin_ctl_get_focus(cin_ctl_t *cin, int *val){
     *val = 0;
   }
 
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_set_focus(cin_ctl_t *cin, int val){
@@ -1237,7 +1237,7 @@ int cin_ctl_set_focus(cin_ctl_t *cin, int val){
     return _status;
   }
 
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_int_trigger_start(cin_ctl_t *cin, int nimages){
@@ -1268,7 +1268,7 @@ int cin_ctl_int_trigger_stop(cin_ctl_t *cin){
     return _status;
   }
   DEBUG_COMMENT("Stopped internal triggers\n");
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_ext_trigger_start(cin_ctl_t *cin, int trigger_mode){
@@ -1285,7 +1285,7 @@ int cin_ctl_ext_trigger_start(cin_ctl_t *cin, int trigger_mode){
   }
 
   DEBUG_COMMENT("External triggers set.\n");
-  return 0;
+  return CIN_OK;
 
 error:
   return _status;
@@ -1300,7 +1300,7 @@ int cin_ctl_ext_trigger_stop(cin_ctl_t *cin){
     return _status;
   }
   DEBUG_COMMENT("Stopped external triggers\n");
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_get_triggering(cin_ctl_t *cin, int *trigger){
@@ -1317,7 +1317,7 @@ int cin_ctl_get_triggering(cin_ctl_t *cin, int *trigger){
 
   if(trig != CIN_CTL_TRIG_INTERNAL){
     *trigger = 2;
-    return 0;
+    return CIN_OK;
   }
 
   _status = cin_ctl_get_focus(cin, &focus);
@@ -1327,13 +1327,13 @@ int cin_ctl_get_triggering(cin_ctl_t *cin, int *trigger){
 
   if(focus){
     *trigger = 1;
-    return 0;
+    return CIN_OK;
   } else {
     *trigger = 0;
-    return 0;
+    return CIN_OK;
   }
 
-  return -1;
+  return CIN_ERROR;
 
 }
 
@@ -1357,7 +1357,7 @@ int cin_ctl_set_exposure_time(cin_ctl_t *cin,float ftime){
   }
 
   DEBUG_PRINT("Exposure time set to %d (10this us)\n", _time);
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_set_trigger_delay(cin_ctl_t *cin,float ftime){  
@@ -1379,7 +1379,7 @@ int cin_ctl_set_trigger_delay(cin_ctl_t *cin,float ftime){
   }
 
   DEBUG_PRINT("Set trigger delay to %d\n", _time);
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_set_cycle_time(cin_ctl_t *cin,float ftime){
@@ -1403,7 +1403,7 @@ int cin_ctl_set_cycle_time(cin_ctl_t *cin,float ftime){
   } 
 
   DEBUG_PRINT("Cycle time set to %d msec\n", _time);
-  return 0;
+  return CIN_OK;
 }
 
 /******************* Frame Acquisition *************************/
@@ -1417,7 +1417,7 @@ int cin_ctl_frame_count_reset(cin_ctl_t *cin){
   }
 
   DEBUG_COMMENT("Frame count reset to 0\n");
-  return 0;
+  return CIN_OK;
 }
 
 /* Setting of IP Addresses */
@@ -1434,7 +1434,7 @@ int cin_ctl_set_address(cin_ctl_t *cin, char *ip, uint16_t reg0, uint16_t reg1){
   struct in_addr addr;
   if(!inet_aton(ip, &addr)){
     ERROR_COMMENT("inet_aton() failed\n");
-    return -1;
+    return CIN_ERROR;
   }
 
   uint32_t addr_s = ntohl(addr.s_addr);
@@ -1447,10 +1447,10 @@ int cin_ctl_set_address(cin_ctl_t *cin, char *ip, uint16_t reg0, uint16_t reg1){
 
   if(_status){
     ERROR_COMMENT("Could not set IP.\n");
-    return -1;
+    return CIN_ERROR;
   }
 
-  return 0;
+  return CIN_OK;
 }
 
 /*******************  MUX Settings for Output **********************/
@@ -1460,12 +1460,12 @@ int cin_ctl_set_mux(cin_ctl_t *cin, int setting){
   int _status = cin_ctl_write_with_readback(cin, REG_TRIGGERSELECT_REG, (uint16_t)setting);
   if(_status){
     ERROR_COMMENT("Failed to write MUX setting\n");
-    return -1;
+    return CIN_ERROR;
   } 
 
   DEBUG_PRINT("Set MUX to 0x%X\n", setting);
 
-  return 0;
+  return CIN_OK;
 }
 
 int cin_ctl_get_mux(cin_ctl_t *cin, int *setting){
@@ -1473,12 +1473,12 @@ int cin_ctl_get_mux(cin_ctl_t *cin, int *setting){
   int _status = cin_ctl_read(cin, REG_TRIGGERSELECT_REG, (uint16_t*)setting, 0);
   if(_status){
     ERROR_COMMENT("Failed to read MUX setting\n");
-    return -1;
+    return CIN_ERROR;
   } 
 
   DEBUG_PRINT("Mux value is 0x%X\n", *setting);
 
-  return 0;
+  return CIN_OK;
 }
 
 /*******************  Control Gain of fCRIC   **********************/
@@ -1491,7 +1491,7 @@ int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain){
     _gain = (uint16_t)gain;
   } else {
     ERROR_PRINT("Invalid gain setting %d\n", gain);
-    return -1;
+    return CIN_ERROR;
   }
 
   _status |= cin_ctl_write(cin, REG_FCRIC_WRITE0_REG, 0xA000, 1);
@@ -1504,7 +1504,7 @@ int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain){
     return _status;
   }
 
-  return 0;
+  return CIN_OK;
 
 }
 
@@ -1522,7 +1522,7 @@ int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp){
     _onoff = fcric_clamp_reg_on;
   } else {
     ERROR_PRINT("Invalid clamp setting %d\n", clamp);
-    return -1;
+    return CIN_ERROR;
   }
 
   int i;
@@ -1538,7 +1538,7 @@ int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp){
     return _status;
   }
 
-  return 0;
+  return CIN_OK;
 
 }
 
@@ -1586,31 +1586,31 @@ int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify)
   _status = cin_ctl_get_bias(cin, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read bias status.\n");
-    return -1;
+    return CIN_ERROR;
   }
   if(_val){
     ERROR_COMMENT("Cannot set bias values with BIAS on\n");
-    return -1;
+    return CIN_ERROR;
   }
 
   _status = cin_ctl_get_clocks(cin, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read clock status.\n"); 
-    return -1;
+    return CIN_ERROR;
   }
   if(_val){
     ERROR_COMMENT("Cannot set bias voltages with CLOCKS on.\n");
-    return -1;
+    return CIN_ERROR;
   }
   
   _status = cin_ctl_get_triggering(cin, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read triggering status.\n"); 
-    return -1;
+    return CIN_ERROR;
   }
   if(_val){
     ERROR_COMMENT("Cannot set bias voltages while camera is triggering.\n");
-    return -1;
+    return CIN_ERROR;
   }
 
   _status = 0;
@@ -1653,7 +1653,7 @@ int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len)
     if(_status)
     {
       ERROR_PRINT("Unable to write %04X to cin (line %d)\n", vals[i], i);
-      return -1;
+      return CIN_ERROR;
     }
   }
 
@@ -1673,13 +1673,13 @@ int cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals)
     if(_status)
     {
       ERROR_PRINT("Unable to write %04X to cin (line %d)\n", vals[i], i);
-      return -1;
+      return CIN_ERROR;
     }
   }
 
   DEBUG_COMMENT("Done\n");
 
-  return 0;
+  return CIN_OK;
 }
 
 /*******************  Register Dump of CIN    **********************/

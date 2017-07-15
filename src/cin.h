@@ -65,6 +65,9 @@ extern const char *cin_build_version;
  * -------------------------------------------------------------------------------
  */
 
+#define CIN_OK                             0
+#define CIN_ERROR                          -1
+
 #define CIN_CTL_IP                         "192.168.1.207"
 #define CIN_CTL_CIN_PORT                   49200
 #define CIN_CTL_BIND_PORT                  50200
@@ -324,6 +327,7 @@ typedef struct cin_ctl {
   // Config information 
   cin_config_timing_t timing[CIN_CONFIG_MAX_TIMING_MODES];
   int timing_num;
+  cin_config_timing_t *current_timing;
 
   // Mutex for threaded access
   cin_ctl_listener_t *listener;
@@ -830,7 +834,7 @@ void cin_data_reset_stats(cin_data_t *cin);
 int cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan);
 void cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize);
 
-int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *data);
+int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, char *mode);
 #ifdef __cplusplus
 }
 #endif

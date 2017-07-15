@@ -53,7 +53,7 @@ int cin_config_find_timing(cin_ctl_t *cin, char *name)
       return i;
     }
   }
-  return CIN_CONFIG_ERROR;
+  return CIN_ERROR;
 }
 
 int cin_config_init(cin_ctl_t *cin)
@@ -66,12 +66,12 @@ int cin_config_init(cin_ctl_t *cin)
   strcpy(cin->timing[0].name, "default");
   cin->timing[0].data = cin_config_timing;
   cin->timing[0].data_len = cin_config_timing_len;
-  cin->timing[0].cols = 960;
+  cin->timing[0].rows = 960;
   cin->timing[0].overscan = 0;
   cin->timing[0].fclk_freq = CIN_CTL_FCLK_200;
 
   cin->timing_num = 1;
   DEBUG_PRINT("Configured %d timing modes.\n", cin->timing_num);
 
-  return CIN_CONFIG_OK;
+  return CIN_OK;
 }

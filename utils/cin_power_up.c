@@ -26,16 +26,7 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  cin_com_boot(&cin_ctl, &cin_data);
-
-  //cin_ctl_set_fclk(&cin_ctl, CIN_CTL_FCLK_200);
-  //int fclk;
-  //cin_ctl_get_fclk(&cin_ctl, &fclk);
-
-  if(cin_ctl_set_timing_regs(&cin_ctl, cin_config_timing, cin_config_timing_len))
-  {
-    return -1;
-  }
+  cin_com_boot(&cin_ctl, &cin_data, "default");
 
   cin_ctl_set_cycle_time(&cin_ctl, 1);
   cin_ctl_set_exposure_time(&cin_ctl, 0.001);

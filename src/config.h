@@ -33,9 +33,6 @@
 #ifndef CIN_CONFIG_H
 #define CIN_CONFIG_H 1
 
-#define CIN_CONFIG_ERROR -1
-#define CIN_CONFIG_OK     0
-
 int cin_config_init(cin_ctl_t *cin);
 int cin_config_find_timing(cin_ctl_t *cin, char *name);
 

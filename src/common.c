@@ -48,21 +48,43 @@
  * -----------------------------------------------------------------------------------------
  */
 
-int cin_com_set_timing(cin_ctl_t *cin, char *name)
+int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data,  char *name)
 {
   int mode;
-  mode = cin_config_find_timing(cin, name);
-  if(mode == CIN_CONFIG_ERROR)
+
+  // Find the timing mode
+  mode = cin_config_find_timing(cin_ctl, name);
+  if(mode == CIN_ERROR)
   {
-    return -1;
+    return CIN_ERROR;
   }
 
-  cin_ctl_set_timing_regs(cin, cin->timing[mode].data, cin->timing[mode].data_len);
+  cin_ctl->current_timing = &cin_ctl->timing[mode];
 
-  return 0;
+  // Now upload timing data to CIN
+  DEBUG_PRINT("Uploading timing data from \"%s\".\n", name);
+  if(cin_ctl_set_timing_regs(cin_ctl, cin_ctl->current_timing->data, 
+        cin_ctl->current_timing->data_len) != CIN_OK)
+  {
+    return CIN_ERROR;
+  }
+
+  // Now set the fclk
+  if(cin_ctl_set_fclk(cin_ctl, cin_ctl->current_timing->fclk_freq) != CIN_OK)
+  {
+    return CIN_ERROR;
+  }
+
+  // Now set the descramble params
+  if(cin_data_set_descramble_params(cin_data, cin_ctl->current_timing->rows,
+        cin_ctl->current_timing->overscan) != CIN_OK)
+  {
+    return CIN_ERROR;
+  }
+  return CIN_OK;
 }
 
-int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data)
+int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, char *mode)
 {
   // Power cycle the CIN
 
@@ -92,6 +114,8 @@ int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data)
     return -1;
   }
 
+  cin_ctl_fp_pwr(cin_ctl, 1);
+
   if(cin_com_set_fabric_comms(cin_ctl, cin_data))
   {
     return -1;
@@ -99,10 +123,11 @@ int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data)
 
   if(mode != NULL)
   {
-    if(cin_com_set_timing(cin_ctl, mode)){
-
+    if(cin_com_set_timing(cin_ctl, cin_data, mode)){
+      return -1;
     }
   }
+
 
   return 0;
 }
