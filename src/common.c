@@ -81,6 +81,7 @@ int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data,  char *name)
   {
     return CIN_ERROR;
   }
+
   return CIN_OK;
 }
 

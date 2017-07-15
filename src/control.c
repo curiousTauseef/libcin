@@ -57,6 +57,8 @@ int cin_ctl_init(cin_ctl_t *cin,
   cin_config_init(cin);
   cin->current_timing = NULL;
 
+  cin->fclk_time_tick = 1;          // 200 MHz 1us
+
   cin->addr       = cin_com_set_string(addr, CIN_CTL_IP);
   cin->bind_addr  = cin_com_set_string(bind_addr, "0.0.0.0");
   cin->port       = cin_com_set_int(port, CIN_CTL_CIN_PORT);
@@ -110,7 +112,6 @@ int cin_ctl_init(cin_ctl_t *cin,
 
   DEBUG_COMMENT("Listening thread has started.\n");
 
-  // SBW : Do we need to wait for listener to start?
   return CIN_OK;
 }
 

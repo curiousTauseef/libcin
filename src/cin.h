@@ -329,9 +329,12 @@ typedef struct cin_ctl {
   int timing_num;
   cin_config_timing_t *current_timing;
 
+  // FCLK info for absolute time
+  int fclk_time_tick;               /**< In micro seconds */
+
   // Mutex for threaded access
   cin_ctl_listener_t *listener;
-  pthread_mutex_t access; /* For sequential access to CIN */
+  pthread_mutex_t access; 
   pthread_mutexattr_t access_attr;
 } cin_ctl_t;
 
