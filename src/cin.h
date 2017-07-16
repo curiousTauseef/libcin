@@ -309,6 +309,7 @@ typedef struct cin_config_timing {
   int cols;                 /**< Cols for this timing setup */
   int overscan;             /**< Number of overscan cols for this setup */
   int fclk_freq;            /**< FCLK Frequency to use */
+  int framestore;           /**< Flag (not zero means framestore */
 } cin_config_timing_t;
 
 typedef struct cin_ctl {
