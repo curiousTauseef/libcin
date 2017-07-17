@@ -67,7 +67,10 @@ src/report.o: src/report.h src/cin.h
 
 src/config.o: src/cin.h src/config.h data/timing.h
 
-src/embedded.o: data/version.h data/firmware.h data/fcric_200.h data/bias.h config/$(FIRMWARE)
+src/embedded.o: data/version.h data/firmware.h \
+	data/fcric_200.h data/fcric_125.h \
+	data/bias.h \
+	config/$(FIRMWARE)
 
 utils/cinregdump.o: src/cin.h
 
@@ -100,6 +103,9 @@ data/timing.h: bin/convert_config
 
 data/fcric_200.h: bin/convert_config
 	bin/convert_config -n cin_config_fcric_200 -f config/fcric_200.txt data/fcric_200.h
+
+data/fcric_125.h: bin/convert_config
+	bin/convert_config -n cin_config_fcric_125 -f config/fcric_125.txt data/fcric_125.h
 
 data/bias.h: bin/convert_config
 	bin/convert_config -n cin_config_bias -b config/bias.txt data/bias.h

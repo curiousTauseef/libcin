@@ -3,3 +3,4 @@
 #include "firmware.h"
 #include "bias.h"
 #include "fcric_200.h"
+#include "fcric_125.h"
