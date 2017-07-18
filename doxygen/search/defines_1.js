@@ -9,6 +9,8 @@ var searchData=
   ['reg_5fdelaytoshutterlsb_5freg',['REG_DELAYTOSHUTTERLSB_REG',['../cin__register__map_8h.html#a8a702827fed39f7413cf0f0777aea79e',1,'cin_register_map.h']]],
   ['reg_5feth_5fenable',['REG_ETH_ENABLE',['../cin__register__map_8h.html#af823076f0ff702e18b89f5559316614d',1,'cin_register_map.h']]],
   ['reg_5feth_5freset',['REG_ETH_RESET',['../cin__register__map_8h.html#a7a9e5930dc239690063c75d82129ed81',1,'cin_register_map.h']]],
+  ['reg_5fexposuretimelsb_5freg',['REG_EXPOSURETIMELSB_REG',['../cin__register__map_8h.html#aaca4db43d5025cf41f6862d47615214b',1,'cin_register_map.h']]],
+  ['reg_5fexposuretimemsb_5freg',['REG_EXPOSURETIMEMSB_REG',['../cin__register__map_8h.html#a6549fe06ef2bb1d1d50815e037030f01',1,'cin_register_map.h']]],
   ['reg_5ffclk_5fi2c_5faddress',['REG_FCLK_I2C_ADDRESS',['../cin__register__map_8h.html#a0ccb78fbef43816f52f209962d8968f4',1,'cin_register_map.h']]],
   ['reg_5ffclk_5fi2c_5fdata_5frd',['REG_FCLK_I2C_DATA_RD',['../cin__register__map_8h.html#a6afe1b8cb9962ebdcf8201050b9b4311',1,'cin_register_map.h']]],
   ['reg_5ffclk_5fi2c_5fdata_5fwr',['REG_FCLK_I2C_DATA_WR',['../cin__register__map_8h.html#a2d52e07af5d08a89562d83c30a87a8d6',1,'cin_register_map.h']]],
@@ -35,5 +37,7 @@ var searchData=
   ['reg_5fsram_5fcommand',['REG_SRAM_COMMAND',['../cin__register__map_8h.html#af9b8ca6ffd0dda3c75f992117cb087bf',1,'cin_register_map.h']]],
   ['reg_5fsram_5fstatus0',['REG_SRAM_STATUS0',['../cin__register__map_8h.html#a0b86d159a39c081afbfa27811bf6851a',1,'cin_register_map.h']]],
   ['reg_5fstream_5ftype',['REG_STREAM_TYPE',['../cin__register__map_8h.html#a71199a1e6a2c4008d84bf3f262464b1f',1,'cin_register_map.h']]],
-  ['reg_5ftriggermask_5freg',['REG_TRIGGERMASK_REG',['../cin__register__map_8h.html#ac1c039998d5d1e472070ca472aa2dafe',1,'cin_register_map.h']]]
+  ['reg_5ftriggermask_5freg',['REG_TRIGGERMASK_REG',['../cin__register__map_8h.html#ac1c039998d5d1e472070ca472aa2dafe',1,'cin_register_map.h']]],
+  ['reg_5ftriggerrepetitiontimelsb_5freg',['REG_TRIGGERREPETITIONTIMELSB_REG',['../cin__register__map_8h.html#ab2555f97d92584205d65b20d59b72008',1,'cin_register_map.h']]],
+  ['reg_5ftriggerrepetitiontimemsb_5freg',['REG_TRIGGERREPETITIONTIMEMSB_REG',['../cin__register__map_8h.html#aa034d6b87ddbe72a3c30f10bc7ca1ad0',1,'cin_register_map.h']]]
 ];
