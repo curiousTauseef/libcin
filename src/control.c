@@ -1348,15 +1348,20 @@ int cin_ctl_get_triggering(cin_ctl_t *cin, int *trigger){
 
 }
 
-int cin_ctl_set_exposure_time(cin_ctl_t *cin,float ftime){
-
-  int _status;
+int cin_ctl_set_exposure_time(cin_ctl_t *cin,float ftime)
+{
+  int _status = CIN_OK;
   uint32_t _time;
   uint16_t _msbval,_lsbval;
 
   ftime = ftime * 1e5;
   ftime = ftime * cin->fclk_time_factor;
   _time = (uint32_t)ftime;  //Extract integer from decimal
+
+  if(_time == 0)
+  {
+    _time = 1;
+  }
    
   _msbval = (uint32_t)(_time >> 16);
   _lsbval = (uint32_t)(_time & 0xFFFF);
@@ -1410,9 +1415,9 @@ int cin_ctl_set_cycle_time(cin_ctl_t *cin,float ftime){
   _status  = cin_ctl_write_with_readback(cin,REG_TRIGGERREPETITIONTIMEMSB_REG,_msbval);
   _status |= cin_ctl_write_with_readback(cin,REG_TRIGGERREPETITIONTIMELSB_REG,_lsbval);
 
-  if(_status){
+  if(_status != CIN_OK){
     ERROR_COMMENT("Unable to set cycle time");
-    return _status;
+    return CIN_ERROR;
   } 
 
   DEBUG_PRINT("Cycle time set to %d msec\n", _time);

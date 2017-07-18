@@ -1,4 +1,5 @@
-/**<vim: set ts=2 sw=2 tw=0 noet : */
+/*<vim: set ts=2 sw=2 tw=0 noet : */
+
 /**<
  * @file 
  * @author Stuart B. Wilkins <swilkins@bnl.gov> 
@@ -38,7 +39,11 @@
  *
  *  \section TIMING
  *
- *  Timing
+ *  The exposure time is set through the REG_EXPOSURETIMEMSB_REG and REG_EXPOSURETIMELSB_REG
+ *  registers. Their value in wall time depends on the fclk frequency. At 200 MHz fclk a
+ *  register value of 0x00000001 corresponds to 20 us. At 125 MHz, a value of 0x00000001 
+ *  corresponds to 32 us.
+ *  
  *
  */
    
@@ -330,13 +335,13 @@
 
 #define REG_BIASPARAM_READ_START         0x3000
 
-#define REG_EXPOSURETIMEMSB_REG          0x8206
-#define REG_EXPOSURETIMELSB_REG          0x8207
+#define REG_EXPOSURETIMEMSB_REG          0x8206     /**< Exposure time MSB */
+#define REG_EXPOSURETIMELSB_REG          0x8207     /**< Exposure time LSB */
 #define REG_ALTEXPOSURETIMEMSB_REG       0x8306
 #define REG_ALTEXPOSURETIMELSB_REG       0x8307
 
-#define REG_TRIGGERREPETITIONTIMEMSB_REG 0x8208
-#define REG_TRIGGERREPETITIONTIMELSB_REG 0x8209
+#define REG_TRIGGERREPETITIONTIMEMSB_REG 0x8208     /**< Trigger Cycle Time MSB */
+#define REG_TRIGGERREPETITIONTIMELSB_REG 0x8209     /**< Trigger Cycle Time LSB */
 #define REG_DELAYTOEXPOSUREMSB_REG       0x820A
 #define REG_DELAYTOEXPOSURELSB_REG       0x820B
 #define REG_NUMBEROFEXPOSURE_REG         0x820C
