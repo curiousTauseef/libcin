@@ -32,9 +32,13 @@
  *  of the authors and should not be interpreted as representing official policies, 
  *  either expressed or implied, of the FreeBSD Project.
  *  
- *  @section DESCRIPTION
+ *  \section DESCRIPTION
  *
  *  Control and Frame FPGA Register Map
+ *
+ *  \section TIMING
+ *
+ *  Timing
  *
  */
    
