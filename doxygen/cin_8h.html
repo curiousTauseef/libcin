@@ -427,9 +427,9 @@ Macros</h2></td></tr>
 <tr class="memitem:a6427ec8819932e6766220873f6499ba7"><td class="memItemLeft" align="right" valign="top"><a id="a6427ec8819932e6766220873f6499ba7"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>CIN_DATA_PIPELINE_FLUSH</b>&#160;&#160;&#160;1344</td></tr>
 <tr class="separator:a6427ec8819932e6766220873f6499ba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a15787000d6dd4abac355c9f96d4a74"><td class="memItemLeft" align="right" valign="top"><a id="a1a15787000d6dd4abac355c9f96d4a74"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>CIN_CTL_NUM_BIAS_VOLTAGE</b>&#160;&#160;&#160;20</td></tr>
-<tr class="separator:a1a15787000d6dd4abac355c9f96d4a74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd9d5ad995b34eaa3d4704650a6edd34"><td class="memItemLeft" align="right" valign="top"><a id="abd9d5ad995b34eaa3d4704650a6edd34"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>CIN_CTL_NUM_BIAS</b>&#160;&#160;&#160;20</td></tr>
+<tr class="separator:abd9d5ad995b34eaa3d4704650a6edd34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5110477370e19c10541815adaf75b882"><td class="memItemLeft" align="right" valign="top"><a id="a5110477370e19c10541815adaf75b882"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>CIN_CTL_BIAS_POSH</b>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:a5110477370e19c10541815adaf75b882"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -631,9 +631,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_get_bias_regs<
 <tr class="memitem:gaa0dcd0695abee0cfe3d9c4ea1aa041e9"><td class="memItemLeft" align="right" valign="top">
 int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_set_bias_voltages</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, float *voltage, int verify)</td></tr>
 <tr class="separator:gaa0dcd0695abee0cfe3d9c4ea1aa041e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga90d16f522a23718ef53167b4943976f6"><td class="memItemLeft" align="right" valign="top">
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_get_bias_voltages</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, float *voltage)</td></tr>
-<tr class="separator:ga90d16f522a23718ef53167b4943976f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac26c50a1cd9dfb3c6725d726a4dc7653"><td class="memItemLeft" align="right" valign="top">
+int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_get_bias_voltages</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, float *voltage, uint16_t *regs)</td></tr>
+<tr class="separator:gac26c50a1cd9dfb3c6725d726a4dc7653"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad8d789b7d7823e0d847d59927d2c5c59"><td class="memItemLeft" align="right" valign="top">
 int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_set_timing_regs</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, uint16_t *vals, int vals_len)</td></tr>
 <tr class="separator:gad8d789b7d7823e0d847d59927d2c5c59"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -709,6 +709,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_set_fcric_regs
 <tr class="memitem:a4625e3ed63eb77323f217984575ac16a"><td class="memItemLeft" align="right" valign="top"><a id="a4625e3ed63eb77323f217984575ac16a"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_set_fabric_address</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, char *ip)</td></tr>
 <tr class="separator:a4625e3ed63eb77323f217984575ac16a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a272dcef01834de73c3440547ed6e5717"><td class="memItemLeft" align="right" valign="top"><a id="a272dcef01834de73c3440547ed6e5717"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_bias_dump</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, FILE *fp)</td></tr>
+<tr class="separator:a272dcef01834de73c3440547ed6e5717"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f1fd5316d579e946b39d4d068f0eebd"><td class="memItemLeft" align="right" valign="top"><a id="a2f1fd5316d579e946b39d4d068f0eebd"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_reg_dump</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, FILE *fp)</td></tr>
 <tr class="separator:a2f1fd5316d579e946b39d4d068f0eebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -827,7 +830,7 @@ DESCRIPTION</h1>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jul 18 2017 01:25:58 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 18 2017 12:16:00 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>
