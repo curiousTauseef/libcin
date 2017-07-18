@@ -46,7 +46,8 @@
  * -----------------------------------------------------------------------------------------
  */
 
-int fifo_init(fifo *f, int elem_size, long int size, int readers){
+int fifo_init(fifo *f, int elem_size, long int size)
+{
   /* Initialize the fifo */
   /* NOTE : if this fails then it causes memory leaks !*/
 
@@ -57,16 +58,12 @@ int fifo_init(fifo *f, int elem_size, long int size, int readers){
 
   /* set the initial parameters */
   f->head = f->data;
-  int i;
-  for(i=0;i<FIFO_MAX_READERS;i++){
-    f->tail[i] = f->data;
-  }
+  f->tail = f->data;
   f->end  = f->data + ((size - 1) * (long int)elem_size);
   f->size = size;
   f->elem_size = elem_size;
 
   f->full = 0;
-  f->readers = readers;
   f->overruns = 0;
 
   /* Setup mutex */
@@ -79,10 +76,7 @@ int fifo_init(fifo *f, int elem_size, long int size, int readers){
 
 void fifo_flush(fifo *f){
   pthread_mutex_lock(&f->mutex);
-  int i;
-  for(i=0;i<FIFO_MAX_READERS;i++){
-    f->tail[i] = f->head;
-  }
+  f->tail = f->head;
   f->full = 0;
 
   pthread_mutex_unlock(&f->mutex);
@@ -101,20 +95,16 @@ int fifo_overruns(fifo *f)
 
 long int fifo_used_bytes(fifo *f){
   long int bytes = 0;
-
-  int i;
   long int used;
 
   pthread_mutex_lock(&f->mutex);
-  for(i=0;i<f->readers;i++){
-    if(f->head >= f->tail[i]){
-      used = (long int)(f->head - f->tail[i]);  
-    } else {
-      used = (long int)((f->end - f->tail[i]) + (f->head - f->data));
-    }
-    if(used > bytes){
-      bytes = used;
-    }
+  if(f->head >= f->tail){
+    used = (long int)(f->head - f->tail);  
+  } else {
+    used = (long int)((f->end - f->tail) + (f->head - f->data));
+  }
+  if(used > bytes){
+    bytes = used;
   }
   pthread_mutex_unlock(&f->mutex);
   return bytes;
@@ -150,17 +140,14 @@ void fifo_advance_head(fifo *f){
 
   /* Check all the tail pointers */
 
-  int i;
-  for(i=0;i<f->readers;i++){
-    if((f->head == f->end) && (f->tail[i] == f->data)){
-      f->full = 1;
-      f->overruns++;
-      goto cleanup;
-    } else if((f->head + f->elem_size) == f->tail[i]){
-      f->full = 1;
-      f->overruns++;
-      goto cleanup;
-    }
+  if((f->head == f->end) && (f->tail == f->data)){
+    f->full = 1;
+    f->overruns++;
+    goto cleanup;
+  } else if((f->head + f->elem_size) == f->tail){
+    f->full = 1;
+    f->overruns++;
+    goto cleanup;
   }
 
   if(f->head == f->end){
@@ -176,36 +163,38 @@ cleanup:
   pthread_mutex_unlock(&f->mutex);
 }
 
-void* fifo_get_tail(fifo *f, int reader){
+void* fifo_get_tail(fifo *f)
+{
   /* Return the tail pointer or NULL if the FIFO is empty */
 
   void* tail;
 
   pthread_mutex_lock(&f->mutex);
-  while(f->tail[reader] == f->head){
+  while(f->tail == f->head){
     pthread_cond_wait(&f->signal, &f->mutex);
   }
 
-  tail = f->tail[reader];
+  tail = f->tail;
   pthread_mutex_unlock(&f->mutex);
 
   return tail;
 }
 
-void fifo_advance_tail(fifo *f, int reader){
+void fifo_advance_tail(fifo *f)
+{
   /* Return the tail pointer and advance the FIFO */
 
   pthread_mutex_lock(&f->mutex);
 
   /* If the head and tail are the same, FIFO is empty */
-  if(f->tail[reader] == f->head){
+  if(f->tail == f->head){
     return;
   }
 
-  if(f->tail[reader] == f->end){
-    f->tail[reader] = f->data;
+  if(f->tail == f->end){
+    f->tail = f->data;
   } else {
-    f->tail[reader] += f->elem_size;
+    f->tail += f->elem_size;
   }
 
   pthread_mutex_unlock(&f->mutex);

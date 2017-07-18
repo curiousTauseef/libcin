@@ -255,19 +255,13 @@ void cin_set_error_print(int error);
  * ---------------------------------------------------------------------
  */
 
-extern uint16_t cin_config_timing[];
-extern int cin_config_timing_len; 
-
 #define CIN_CONFIG_MAX_STRING 40
-
-#define FIFO_MAX_READERS 10 
 
 typedef struct {
   void *data;
   void *head;
-  void *tail[FIFO_MAX_READERS];
+  void *tail;
   void *end;
-  int readers;
   long int size;
   int elem_size;
   int full;

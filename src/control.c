@@ -95,7 +95,7 @@ int cin_ctl_init(cin_ctl_t *cin,
   }
 
   listener->cp = &(cin->ctl_port);
-  if(fifo_init(&listener->ctl_fifo, sizeof(uint32_t), 100,1)){
+  if(fifo_init(&listener->ctl_fifo, sizeof(uint32_t), 100)){
     ERROR_COMMENT("Failed to initialize fifo.\n");
     return CIN_ERROR;
   }
@@ -138,8 +138,8 @@ uint32_t cin_ctl_get_packet(cin_ctl_t *cin, uint32_t *val){
   for(i=0;i<1000;i++){
     r = fifo_used_bytes(&cin->listener->ctl_fifo);
     if(r){
-      *val = *((uint32_t *)fifo_get_tail(&cin->listener->ctl_fifo, 0));
-      fifo_advance_tail(&cin->listener->ctl_fifo, 0);
+      *val = *((uint32_t *)fifo_get_tail(&cin->listener->ctl_fifo));
+      fifo_advance_tail(&cin->listener->ctl_fifo);
       return CIN_OK;
     }
     usleep(200);

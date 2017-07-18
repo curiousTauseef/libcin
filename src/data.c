@@ -190,7 +190,7 @@ int cin_data_init_buffers(cin_data_t *cin, int packet_buffer_len, int frame_buff
 
   cin->packet_fifo = (fifo*)malloc(sizeof(fifo));
   if(fifo_init(cin->packet_fifo, sizeof(cin_data_packet_t), 
-     packet_buffer_len, 1)){
+     packet_buffer_len)){
     return 1;
   }
 
@@ -205,7 +205,7 @@ int cin_data_init_buffers(cin_data_t *cin, int packet_buffer_len, int frame_buff
 
   /* Frame FIFO */
   cin->frame_fifo = (fifo*)malloc(sizeof(fifo));
-  if(fifo_init(cin->frame_fifo, sizeof(struct cin_data_frame), frame_buffer_len, 1)){
+  if(fifo_init(cin->frame_fifo, sizeof(struct cin_data_frame), frame_buffer_len)){
     return 1;
   }
 
@@ -367,11 +367,11 @@ void *cin_data_assembler_thread(void *args){
 
     /* Get a packet from the fifo */
 
-    buffer = (cin_data_packet_t*)fifo_get_tail(cin->packet_fifo, 0);
+    buffer = (cin_data_packet_t*)fifo_get_tail(cin->packet_fifo);
 
     if(buffer == NULL){
       /* We don't have a frame, continue */
-      fifo_advance_tail(cin->packet_fifo, 0);
+      fifo_advance_tail(cin->packet_fifo);
       continue;
     }
 
@@ -390,14 +390,14 @@ void *cin_data_assembler_thread(void *args){
       pthread_mutex_unlock(&cin->stats_mutex);
 
       /* We don't have a frame, continue */
-      fifo_advance_tail(cin->packet_fifo, 0);
+      fifo_advance_tail(cin->packet_fifo);
       continue;
     } else if(buffer_len < 60) {
       // This is a quick hack to remove some bad packets from the end
       // of the data stream. They all say DEAD FOOD .....
       // we don't mark these as mallformed as they are always there
       //DEBUG_COMMENT("Packet too small ... dropping.\n");
-      fifo_advance_tail(cin->packet_fifo, 0);
+      fifo_advance_tail(cin->packet_fifo);
       continue;
     }
 
@@ -413,7 +413,7 @@ void *cin_data_assembler_thread(void *args){
       cin->mallformed_packets++;
       pthread_mutex_unlock(&cin->stats_mutex);
   
-      fifo_advance_tail(cin->packet_fifo, 0);
+      fifo_advance_tail(cin->packet_fifo);
       continue;
     }
     
@@ -505,7 +505,7 @@ void *cin_data_assembler_thread(void *args){
       pthread_mutex_lock(&cin->stats_mutex);
       cin->mallformed_packets++;
       pthread_mutex_unlock(&cin->stats_mutex);
-      fifo_advance_tail(cin->packet_fifo, 0);
+      fifo_advance_tail(cin->packet_fifo);
       continue;
     }
 
@@ -557,7 +557,7 @@ void *cin_data_assembler_thread(void *args){
       pthread_mutex_lock(&cin->stats_mutex);
       cin->mallformed_packets++;
       pthread_mutex_unlock(&cin->stats_mutex);
-      fifo_advance_tail(cin->packet_fifo, 0);
+      fifo_advance_tail(cin->packet_fifo);
       continue;
     }
 
@@ -609,7 +609,7 @@ void *cin_data_assembler_thread(void *args){
 
     /* Now we are done with the packet, we can advance the fifo */
 
-    fifo_advance_tail(cin->packet_fifo, 0);
+    fifo_advance_tail(cin->packet_fifo);
 
     /* Now we can set the last packet to this packet */
 
@@ -786,7 +786,7 @@ void* cin_data_descramble_thread(void *args){
 
   while(1){
     // Get a frame 
-    frame = (cin_data_frame_t*)fifo_get_tail(cin->frame_fifo, 0);
+    frame = (cin_data_frame_t*)fifo_get_tail(cin->frame_fifo);
     image = (cin_data_frame_t*)cin_data_buffer_push(cin);
     max = image->size_x * image->size_y;
 
@@ -807,7 +807,7 @@ void* cin_data_descramble_thread(void *args){
     }
 
     // Release the frame and the image
-    fifo_advance_tail(cin->frame_fifo, 0);
+    fifo_advance_tail(cin->frame_fifo);
     cin_data_buffer_pop(cin);
   }
 
