@@ -8,6 +8,7 @@ var searchData=
   ['cin_5fctl_5fpwr_5fval',['cin_ctl_pwr_val',['../structcin__ctl__pwr__val.html',1,'']]],
   ['cin_5fdata',['cin_data',['../structcin__data.html',1,'']]],
   ['cin_5fdata_5fcallbacks',['cin_data_callbacks',['../structcin__data__callbacks.html',1,'']]],
+  ['cin_5fdata_5fdescramble_5fmap_5ft',['cin_data_descramble_map_t',['../structcin__data__descramble__map__t.html',1,'']]],
   ['cin_5fdata_5fframe',['cin_data_frame',['../structcin__data__frame.html',1,'']]],
   ['cin_5fdata_5fpacket',['cin_data_packet',['../structcin__data__packet.html',1,'']]],
   ['cin_5fdata_5fproc',['cin_data_proc',['../structcin__data__proc.html',1,'']]],

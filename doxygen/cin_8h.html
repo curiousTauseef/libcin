@@ -102,7 +102,7 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcin__data__callbacks.html">cin_data_callbacks</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdescramble__map__t.html">descramble_map_t</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcin__data__descramble__map__t.html">cin_data_descramble_map_t</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcin__data.html">cin_data</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -542,9 +542,9 @@ typedef struct <a class="el" href="structcin__data__callbacks.html">cin_data_cal
 <tr class="memitem:a957ba691c7343f747621dd02e7bf7cae"><td class="memItemLeft" align="right" valign="top"><a id="a957ba691c7343f747621dd02e7bf7cae"></a>
 typedef struct <a class="el" href="structcin__data.html">cin_data</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cin_data_t</b></td></tr>
 <tr class="separator:a957ba691c7343f747621dd02e7bf7cae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a012d7284f4ba7a0a4e127b0c8cbed730"><td class="memItemLeft" align="right" valign="top"><a id="a012d7284f4ba7a0a4e127b0c8cbed730"></a>
-typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><b>cin_data_callback</b>) (<a class="el" href="structcin__data__frame.html">cin_data_frame_t</a> *)</td></tr>
-<tr class="separator:a012d7284f4ba7a0a4e127b0c8cbed730"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21f56fb2e79c1572ae6760b0d9d9745a"><td class="memItemLeft" align="right" valign="top"><a id="a21f56fb2e79c1572ae6760b0d9d9745a"></a>
+typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><b>cin_data_callback</b>) (<a class="el" href="structcin__data__frame.html">cin_data_frame_t</a> *, void *usr_ptr)</td></tr>
+<tr class="separator:a21f56fb2e79c1572ae6760b0d9d9745a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88a67c4bb1177f9f7b132901f92778af"><td class="memItemLeft" align="right" valign="top"><a id="a88a67c4bb1177f9f7b132901f92778af"></a>
 typedef struct <a class="el" href="structcin__ctl__id.html">cin_ctl_id</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_id_t</b></td></tr>
 <tr class="separator:a88a67c4bb1177f9f7b132901f92778af"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -706,6 +706,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_set_fcric_clam
 <tr class="memitem:aa12fef8b0135c99b43047eb7b637809c"><td class="memItemLeft" align="right" valign="top"><a id="aa12fef8b0135c99b43047eb7b637809c"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_set_fcric_gain</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, int gain)</td></tr>
 <tr class="separator:aa12fef8b0135c99b43047eb7b637809c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adabfd619f7f96a65d00c7955f8abceef"><td class="memItemLeft" align="right" valign="top"><a id="adabfd619f7f96a65d00c7955f8abceef"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_set_fcric_regs</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, uint16_t *reg, int num_reg)</td></tr>
+<tr class="separator:adabfd619f7f96a65d00c7955f8abceef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4625e3ed63eb77323f217984575ac16a"><td class="memItemLeft" align="right" valign="top"><a id="a4625e3ed63eb77323f217984575ac16a"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_set_fabric_address</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, char *ip)</td></tr>
 <tr class="separator:a4625e3ed63eb77323f217984575ac16a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -783,24 +786,6 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>cin_config_timing
 <tr class="memitem:a98fdee7749850bfb8a3664ef4b16884b"><td class="memItemLeft" align="right" valign="top"><a id="a98fdee7749850bfb8a3664ef4b16884b"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_config_timing_len</b></td></tr>
 <tr class="separator:a98fdee7749850bfb8a3664ef4b16884b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90a6b4425792c934070e37a3ffb2dbc3"><td class="memItemLeft" align="right" valign="top"><a id="a90a6b4425792c934070e37a3ffb2dbc3"></a>
-unsigned char&#160;</td><td class="memItemRight" valign="bottom"><b>cin_config_firmware</b> []</td></tr>
-<tr class="separator:a90a6b4425792c934070e37a3ffb2dbc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8a9ac627ad6f1132baac2fcc02851a9"><td class="memItemLeft" align="right" valign="top"><a id="ac8a9ac627ad6f1132baac2fcc02851a9"></a>
-unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>cin_config_firmware_len</b></td></tr>
-<tr class="separator:ac8a9ac627ad6f1132baac2fcc02851a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5873b9073e48f18aa2ae4868cda05983"><td class="memItemLeft" align="right" valign="top"><a id="a5873b9073e48f18aa2ae4868cda05983"></a>
-uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>cin_config_bias</b> []</td></tr>
-<tr class="separator:a5873b9073e48f18aa2ae4868cda05983"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8265cb4df6cbbc67248846a211aba07"><td class="memItemLeft" align="right" valign="top"><a id="ab8265cb4df6cbbc67248846a211aba07"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_config_bias_len</b></td></tr>
-<tr class="separator:ab8265cb4df6cbbc67248846a211aba07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b5c6b086a7b7da54289f02d943d14dd"><td class="memItemLeft" align="right" valign="top"><a id="a9b5c6b086a7b7da54289f02d943d14dd"></a>
-uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>cin_config_fcric_200</b> []</td></tr>
-<tr class="separator:a9b5c6b086a7b7da54289f02d943d14dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e2910037e6a502e75adda6321add2fd"><td class="memItemLeft" align="right" valign="top"><a id="a5e2910037e6a502e75adda6321add2fd"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_config_fcric_200_len</b></td></tr>
-<tr class="separator:a5e2910037e6a502e75adda6321add2fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><dl class="section author"><dt>Author</dt><dd>Stuart B. Wilkins <a href="#" onclick="location.href='mai'+'lto:'+'swi'+'lk'+'ins'+'@b'+'nl.'+'go'+'v'; return false;">swilk<span style="display: none;">.nosp@m.</span>ins@<span style="display: none;">.nosp@m.</span>bnl.g<span style="display: none;">.nosp@m.</span>ov</a></dd></dl>
@@ -851,7 +836,7 @@ DESCRIPTION</h1>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 17 2017 22:44:27 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 18 2017 00:55:08 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

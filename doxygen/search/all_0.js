@@ -23,6 +23,7 @@ var searchData=
   ['cin_5fctl_5fwrite_5fwith_5freadback',['cin_ctl_write_with_readback',['../group__cin__ctl__rw.html#ga15ae1265f7abc5a08ca4560c007a92b0',1,'cin_ctl_write_with_readback(cin_ctl_t *cin, uint16_t reg, uint16_t val):&#160;control.c'],['../group__cin__ctl__rw.html#ga15ae1265f7abc5a08ca4560c007a92b0',1,'cin_ctl_write_with_readback(cin_ctl_t *cin, uint16_t reg, uint16_t val):&#160;control.c']]],
   ['cin_5fdata',['cin_data',['../structcin__data.html',1,'']]],
   ['cin_5fdata_5fcallbacks',['cin_data_callbacks',['../structcin__data__callbacks.html',1,'']]],
+  ['cin_5fdata_5fdescramble_5fmap_5ft',['cin_data_descramble_map_t',['../structcin__data__descramble__map__t.html',1,'']]],
   ['cin_5fdata_5fdestroy',['cin_data_destroy',['../group__cin__data__init.html#ga32085025ef9031752c1853a110f15dc4',1,'cin_data_destroy(cin_data_t *cin):&#160;data.c'],['../group__cin__data__init.html#ga32085025ef9031752c1853a110f15dc4',1,'cin_data_destroy(cin_data_t *cin):&#160;data.c']]],
   ['cin_5fdata_5fframe',['cin_data_frame',['../structcin__data__frame.html',1,'']]],
   ['cin_20data_20framestore_20functions',['CIN Data Framestore Functions',['../group__cin__data__framestore.html',1,'']]],
