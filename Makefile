@@ -45,8 +45,8 @@ _MKDIR := $(shell for d in $(REQUIRED_DIRS) ; do\
 FIRMWARE=top_frame_fpga-v3012.bit
 
 all: lib/libcin.so lib/libcin.a\
-	bin/cin_power_up bin/cinregdump bin/convert_config \
-	test/smoketest test/datatest
+	bin/cin_power_up bin/cin_reg_dump bin/convert_config \
+	test/smoketest test/datatest bin/cin_bias_dump
 
 GIT = git
 AWK = awk
@@ -68,7 +68,9 @@ src/report.o: src/report.h src/cin.h
 
 src/config.o: src/cin.h src/config.h data/timing.h
 
-utils/cinregdump.o: src/cin.h
+utils/cin_reg_dump.o: src/cin.h
+
+utils/cin_bias_dump.o: src/cin.h
 
 utils/cin_power_up.o: src/cin.h
 
@@ -122,8 +124,11 @@ lib/libcin.so: $(LIBOBJECTS)
 LDFLAGS=-L./lib
 LDLIBS=-Wl,-Bstatic -lcin -Wl,-Bdynamic -lconfig -lpthread -lrt -lbsd
 
-bin/cinregdump: utils/cinregdump.o lib/libcin.a  src/cin.h
-	$(CC) $(LDFLAGS) utils/cinregdump.o -o $@ $(LDLIBS) 
+bin/cin_reg_dump: utils/cin_reg_dump.o lib/libcin.a  src/cin.h
+	$(CC) $(LDFLAGS) utils/cin_reg_dump.o -o $@ $(LDLIBS) 
+
+bin/cin_bias_dump: utils/cin_bias_dump.o lib/libcin.a  src/cin.h
+	$(CC) $(LDFLAGS) utils/cin_bias_dump.o -o $@ $(LDLIBS) 
 
 bin/cin_power_up: utils/cin_power_up.o lib/libcin.a  src/cin.h
 	$(CC) $(LDFLAGS) utils/cin_power_up.o -o $@ $(LDLIBS) 
@@ -173,7 +178,8 @@ install: all
 	$(INSTALL_DATA) lib/libcin.a $(libdir)
 	$(INSTALL_DATA) lib/libcin.so $(libdir)
 	$(INSTALL_DATA) src/cin.h $(includedir)
-	$(INSTALL_PROGRAM) utils/cinregdump $(bindir)
+	$(INSTALL_PROGRAM) utils/cin_reg_dump $(bindir)
+	$(INSTALL_PROGRAM) utils/cin_power_up$(bindir)
 
 test: all
 	./test/smoketest

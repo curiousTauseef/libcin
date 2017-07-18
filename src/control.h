@@ -35,9 +35,17 @@
 #include "cin.h"
 #include "fifo.h"
 
-float bias_voltage_range[CIN_CTL_NUM_BIAS_VOLTAGE] = {
+float bias_voltage_range[] = {
   9.0, -9.0, 9.0, -9.0, 9.0, -9.0, 9.0, -9.0, 9.0, -9.0, 
   9.0, -9.0, 99.0, 5.0, -15.0, -25.0, -10.0, -5.1, 0.0, 0.0
+};
+
+char cin_ctl_bias_name[][20] = {
+  "POSH",     "NEGH",      "POSRG",    "NEGRG",    
+  "POSSW",    "NEGSW",     "POSV",     "NEGV",    
+  "POSTG",    "NEGTG",     "POSVF",    "NEGVF",
+  "NEDGE",    "OTG",       "VDDR",     "VDD_OUT",
+  "BUF_BASE", "BUF_DELTA", "SPARE1",   "SPARE2"
 };
 
 #define CIN_CTL_FCLK_NUM_REG            6

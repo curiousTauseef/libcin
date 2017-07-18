@@ -199,7 +199,7 @@ extern const char *cin_build_version;
  * -------------------------------------------------------------------------------
  */
 
-#define CIN_CTL_NUM_BIAS_VOLTAGE           20
+#define CIN_CTL_NUM_BIAS                   20
 
 #define CIN_CTL_BIAS_POSH                  0
 #define CIN_CTL_BIAS_NEGH                  1
@@ -319,7 +319,7 @@ typedef struct cin_ctl {
   cin_config_timing_t *current_timing;
 
   // FCLK info for absolute time
-  int fclk_time_tick;               /**< In micro seconds */
+  float fclk_time_factor;               /**< In micro seconds */
 
   // Mutex for threaded access
   cin_ctl_listener_t *listener;
@@ -654,7 +654,7 @@ int cin_ctl_get_bias(cin_ctl_t *cin, int *val);
 int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify);
 int cin_ctl_get_bias_regs(cin_ctl_t * cin, uint16_t *vals);
 int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify);
-int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage);
+int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage, uint16_t *regs);
 /** @} */
 
 
@@ -690,7 +690,7 @@ int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain);
 int cin_ctl_set_fcric_regs(cin_ctl_t *cin, uint16_t *reg, int num_reg);
 int cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip);
 
-
+int cin_ctl_bias_dump(cin_ctl_t *cin, FILE *fp);
 int cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp);
 
 /*------------------------

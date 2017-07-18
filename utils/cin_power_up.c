@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     goto error;
   }
 
-  cin_ctl_set_cycle_time(&cin_ctl, 0.01);
+  cin_ctl_set_cycle_time(&cin_ctl, 1.0);
   cin_ctl_set_exposure_time(&cin_ctl, 0.001);
   cin_ctl_int_trigger_start(&cin_ctl, 0);
 

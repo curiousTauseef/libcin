@@ -63,7 +63,7 @@ int cin_ctl_init(cin_ctl_t *cin,
   cin_config_init(cin);
   cin->current_timing = NULL;
 
-  cin->fclk_time_tick = 1;          // 200 MHz 1us
+  cin->fclk_time_factor = 1.0;          // 200 MHz 1us
 
   cin->addr       = cin_com_set_string(addr, CIN_CTL_IP);
   cin->bind_addr  = cin_com_set_string(bind_addr, "0.0.0.0");
@@ -1355,6 +1355,7 @@ int cin_ctl_set_exposure_time(cin_ctl_t *cin,float ftime){
   uint16_t _msbval,_lsbval;
 
   ftime = ftime * 1e5;
+  ftime = ftime * cin->fclk_time_factor;
   _time = (uint32_t)ftime;  //Extract integer from decimal
    
   _msbval = (uint32_t)(_time >> 16);
@@ -1377,7 +1378,7 @@ int cin_ctl_set_trigger_delay(cin_ctl_t *cin,float ftime){
   uint32_t _time;
   uint16_t _msbval,_lsbval;
 
-  _time=(uint32_t)ftime;   //Extract integer from decimal
+  _time=(uint32_t)(ftime * 1000);   //Extract integer from decimal
 
   _msbval=(uint16_t)(_time >> 16);
   _lsbval=(uint16_t)(_time & 0xFFFF);
@@ -1400,6 +1401,7 @@ int cin_ctl_set_cycle_time(cin_ctl_t *cin,float ftime){
   uint16_t _msbval,_lsbval;
                                        
   ftime = ftime*1000;         //Convert to ms
+  ftime = ftime*cin->fclk_time_factor;
   _time = (uint32_t)ftime;    //Extract integer from decimal
 
   _msbval=(uint16_t)(_time >> 16);
@@ -1613,10 +1615,18 @@ int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp){
 
 /*******************  BIAS Voltage Settings   **********************/
 
-int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage){
-
+int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage, uint16_t *regs)
+{
   int n;
-  uint16_t _val[CIN_CTL_NUM_BIAS_VOLTAGE];
+  uint16_t *_val;
+
+  if(regs == NULL)
+  {
+    uint16_t __val[CIN_CTL_NUM_BIAS];
+    _val = __val;
+  } else {
+    _val = regs;
+  }
 
   if(cin_ctl_get_bias_regs(cin, _val) != CIN_OK)
   {
@@ -1624,7 +1634,7 @@ int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage){
     return CIN_ERROR;
   }
 
-  for(n=0;n<CIN_CTL_NUM_BIAS_VOLTAGE;n++){
+  for(n=0;n<CIN_CTL_NUM_BIAS;n++){
     voltage[n] = (float)(_val[n] & 0x0FFF) * bias_voltage_range[n] / 4096.0;
   } 
 
@@ -1636,7 +1646,7 @@ int cin_ctl_get_bias_regs(cin_ctl_t *cin, uint16_t *vals)
   int n;
   int _status = CIN_OK;
 
-  for(n=0;n<CIN_CTL_NUM_BIAS_VOLTAGE;n++){
+  for(n=0;n<CIN_CTL_NUM_BIAS;n++){
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, 0x0030 + (2 * n), 1);
     _status |= cin_ctl_read(cin, REG_BIASREGISTERDATAOUT, &vals[n], 0);
   }
@@ -1687,7 +1697,7 @@ int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify)
   }
 
   _status = CIN_OK;
-  for(n=0;n<CIN_CTL_NUM_BIAS_VOLTAGE;n++){
+  for(n=0;n<CIN_CTL_NUM_BIAS;n++){
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, (2 * n), 1);
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA	, _val, 1);
     _status |= cin_ctl_write(cin, REG_FRM_COMMAND, 0x0102, 1);
@@ -1704,10 +1714,10 @@ int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify)
 
 int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify)
 {
-  uint16_t _val[CIN_CTL_NUM_BIAS_VOLTAGE];
+  uint16_t _val[CIN_CTL_NUM_BIAS];
 
   int n;
-  for(n=0;n<CIN_CTL_NUM_BIAS_VOLTAGE;n++)
+  for(n=0;n<CIN_CTL_NUM_BIAS;n++)
   {
     _val[n] =  (int)((voltage[n] / bias_voltage_range[n]) * 0x0FFF) & 0x0FFF;
     _val[n] |= ((n << 14) & 0xC000);
@@ -1789,4 +1799,30 @@ int cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp)
   } 
 
   return status;
+}
+
+int cin_ctl_bias_dump(cin_ctl_t *cin, FILE *fp)
+{
+  fprintf(fp, "------------------------------------------------------------------------------\n");
+  fprintf(fp, "Bias Setting Name                        : Register : Value  : Voltage       :\n");
+  fprintf(fp, "------------------------------------------------------------------------------\n");
+
+  int status;
+  uint16_t reg[CIN_CTL_NUM_BIAS];
+  float val[CIN_CTL_NUM_BIAS];
+  status = cin_ctl_get_bias_voltages(cin, val, reg);
+  if(status != CIN_OK)
+  {
+    ERROR_COMMENT("Unable to read bias voltages\n");
+    return CIN_ERROR;
+  }
+
+  int i;
+  for(i=0;i<CIN_CTL_NUM_BIAS;i++)
+  {
+    fprintf(fp, "%-40s :  0x%04X  :  0x%04X  : %-13.8f :\n", 
+        cin_ctl_bias_name[i], 0x030 + (2 * i), reg[i], val[i]);
+  } 
+
+  return CIN_OK;
 }
