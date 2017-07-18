@@ -69,6 +69,7 @@ int cin_config_init(cin_ctl_t *cin)
   cin->timing[0].rows = 960;
   cin->timing[0].overscan = 0;
   cin->timing[0].fclk_freq = CIN_CTL_FCLK_200;
+  cin->timing[0].framestore = 0;
 
   cin->timing_num = 1;
   DEBUG_PRINT("Configured %d timing modes.\n", cin->timing_num);

@@ -35,7 +35,7 @@ CFLAGS=-Wall -O3 -g --pic -I./src -I./data
 
 LIBOBJECTS= src/data.o src/fifo.o src/control.o src/descramble.o \
 		    src/common.o src/report.o src/config.o \
-			src/embedded.o
+			data/version.o data/firmware.o
 
 REQUIRED_DIRS = lib bin doc data
 _MKDIR := $(shell for d in $(REQUIRED_DIRS) ; do\
@@ -57,7 +57,8 @@ src/data.o: src/data.h src/fifo.h \
 src/fifo.o: src/fifo.h src/cin.h
 
 src/control.o: src/control.h src/cin.h src/cin_register_map.h \
-	           src/fifo.h src/cinregisters.h src/config.h src/common.h
+	           src/fifo.h src/cinregisters.h src/config.h src/common.h \
+			   data/fcric_125.h data/fcric_200.h data/bias.h 
 
 src/descramble.o: src/descramble.h src/cin.h
 
@@ -67,47 +68,45 @@ src/report.o: src/report.h src/cin.h
 
 src/config.o: src/cin.h src/config.h data/timing.h
 
-src/embedded.o: data/version.h data/firmware.h \
-	data/fcric_200.h data/fcric_125.h \
-	data/bias.h \
-	config/$(FIRMWARE)
-
 utils/cinregdump.o: src/cin.h
 
 utils/cin_power_up.o: src/cin.h
 
 utils/convert_config.o:
 
+data/version.o: src/cin.h data/version.c
+
 #
 # Create version strings
 #
-data/version.h: 
-	$(GIT) rev-parse HEAD | $(AWK) 'BEGIN {} {print "const char *cin_build_git_sha = \"" $$0"\";"} END {}' > data/version.h
-	date | $(AWK) 'BEGIN {} {print "const char *cin_build_git_time = \""$$0"\";"} END {} ' >> data/version.h
-	$(GIT) describe --dirty --always | $(AWK) 'BEGIN {} {print "const char *cin_build_version = \""$$0"\";"} END {} ' >> data/version.h
-	cat data/version.h
+data/version.c: 
+	$(GIT) rev-parse HEAD | $(AWK) 'BEGIN {} {print "const char *cin_build_git_sha = \"" $$0"\";"} END {}' > data/version.c
+	date | $(AWK) 'BEGIN {} {print "const char *cin_build_git_time = \""$$0"\";"} END {} ' >> data/version.c
+	$(GIT) describe --dirty --always | $(AWK) 'BEGIN {} {print "const char *cin_build_version = \""$$0"\";"} END {} ' >> data/version.c
+	cat data/version.c
+
 
 #
 # Create the firmware and embed.
 #
-data/firmware.h:
-	xxd --include config/$(FIRMWARE) > data/firmware.h
-	sed -i 's/char.*\[\]/char cin_config_firmware[]/g' data/firmware.h
-	sed -i 's/int.*_len/cin_config_firmware_len/g' data/firmware.h
+data/firmware.c: config/$(FIRMWARE)
+	xxd --include config/$(FIRMWARE) > $@
+	sed -i 's/char.*\[\]/char cin_config_firmware[]/g' $@
+	sed -i 's/int.*_len/cin_config_firmware_len/g' $@
 
 #
 # Create the firmware and embed.
 #
-data/timing.h: bin/convert_config
+data/timing.h: bin/convert_config config/timing.txt
 	bin/convert_config -n cin_config_timing -t config/timing.txt data/timing.h
 
-data/fcric_200.h: bin/convert_config
+data/fcric_200.h: bin/convert_config config/fcric_200.txt
 	bin/convert_config -n cin_config_fcric_200 -f config/fcric_200.txt data/fcric_200.h
 
-data/fcric_125.h: bin/convert_config
+data/fcric_125.h: bin/convert_config config/fcric_125.txt
 	bin/convert_config -n cin_config_fcric_125 -f config/fcric_125.txt data/fcric_125.h
 
-data/bias.h: bin/convert_config
+data/bias.h: bin/convert_config config/bias.txt
 	bin/convert_config -n cin_config_bias -b config/bias.txt data/bias.h
 
 # create dynamically and statically-linked libs.

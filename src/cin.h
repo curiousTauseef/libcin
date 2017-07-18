@@ -257,12 +257,6 @@ void cin_set_error_print(int error);
 
 extern uint16_t cin_config_timing[];
 extern int cin_config_timing_len; 
-extern unsigned char cin_config_firmware[];
-extern unsigned cin_config_firmware_len;
-extern uint16_t cin_config_bias[];
-extern int cin_config_bias_len;
-extern uint16_t cin_config_fcric_200[];
-extern int cin_config_fcric_200_len;
 
 #define CIN_CONFIG_MAX_STRING 40
 
@@ -346,7 +340,6 @@ typedef struct cin_data_frame {
   struct timespec timestamp;
   int size_x;
   int size_y;
-  void *usr_ptr; // User container
 } cin_data_frame_t;
 
 typedef struct cin_data_stats {
@@ -354,7 +347,6 @@ typedef struct cin_data_stats {
 
   int last_frame;
   double framerate;
-  double datarate;
 
   // FIFO data
   
@@ -380,9 +372,10 @@ typedef struct cin_data_threads {
 } cin_data_threads_t;
 
 typedef struct cin_data_callbacks {
-  void* (*push) (cin_data_frame_t *);
-  void* (*pop)  (cin_data_frame_t *);
+  void* (*push) (cin_data_frame_t *, void* usr_ptr);
+  void* (*pop)  (cin_data_frame_t *, void* usr_ptr);
   cin_data_frame_t *frame;
+  void *usr_ptr; // User container
 } cin_data_callbacks_t;
 
 typedef struct {
@@ -391,7 +384,8 @@ typedef struct {
   int      size_y; // ROWS
   int      overscan;
   int      rows;
-} descramble_map_t;
+} cin_data_descramble_map_t;
+
 
 typedef struct cin_data {
 
@@ -427,7 +421,7 @@ typedef struct cin_data {
   uint16_t last_frame;
 
   /* Current Descramble Map */
-  descramble_map_t map;
+  cin_data_descramble_map_t map;
 
   /* Framestore mode info */
   int framestore_mode;
@@ -437,7 +431,7 @@ typedef struct cin_data {
 } cin_data_t;
 // Callback functions
 
-typedef void (*cin_data_callback) (cin_data_frame_t *);
+typedef void (*cin_data_callback) (cin_data_frame_t *, void *usr_ptr);
 
 /* ---------------------------------------------------------------------
  *
@@ -699,6 +693,7 @@ int cin_ctl_set_mux(cin_ctl_t *cin, int setting);
 int cin_ctl_get_mux(cin_ctl_t *cin, int *setting);
 int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp);
 int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain);
+int cin_ctl_set_fcric_regs(cin_ctl_t *cin, uint16_t *reg, int num_reg);
 int cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip);
 
 

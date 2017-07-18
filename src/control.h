@@ -40,24 +40,24 @@ float bias_voltage_range[CIN_CTL_NUM_BIAS_VOLTAGE] = {
   9.0, -9.0, 99.0, 5.0, -15.0, -25.0, -10.0, -5.1, 0.0, 0.0
 };
 
-#define NUM_CLAMP_REG 8
-uint16_t fcric_clamp_reg[NUM_CLAMP_REG] =     
+#define CIN_CTL_FCLK_NUM_REG            6
+#define CIN_CTL_FCRIC_NUM_REG           8
+
+uint16_t cin_ctl_fcric_clamp_reg[CIN_CTL_FCRIC_NUM_REG] =     
 { 
   0x0048, 0x0049, 0x0050, 0x0051, 0x0058, 0x0059, 0x005A, 0x005B
 };
-uint16_t fcric_clamp_reg_on[NUM_CLAMP_REG] =  
+uint16_t cin_ctl_fcric_clamp_reg_on[CIN_CTL_FCRIC_NUM_REG] =  
 { 
   0x0001, 0x00FF, 0x0001, 0x00FF, 0x00FF, 0x0001, 0x00FF, 0x0001
 };
-uint16_t fcric_clamp_reg_off[NUM_CLAMP_REG] = 
+uint16_t cin_ctl_fcric_clamp_reg_off[CIN_CTL_FCRIC_NUM_REG] = 
 { 
   0x00C7, 0x004C, 0x00B4, 0x0002, 0x0001, 0x004C, 0x0064, 0x005B
 };
 
-uint16_t cin_fcric_regs[] = {0x821D, 0x821E, 0x821F, 0x8001};
-uint16_t cin_bias_timing_regs[] = {0x8200, 0x8201, 0x8001};
-
-#define CIN_FCLK_NUM_REG 6
+uint16_t cin_ctl_fcric_regs[] = {0x821D, 0x821E, 0x821F, 0x8001};
+uint16_t cin_ctl_bias_timing_regs[] = {0x8200, 0x8201, 0x8001};
 
 uint16_t CIN_FCLK_REG[] = 
 { 
@@ -69,7 +69,7 @@ uint16_t CIN_FCLK_REG[] =
 #define CIN_FCLK_PROGRAM_200        2
 #define CIN_FCLK_PROGRAM_250        3
 
-uint16_t CIN_FCLK_PROGRAM[][CIN_FCLK_NUM_REG] = 
+uint16_t CIN_FCLK_PROGRAM[][CIN_CTL_FCLK_NUM_REG] = 
 {
   { 0xF002, 0xF042, 0xF0BC, 0xF019, 0xF06D, 0xF08F }, // 125 MHz
   { 0xF060, 0xF0C2, 0xF0C1, 0xF0B9, 0xF08A, 0xF0EF }, // 180 MHz

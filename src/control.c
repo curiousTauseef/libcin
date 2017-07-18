@@ -45,6 +45,12 @@
 #include "config.h"
 #include "common.h"
 #include "fifo.h"
+#include "fcric_125.h"
+#include "fcric_200.h"
+#include "bias.h"
+
+extern unsigned char cin_config_firmware[];
+extern unsigned int cin_config_firmware_len;
 
 /**************************** INITIALIZATION **************************/
 
@@ -325,8 +331,6 @@ int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait)
   {
     fifo_flush(&cin->listener->ctl_fifo);     
 
-    DEBUG_PRINT("Try = %d : reading reg 0x%04X\n", tries, reg);
-
     _status = cin_ctl_write(cin, REG_READ_ADDRESS, reg, 1);
     if (_status != CIN_OK)
     {
@@ -356,7 +360,6 @@ int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait)
     goto error;
   }
 
-  DEBUG_PRINT("Read 0x%08X\n", buf);
 #ifdef __DEBUG_STREAM__
   DEBUG_PRINT("Got %04X from %04X\n", buf & 0xFFFF, (buf >> 16));
 #endif
@@ -438,6 +441,8 @@ int cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr){
       goto error;
     }
   }
+
+  return CIN_OK;
    
 error:
    return CIN_ERROR;
@@ -690,7 +695,7 @@ int cin_ctl_set_fclk_regs(cin_ctl_t *cin, int clkfreq)
   int _status = 0;
 
   int i;
-  for(i=0;i<CIN_FCLK_NUM_REG;i++)
+  for(i=0;i<CIN_CTL_FCLK_NUM_REG;i++)
   {
     _status |= cin_ctl_write(cin,REG_FCLK_I2C_ADDRESS, CIN_FCLK_REG[i], 1);
     _status |= cin_ctl_write(cin,REG_FCLK_I2C_DATA_WR, CIN_FCLK_PROGRAM[clkfreq][i], 1);
@@ -1249,7 +1254,7 @@ int cin_ctl_set_focus(cin_ctl_t *cin, int val){
 int cin_ctl_int_trigger_start(cin_ctl_t *cin, int nimages){
   // Trigger the camera, setting the trigger mode
 
-  int _status = 0;
+  int _status = CIN_OK;
 
   DEBUG_PRINT("Set n exposures to %d\n", nimages);
 
@@ -1486,6 +1491,65 @@ int cin_ctl_get_mux(cin_ctl_t *cin, int *setting){
   return CIN_OK;
 }
 
+/*******************  Upload values to fCRICs **********************/
+
+int cin_ctl_set_fcric(cin_ctl_t *cin)
+{
+  // First get the fclk 
+  int fclk;
+  if(cin_ctl_get_fclk(cin, &fclk) != CIN_OK)
+  {
+    ERROR_COMMENT("Unable to get fclk status\n");
+    return CIN_ERROR;
+  }
+
+  if(fclk == CIN_CTL_FCLK_200)
+  {
+    cin_ctl_set_fcric_regs(cin, cin_config_fcric_200, cin_config_fcric_200_len);
+  } else if(fclk == CIN_CTL_FCLK_125_C) { 
+    cin_ctl_set_fcric_regs(cin, cin_config_fcric_125, cin_config_fcric_125_len);
+  } else {
+    ERROR_PRINT("Could not set fCRIC, no data for fclk value %d\n", fclk);
+    return CIN_ERROR;
+  }
+
+  return CIN_OK;
+}
+
+int cin_ctl_set_fcric_regs(cin_ctl_t *cin, uint16_t *reg, int num_reg)
+{
+  int _status = CIN_OK;
+
+  _status |= cin_ctl_write(cin, REG_DETECTOR_CONFIG_REG5, 0x0001, 1);
+  _status |= cin_ctl_write(cin, REG_DETECTOR_CONFIG_REG5, 0x0000, 1);
+  _status |= cin_ctl_write(cin, REG_FCRIC_MASK_REG1, 0xFFFF, 1);
+  _status |= cin_ctl_write(cin, REG_FCRIC_MASK_REG2, 0xFFFF, 1);
+  _status |= cin_ctl_write(cin, REG_FCRIC_MASK_REG3, 0xFFFF, 1);
+
+  int i;
+  for(i=0;i<num_reg;i+=2)
+  {
+    _status |= cin_ctl_write(cin, REG_FCRIC_WRITE0_REG, 0xA000, 1);
+    _status |= cin_ctl_write(cin, REG_FCRIC_WRITE1_REG, reg[i], 1);
+    _status |= cin_ctl_write(cin, REG_FCRIC_WRITE2_REG, reg[i+1], 1);
+    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_SEND_FCRIC_CONFIG, 1);
+  }
+
+
+  _status |= cin_ctl_write(cin, REG_FCRIC_MASK_REG1, 0x0000, 1);
+  _status |= cin_ctl_write(cin, REG_FCRIC_MASK_REG2, 0x0000, 1);
+  _status |= cin_ctl_write(cin, REG_FCRIC_MASK_REG3, 0x0000, 1);
+
+  if(_status != CIN_OK)
+  {
+    ERROR_COMMENT("Failed to write fCRIC data to CIN\n");
+    return CIN_ERROR;
+  }
+
+  ERROR_PRINT("Uploaded %d values to fCRIC regs\n", num_reg);
+  return CIN_OK;
+}
+
 /*******************  Control Gain of fCRIC   **********************/
 
 int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain){
@@ -1502,7 +1566,7 @@ int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain){
   _status |= cin_ctl_write(cin, REG_FCRIC_WRITE0_REG, 0xA000, 1);
   _status |= cin_ctl_write(cin, REG_FCRIC_WRITE1_REG, 0x0086, 1);
   _status |= cin_ctl_write(cin, REG_FCRIC_WRITE2_REG, _gain, 1);
-  _status |= cin_ctl_write(cin, REG_FRM_COMMAND, 0x0105, 1);
+  _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_SEND_FCRIC_CONFIG, 1);
 
   if(_status != CIN_OK){
     ERROR_COMMENT("Unable to set gain settings\n");
@@ -1522,20 +1586,20 @@ int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp){
   int _status = CIN_OK;
 
   if(clamp == 0){
-    _onoff = fcric_clamp_reg_off;
+    _onoff = cin_ctl_fcric_clamp_reg_off;
   } else if(clamp == 1){
-    _onoff = fcric_clamp_reg_on;
+    _onoff = cin_ctl_fcric_clamp_reg_on;
   } else {
     ERROR_PRINT("Invalid clamp setting %d\n", clamp);
     return CIN_ERROR;
   }
 
   int i;
-  for(i=0;i<NUM_CLAMP_REG;i++){
+  for(i=0;i<CIN_CTL_FCRIC_NUM_REG;i++){
     _status |= cin_ctl_write(cin, REG_FCRIC_WRITE0_REG, 0xA000, 1);
-    _status |= cin_ctl_write(cin, REG_FCRIC_WRITE1_REG, fcric_clamp_reg[i], 1);
+    _status |= cin_ctl_write(cin, REG_FCRIC_WRITE1_REG, cin_ctl_fcric_clamp_reg[i], 1);
     _status |= cin_ctl_write(cin, REG_FCRIC_WRITE2_REG, _onoff[i], 1);
-    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, 0x0105, 1);
+    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_SEND_FCRIC_CONFIG, 1);
   }
 
   if(_status != CIN_OK){

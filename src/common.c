@@ -91,12 +91,14 @@ int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, char *mode)
 
   if(cin_ctl_pwr(cin_ctl, 0))
   {
+    ERROR_COMMENT("Unable to turn off CIN power\n");
     return CIN_ERROR;
   }
   sleep(1);
 
   if(cin_ctl_pwr(cin_ctl, 1))
   {
+    ERROR_COMMENT("Unable to turn on CIN power\n");
     return CIN_ERROR;
   }
   sleep(1);
@@ -105,6 +107,7 @@ int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, char *mode)
 
   if(cin_ctl_load_firmware(cin_ctl))
   {
+    ERROR_COMMENT("Unable to Upload Firmware\n");
     return CIN_ERROR;
   }
 
@@ -112,22 +115,26 @@ int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, char *mode)
   cin_ctl_id_t cin_id;
   if(cin_ctl_get_id(cin_ctl, &cin_id))
   {
+    ERROR_COMMENT("Unable to get ID of CIN\n");
     return CIN_ERROR;
   }
 
   if(cin_ctl_fp_pwr(cin_ctl, 1) != CIN_OK)
   {
+    ERROR_COMMENT("Unable to turn on FP power\n");
     return CIN_ERROR;
   }
 
-  if(cin_com_set_fabric_comms(cin_ctl, cin_data))
+  if(cin_com_set_fabric_comms(cin_ctl, cin_data) != CIN_OK)
   {
+    ERROR_COMMENT("Unable to set fabric comms\n");
     return CIN_ERROR;
   }
 
   if(mode != NULL)
   {
-    if(cin_com_set_timing(cin_ctl, cin_data, mode)){
+    if(cin_com_set_timing(cin_ctl, cin_data, mode) != CIN_OK){
+      ERROR_COMMENT("Unable to set timing\n");
       return CIN_ERROR;
     }
   }

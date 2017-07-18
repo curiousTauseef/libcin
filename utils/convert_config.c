@@ -100,7 +100,8 @@ int parse_fcric_data(uint16_t vals[][2], int n_vals, uint16_t *pvals, int *n_pva
   // Check length
   if(n_vals != 164)
   {
-    fprintf(stderr, "!!! FCRIC File is not of correct length.");
+    fprintf(stderr, "!!! FCRIC File is not of correct length (%d vs %d).",
+        n_vals, 164);
     return -1;
   }
   

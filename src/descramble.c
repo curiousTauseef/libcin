@@ -38,7 +38,7 @@
 #include "descramble_map.h"
 
 
-int cin_data_descramble_init(descramble_map_t *map){
+int cin_data_descramble_init(cin_data_descramble_map_t *map){
 
   // Do some bounds checking
   
@@ -110,7 +110,7 @@ int cin_data_descramble_init(descramble_map_t *map){
   return 0;
 }
 
-int cin_data_descramble_frame(descramble_map_t *map, uint16_t *out, uint16_t *in){
+int cin_data_descramble_frame(cin_data_descramble_map_t *map, uint16_t *out, uint16_t *in, int max){
 
   // Actually descramble the frame
 
@@ -123,8 +123,15 @@ int cin_data_descramble_frame(descramble_map_t *map, uint16_t *out, uint16_t *in
 
   // Descramble (copy) into output block
 
+  int size = (map->size_x * map->size_y);
+  DEBUG_PRINT("Size = %d, Max = %d\n", size, max);
+  if(size > max)
+  {
+    size = max;
+  }
+
   int i;
-  for(i = 0;i < (map->size_x * map->size_y); i++){
+  for(i=0;i<size; i++){
     out[*(map_p++)] = *(in_p++);
   }
   

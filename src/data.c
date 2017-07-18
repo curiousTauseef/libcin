@@ -156,7 +156,7 @@ int cin_data_init(cin_data_t *cin,
   cin->callbacks.push = (void*)push_callback;
   cin->callbacks.pop = (void*)pop_callback;
   cin->callbacks.frame = malloc(sizeof(cin_data_frame_t));
-  cin->callbacks.frame->usr_ptr = usr_ptr;
+  cin->callbacks.usr_ptr = usr_ptr;
 
   cin_data_thread_start(&cin->listen_thread, NULL,
                         (void *)cin_data_listen_thread, 
@@ -640,7 +640,7 @@ void cin_data_reset_stats(cin_data_t *cin){
 }
 
 void cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats){
-  double framerate, datarate;
+  double framerate;
 
   pthread_mutex_lock(&cin->stats_mutex);
 
@@ -659,12 +659,9 @@ void cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats){
   }
 
   // TODO This is probably not accurate... it is not all CIN_DATA_MAX_STREAM!
-  datarate = framerate * CIN_DATA_MAX_STREAM * sizeof(uint16_t);
-  datarate = datarate / (1024 * 1024); // Convert to Mb.s^-1
 
   stats->last_frame = (int)cin->last_frame;
   stats->framerate = framerate;
-  stats->datarate = datarate;
 
   stats->packet_percent_full = fifo_percent_full(cin->packet_fifo);
   stats->frame_percent_full = fifo_percent_full(cin->frame_fifo);
@@ -693,8 +690,7 @@ void cin_data_show_stats(FILE *fp, cin_data_stats_t stats){
           stats.image_percent_full);
   fprintf(fp, "%-80s\n", buffer);
 
-  sprintf(buffer, "Framerate     = %6.1f s^-1 : Data Rate     = %10.3f Mb.s^-1",
-          stats.framerate, stats.datarate);
+  sprintf(buffer, "Framerate     = %6.1f s^-1", stats.framerate);
   fprintf(fp, "%-80s\n", buffer);
 
   sprintf(buffer, "Dropped packets %-11ld : Mallformed packets %-11ld",
@@ -742,6 +738,9 @@ void cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, i
   pthread_mutex_lock(&cin->descramble_mutex);
   *overscan = cin->map.overscan;
   *rows = cin->map.rows;
+  *xsize = 0;
+  *ysize = 0;
+
   if(xsize != NULL){
     *xsize = cin->map.size_x;
   }
@@ -776,6 +775,8 @@ void* cin_data_descramble_thread(void *args){
 
   struct cin_data_frame *frame = NULL;
   struct cin_data_frame *image = NULL;
+
+  int max;
   
   pthread_mutex_lock(&cin->descramble_mutex);
   cin_data_descramble_init(&cin->map);
@@ -787,6 +788,7 @@ void* cin_data_descramble_thread(void *args){
     // Get a frame 
     frame = (cin_data_frame_t*)fifo_get_tail(cin->frame_fifo, 0);
     image = (cin_data_frame_t*)cin_data_buffer_push(cin);
+    max = image->size_x * image->size_y;
 
     DEBUG_PRINT("Descrambling frame %d\n", frame->number);
 
@@ -794,7 +796,7 @@ void* cin_data_descramble_thread(void *args){
     {
       pthread_mutex_lock(&cin->descramble_mutex);
 
-      cin_data_descramble_frame(&cin->map, image->data, frame->data); 
+      cin_data_descramble_frame(&cin->map, image->data, frame->data, max); 
 
       image->timestamp = frame->timestamp;
       image->number = frame->number;
@@ -823,11 +825,9 @@ void* cin_data_descramble_thread(void *args){
 cin_data_frame_t* cin_data_buffer_push(cin_data_t *cin)
 {
   // Run the callback to load the data frame
-  DEBUG_PRINT("Calling callback %p with frame %p\n", 
-      cin->callbacks.push, cin->callbacks.frame);
   if(cin->callbacks.push != NULL)
   {
-    (*cin->callbacks.push)(cin->callbacks.frame);
+    (*cin->callbacks.push)(cin->callbacks.frame, cin->callbacks.usr_ptr);
     // We return a type of cin_data_frame to process
     return cin->callbacks.frame;
   }
@@ -836,11 +836,9 @@ cin_data_frame_t* cin_data_buffer_push(cin_data_t *cin)
 
 void cin_data_buffer_pop(cin_data_t *cin)
 {
-  DEBUG_PRINT("Calling callback %p with frame %p\n", 
-      cin->callbacks.pop, cin->callbacks.frame); 
   if(cin->callbacks.pop != NULL)
   {
-    (*cin->callbacks.pop)(cin->callbacks.frame);
+    (*cin->callbacks.pop)(cin->callbacks.frame, cin->callbacks.usr_ptr);
   }
   return;
 }

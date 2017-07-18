@@ -25,14 +25,22 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  cin_com_boot(&cin_ctl, &cin_data, "default");
+  if(cin_com_boot(&cin_ctl, &cin_data, "default") != CIN_OK)
+  {
+    perror("Unable to boot CIN\n");
+    goto error;
+  }
 
-  cin_ctl_set_cycle_time(&cin_ctl, 1);
+  cin_ctl_set_cycle_time(&cin_ctl, 0.01);
   cin_ctl_set_exposure_time(&cin_ctl, 0.001);
   cin_ctl_int_trigger_start(&cin_ctl, 0);
 
   cin_ctl_destroy(&cin_ctl);
   cin_data_destroy(&cin_data);
-
   return 0;
+
+error:
+  cin_ctl_destroy(&cin_ctl);
+  cin_data_destroy(&cin_data);
+  return 128;
 }
