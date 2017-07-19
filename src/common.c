@@ -56,6 +56,7 @@ int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data,  char *name)
   mode = cin_config_find_timing(cin_ctl, name);
   if(mode == CIN_ERROR)
   {
+    ERROR_PRINT("No timing data for handle \"%s\"\n", name);
     return CIN_ERROR;
   }
 
@@ -88,18 +89,21 @@ int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data,  char *name)
 int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, char *mode)
 {
   // Power cycle the CIN
+  
+  // Lock Mutex
+  pthread_mutex_lock(&cin_ctl->access);
 
   if(cin_ctl_pwr(cin_ctl, 0))
   {
     ERROR_COMMENT("Unable to turn off CIN power\n");
-    return CIN_ERROR;
+    goto error;
   }
   sleep(1);
 
   if(cin_ctl_pwr(cin_ctl, 1))
   {
     ERROR_COMMENT("Unable to turn on CIN power\n");
-    return CIN_ERROR;
+    goto error;
   }
   sleep(1);
 
@@ -108,7 +112,7 @@ int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, char *mode)
   if(cin_ctl_load_firmware(cin_ctl))
   {
     ERROR_COMMENT("Unable to Upload Firmware\n");
-    return CIN_ERROR;
+    goto error;
   }
 
   // Get the ID of the CIN
@@ -116,37 +120,42 @@ int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, char *mode)
   if(cin_ctl_get_id(cin_ctl, &cin_id))
   {
     ERROR_COMMENT("Unable to get ID of CIN\n");
-    return CIN_ERROR;
+    goto error;
   }
 
   if(cin_ctl_fp_pwr(cin_ctl, 1) != CIN_OK)
   {
     ERROR_COMMENT("Unable to turn on FP power\n");
-    return CIN_ERROR;
+    goto error;
   }
 
   if(cin_com_set_fabric_comms(cin_ctl, cin_data) != CIN_OK)
   {
     ERROR_COMMENT("Unable to set fabric comms\n");
-    return CIN_ERROR;
+    goto error;
   }
 
   if(mode != NULL)
   {
     if(cin_com_set_timing(cin_ctl, cin_data, mode) != CIN_OK){
       ERROR_COMMENT("Unable to set timing\n");
-      return CIN_ERROR;
+      goto error;
     }
   }
 
+  pthread_mutex_unlock(&cin_ctl->access);
 
   return CIN_OK;
+
+error:
+  pthread_mutex_unlock(&cin_ctl->access);
+  return CIN_ERROR;
 }
 
 int cin_com_set_fabric_comms(cin_ctl_t *cin_ctl, cin_data_t *cin_data)
 {
   // Set the fabric comms depending on how the cin_data has been setup
-
+  DEBUG_PRINT("cin_data->addr = %s\n", cin_data->addr);
   cin_ctl_set_fabric_address(cin_ctl, cin_data->addr);
   cin_data_send_magic(cin_data);
 

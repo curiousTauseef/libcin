@@ -62,7 +62,8 @@ int cin_ctl_init(cin_ctl_t *cin,
   cin_config_init(cin);
   cin->current_timing = NULL;
 
-  cin->fclk_time_factor = 1.0;          // 200 MHz 1us
+  cin->fclk_time_factor = 125.0 / 200.0;          // 200 MHz 1us
+  //cin->fclk_time_factor = 1.0;          // 200 MHz 1us
 
   cin->addr       = cin_com_set_string(addr, CIN_CTL_IP);
   cin->bind_addr  = cin_com_set_string(bind_addr, "0.0.0.0");
@@ -1353,9 +1354,8 @@ int cin_ctl_set_exposure_time(cin_ctl_t *cin,float ftime)
   uint32_t _time;
   uint16_t _msbval,_lsbval;
 
-  ftime = ftime * 1e5;
   ftime = ftime * cin->fclk_time_factor;
-  _time = (uint32_t)ftime;  //Extract integer from decimal
+  _time = (uint32_t)(ftime * 50000); 
 
   if(_time == 0)
   {
@@ -1372,7 +1372,7 @@ int cin_ctl_set_exposure_time(cin_ctl_t *cin,float ftime)
     return _status;
   }
 
-  DEBUG_PRINT("Exposure time set to %d (10this us)\n", _time);
+  DEBUG_PRINT("Exposure time set to %d (ticks)\n", _time);
   return CIN_OK;
 }
 
@@ -1405,7 +1405,6 @@ int cin_ctl_set_cycle_time(cin_ctl_t *cin,float ftime){
   uint16_t _msbval,_lsbval;
                                        
   ftime = ftime*1000;         //Convert to ms
-  ftime = ftime*cin->fclk_time_factor;
   _time = (uint32_t)ftime;    //Extract integer from decimal
 
   _msbval=(uint16_t)(_time >> 16);
@@ -1526,6 +1525,8 @@ int cin_ctl_set_fcric_regs(cin_ctl_t *cin, uint16_t *reg, int num_reg)
 {
   int _status = CIN_OK;
 
+  pthread_mutex_lock(&cin->access);
+
   _status |= cin_ctl_write(cin, REG_DETECTOR_CONFIG_REG5, 0x0001, 1);
   _status |= cin_ctl_write(cin, REG_DETECTOR_CONFIG_REG5, 0x0000, 1);
   _status |= cin_ctl_write(cin, REG_FCRIC_MASK_REG1, 0xFFFF, 1);
@@ -1545,6 +1546,8 @@ int cin_ctl_set_fcric_regs(cin_ctl_t *cin, uint16_t *reg, int num_reg)
   _status |= cin_ctl_write(cin, REG_FCRIC_MASK_REG1, 0x0000, 1);
   _status |= cin_ctl_write(cin, REG_FCRIC_MASK_REG2, 0x0000, 1);
   _status |= cin_ctl_write(cin, REG_FCRIC_MASK_REG3, 0x0000, 1);
+
+  pthread_mutex_unlock(&cin->access);
 
   if(_status != CIN_OK)
   {
@@ -1652,7 +1655,7 @@ int cin_ctl_get_bias_regs(cin_ctl_t *cin, uint16_t *vals)
 
   for(n=0;n<CIN_CTL_NUM_BIAS;n++){
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, 0x0030 + (2 * n), 1);
-    _status |= cin_ctl_read(cin, REG_BIASREGISTERDATAOUT, &vals[n], 0);
+    _status |= cin_ctl_read(cin, REG_BIASREGISTERDATAOUT, &vals[n], 1);
   }
 
   if(_status != CIN_OK)
@@ -1670,50 +1673,92 @@ int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify)
   int _status = 0;
   int _val;
 
+  pthread_mutex_lock(&cin->access);
+
   if(cin_ctl_get_bias(cin, &_val) != CIN_OK)
   {
     ERROR_COMMENT("Unable to read bias status.\n");
-    return CIN_ERROR;
+    goto error;
   }
   if(_val){
     ERROR_COMMENT("Cannot set bias values with BIAS on\n");
-    return CIN_ERROR;
+    goto error;
   }
 
   if(cin_ctl_get_clocks(cin, &_val) != CIN_OK)
   {
     ERROR_COMMENT("Unable to read clock status.\n"); 
-    return CIN_ERROR;
+    goto error;
   }
   if(_val){
     ERROR_COMMENT("Cannot set bias voltages with CLOCKS on.\n");
-    return CIN_ERROR;
+    goto error;
   }
   
   if(cin_ctl_get_triggering(cin, &_val) != CIN_OK)
   {
     ERROR_COMMENT("Unable to read triggering status.\n"); 
-    return CIN_ERROR;
+    goto error;
   }
   if(_val){
     ERROR_COMMENT("Cannot set bias voltages while camera is triggering.\n");
-    return CIN_ERROR;
+    goto error;
   }
 
   _status = CIN_OK;
+  DEBUG_COMMENT("Uploading Bias Values\n");
+
   for(n=0;n<CIN_CTL_NUM_BIAS;n++){
-    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, (2 * n), 1);
-    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA	, _val, 1);
-    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, 0x0102, 1);
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, (2 * n), 0);
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA	, vals[n], 0);
+    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, 0x0102, 0);
+    usleep(100000);
   } 
 
   if(_status != CIN_OK)
   {
     ERROR_COMMENT("Unable to set bias values\n");
-    return CIN_ERROR;
+    goto error;
   }
 
+  if(verify)
+  {
+    DEBUG_COMMENT("Verifying bias values\n");
+    uint16_t _rregs[CIN_CTL_NUM_BIAS];
+    if(cin_ctl_get_bias_regs(cin, _rregs) != CIN_OK)
+    {
+      ERROR_COMMENT("Unable to read bias values\n");
+      goto error;
+    }
+
+    int i;
+    int _err = 0;
+    for(i=0;i<CIN_CTL_NUM_BIAS;i++)
+    {
+      if(_rregs[i] != vals[i])
+      {
+        DEBUG_PRINT("Validation ERROR at bias value %d (wrote %04x read %04x)\n",
+            i, vals[i], _rregs[i]);
+        _err++;
+      } else {
+        DEBUG_PRINT("Validation OK at bias value %d (wrote %04x read %04x)\n",
+            i, vals[i], _rregs[i]);
+      }
+    }
+    if(_err)
+    {
+      goto error;
+    }
+    DEBUG_COMMENT("Bias Verified OK\n");
+  }
+
+  pthread_mutex_unlock(&cin->access);
   return CIN_OK;
+
+error:
+
+  pthread_mutex_unlock(&cin->access);
+  return CIN_ERROR;
 }
 
 int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify)
@@ -1736,9 +1781,17 @@ int cin_ctl_set_bias_voltages(cin_ctl_t *cin, float *voltage, int verify)
   return CIN_OK;
 }
 
+int cin_ctl_upload_bias(cin_ctl_t *cin)
+{
+  return cin_ctl_set_bias_regs(cin, cin_config_bias, 1);
+}
+
 int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len)
 {
   int i;
+
+  pthread_mutex_lock(&cin->access);
+
   DEBUG_PRINT("Writing to timing registers (%d values)\n", vals_len);
   for(i=0;i<vals_len;i++)
   {
@@ -1750,18 +1803,30 @@ int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len)
     if(_status != CIN_OK)
     {
       ERROR_PRINT("Unable to write %04X to cin (line %d)\n", vals[i], i);
-      return CIN_ERROR;
+      goto error;
     }
   }
 
   DEBUG_COMMENT("Done\n");
 
-  return cin_ctl_write(cin,REG_DETECTOR_CONFIG_REG6, 0x0000, 0);
+  if(cin_ctl_write(cin,REG_DETECTOR_CONFIG_REG6, 0x0000, 0) != CIN_OK)
+  {
+    goto error;
+  }
+
+  pthread_mutex_unlock(&cin->access);
+  return CIN_OK;
+
+error:
+  pthread_mutex_unlock(&cin->access);
+  return CIN_ERROR;
 }
 
 int cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals)
 {
   int i;
+  pthread_mutex_lock(&cin->access);
+
   for(i=0;i<510;i++)
   {
     int _status = 0;
@@ -1770,13 +1835,18 @@ int cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals)
     if(_status)
     {
       ERROR_PRINT("Unable to write %04X to cin (line %d)\n", vals[i], i);
-      return CIN_ERROR;
+      goto error;
     }
   }
 
   DEBUG_COMMENT("Done\n");
 
+  pthread_mutex_unlock(&cin->access);
   return CIN_OK;
+
+error:
+  pthread_mutex_unlock(&cin->access);
+  return CIN_ERROR;
 }
 
 /*******************  Register Dump of CIN    **********************/

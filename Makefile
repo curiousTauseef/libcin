@@ -47,7 +47,7 @@ FIRMWARE=top_frame_fpga-v3012.bit
 all: lib/libcin.so lib/libcin.a\
 	bin/cin_power_up bin/cin_reg_dump bin/convert_config \
 	test/smoketest test/datatest bin/cin_bias_dump \
-	bin/cin_test_fo
+	bin/cin_test_fo bin/cin_send_bias
 
 GIT = git
 AWK = awk
@@ -76,6 +76,8 @@ utils/cin_bias_dump.o: src/cin.h
 utils/cin_power_up.o: src/cin.h
 
 utils/cin_test_fo.o: src/cin.h
+
+utils/cin_send_bias.o: src/cin.h
 
 utils/convert_config.o:
 
@@ -131,6 +133,9 @@ LDLIBS=-Wl,-Bstatic -lcin -Wl,-Bdynamic -lconfig -lpthread -lrt -lbsd
 
 bin/cin_test_fo: utils/cin_test_fo.o lib/libcin.a  src/cin.h
 	$(CC) $(LDFLAGS) utils/cin_test_fo.o -o $@ $(LDLIBS) 
+
+bin/cin_send_bias: utils/cin_send_bias.o lib/libcin.a  src/cin.h
+	$(CC) $(LDFLAGS) utils/cin_send_bias.o -o $@ $(LDLIBS) 
 
 bin/cin_reg_dump: utils/cin_reg_dump.o lib/libcin.a  src/cin.h
 	$(CC) $(LDFLAGS) utils/cin_reg_dump.o -o $@ $(LDLIBS) 

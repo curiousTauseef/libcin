@@ -688,6 +688,7 @@ int cin_ctl_get_mux(cin_ctl_t *cin, int *setting);
 int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp);
 int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain);
 int cin_ctl_set_fcric_regs(cin_ctl_t *cin, uint16_t *reg, int num_reg);
+int cin_ctl_set_fcric(cin_ctl_t *cin);
 int cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip);
 
 int cin_ctl_bias_dump(cin_ctl_t *cin, FILE *fp);
@@ -828,6 +829,7 @@ int cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan);
 void cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize);
 
 int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, char *mode);
+int cin_ctl_upload_bias(cin_ctl_t *cin);
 #ifdef __cplusplus
 }
 #endif

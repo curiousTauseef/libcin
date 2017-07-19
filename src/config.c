@@ -66,18 +66,20 @@ int cin_config_init(cin_ctl_t *cin)
   strcpy(cin->timing[0].name, "125MHz_TIMING");
   cin->timing[0].data = cin_config_125_timing;
   cin->timing[0].data_len = cin_config_125_timing_len;
-  cin->timing[0].rows = 960;
+  cin->timing[0].rows = 1920;
+  cin->timing[0].cols = 960;
   cin->timing[0].overscan = 0;
   cin->timing[0].fclk_freq = CIN_CTL_FCLK_125_C;
   cin->timing[0].framestore = 0;
 
-  strcpy(cin->timing[0].name, "125MHz_TIMING_FS");
-  cin->timing[0].data = cin_config_125_timing;
-  cin->timing[0].data_len = cin_config_125_timing_len;
-  cin->timing[0].rows = 960;
-  cin->timing[0].overscan = 0;
-  cin->timing[0].fclk_freq = CIN_CTL_FCLK_125_C;
-  cin->timing[0].framestore = 0;
+  strcpy(cin->timing[1].name, "125MHz_TIMING_FS");
+  cin->timing[1].data = cin_config_125_timing_fs;
+  cin->timing[1].data_len = cin_config_125_timing_fs_len;
+  cin->timing[1].rows = 960;
+  cin->timing[1].cols = 960;
+  cin->timing[1].overscan = 0;
+  cin->timing[1].fclk_freq = CIN_CTL_FCLK_125_C;
+  cin->timing[1].framestore = 1;
 
   cin->timing_num = 2;
 
