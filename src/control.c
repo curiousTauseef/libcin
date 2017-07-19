@@ -45,8 +45,7 @@
 #include "config.h"
 #include "common.h"
 #include "fifo.h"
-#include "fcric_125.h"
-#include "fcric_200.h"
+#include "fcric.h"
 #include "bias.h"
 
 extern unsigned char cin_config_firmware[];

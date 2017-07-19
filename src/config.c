@@ -63,15 +63,24 @@ int cin_config_init(cin_ctl_t *cin)
   DEBUG_COMMENT("Configuring default timing modes\n");
   // Defualt timing
 
-  strcpy(cin->timing[0].name, "default");
-  cin->timing[0].data = cin_config_timing;
-  cin->timing[0].data_len = cin_config_timing_len;
+  strcpy(cin->timing[0].name, "125MHz_TIMING");
+  cin->timing[0].data = cin_config_125_timing;
+  cin->timing[0].data_len = cin_config_125_timing_len;
   cin->timing[0].rows = 960;
   cin->timing[0].overscan = 0;
-  cin->timing[0].fclk_freq = CIN_CTL_FCLK_200;
+  cin->timing[0].fclk_freq = CIN_CTL_FCLK_125_C;
   cin->timing[0].framestore = 0;
 
-  cin->timing_num = 1;
+  strcpy(cin->timing[0].name, "125MHz_TIMING_FS");
+  cin->timing[0].data = cin_config_125_timing;
+  cin->timing[0].data_len = cin_config_125_timing_len;
+  cin->timing[0].rows = 960;
+  cin->timing[0].overscan = 0;
+  cin->timing[0].fclk_freq = CIN_CTL_FCLK_125_C;
+  cin->timing[0].framestore = 0;
+
+  cin->timing_num = 2;
+
   DEBUG_PRINT("Configured %d timing modes.\n", cin->timing_num);
 
   return CIN_OK;

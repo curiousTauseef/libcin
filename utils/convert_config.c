@@ -253,7 +253,7 @@ int main(int argc, char *argv[])
     errflg++;
   }
 
-  if((argc - optind) != 2){
+  if((argc - optind) != 1){
     errflg++;
   }
 
@@ -270,7 +270,6 @@ int main(int argc, char *argv[])
   int n_pvals = 0;
 
   fprintf(stderr, "--- Input file %s\n", argv[optind]);
-  fprintf(stderr, "--- Output file %s\n", argv[optind+1]);
 
   if(read_file(argv[optind], vals, &n_vals))
   {
@@ -301,14 +300,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  FILE *fp = fopen(argv[optind+1], "w");
-  if(fp == NULL)
-  {
-    fprintf(stderr, "!!! Unable to open file %s for write.\n", argv[optind]);
-    return 30;
-  }
-  dump_data(fp, name, pvals, n_pvals);
-  fclose(fp);
+  dump_data(stdout, name, pvals, n_pvals);
 
   return 0;
 }

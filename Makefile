@@ -46,7 +46,8 @@ FIRMWARE=top_frame_fpga-v3012.bit
 
 all: lib/libcin.so lib/libcin.a\
 	bin/cin_power_up bin/cin_reg_dump bin/convert_config \
-	test/smoketest test/datatest bin/cin_bias_dump
+	test/smoketest test/datatest bin/cin_bias_dump \
+	bin/cin_test_fo
 
 GIT = git
 AWK = awk
@@ -58,7 +59,7 @@ src/fifo.o: src/fifo.h src/cin.h
 
 src/control.o: src/control.h src/cin.h src/cin_register_map.h \
 	           src/fifo.h src/cinregisters.h src/config.h src/common.h \
-			   data/fcric_125.h data/fcric_200.h data/bias.h 
+			   data/fcric.h data/fcric.h data/bias.h data/timing.h
 
 src/descramble.o: src/descramble.h src/cin.h
 
@@ -73,6 +74,8 @@ utils/cin_reg_dump.o: src/cin.h
 utils/cin_bias_dump.o: src/cin.h
 
 utils/cin_power_up.o: src/cin.h
+
+utils/cin_test_fo.o: src/cin.h
 
 utils/convert_config.o:
 
@@ -99,17 +102,19 @@ data/firmware.c: config/$(FIRMWARE)
 #
 # Create the firmware and embed.
 #
-data/timing.h: bin/convert_config config/timing.txt
-	bin/convert_config -n cin_config_timing -t config/timing.txt data/timing.h
+data/timing.h: bin/convert_config config/20170526_125MHz_fCCD_Timing_xper.txt config/20170526_125MHz_fCCD_Timing_FS_xper.txt
+	bin/convert_config -n cin_config_125_timing -t \
+		config/20170526_125MHz_fCCD_Timing_xper.txt  > data/timing.h
+	bin/convert_config -n cin_config_125_timing_fs -t \
+		config/20170526_125MHz_fCCD_Timing_FS_xper.txt  >> data/timing.h
+	grep uint16_t data/timing.h
 
-data/fcric_200.h: bin/convert_config config/fcric_200.txt
-	bin/convert_config -n cin_config_fcric_200 -f config/fcric_200.txt data/fcric_200.h
+data/fcric.h: bin/convert_config config/fcric_200.txt config/fcric_125.txt
+	bin/convert_config -n cin_config_fcric_200 -f config/fcric_200.txt > data/fcric.h
+	bin/convert_config -n cin_config_fcric_125 -f config/fcric_125.txt >> data/fcric.h
 
-data/fcric_125.h: bin/convert_config config/fcric_125.txt
-	bin/convert_config -n cin_config_fcric_125 -f config/fcric_125.txt data/fcric_125.h
-
-data/bias.h: bin/convert_config config/bias.txt
-	bin/convert_config -n cin_config_bias -b config/bias.txt data/bias.h
+data/bias.h: bin/convert_config config/20160330_80V_Bias_Settings.txt
+	bin/convert_config -n cin_config_bias -b config/20160330_80V_Bias_Settings.txt > data/bias.h
 
 # create dynamically and statically-linked libs.
 
@@ -124,6 +129,9 @@ lib/libcin.so: $(LIBOBJECTS)
 LDFLAGS=-L./lib
 LDLIBS=-Wl,-Bstatic -lcin -Wl,-Bdynamic -lconfig -lpthread -lrt -lbsd
 
+bin/cin_test_fo: utils/cin_test_fo.o lib/libcin.a  src/cin.h
+	$(CC) $(LDFLAGS) utils/cin_test_fo.o -o $@ $(LDLIBS) 
+
 bin/cin_reg_dump: utils/cin_reg_dump.o lib/libcin.a  src/cin.h
 	$(CC) $(LDFLAGS) utils/cin_reg_dump.o -o $@ $(LDLIBS) 
 
@@ -136,10 +144,10 @@ bin/cin_power_up: utils/cin_power_up.o lib/libcin.a  src/cin.h
 bin/convert_config: utils/convert_config.o 
 	$(CC) utils/convert_config.o -o $@ 
 
-test/smoketest: test/smoketest.o lib/libcin.so  src/cin.h
+test/smoketest: test/smoketest.o lib/libcin.a  src/cin.h
 	$(CC) $(LDFLAGS) test/smoketest.o -o $@ $(LDLIBS) 
 
-test/datatest: test/datatest.o lib/libcin.so  src/cin.h
+test/datatest: test/datatest.o lib/libcin.a  src/cin.h
 	$(CC) $(LDFLAGS) test/datatest.o -o $@ $(LDLIBS) 
 
 .PHONY :doc
