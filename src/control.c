@@ -554,10 +554,10 @@ error:
 
 int cin_ctl_load_firmware_file(cin_ctl_t *cin, char *filename){
    
-  uint32_t num_e;
+  size_t num_e;
   FILE *file = NULL;
   unsigned char *buffer = NULL;
-  int buffer_max = 20000000;
+  size_t buffer_max = 20000000;
   int _status = -1; 
 
   if((buffer = (unsigned char *)malloc(buffer_max)) == NULL)
@@ -574,11 +574,18 @@ int cin_ctl_load_firmware_file(cin_ctl_t *cin, char *filename){
 
   DEBUG_PRINT("Loading %s\n", filename);
 
-  num_e = fread(buffer,buffer_max, sizeof(buffer), file);
+  num_e = fread(buffer, sizeof(unsigned char), buffer_max, file);
+  if(num_e == 0)
+  {
+    ERROR_PRINT("fread error %d %d\n", ferror(file), feof(file));
+    goto error;
+  }
 
   fclose(file);
 
-  _status = cin_ctl_load_firmware_data(cin, buffer, num_e);
+  DEBUG_PRINT("Read %d bytes (max = %d)\n", (int)num_e, (int)buffer_max);
+
+  _status = cin_ctl_load_firmware_data(cin, buffer, (int)num_e);
   return _status;
 
 error:
@@ -1799,7 +1806,7 @@ int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len)
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, i * 2, 1);
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA, vals[i], 1);
     _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_WR_CCD_CLOCK_REG, 1);
-    usleep(20);
+    usleep(1000);
     if(_status != CIN_OK)
     {
       ERROR_PRINT("Unable to write %04X to cin (line %d)\n", vals[i], i);
