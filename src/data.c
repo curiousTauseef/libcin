@@ -722,7 +722,6 @@ void *cin_data_listen_thread(void *args){
                             (socklen_t*)&cin->dp.slen);
     
     if(ioctl(cin->dp.sockfd, SIOCGSTAMPNS, &time) == -1){
-      ERROR_COMMENT("Unable to read packet time\n");
       clock_gettime(CLOCK_REALTIME, &time);
     }
 
