@@ -42,7 +42,7 @@ _MKDIR := $(shell for d in $(REQUIRED_DIRS) ; do\
 	[ -d $$d ] || mkdir -p $$d;            \
 	done )
 
-FIRMWARE=top_frame_fpga-v1019j.bit
+FIRMWARE=top_frame_fpga-v3012.bit
 
 all: lib/libcin.so lib/libcin.a\
 	bin/cin_power_up bin/cin_reg_dump bin/convert_config \

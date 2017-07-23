@@ -788,22 +788,22 @@ void* cin_data_descramble_thread(void *args){
     // Get a frame 
     frame = (cin_data_frame_t*)fifo_get_tail(cin->frame_fifo);
     image = (cin_data_frame_t*)cin_data_buffer_push(cin);
-    max = image->size_x * image->size_y;
 
     DEBUG_PRINT("Descrambling frame %d\n", frame->number);
 
     if(image != NULL)
     {
+      max = image->size_x * image->size_y;
+      
       pthread_mutex_lock(&cin->descramble_mutex);
-
       cin_data_descramble_frame(&cin->map, image->data, frame->data, max); 
+      pthread_mutex_unlock(&cin->descramble_mutex);
 
       image->timestamp = frame->timestamp;
       image->number = frame->number;
       image->size_x = cin->map.size_x;
       image->size_y = cin->map.size_y;
 
-      pthread_mutex_unlock(&cin->descramble_mutex);
     }
 
     // Release the frame and the image

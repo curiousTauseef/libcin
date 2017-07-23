@@ -22,11 +22,13 @@ int main(int argc, char *argv[]){
   strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S %Z", info);
 
   fprintf(stdout, "\n");
-  fprintf(stdout, "cinregdump : Started at %s\n\n", buf);
+  fprintf(stdout, "cin_reg_dump : Started at %s\n\n", buf);
 
   int status = cin_ctl_reg_dump(&cin, stdout);
 
   cin_ctl_destroy(&cin);
+
+  fprintf(stdout, "\n");
 
   return status;
 }

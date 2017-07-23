@@ -37,6 +37,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <sys/time.h>
 
 #include "cin.h"
 #include "cin_register_map.h"
@@ -132,17 +133,27 @@ int cin_ctl_destroy(cin_ctl_t *cin){
 
 
 uint32_t cin_ctl_get_packet(cin_ctl_t *cin, uint32_t *val){
-  int i;
   long int r;
-  
-  for(i=0;i<1000;i++){
+  struct timeval start, now, diff;
+
+  gettimeofday(&start, NULL);
+ 
+  while(1)
+  {
     r = fifo_used_bytes(&cin->listener->ctl_fifo);
     if(r){
       *val = *((uint32_t *)fifo_get_tail(&cin->listener->ctl_fifo));
       fifo_advance_tail(&cin->listener->ctl_fifo);
       return CIN_OK;
     }
-    usleep(200);
+    
+    gettimeofday(&now, NULL);
+    timersub(&now, &start, &diff);
+    if(diff.tv_sec > 2)
+    {
+      ERROR_PRINT("Read timeout after %d seconds\n", 2);
+      break;
+    }
   }
 
   return CIN_ERROR;
@@ -168,7 +179,7 @@ void *cin_ctl_listen_thread(void* args){
                  (socklen_t*)&data->cp->slen);
     if(i != -1){
       *buffer = ntohl(val);
-#ifdef __DEBUG_STREAM__
+#ifdef __DEBUG_STREAM_THREAD__
       DEBUG_PRINT("Received %d bytes value  = %08lX\n", i, (long int)(*buffer));
 #endif
       fifo_advance_head(&data->ctl_fifo);
@@ -245,39 +256,46 @@ error:
 
 int cin_ctl_write_with_readback(cin_ctl_t *cin, uint16_t reg, uint16_t val){
   
-  int tries = CIN_CTL_MAX_WRITE_TRIES;
+  int try = CIN_CTL_MAX_WRITE_TRIES;
+  uint16_t _val;
 
   pthread_mutex_lock(&cin->access);
 
-  int _status;
-  while(tries){
-    DEBUG_PRINT("try = %d\n", tries);
-    _status = cin_ctl_write(cin, reg, val, 1);
-    if(_status){
+  while(try){
+    if(cin_ctl_write(cin, reg, val, 1) != CIN_OK)
+    {
       ERROR_PRINT("Error writing register %x\n", reg);
-      goto error;
+      continue;
     }
 
-    uint16_t _val;
-    _status = cin_ctl_read(cin, reg, &_val, 0);
-    if(_status){
+    if(cin_ctl_read(cin, reg, &_val, 1) != CIN_OK)
+    {
       ERROR_PRINT("Unable to read register %x\n", reg);
-      goto error;
+      continue;
     }
-    DEBUG_PRINT("sent = 0x%04X recv = 0x%04X\n", val, _val); 
+
+#ifdef __DEBUG_STREAM__
+    DEBUG_PRINT("try = %d sent = 0x%04X recv = 0x%04X\n", try, val, _val); 
+#endif
+
     if(_val == val){
       // Value correct
       break;
     }
-    tries--;
+    try--;
   }
 
+  if(_val != val)
+  {
+    // We failed
+    ERROR_PRINT("Unable to set reg 0x%04X after %d tries.\n", reg, CIN_CTL_MAX_WRITE_TRIES);
+    pthread_mutex_unlock(&cin->access);
+    return CIN_ERROR;
+  }
+    
   pthread_mutex_unlock(&cin->access);
   return CIN_OK;
 
-error:
-  pthread_mutex_unlock(&cin->access);
-  return CIN_ERROR;
 }
 
 int cin_ctl_stream_write(cin_ctl_t *cin, unsigned char *val,int size) {
@@ -324,6 +342,10 @@ int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait)
   int _status;
   uint32_t buf = 0;
 
+#ifdef __DEBUG_STREAM__
+  DEBUG_PRINT("Read reg %04X\n", reg);
+#endif 
+
   pthread_mutex_lock(&cin->access);
 
   int tries = CIN_CTL_MAX_READ_TRIES;
@@ -331,7 +353,7 @@ int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait)
   {
     fifo_flush(&cin->listener->ctl_fifo);     
 
-    _status = cin_ctl_write(cin, REG_READ_ADDRESS, reg, 1);
+    _status = cin_ctl_write(cin, REG_READ_ADDRESS, reg, 0);
     if (_status != CIN_OK)
     {
       goto error;
@@ -339,19 +361,29 @@ int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait)
 
     if(wait)
     {
-      usleep(100000);
+      usleep(CIN_CTL_READ_SLEEP);
     }
 
-    _status = cin_ctl_write(cin, REG_COMMAND, CMD_READ_REG, 1);
+    _status = cin_ctl_write(cin, REG_COMMAND, CMD_READ_REG, 0);
     if (_status != CIN_OK)
     {
+     ERROR_COMMENT("Write Error\n");
       goto error;
     }
 
     if(cin_ctl_get_packet(cin, &buf) == CIN_OK)
     {
-      break;
+      if((buf >> 16) == reg)
+      {
+        break;
+      } else {
+        ERROR_PRINT("Read value is register 0x%04X was expecting 0x%04X (try %d)\n", 
+                    (buf >> 16), reg, tries);
+      }
+    } else {
+      ERROR_PRINT("Read timeout on try %d\n", tries);
     }
+
     tries--;
   }
 
@@ -364,19 +396,12 @@ int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait)
   DEBUG_PRINT("Got %04X from %04X\n", buf & 0xFFFF, (buf >> 16));
 #endif
 
-  if((buf >> 16) != reg)
-  {
-    ERROR_PRINT("Read value is register 0x%04X was expecting 0x%04X\n", 
-                (buf >> 16), reg);
-    goto error;
-  }
 
   *val = (uint16_t)buf;
   pthread_mutex_unlock(&cin->access);
   return CIN_OK;
     
 error:  
-   ERROR_COMMENT("Read error.\n");
    pthread_mutex_unlock(&cin->access);
    return CIN_ERROR;
 }
@@ -449,7 +474,7 @@ error:
 }
 
 int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off){
-  int _status;
+  int _status = CIN_OK;
   uint16_t _val1;
   uint16_t _val2;
 
@@ -463,16 +488,16 @@ int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off){
     DEBUG_COMMENT("Disabeling FO Test Pattern\n");
   }
 
-  _status  = cin_ctl_write(cin,CIN_CTL_FO_REG1, 0x9E00, 0);
-  _status |= cin_ctl_write(cin,CIN_CTL_FO_REG2, 0x0000, 0);
-  _status |= cin_ctl_write(cin,CIN_CTL_FO_REG3, _val1,  0);
-  _status |= cin_ctl_write(cin,CIN_CTL_FO_REG4, 0x0105, 0);
+  _status |= cin_ctl_write_with_readback(cin,REG_FCRIC_WRITE0_REG, 0x9E00);
+  _status |= cin_ctl_write_with_readback(cin,REG_FCRIC_WRITE1_REG, 0x0000);
+  _status |= cin_ctl_write_with_readback(cin,REG_FCRIC_WRITE2_REG, _val1);
+  _status |= cin_ctl_write(cin,REG_FRM_COMMAND, CMD_SEND_FCRIC_CONFIG, 0);
 
-  usleep(20000);   /*for flow control*/ 
+  usleep(CIN_CTL_FO_SLEEP); // For flow control
 
-  _status |= cin_ctl_write(cin,CIN_CTL_FO_REG5, _val2, 0);
-  _status |= cin_ctl_write(cin,CIN_CTL_FO_REG6, _val2, 0);
-  _status |= cin_ctl_write(cin,CIN_CTL_FO_REG7, _val2, 0);
+  _status |= cin_ctl_write_with_readback(cin,REG_FCRIC_MASK_REG1, _val2);
+  _status |= cin_ctl_write_with_readback(cin,REG_FCRIC_MASK_REG2, _val2);
+  _status |= cin_ctl_write_with_readback(cin,REG_FCRIC_MASK_REG3, _val2);
 
   return _status;
 }
@@ -531,7 +556,7 @@ int cin_ctl_load_config(cin_ctl_t *cin,char *filename){
       sscanf (_line,"%s %s",_regstr,_valstr);
       _regul=strtoul(_regstr,NULL,16);
       _valul=strtoul(_valstr,NULL,16);          
-      usleep(10000);   /*for flow control*/ 
+      usleep(CIN_CTL_CONFIG_SLEEP);   /*for flow control*/ 
       _status=cin_ctl_write(cin, _regul, _valul, 0);
       if (_status != 0){
         ERROR_COMMENT("Error writing to CIN\n");
@@ -669,23 +694,23 @@ error:
 int cin_ctl_freeze_dco(cin_ctl_t *cin, int freeze){
   int _status;
 
-  _status = cin_ctl_write(cin,REG_FCLK_I2C_ADDRESS, 0xB089, 1);
+  _status = cin_ctl_write_with_readback(cin,REG_FCLK_I2C_ADDRESS, 0xB089);
 
   if(freeze){
-    _status |= cin_ctl_write(cin,REG_FCLK_I2C_DATA_WR, 0xF010, 1);
+    _status |= cin_ctl_write_with_readback(cin,REG_FCLK_I2C_DATA_WR, 0xF010);
   } else {
-    _status |= cin_ctl_write(cin,REG_FCLK_I2C_DATA_WR, 0xF000, 1);
+    _status |= cin_ctl_write_with_readback(cin,REG_FCLK_I2C_DATA_WR, 0xF000);
   }
 
-  _status |= cin_ctl_write(cin,REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
+  _status |= cin_ctl_write(cin,REG_FRM_COMMAND, CMD_FCLK_COMMIT, 0);
 
   sleep(1);
 
   if(!freeze){
     // Start the DCO up
-    _status |= cin_ctl_write(cin,REG_FCLK_I2C_ADDRESS, 0xB087, 1);
-    _status |= cin_ctl_write(cin,REG_FCLK_I2C_DATA_WR, 0xF040, 1);
-    _status |= cin_ctl_write(cin,REG_FRM_COMMAND, CMD_FCLK_COMMIT, 1);
+    _status |= cin_ctl_write_with_readback(cin,REG_FCLK_I2C_ADDRESS, 0xB087);
+    _status |= cin_ctl_write_with_readback(cin,REG_FCLK_I2C_DATA_WR, 0xF040);
+    _status |= cin_ctl_write(cin,REG_FRM_COMMAND, CMD_FCLK_COMMIT, 0);
     sleep(1);
   }
 
@@ -699,7 +724,17 @@ int cin_ctl_freeze_dco(cin_ctl_t *cin, int freeze){
 
 int cin_ctl_set_fclk_regs(cin_ctl_t *cin, int clkfreq)
 {
-  int _status = 0;
+  int _status = CIN_OK;
+
+  DEBUG_PRINT("Setting FCLK DCO to %d\n", clkfreq);
+
+  if(cin_ctl_freeze_dco(cin, 1) != CIN_OK)
+  {
+    ERROR_COMMENT("Unable to freeze DCO\n");
+    return CIN_ERROR;
+  }
+
+  usleep(CIN_CTL_DCO_SLEEP);
 
   int i;
   for(i=0;i<CIN_CTL_FCLK_NUM_REG;i++)
@@ -710,86 +745,78 @@ int cin_ctl_set_fclk_regs(cin_ctl_t *cin, int clkfreq)
     usleep(200000);
   }
 
-  return _status;
+  if(_status != CIN_OK)
+  {
+    ERROR_COMMENT("Unable to set FCLK regs\n");
+    return CIN_ERROR;
+  }
+
+  if(cin_ctl_freeze_dco(cin, 0) != CIN_OK)
+  {
+    ERROR_COMMENT("Unable to unfreeze DCO\n");
+    return CIN_ERROR;
+  }
+
+  return CIN_OK;
 }
 
 int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq){
 
-  int _status = 0;
+  int _status = CIN_OK;
+
+  pthread_mutex_lock(&cin->access);
 
   switch(clkfreq)
   {
     case CIN_CTL_FCLK_125_C:
-      _status = cin_ctl_freeze_dco(cin, 1);
-      usleep(200000);
-      if(!_status)
-      {
-        cin_ctl_set_fclk_regs(cin, CIN_FCLK_PROGRAM_125);
-      }
-      if(!_status)
-      {
-        _status = cin_ctl_freeze_dco(cin, 0);
-      }
+      _status = cin_ctl_set_fclk_regs(cin, CIN_FCLK_PROGRAM_125);
       break;
 
     case CIN_CTL_FCLK_200_C:
-      _status = cin_ctl_freeze_dco(cin, 1);
-      usleep(200000);
-      if(!_status)
-      {
-        cin_ctl_set_fclk_regs(cin, CIN_FCLK_PROGRAM_200);
-      }
-      if(!_status)
-      {
-        _status = cin_ctl_freeze_dco(cin, 0);
-      }
+      _status = cin_ctl_set_fclk_regs(cin, CIN_FCLK_PROGRAM_200);
       break;
 
     case CIN_CTL_FCLK_250_C:
-      _status = cin_ctl_freeze_dco(cin, 1);
-      usleep(200000);
-      if(!_status)
-      {
-        cin_ctl_set_fclk_regs(cin, CIN_FCLK_PROGRAM_250);
-      }
-      if(!_status)
-      {
-        _status = cin_ctl_freeze_dco(cin, 0);
-      }
+      _status = cin_ctl_set_fclk_regs(cin, CIN_FCLK_PROGRAM_250);
       break;
 
     case CIN_CTL_FCLK_200:
-      _status = cin_ctl_write(cin, REG_FCLK_I2C_DATA_WR, CMD_FCLK_200, 1);
+      _status = cin_ctl_write_with_readback(cin, REG_FCLK_I2C_DATA_WR, CMD_FCLK_200);
       break;
 
     default:
       ERROR_PRINT("Invalid clock frequency %d\n", clkfreq);
-      return CIN_ERROR;
+      goto error;
       break;
   }
 
-  if(_status){
+  if(_status != CIN_OK){
     ERROR_COMMENT("Unable to set FCLK frequency.\n");
-    return CIN_ERROR;
+    goto error;
   }
 
   // Now verrify that fclk has been set
   
   int _fclk;
-  if(cin_ctl_get_fclk(cin, &_fclk))
+  if(cin_ctl_get_fclk(cin, &_fclk) != CIN_OK)
   {
     ERROR_COMMENT("Unable to read FCLK value.\n");
-    return CIN_ERROR;
+    goto error;
   }
 
   if(_fclk != clkfreq)
   {
     ERROR_PRINT("Failed to set fclk frequency. Set %d got %d\n", clkfreq, _fclk);
-    return CIN_ERROR;
+    goto error;
   }
 
   DEBUG_PRINT("Set FCLK to %d\n", clkfreq);
+  pthread_mutex_unlock(&cin->access);
   return CIN_OK;
+
+error:
+  pthread_mutex_unlock(&cin->access);
+  return CIN_ERROR;
 }
 
 int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq)
@@ -816,13 +843,14 @@ int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq)
     for(i=0;i<CIN_FCLK_READ_N;i++){
       _status |= cin_ctl_write(cin, REG_FCLK_I2C_ADDRESS, CIN_FCLK_READ[i], 0);
       _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_FCLK_COMMIT, 0);
+      usleep(CIN_CTL_FCLK_SLEEP);
       _status |= cin_ctl_read(cin, REG_FCLK_I2C_DATA_RD, &_reg[i], 1);
     }
 
     // Print Reisters to debug stream
 
     for(i=0;i<CIN_FCLK_READ_N;i++){
-      DEBUG_PRINT("FCLK REG 0x%04X = 0x%04X\n", CIN_FCLK_READ[i], _reg[i]);
+      DEBUG_PRINT("FCLK REG 0x%04X = 0x%04X %d\n", CIN_FCLK_READ[i], _reg[i], _status);
     }
 
     // Calculate HS Divider
@@ -1265,16 +1293,19 @@ int cin_ctl_int_trigger_start(cin_ctl_t *cin, int nimages){
 
   DEBUG_PRINT("Set n exposures to %d\n", nimages);
 
+  pthread_mutex_lock(&cin->access);
   _status |= cin_ctl_write_with_readback(cin, REG_NUMBEROFEXPOSURE_REG, (uint16_t)nimages);
   _status |= cin_ctl_set_focus(cin, 1);
   _status |= cin_ctl_write(cin, REG_FRM_COMMAND, 0x0100, 0);
+  pthread_mutex_unlock(&cin->access);
 
-  if(_status){
+  if(_status != CIN_OK){
     ERROR_COMMENT("Unable to start triggers");
+    return CIN_ERROR;
   }
 
   DEBUG_COMMENT("Trigger sent.\n");
-  return _status;
+  return CIN_OK;
 }
       
 int cin_ctl_int_trigger_stop(cin_ctl_t *cin){
@@ -1534,25 +1565,25 @@ int cin_ctl_set_fcric_regs(cin_ctl_t *cin, uint16_t *reg, int num_reg)
 
   pthread_mutex_lock(&cin->access);
 
-  _status |= cin_ctl_write(cin, REG_DETECTOR_CONFIG_REG5, 0x0001, 1);
-  _status |= cin_ctl_write(cin, REG_DETECTOR_CONFIG_REG5, 0x0000, 1);
-  _status |= cin_ctl_write(cin, REG_FCRIC_MASK_REG1, 0xFFFF, 1);
-  _status |= cin_ctl_write(cin, REG_FCRIC_MASK_REG2, 0xFFFF, 1);
-  _status |= cin_ctl_write(cin, REG_FCRIC_MASK_REG3, 0xFFFF, 1);
+  _status |= cin_ctl_write_with_readback(cin, REG_DETECTOR_CONFIG_REG5, 0x0001);
+  _status |= cin_ctl_write_with_readback(cin, REG_DETECTOR_CONFIG_REG5, 0x0000);
+  _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_MASK_REG1, 0xFFFF);
+  _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_MASK_REG2, 0xFFFF);
+  _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_MASK_REG3, 0xFFFF);
 
   int i;
   for(i=0;i<num_reg;i+=2)
   {
-    _status |= cin_ctl_write(cin, REG_FCRIC_WRITE0_REG, 0xA000, 1);
-    _status |= cin_ctl_write(cin, REG_FCRIC_WRITE1_REG, reg[i], 1);
-    _status |= cin_ctl_write(cin, REG_FCRIC_WRITE2_REG, reg[i+1], 1);
-    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_SEND_FCRIC_CONFIG, 1);
+    _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_WRITE0_REG, 0xA000);
+    _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_WRITE1_REG, reg[i]);
+    _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_WRITE2_REG, reg[i+1]);
+    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_SEND_FCRIC_CONFIG, 0);
   }
 
 
-  _status |= cin_ctl_write(cin, REG_FCRIC_MASK_REG1, 0x0000, 1);
-  _status |= cin_ctl_write(cin, REG_FCRIC_MASK_REG2, 0x0000, 1);
-  _status |= cin_ctl_write(cin, REG_FCRIC_MASK_REG3, 0x0000, 1);
+  _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_MASK_REG1, 0x0000);
+  _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_MASK_REG2, 0x0000);
+  _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_MASK_REG3, 0x0000);
 
   pthread_mutex_unlock(&cin->access);
 
@@ -1579,9 +1610,9 @@ int cin_ctl_set_fcric_gain(cin_ctl_t *cin, int gain){
     return CIN_ERROR;
   }
 
-  _status |= cin_ctl_write(cin, REG_FCRIC_WRITE0_REG, 0xA000, 1);
-  _status |= cin_ctl_write(cin, REG_FCRIC_WRITE1_REG, 0x0086, 1);
-  _status |= cin_ctl_write(cin, REG_FCRIC_WRITE2_REG, _gain, 1);
+  _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_WRITE0_REG, 0xA000);
+  _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_WRITE1_REG, 0x0086);
+  _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_WRITE2_REG, _gain);
   _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_SEND_FCRIC_CONFIG, 1);
 
   if(_status != CIN_OK){
@@ -1612,10 +1643,10 @@ int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp){
 
   int i;
   for(i=0;i<CIN_CTL_FCRIC_NUM_REG;i++){
-    _status |= cin_ctl_write(cin, REG_FCRIC_WRITE0_REG, 0xA000, 1);
-    _status |= cin_ctl_write(cin, REG_FCRIC_WRITE1_REG, cin_ctl_fcric_clamp_reg[i], 1);
-    _status |= cin_ctl_write(cin, REG_FCRIC_WRITE2_REG, _onoff[i], 1);
-    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_SEND_FCRIC_CONFIG, 1);
+    _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_WRITE0_REG, 0xA000);
+    _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_WRITE1_REG, cin_ctl_fcric_clamp_reg[i]);
+    _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_WRITE2_REG, _onoff[i]);
+    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_SEND_FCRIC_CONFIG, 0);
   }
 
   if(_status != CIN_OK){
@@ -1661,7 +1692,7 @@ int cin_ctl_get_bias_regs(cin_ctl_t *cin, uint16_t *vals)
   int _status = CIN_OK;
 
   for(n=0;n<CIN_CTL_NUM_BIAS;n++){
-    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, 0x0030 + (2 * n), 1);
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, CIN_CTL_BIAS_OFFSET + (2 * n), 1);
     _status |= cin_ctl_read(cin, REG_BIASREGISTERDATAOUT, &vals[n], 1);
   }
 
@@ -1716,10 +1747,10 @@ int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify)
   DEBUG_COMMENT("Uploading Bias Values\n");
 
   for(n=0;n<CIN_CTL_NUM_BIAS;n++){
-    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, (2 * n), 0);
-    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA	, vals[n], 0);
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, (2 * n), 1);
+    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA	, vals[n], 1);
     _status |= cin_ctl_write(cin, REG_FRM_COMMAND, 0x0102, 0);
-    usleep(100000);
+    usleep(CIN_CTL_BIAS_SLEEP);
   } 
 
   if(_status != CIN_OK)
@@ -1759,7 +1790,6 @@ int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify)
     DEBUG_COMMENT("Bias Verified OK\n");
   }
 
-  pthread_mutex_unlock(&cin->access);
   return CIN_OK;
 
 error:
@@ -1805,7 +1835,7 @@ int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len)
     int _status = CIN_OK;
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, i * 2, 1);
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERDATA, vals[i], 1);
-    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_WR_CCD_CLOCK_REG, 1);
+    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_WR_CCD_CLOCK_REG, 0);
     usleep(1000);
     if(_status != CIN_OK)
     {
@@ -1816,10 +1846,16 @@ int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len)
 
   DEBUG_COMMENT("Done\n");
 
-  if(cin_ctl_write(cin,REG_DETECTOR_CONFIG_REG6, 0x0000, 0) != CIN_OK)
+  if(cin_ctl_write_with_readback(cin,REG_DETECTOR_CONFIG_REG6, 0x0000) != CIN_OK)
   {
     goto error;
   }
+
+  //uint16_t read_vals[600]; /// OUCH! Needs fixing
+  //if(cin_ctl_get_timing_regs(cin, read_vals, vals_len) != CIN_OK)
+  //{
+  //  goto error;
+  //}
 
   pthread_mutex_unlock(&cin->access);
   return CIN_OK;
@@ -1829,16 +1865,17 @@ error:
   return CIN_ERROR;
 }
 
-int cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals)
+int cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len)
 {
   int i;
   pthread_mutex_lock(&cin->access);
 
-  for(i=0;i<510;i++)
+  for(i=0;i<vals_len;i++)
   {
     int _status = 0;
-    _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, (2 * i), 1);
+    _status |= cin_ctl_write_with_readback(cin, REG_BIASANDCLOCKREGISTERADDRESS, (2 * i));
     _status |= cin_ctl_read(cin, REG_CLOCKREGISTERDATAOUT, &vals[i], 0);
+    DEBUG_PRINT("Reg 0x%04X = 0x%04X\n", 2 * i, vals[i]);
     if(_status)
     {
       ERROR_PRINT("Unable to write %04X to cin (line %d)\n", vals[i], i);
@@ -1879,14 +1916,15 @@ int cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp)
     rmap++;
   } 
 
+  fprintf(fp, "-------------------------------------------------------------\n");
   return status;
 }
 
 int cin_ctl_bias_dump(cin_ctl_t *cin, FILE *fp)
 {
-  fprintf(fp, "------------------------------------------------------------------------------\n");
-  fprintf(fp, "Bias Setting Name                        : Register : Value  : Voltage       :\n");
-  fprintf(fp, "------------------------------------------------------------------------------\n");
+  fprintf(fp, "--------------------------------------------------------------------------------\n");
+  fprintf(fp, "Bias Setting Name                        : Register : Value  : Voltage         :\n");
+  fprintf(fp, "--------------------------------------------------------------------------------\n");
 
   int status;
   uint16_t reg[CIN_CTL_NUM_BIAS];
@@ -1901,9 +1939,11 @@ int cin_ctl_bias_dump(cin_ctl_t *cin, FILE *fp)
   int i;
   for(i=0;i<CIN_CTL_NUM_BIAS;i++)
   {
-    fprintf(fp, "%-40s :  0x%04X  :  0x%04X  : %-13.8f :\n", 
+    fprintf(fp, "%-40s :  0x%04X  :  0x%04X  : % 13.8f :\n", 
         cin_ctl_bias_name[i], 0x030 + (2 * i), reg[i], val[i]);
   } 
+
+  fprintf(fp, "--------------------------------------------------------------------------------\n");
 
   return CIN_OK;
 }

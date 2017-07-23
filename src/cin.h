@@ -75,11 +75,17 @@ extern const char *cin_build_version;
 #define CIN_CTL_FRMW_BIND_PORT             50202
 #define CIN_CTL_RCVBUF                     10  // Mb 
 
-#define CIN_CTL_MAX_READ_TRIES             10
+#define CIN_CTL_MAX_READ_TRIES             5
 #define CIN_CTL_MAX_WRITE_TRIES            5
 #define CIN_CTL_WRITE_SLEEP                100 // microsecs
-#define CIN_CTL_STREAM_CHUNK               256
-#define CIN_CTL_STREAM_SLEEP               15
+#define CIN_CTL_READ_SLEEP                 100 // microsecs
+#define CIN_CTL_BIAS_SLEEP                 100000 // microseconds
+#define CIN_CTL_FO_SLEEP                   500000 // microseconds
+#define CIN_CTL_CONFIG_SLEEP               100 // microseconds
+#define CIN_CTL_DCO_SLEEP                  1000000 // microseconds
+#define CIN_CTL_FCLK_SLEEP                 200000 // microseconds
+#define CIN_CTL_STREAM_CHUNK               512
+#define CIN_CTL_STREAM_SLEEP               5
 
 #define CIN_CTL_POWER_ENABLE               0x001F
 #define CIN_CTL_POWER_DISABLE              0x0000
@@ -153,10 +159,6 @@ extern const char *cin_build_version;
 #define CIN_CTL_FO_REG1                    0x821D
 #define CIN_CTL_FO_REG2                    0x821E
 #define CIN_CTL_FO_REG3                    0x821F
-#define CIN_CTL_FO_REG4                    0x8001
-#define CIN_CTL_FO_REG5                    0x8211
-#define CIN_CTL_FO_REG6                    0x8212
-#define CIN_CTL_FO_REG7                    0x8213
 
 #define CIN_DATA_IP                        "10.0.5.207"
 #define CIN_DATA_BIND_PORT                 49201
@@ -200,6 +202,7 @@ extern const char *cin_build_version;
  */
 
 #define CIN_CTL_NUM_BIAS                   20
+#define CIN_CTL_BIAS_OFFSET                0x0030  /**< Offset in address to read bias */
 
 #define CIN_CTL_BIAS_POSH                  0
 #define CIN_CTL_BIAS_NEGH                  1
@@ -625,12 +628,11 @@ int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len
 /** @} */
 
 /** @defgroup cin_ctl_fclk CIN FCLK Configuration Routines
- * Firmware upload routines
+ * FCLK (Internal FPGA Clock) Routines
  * @{
  */
 int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq);
 int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq);
-int cin_ctl_set_fclk_regs(cin_ctl_t *cin, int clkfreq);
 /** @} */
 
 
@@ -663,7 +665,7 @@ int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage, uint16_t *regs);
  * @{
  */
 int cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len);
-int cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals);
+int cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len);
 /** @} */
 
 int cin_ctl_get_camera_pwr(cin_ctl_t *cin, int *val);

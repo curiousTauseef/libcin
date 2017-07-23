@@ -102,4 +102,6 @@ int cin_ctl_calc_vi_status(cin_ctl_t *cin,
                            uint16_t vreg, uint16_t ireg, double vfact,
                            cin_ctl_pwr_val_t *vi);
 
+int cin_ctl_set_fclk_regs(cin_ctl_t *cin, int clkfreq);
+int cin_ctl_freeze_dco(cin_ctl_t *cin, int freeze);
 #endif /* ifndef __CIN_API_H__ */
