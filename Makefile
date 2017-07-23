@@ -42,7 +42,7 @@ _MKDIR := $(shell for d in $(REQUIRED_DIRS) ; do\
 	[ -d $$d ] || mkdir -p $$d;            \
 	done )
 
-FIRMWARE=top_frame_fpga-v3012.bit
+FIRMWARE=top_frame_fpga-v1019j.bit
 
 all: lib/libcin.so lib/libcin.a\
 	bin/cin_power_up bin/cin_reg_dump bin/convert_config \
@@ -102,13 +102,21 @@ data/firmware.c: config/$(FIRMWARE)
 	sed -i 's/int.*_len/cin_config_firmware_len/g' $@
 
 #
-# Create the firmware and embed.
+# Create the timing files and embed.
 #
-data/timing.h: bin/convert_config config/20170526_125MHz_fCCD_Timing_xper.txt config/20170526_125MHz_fCCD_Timing_FS_xper.txt
+data/timing.h:  bin/convert_config \
+				config/20170526_125MHz_fCCD_Timing_xper.txt \
+				config/20170526_125MHz_fCCD_Timing_FS_xper.txt \
+				config/2014_Jan_07-07_31_CCD_23ID_FS.txt \
+				config/2013_Nov_25-200MHz_CCD_timing.txt
 	bin/convert_config -n cin_config_125_timing -t \
 		config/20170526_125MHz_fCCD_Timing_xper.txt  > data/timing.h
 	bin/convert_config -n cin_config_125_timing_fs -t \
 		config/20170526_125MHz_fCCD_Timing_FS_xper.txt  >> data/timing.h
+	bin/convert_config -n cin_config_200_lcls_fs -t \
+		config/2014_Jan_07-07_31_CCD_23ID_FS.txt  >> data/timing.h
+	bin/convert_config -n cin_config_200_full_gold -t \
+		config/2013_Nov_25-200MHz_CCD_timing.txt >> data/timing.h
 	grep uint16_t data/timing.h
 
 data/fcric.h: bin/convert_config config/fcric_200.txt config/fcric_125.txt
