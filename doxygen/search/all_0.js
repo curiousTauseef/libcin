@@ -6,6 +6,7 @@ var searchData=
   ['cin_5fconfig_5ftiming',['cin_config_timing',['../structcin__config__timing.html',1,'']]],
   ['cin_5fctl',['cin_ctl',['../structcin__ctl.html',1,'']]],
   ['cin_20control_20bias_20routines',['CIN Control Bias Routines',['../group__cin__ctl__bias.html',1,'']]],
+  ['cin_5fctl_5fbias_5foffset',['CIN_CTL_BIAS_OFFSET',['../cin_8h.html#ad95dc4e4eea94fe47c04313732519a2e',1,'cin.h']]],
   ['cin_5fctl_5fdestroy',['cin_ctl_destroy',['../group__cin__ctl__init.html#ga888fd017426a3718a875f6bdb5078b81',1,'cin_ctl_destroy(cin_ctl_t *cin):&#160;control.c'],['../group__cin__ctl__init.html#ga888fd017426a3718a875f6bdb5078b81',1,'cin_ctl_destroy(cin_ctl_t *cin):&#160;control.c']]],
   ['cin_20fclk_20configuration_20routines',['CIN FCLK Configuration Routines',['../group__cin__ctl__fclk.html',1,'']]],
   ['cin_20firmware_20upload_20routines',['CIN Firmware Upload Routines',['../group__cin__ctl__firmware.html',1,'']]],
