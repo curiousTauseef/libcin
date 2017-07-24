@@ -34,6 +34,6 @@
 #define CIN_CONFIG_H 1
 
 int cin_config_init(cin_ctl_t *cin);
-int cin_config_find_timing(cin_ctl_t *cin, char *name);
+int cin_config_find_timing(cin_ctl_t *cin, const char *name);
 
 #endif

@@ -132,7 +132,7 @@ int cin_ctl_destroy(cin_ctl_t *cin){
   return CIN_OK;
 }
 
-void cin_ctl_message(cin_ctl_t *cin, char *message, int severity)
+void cin_ctl_message(cin_ctl_t *cin, const char *message, int severity)
 {
   if(cin->msg_callback != NULL)
   {

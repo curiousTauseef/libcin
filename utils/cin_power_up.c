@@ -6,7 +6,7 @@
 #include "cin.h"
 
 
-void msg_callback(char *message, int severity, void *ptr)
+void msg_callback(const char *message, int severity, void *ptr)
 {
   if(severity == CIN_CTL_MSG_OK)
   {

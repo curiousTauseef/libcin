@@ -48,7 +48,7 @@
  * -----------------------------------------------------------------------------------------
  */
 
-int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data,  char *name)
+int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data,  const char *name)
 {
   int mode;
   char _msg[256];
@@ -98,7 +98,7 @@ error:
   return CIN_OK;
 }
 
-int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, char *mode)
+int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, const char *mode)
 {
   // Power cycle the CIN
   

@@ -41,7 +41,7 @@
 
 #include "timing.h"
 
-int cin_config_find_timing(cin_ctl_t *cin, char *name)
+int cin_config_find_timing(cin_ctl_t *cin, const char *name)
 {
   int i;
   for(i=0;i<cin->timing_num;i++)
