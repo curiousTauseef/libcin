@@ -152,6 +152,10 @@ int cin_data_init(cin_data_t *cin,
   pthread_mutex_init(&cin->descramble_mutex, NULL);
   pthread_mutex_init(&cin->framestore_mutex, NULL);
 
+  pthread_barrier_init(&cin->listen_thread.barrier, NULL, 2);
+  pthread_barrier_init(&cin->assembler_thread.barrier, NULL, 2);
+  pthread_barrier_init(&cin->descramble_thread.barrier, NULL, 2);
+
   /* Setup connections between processes */
   cin->callbacks.push = (void*)push_callback;
   cin->callbacks.pop = (void*)pop_callback;
@@ -168,6 +172,20 @@ int cin_data_init(cin_data_t *cin,
   cin_data_thread_start(&cin->descramble_thread, NULL,
                         (void *)cin_data_descramble_thread,
                         (void *)cin);
+
+  // Now wait for threads to start
+
+  DEBUG_COMMENT("Waiting for all threads to signal they have started\n");
+
+  pthread_barrier_wait(&cin->listen_thread.barrier);
+  pthread_barrier_destroy(&cin->listen_thread.barrier);
+  pthread_barrier_wait(&cin->assembler_thread.barrier);
+  pthread_barrier_destroy(&cin->assembler_thread.barrier);
+  pthread_barrier_wait(&cin->descramble_thread.barrier);
+  pthread_barrier_destroy(&cin->descramble_thread.barrier);
+
+  DEBUG_COMMENT("All threads started\n");
+
   return 0;
 }
 
@@ -363,6 +381,7 @@ void *cin_data_assembler_thread(void *args){
 
   cin_data_t *cin = (cin_data_t*)args;
 
+  pthread_barrier_wait(&cin->assembler_thread.barrier);
   while(1){
 
     /* Get a packet from the fifo */
@@ -713,6 +732,9 @@ void *cin_data_listen_thread(void *args){
   cin_data_send_magic(cin);
 
   struct timespec time;
+
+  pthread_barrier_wait(&cin->listen_thread.barrier);
+
   while(1){
     /* Get the next element in the fifo */
     buffer = (cin_data_packet_t*)fifo_get_head(cin->packet_fifo);
@@ -785,6 +807,7 @@ void* cin_data_descramble_thread(void *args){
 
   DEBUG_COMMENT("Initialized descramble map\n");
 
+  pthread_barrier_wait(&cin->descramble_thread.barrier);
   while(1){
     // Get a frame 
     frame = (cin_data_frame_t*)fifo_get_tail(cin->frame_fifo);

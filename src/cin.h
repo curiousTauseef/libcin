@@ -372,6 +372,7 @@ typedef struct cin_data_stats {
 
 typedef struct cin_data_threads {
   pthread_t thread_id;
+  pthread_barrier_t barrier;
   int started;
 } cin_data_threads_t;
 
