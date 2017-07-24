@@ -67,6 +67,9 @@ extern const char *cin_build_version;
 
 #define CIN_OK                             0
 #define CIN_ERROR                          -1
+#define CIN_CTL_MSG_OK                     0
+#define CIN_CTL_MSG_MINOR                  1
+#define CIN_CTL_MSG_MAJOR                  2
 
 #define CIN_CTL_IP                         "192.168.1.207"
 #define CIN_CTL_CIN_PORT                   49200
@@ -328,6 +331,10 @@ typedef struct cin_ctl {
   cin_ctl_listener_t *listener;
   pthread_mutex_t access; 
   pthread_mutexattr_t access_attr;
+
+  // Callback fot status info
+  void (*msg_callback)(char*, int, void*);
+  void *msg_callback_ptr;
 } cin_ctl_t;
 
 
@@ -521,6 +528,9 @@ int cin_ctl_init(cin_ctl_t *cin,
  * @return Returns 0 on sucsess non-zero if error
  */
 int cin_ctl_destroy(cin_ctl_t *cin);
+
+void cin_ctl_message(cin_ctl_t *cin, char *message, int severity);
+void cin_ctl_set_msg_callback(cin_ctl_t *cin, void *msg_callback, void *ptr);
 
 /*!
  * Send a magic packet to the CIN to initialize data

@@ -5,12 +5,28 @@
 
 #include "cin.h"
 
+
+void msg_callback(char *message, int severity, void *ptr)
+{
+  if(severity == CIN_CTL_MSG_OK)
+  {
+    fprintf(stderr, "--- %s\n", message);
+  } else if(severity == CIN_CTL_MSG_MINOR){
+    fprintf(stderr, "*** %s\n", message);
+  } else if(severity == CIN_CTL_MSG_MAJOR){
+    fprintf(stderr, "!!! %s\n", message);
+  }
+}
+
+
 int main(int argc, char *argv[])
 {
   cin_ctl_t cin_ctl;
   cin_data_t cin_data;
-  cin_set_debug_print(1);
-  cin_set_error_print(1);
+
+  cin_set_debug_print(0);
+  cin_set_error_print(0);
+
 
   if(argc != 2)
   {
@@ -30,6 +46,8 @@ int main(int argc, char *argv[])
     fprintf(stderr,"Unable to initialize CIN data library\n");
     return -1;
   }
+
+  cin_ctl_set_msg_callback(&cin_ctl, &msg_callback, NULL);
 
   if(cin_com_boot(&cin_ctl, &cin_data, argv[1]) != CIN_OK)
   {

@@ -51,12 +51,15 @@
 int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data,  char *name)
 {
   int mode;
+  char _msg[256];
 
   // Find the timing mode
   mode = cin_config_find_timing(cin_ctl, name);
   if(mode == CIN_ERROR)
   {
     ERROR_PRINT("No timing data for handle \"%s\"\n", name);
+    snprintf(_msg, 256, "No timing data found for \"%s\"", name);
+    cin_ctl_message(cin_ctl, _msg, CIN_CTL_MSG_MAJOR);
     return CIN_ERROR;
   }
 
@@ -64,25 +67,34 @@ int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data,  char *name)
 
   // Now upload timing data to CIN
   DEBUG_PRINT("Uploading timing data from \"%s\".\n", name);
+  snprintf(_msg, 256, "Uploading timing data \"%s\"", name);
+  cin_ctl_message(cin_ctl, _msg, CIN_CTL_MSG_OK);
+
   if(cin_ctl_set_timing_regs(cin_ctl, cin_ctl->current_timing->data, 
         cin_ctl->current_timing->data_len) != CIN_OK)
   {
-    return CIN_ERROR;
+    goto error;
   }
 
   // Now set the fclk
   if(cin_ctl_set_fclk(cin_ctl, cin_ctl->current_timing->fclk_freq) != CIN_OK)
   {
-    return CIN_ERROR;
+    goto error;
   }
 
   // Now set the descramble params
   if(cin_data_set_descramble_params(cin_data, cin_ctl->current_timing->rows,
         cin_ctl->current_timing->overscan) != CIN_OK)
   {
-    return CIN_ERROR;
+    goto error;
   }
 
+  snprintf(_msg, 256, "Timing set to \"%s\"", name);
+  cin_ctl_message(cin_ctl, _msg, CIN_CTL_MSG_OK);
+  return CIN_OK;
+
+error:
+  cin_ctl_message(cin_ctl, "Error Uploading Timing", CIN_CTL_MSG_MAJOR);
   return CIN_OK;
 }
 
@@ -93,6 +105,7 @@ int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, char *mode)
   // Lock Mutex
   pthread_mutex_lock(&cin_ctl->access);
 
+  cin_ctl_message(cin_ctl, "Powering OFF CIN", CIN_CTL_MSG_OK);
   if(cin_ctl_pwr(cin_ctl, 0))
   {
     ERROR_COMMENT("Unable to turn off CIN power\n");
@@ -100,11 +113,13 @@ int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, char *mode)
   }
   sleep(1);
 
+  cin_ctl_message(cin_ctl, "Powering ON CIN", CIN_CTL_MSG_OK);
   if(cin_ctl_pwr(cin_ctl, 1))
   {
     ERROR_COMMENT("Unable to turn on CIN power\n");
     goto error;
   }
+
   sleep(1);
 
   // Load the firmware
@@ -115,19 +130,16 @@ int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, char *mode)
     goto error;
   }
 
-  // Get the ID of the CIN
-  cin_ctl_id_t cin_id;
-  if(cin_ctl_get_id(cin_ctl, &cin_id))
-  {
-    ERROR_COMMENT("Unable to get ID of CIN\n");
-    goto error;
-  }
+  sleep(1);
 
+  cin_ctl_message(cin_ctl, "Powering ON CIN Front Panel", CIN_CTL_MSG_OK);
   if(cin_ctl_fp_pwr(cin_ctl, 1) != CIN_OK)
   {
     ERROR_COMMENT("Unable to turn on FP power\n");
     goto error;
   }
+
+  sleep(1);
 
   if(cin_com_set_fabric_comms(cin_ctl, cin_data) != CIN_OK)
   {
@@ -173,14 +185,10 @@ int _debug_print_flag = 0;
 int _error_print_flag = 1;
 
 void cin_set_debug_print(int debug){
-  fprintf(stderr, "%s:%d:%s(): Set DEBUG to %d from %d\n", __FILE__, __LINE__, __func__,
-          debug, _debug_print_flag);
   _debug_print_flag = debug;
 }
 
 void cin_set_error_print(int error){
-  fprintf(stderr, "%s:%d:%s(): Set ERROR to %d from %d\n", __FILE__, __LINE__, __func__,
-          error, _error_print_flag);
   _error_print_flag = error;
 }
 

@@ -733,7 +733,8 @@ void *cin_data_listen_thread(void *args){
   pthread_exit(NULL);
 }
 
-void cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize){
+void cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize)
+{
   pthread_mutex_lock(&cin->descramble_mutex);
   *overscan = cin->map.overscan;
   *rows = cin->map.rows;
@@ -750,7 +751,8 @@ void cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, i
 
 }
 
-int cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan){
+int cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan)
+{
   /* This routine sets the descamble parameters */
   int rtn;
 

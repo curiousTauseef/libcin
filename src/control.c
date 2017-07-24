@@ -58,6 +58,9 @@ int cin_ctl_init(cin_ctl_t *cin,
                  char *addr, uint16_t port, uint16_t sport, 
                  char *bind_addr, uint16_t bind_port, uint16_t bind_sport) 
 { 
+  cin->msg_callback = NULL;
+  cin->msg_callback_ptr = NULL;
+
   // Initialize the config
 
   cin_config_init(cin);
@@ -129,8 +132,22 @@ int cin_ctl_destroy(cin_ctl_t *cin){
   return CIN_OK;
 }
 
-/**************************** UDP Socket ******************************/
+void cin_ctl_message(cin_ctl_t *cin, char *message, int severity)
+{
+  if(cin->msg_callback != NULL)
+  {
+    // Call the callback
+    (*cin->msg_callback)(message, severity, cin->msg_callback_ptr);
+  }
+}
 
+void cin_ctl_set_msg_callback(cin_ctl_t *cin, void *msg_callback, void *ptr)
+{
+  cin->msg_callback = msg_callback;
+  cin->msg_callback_ptr = ptr;
+}
+
+/**************************** UDP Socket ******************************/
 
 uint32_t cin_ctl_get_packet(cin_ctl_t *cin, uint32_t *val){
   long int r;
@@ -634,6 +651,7 @@ int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len
 {
   int _status = -1; 
 
+  cin_ctl_message(cin, "Sending frame FPGA firmware to CIN", CIN_CTL_MSG_OK);
   // Lock the mutex for exclusive access to the CIN
 
   pthread_mutex_lock(&cin->access);
@@ -672,6 +690,7 @@ int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len
   } 
 
   sleep(1);
+   
   DEBUG_COMMENT("Done.\n");
 
   uint16_t _fpga_status;
@@ -682,12 +701,24 @@ int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len
     goto error;
   }
   
+  // Get the ID of the CIN
+  cin_ctl_id_t cin_id;
+  if(cin_ctl_get_id(cin, &cin_id))
+  {
+    ERROR_COMMENT("Unable to get ID of CIN\n");
+    goto error;
+  }
+  
   pthread_mutex_unlock(&cin->access);
   DEBUG_COMMENT("FPGA Configured OK\n");
+  char _msg[256];
+  snprintf(_msg, 256, "Firmware 0x%04X uploaded and FPGA configured", cin_id.fabric_fpga_ver);
+  cin_ctl_message(cin, _msg, CIN_CTL_MSG_OK);
   return CIN_OK;
    
 error:
   pthread_mutex_unlock(&cin->access);
+  cin_ctl_message(cin, "Unable to upload firmware", CIN_CTL_MSG_MAJOR);
   return CIN_ERROR;
 }
 
@@ -1716,35 +1747,42 @@ int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify)
   if(cin_ctl_get_bias(cin, &_val) != CIN_OK)
   {
     ERROR_COMMENT("Unable to read bias status.\n");
+    cin_ctl_message(cin, "Unable to set BIAS", CIN_CTL_MSG_MAJOR);
     goto error;
   }
   if(_val){
     ERROR_COMMENT("Cannot set bias values with BIAS on\n");
+    cin_ctl_message(cin, "Unable to set BIAS with BIAS on", CIN_CTL_MSG_MINOR);
     goto error;
   }
 
   if(cin_ctl_get_clocks(cin, &_val) != CIN_OK)
   {
     ERROR_COMMENT("Unable to read clock status.\n"); 
+    cin_ctl_message(cin, "Unable to set BIAS", CIN_CTL_MSG_MAJOR);
     goto error;
   }
   if(_val){
     ERROR_COMMENT("Cannot set bias voltages with CLOCKS on.\n");
+    cin_ctl_message(cin, "Unable to set BIAS with CLOCKS on", CIN_CTL_MSG_MINOR);
     goto error;
   }
   
   if(cin_ctl_get_triggering(cin, &_val) != CIN_OK)
   {
     ERROR_COMMENT("Unable to read triggering status.\n"); 
+    cin_ctl_message(cin, "Unable to set BIAS", CIN_CTL_MSG_MAJOR);
     goto error;
   }
   if(_val){
     ERROR_COMMENT("Cannot set bias voltages while camera is triggering.\n");
+    cin_ctl_message(cin, "Unable to set BIAS while triggering", CIN_CTL_MSG_MINOR);
     goto error;
   }
 
   _status = CIN_OK;
   DEBUG_COMMENT("Uploading Bias Values\n");
+  cin_ctl_message(cin, "Uploading BIAS values to CIN", CIN_CTL_MSG_OK);
 
   for(n=0;n<CIN_CTL_NUM_BIAS;n++){
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, (2 * n), 1);
@@ -1756,12 +1794,14 @@ int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify)
   if(_status != CIN_OK)
   {
     ERROR_COMMENT("Unable to set bias values\n");
+    cin_ctl_message(cin, "Unable to set BIAS", CIN_CTL_MSG_MAJOR);
     goto error;
   }
 
   if(verify)
   {
     DEBUG_COMMENT("Verifying bias values\n");
+    cin_ctl_message(cin, "Verifying BIAS values", CIN_CTL_MSG_OK);
     uint16_t _rregs[CIN_CTL_NUM_BIAS];
     if(cin_ctl_get_bias_regs(cin, _rregs) != CIN_OK)
     {
@@ -1785,11 +1825,13 @@ int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify)
     }
     if(_err)
     {
+      cin_ctl_message(cin, "BIAS values failed verification", CIN_CTL_MSG_MAJOR);
       goto error;
     }
     DEBUG_COMMENT("Bias Verified OK\n");
   }
 
+  cin_ctl_message(cin, "BIAS values uploaded OK", CIN_CTL_MSG_OK);
   return CIN_OK;
 
 error:
