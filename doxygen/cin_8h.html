@@ -559,9 +559,9 @@ typedef struct <a class="el" href="structcin__data.html">cin_data</a>&#160;</td>
 <tr class="memitem:a21f56fb2e79c1572ae6760b0d9d9745a"><td class="memItemLeft" align="right" valign="top"><a id="a21f56fb2e79c1572ae6760b0d9d9745a"></a>
 typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><b>cin_data_callback</b>) (<a class="el" href="structcin__data__frame.html">cin_data_frame_t</a> *, void *usr_ptr)</td></tr>
 <tr class="separator:a21f56fb2e79c1572ae6760b0d9d9745a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adabcd56b898b9fde1fe3b7687bb026df"><td class="memItemLeft" align="right" valign="top"><a id="adabcd56b898b9fde1fe3b7687bb026df"></a>
-typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_msg_callback</b>) (char *, int, void *)</td></tr>
-<tr class="separator:adabcd56b898b9fde1fe3b7687bb026df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b509c4bbce1c8af90d99afaef258181"><td class="memItemLeft" align="right" valign="top"><a id="a9b509c4bbce1c8af90d99afaef258181"></a>
+typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_msg_callback</b>) (const char *, int, void *)</td></tr>
+<tr class="separator:a9b509c4bbce1c8af90d99afaef258181"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88a67c4bb1177f9f7b132901f92778af"><td class="memItemLeft" align="right" valign="top"><a id="a88a67c4bb1177f9f7b132901f92778af"></a>
 typedef struct <a class="el" href="structcin__ctl__id.html">cin_ctl_id</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_id_t</b></td></tr>
 <tr class="separator:a88a67c4bb1177f9f7b132901f92778af"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -584,9 +584,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>cin_report</b> (FILE 
 <tr class="separator:gae042935d4c0825e8e30b228bce1f4907"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga888fd017426a3718a875f6bdb5078b81"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__init.html#ga888fd017426a3718a875f6bdb5078b81">cin_ctl_destroy</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin)</td></tr>
 <tr class="separator:ga888fd017426a3718a875f6bdb5078b81"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga65135dc1cc6c2546ebac00f5ef8f77de"><td class="memItemLeft" align="right" valign="top">
-void&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_message</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, char *message, int severity)</td></tr>
-<tr class="separator:ga65135dc1cc6c2546ebac00f5ef8f77de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7979b0e4e736307048d8fcb62e20cf3d"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_message</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, const char *message, int severity)</td></tr>
+<tr class="separator:ga7979b0e4e736307048d8fcb62e20cf3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga50786d0fa1d8f8fe5f25d11958e4c38a"><td class="memItemLeft" align="right" valign="top">
 void&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_set_msg_callback</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, cin_ctl_msg_callback callback, void *ptr)</td></tr>
 <tr class="separator:ga50786d0fa1d8f8fe5f25d11958e4c38a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -785,9 +785,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_data_set_descrambl
 <tr class="memitem:a9655cd2b343dedc951ff78f1305da188"><td class="memItemLeft" align="right" valign="top"><a id="a9655cd2b343dedc951ff78f1305da188"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>cin_data_get_descramble_params</b> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin, int *rows, int *overscan, int *xsize, int *ysize)</td></tr>
 <tr class="separator:a9655cd2b343dedc951ff78f1305da188"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae59bb37f758370c0af46447a7674bbf3"><td class="memItemLeft" align="right" valign="top"><a id="ae59bb37f758370c0af46447a7674bbf3"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_com_boot</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *<a class="el" href="structcin__ctl.html">cin_ctl</a>, <a class="el" href="structcin__data.html">cin_data_t</a> *<a class="el" href="structcin__data.html">cin_data</a>, char *mode)</td></tr>
-<tr class="separator:ae59bb37f758370c0af46447a7674bbf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3831564d5d8c47a89844c78031823d70"><td class="memItemLeft" align="right" valign="top"><a id="a3831564d5d8c47a89844c78031823d70"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_com_boot</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *<a class="el" href="structcin__ctl.html">cin_ctl</a>, <a class="el" href="structcin__data.html">cin_data_t</a> *<a class="el" href="structcin__data.html">cin_data</a>, const char *mode)</td></tr>
+<tr class="separator:a3831564d5d8c47a89844c78031823d70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb18a79a1b2af0d2bf1ffb3c084f8b18"><td class="memItemLeft" align="right" valign="top"><a id="aeb18a79a1b2af0d2bf1ffb3c084f8b18"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_upload_bias</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin)</td></tr>
 <tr class="separator:aeb18a79a1b2af0d2bf1ffb3c084f8b18"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -874,7 +874,7 @@ DESCRIPTION</h1>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 24 2017 11:49:06 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 24 2017 11:58:41 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

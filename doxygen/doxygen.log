@@ -257,13 +257,13 @@ Generating citations pa/home/travis/build/NSLS-II/libcin/src/cin.h:68: warning: 
 /home/travis/build/NSLS-II/libcin/src/cin.h:383: warning: Member cin_data_callbacks_t (typedef) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:435: warning: Member cin_data_t (typedef) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:440: warning: Member cin_data_callback)(cin_data_frame_t *, void *usr_ptr) (typedef) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:441: warning: Member cin_ctl_msg_callback)(char *, int, void *) (typedef) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:441: warning: Member cin_ctl_msg_callback)(const char *, int, void *) (typedef) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:462: warning: Member cin_ctl_id_t (typedef) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:467: warning: Member cin_ctl_pwr_val_t (typedef) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:242: warning: Member cin_set_debug_print(int debug) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:243: warning: Member cin_set_error_print(int error) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:489: warning: Member cin_report(FILE *fp, int details) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:535: warning: Member cin_ctl_message(cin_ctl_t *cin, char *message, int severity) (function) of group cin_ctl_init is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:535: warning: Member cin_ctl_message(cin_ctl_t *cin, const char *message, int severity) (function) of group cin_ctl_init is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:536: warning: Member cin_ctl_set_msg_callback(cin_ctl_t *cin, cin_ctl_msg_callback callback, void *ptr) (function) of group cin_ctl_init is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:621: warning: Member cin_ctl_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:622: warning: Member cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
@@ -322,7 +322,7 @@ Generating citations pa/home/travis/build/NSLS-II/libcin/src/cin.h:68: warning: 
 /home/travis/build/NSLS-II/libcin/src/cin.h:840: warning: Member cin_data_reset_stats(cin_data_t *cin) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:843: warning: Member cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:844: warning: Member cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:846: warning: Member cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, char *mode) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:846: warning: Member cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, const char *mode) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:847: warning: Member cin_ctl_upload_bias(cin_ctl_t *cin) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:57: warning: Member cin_build_git_time (variable) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:58: warning: Member cin_build_git_sha (variable) of file cin.h is not documented.
@@ -531,7 +531,7 @@ Generating citations pa/home/travis/build/NSLS-II/libcin/src/cin.h:68: warning: 
 /home/travis/build/NSLS-II/libcin/src/cin_register_map.h:385: warning: Member REG_DEBUGCOUNTER01_REG (macro definition) of file cin_register_map.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin_register_map.h:386: warning: Member REG_DEBUGCOUNTER02_REG (macro definition) of file cin_register_map.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin_register_map.h:387: warning: Member REG_DEBUGCOUNTER03_REG (macro definition) of file cin_register_map.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:535: warning: Member cin_ctl_message(cin_ctl_t *cin, char *message, int severity) (function) of group cin_ctl_init is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:535: warning: Member cin_ctl_message(cin_ctl_t *cin, const char *message, int severity) (function) of group cin_ctl_init is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:536: warning: Member cin_ctl_set_msg_callback(cin_ctl_t *cin, cin_ctl_msg_callback callback, void *ptr) (function) of group cin_ctl_init is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:621: warning: Member cin_ctl_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:622: warning: Member cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
@@ -568,7 +568,7 @@ Generating citations pa/home/travis/build/NSLS-II/libcin/src/cin.h:68: warning: 
 /home/travis/build/NSLS-II/libcin/src/cin.h:331: warning: Member listener (variable) of class cin_ctl is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:332: warning: Member access (variable) of class cin_ctl is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:333: warning: Member access_attr (variable) of class cin_ctl is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:336: warning: Member msg_callback)(char *, int, void *) (variable) of class cin_ctl is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:336: warning: Member msg_callback)(const char *, int, void *) (variable) of class cin_ctl is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:337: warning: Member msg_callback_ptr (variable) of class cin_ctl is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:456: warning: Member base_board_id (variable) of class cin_ctl_id is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:457: warning: Member base_serial_no (variable) of class cin_ctl_id is not documented.
@@ -736,7 +736,7 @@ Generating file member index...
 Generating example index...
 finalizing index lists...
 writing tag file...
-lookup cache used 475/65536 hits=3149 misses=496
+lookup cache used 476/65536 hits=3165 misses=497
 finished...
 make -C doc/latex
 make[1]: Entering directory `/home/travis/build/NSLS-II/libcin/doc/latex'
@@ -1150,7 +1150,7 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (58 pages, 214983 bytes).
+Output written on refman.pdf (58 pages, 214997 bytes).
 Transcript written on refman.log.
 makeindex refman.idx
 This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
@@ -1400,7 +1400,7 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (65 pages, 243640 bytes).
+Output written on refman.pdf (65 pages, 243668 bytes).
 Transcript written on refman.log.
 latex_count=8 ; \
 	while egrep -s 'Rerun (LaTeX|to get cross-references right)' refman.log && [ $latex_count -gt 0 ] ;\
@@ -1652,6 +1652,6 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (65 pages, 243817 bytes).
+Output written on refman.pdf (65 pages, 243833 bytes).
 Transcript written on refman.log.
 make[1]: Leaving directory `/home/travis/build/NSLS-II/libcin/doc/latex'
