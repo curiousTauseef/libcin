@@ -435,7 +435,10 @@ typedef struct cin_data {
 } cin_data_t;
 // Callback functions
 
+// FUnction pointer definitions
+
 typedef void (*cin_data_callback) (cin_data_frame_t *, void *usr_ptr);
+typedef void (*cin_ctl_msg_callback)(char*, int, void*);
 
 /* ---------------------------------------------------------------------
  *
@@ -530,7 +533,7 @@ int cin_ctl_init(cin_ctl_t *cin,
 int cin_ctl_destroy(cin_ctl_t *cin);
 
 void cin_ctl_message(cin_ctl_t *cin, char *message, int severity);
-void cin_ctl_set_msg_callback(cin_ctl_t *cin, void (*msg_callback)(char*, int, void*), void *ptr);
+void cin_ctl_set_msg_callback(cin_ctl_t *cin, cin_ctl_msg_callback callback, void *ptr);
 
 /*!
  * Send a magic packet to the CIN to initialize data

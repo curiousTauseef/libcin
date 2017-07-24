@@ -141,9 +141,9 @@ void cin_ctl_message(cin_ctl_t *cin, char *message, int severity)
   }
 }
 
-void cin_ctl_set_msg_callback(cin_ctl_t *cin, void (*msg_callback)(char*, int, void*), void *ptr)
+void cin_ctl_set_msg_callback(cin_ctl_t *cin, cin_ctl_msg_callback callback, void *ptr)
 {
-  cin->msg_callback = msg_callback;
+  cin->msg_callback = callback;
   cin->msg_callback_ptr = ptr;
 }
 
