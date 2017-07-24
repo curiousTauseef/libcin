@@ -263,7 +263,7 @@ Generating citations pa/home/travis/build/NSLS-II/libcin/src/cin.h:68: warning: 
 /home/travis/build/NSLS-II/libcin/src/cin.h:243: warning: Member cin_set_error_print(int error) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:486: warning: Member cin_report(FILE *fp, int details) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:532: warning: Member cin_ctl_message(cin_ctl_t *cin, char *message, int severity) (function) of group cin_ctl_init is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:533: warning: Member cin_ctl_set_msg_callback(cin_ctl_t *cin, void *msg_callback, void *ptr) (function) of group cin_ctl_init is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:533: warning: Member cin_ctl_set_msg_callback(cin_ctl_t *cin, void(*msg_callback)(char *, int, void *), void *ptr) (function) of group cin_ctl_init is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:618: warning: Member cin_ctl_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:619: warning: Member cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:620: warning: Member cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off) (function) of group cin_ctl_rw is not documented.
@@ -531,7 +531,7 @@ Generating citations pa/home/travis/build/NSLS-II/libcin/src/cin.h:68: warning: 
 /home/travis/build/NSLS-II/libcin/src/cin_register_map.h:386: warning: Member REG_DEBUGCOUNTER02_REG (macro definition) of file cin_register_map.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin_register_map.h:387: warning: Member REG_DEBUGCOUNTER03_REG (macro definition) of file cin_register_map.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:532: warning: Member cin_ctl_message(cin_ctl_t *cin, char *message, int severity) (function) of group cin_ctl_init is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:533: warning: Member cin_ctl_set_msg_callback(cin_ctl_t *cin, void *msg_callback, void *ptr) (function) of group cin_ctl_init is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:533: warning: Member cin_ctl_set_msg_callback(cin_ctl_t *cin, void(*msg_callback)(char *, int, void *), void *ptr) (function) of group cin_ctl_init is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:618: warning: Member cin_ctl_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:619: warning: Member cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr) (function) of group cin_ctl_rw is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:620: warning: Member cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off) (function) of group cin_ctl_rw is not documented.
@@ -1149,7 +1149,7 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (58 pages, 214841 bytes).
+Output written on refman.pdf (58 pages, 214901 bytes).
 Transcript written on refman.log.
 makeindex refman.idx
 This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
@@ -1399,7 +1399,7 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (65 pages, 243529 bytes).
+Output written on refman.pdf (65 pages, 243589 bytes).
 Transcript written on refman.log.
 latex_count=8 ; \
 	while egrep -s 'Rerun (LaTeX|to get cross-references right)' refman.log && [ $latex_count -gt 0 ] ;\
@@ -1651,6 +1651,6 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (65 pages, 243730 bytes).
+Output written on refman.pdf (65 pages, 243789 bytes).
 Transcript written on refman.log.
 make[1]: Leaving directory `/home/travis/build/NSLS-II/libcin/doc/latex'
