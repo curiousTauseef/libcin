@@ -234,11 +234,6 @@ int cin_ctl_write(cin_ctl_t *cin, uint16_t reg, uint16_t val, int wait){
   uint32_t _valwr;
   int rc;
   cin_port_t *cp = &(cin->ctl_port);
-
-  if(cp == NULL){
-     ERROR_COMMENT("Parameter cp is NULL!");
-     goto error;
-  }
   
   // Lock the mutex for access
   pthread_mutex_lock(&cin->access);
@@ -649,7 +644,7 @@ int cin_ctl_load_firmware(cin_ctl_t *cin)
 
 int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len)
 {
-  int _status = -1; 
+  int _status;
 
   cin_ctl_message(cin, "Sending frame FPGA firmware to CIN", CIN_CTL_MSG_OK);
   // Lock the mutex for exclusive access to the CIN
@@ -658,7 +653,7 @@ int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len
 
   DEBUG_COMMENT("Placing CIN in firmware program mode\n");
   _status = cin_ctl_write(cin, REG_COMMAND, CMD_PROGRAM_FRAME, 0); 
-  if (_status != 0){
+  if (_status != CIN_OK){
     ERROR_COMMENT("Failed to program CIN\n");
     goto error;
   }   
@@ -666,7 +661,7 @@ int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len
   sleep(1);
   DEBUG_PRINT("Starting to upload firmware (%d bytes)\n", data_len);
   _status = cin_ctl_stream_write(cin, data, data_len);
-  if (_status != 0){
+  if (_status != CIN_OK){
     ERROR_COMMENT("Error writing firmware to CIN\n");
     goto error;
   }
@@ -678,14 +673,14 @@ int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len
   DEBUG_COMMENT("Resetting Frame FPGA\n");
 
   _status=cin_ctl_write(cin, REG_FRM_RESET, 0x0001, 0);
-  if(_status != 0){
+  if(_status != CIN_OK){
     goto error;
   } 
 
   sleep(1); 
 
   _status=cin_ctl_write(cin,REG_FRM_RESET,0x0000, 0);
-  if(_status != 0){
+  if(_status != CIN_OK){
     goto error;
   } 
 
@@ -696,7 +691,7 @@ int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len
   uint16_t _fpga_status;
   _status = cin_ctl_get_cfg_fpga_status(cin, &_fpga_status);
   _status |= !(_fpga_status & CIN_CTL_FPGA_STS_CFG);
-  if(_status){
+  if(_status != CIN_OK){
     DEBUG_COMMENT("FPGA Failed to configure.\n");
     goto error;
   }
@@ -710,10 +705,13 @@ int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len
   }
   
   pthread_mutex_unlock(&cin->access);
+
   DEBUG_COMMENT("FPGA Configured OK\n");
+
   char _msg[256];
   snprintf(_msg, 256, "Firmware 0x%04X uploaded and FPGA configured", cin_id.fabric_fpga_ver);
   cin_ctl_message(cin, _msg, CIN_CTL_MSG_OK);
+
   return CIN_OK;
    
 error:
@@ -1571,6 +1569,7 @@ int cin_ctl_set_fcric(cin_ctl_t *cin)
 {
   // First get the fclk 
   int fclk;
+
   if(cin_ctl_get_fclk(cin, &fclk) != CIN_OK)
   {
     ERROR_COMMENT("Unable to get fclk status\n");
@@ -1579,11 +1578,16 @@ int cin_ctl_set_fcric(cin_ctl_t *cin)
 
   if(fclk == CIN_CTL_FCLK_200)
   {
+    cin_ctl_message(cin, "Uploading fCRIC config for 200 MHz", CIN_CTL_MSG_OK);
     cin_ctl_set_fcric_regs(cin, cin_config_fcric_200, cin_config_fcric_200_len);
+    cin_ctl_message(cin, "fCRICs configured for 200 MHz", CIN_CTL_MSG_OK);
   } else if(fclk == CIN_CTL_FCLK_125_C) { 
+    cin_ctl_message(cin, "Uploading fCRIC config for 125 MHz", CIN_CTL_MSG_OK);
     cin_ctl_set_fcric_regs(cin, cin_config_fcric_125, cin_config_fcric_125_len);
+    cin_ctl_message(cin, "fCRICs configured for 125 MHz", CIN_CTL_MSG_OK);
   } else {
     ERROR_PRINT("Could not set fCRIC, no data for fclk value %d\n", fclk);
+    cin_ctl_message(cin, "Unable to configure fCRIC - Invalid fclk", CIN_CTL_MSG_MINOR);
     return CIN_ERROR;
   }
 
@@ -1677,7 +1681,7 @@ int cin_ctl_set_fcric_clamp(cin_ctl_t *cin, int clamp){
     _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_WRITE0_REG, 0xA000);
     _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_WRITE1_REG, cin_ctl_fcric_clamp_reg[i]);
     _status |= cin_ctl_write_with_readback(cin, REG_FCRIC_WRITE2_REG, _onoff[i]);
-    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_SEND_FCRIC_CONFIG, 0);
+    _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_SEND_FCRIC_CONFIG, 1);
   }
 
   if(_status != CIN_OK){

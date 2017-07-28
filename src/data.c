@@ -115,6 +115,18 @@ int cin_data_init(cin_data_t *cin,
                        cin->bind_addr, cin->bind_port, cin->recv_buf)){
     return -1;
   }
+
+  // Set defualt buffer lengths
+
+  if(!packet_buffer_len)
+  {
+    packet_buffer_len = CIN_DATA_PACKET_BUFFER_LEN;
+  }
+
+  if(!frame_buffer_len)
+  {
+    frame_buffer_len = CIN_DATA_FRAME_BUFFER_LEN;
+  }
   
   /* Initialize buffers */
   int rtn;
@@ -728,9 +740,6 @@ void *cin_data_listen_thread(void *args){
   struct cin_data_packet *buffer = NULL;
   cin_data_t *cin = (cin_data_t *)args;
  
-  /* Send a packet to initialize the CIN */
-  cin_data_send_magic(cin);
-
   struct timespec time;
 
   pthread_barrier_wait(&cin->listen_thread.barrier);

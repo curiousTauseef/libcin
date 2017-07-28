@@ -166,6 +166,8 @@ extern const char *cin_build_version;
 #define CIN_DATA_IP                        "10.0.5.207"
 #define CIN_DATA_BIND_PORT                 49201
 #define CIN_DATA_CIN_PORT                  49203
+#define CIN_DATA_FRAME_BUFFER_LEN          1000
+#define CIN_DATA_PACKET_BUFFER_LEN         10000
 #define CIN_DATA_MAX_MTU                   9000
 #define CIN_DATA_UDP_HEADER                8
 #define CIN_DATA_MAGIC_PACKET              UINT64_C(0x0000F4F3F2F1F000)
