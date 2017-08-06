@@ -67,19 +67,80 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga0a99b732a81f8e091c3647156155d09a"><td class="memItemLeft" align="right" valign="top"><a id="ga0a99b732a81f8e091c3647156155d09a"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_get_fclk</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, int *clkfreq)</td></tr>
+<tr class="memitem:ga0a99b732a81f8e091c3647156155d09a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__fclk.html#ga0a99b732a81f8e091c3647156155d09a">cin_ctl_get_fclk</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, int *clkfreq)</td></tr>
 <tr class="separator:ga0a99b732a81f8e091c3647156155d09a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga993ab986c4e2c70bd7f5299913aa3dec"><td class="memItemLeft" align="right" valign="top"><a id="ga993ab986c4e2c70bd7f5299913aa3dec"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_set_fclk</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, int clkfreq)</td></tr>
+<tr class="memitem:ga993ab986c4e2c70bd7f5299913aa3dec"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__fclk.html#ga993ab986c4e2c70bd7f5299913aa3dec">cin_ctl_set_fclk</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, int clkfreq)</td></tr>
 <tr class="separator:ga993ab986c4e2c70bd7f5299913aa3dec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>FCLK (Internal FPGA Clock) Routines </p>
+<p>These routines configure the Internal Frame FPGA Clock (FCLK) frequency. </p>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ga0a99b732a81f8e091c3647156155d09a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0a99b732a81f8e091c3647156155d09a">&#9670;&nbsp;</a></span>cin_ctl_get_fclk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cin_ctl_get_fclk </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcin__ctl.html">cin_ctl_t</a> *&#160;</td>
+          <td class="paramname"><em>cin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>clkfreq</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the current frame FPGA clock frequency</p>
+<p>cin handle to cin library  clkfreq clock frequency</p>
+<p>CIN_OK on sucsess, CIN_ERROR on an error </p>
+
+</div>
+</div>
+<a id="ga993ab986c4e2c70bd7f5299913aa3dec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga993ab986c4e2c70bd7f5299913aa3dec">&#9670;&nbsp;</a></span>cin_ctl_set_fclk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cin_ctl_set_fclk </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcin__ctl.html">cin_ctl_t</a> *&#160;</td>
+          <td class="paramname"><em>cin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>clkfreq</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set the frame FPGA clock frequency</p>
+<p>cin handle to cin library  clkfreq clock frequency to set</p>
+<p>CIN_OK on sucsess, CIN_ERROR on an error </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Aug 6 2017 12:49:17 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Aug 6 2017 14:46:04 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

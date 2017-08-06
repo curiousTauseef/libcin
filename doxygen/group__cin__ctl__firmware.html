@@ -67,25 +67,112 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga3d1aca6f51fa1bd5475e885283e12000"><td class="memItemLeft" align="right" valign="top"><a id="ga3d1aca6f51fa1bd5475e885283e12000"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_load_firmware</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin)</td></tr>
+<tr class="memitem:ga3d1aca6f51fa1bd5475e885283e12000"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__firmware.html#ga3d1aca6f51fa1bd5475e885283e12000">cin_ctl_load_firmware</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin)</td></tr>
 <tr class="separator:ga3d1aca6f51fa1bd5475e885283e12000"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1bcb49de08c44ee4d071675bf0f558b7"><td class="memItemLeft" align="right" valign="top"><a id="ga1bcb49de08c44ee4d071675bf0f558b7"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_load_firmware_file</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, char *filename)</td></tr>
+<tr class="memitem:ga1bcb49de08c44ee4d071675bf0f558b7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__firmware.html#ga1bcb49de08c44ee4d071675bf0f558b7">cin_ctl_load_firmware_file</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, char *filename)</td></tr>
 <tr class="separator:ga1bcb49de08c44ee4d071675bf0f558b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5171641956918a1deee285920b8be90e"><td class="memItemLeft" align="right" valign="top"><a id="ga5171641956918a1deee285920b8be90e"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_load_firmware_data</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, unsigned char *data, int data_len)</td></tr>
+<tr class="memitem:ga5171641956918a1deee285920b8be90e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__firmware.html#ga5171641956918a1deee285920b8be90e">cin_ctl_load_firmware_data</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, unsigned char *data, int data_len)</td></tr>
 <tr class="separator:ga5171641956918a1deee285920b8be90e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gacd5a0ef09d2aded4d3e6e980eddeeecd"><td class="memItemLeft" align="right" valign="top"><a id="gacd5a0ef09d2aded4d3e6e980eddeeecd"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_load_config</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, char *filename)</td></tr>
 <tr class="separator:gacd5a0ef09d2aded4d3e6e980eddeeecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>Firmware upload routines </p>
+<p>These routines control the upload of firmware to the frame FPGA in the CIN. The firmware can be uploaded using either a external file or an array of unsigned char (bytes). The function <a class="el" href="group__cin__ctl__firmware.html#ga3d1aca6f51fa1bd5475e885283e12000">cin_ctl_load_firmware()</a> loads the pre-compiled firmware. </p>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ga3d1aca6f51fa1bd5475e885283e12000"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3d1aca6f51fa1bd5475e885283e12000">&#9670;&nbsp;</a></span>cin_ctl_load_firmware()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cin_ctl_load_firmware </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcin__ctl.html">cin_ctl_t</a> *&#160;</td>
+          <td class="paramname"><em>cin</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Load the pre-compiled frame FPGA firmware</p>
+<p>cin handle to cin library</p>
+<p>CIN_OK on sucsess, CIN_ERROR on an error </p>
+
+</div>
+</div>
+<a id="ga5171641956918a1deee285920b8be90e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga5171641956918a1deee285920b8be90e">&#9670;&nbsp;</a></span>cin_ctl_load_firmware_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cin_ctl_load_firmware_data </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcin__ctl.html">cin_ctl_t</a> *&#160;</td>
+          <td class="paramname"><em>cin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>data_len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Load the frame FPGA firmware from char array</p>
+<p>cin handle to cin library  data array of binary FPGA firmware  data_len length of binary data</p>
+<p>CIN_OK on sucsess, CIN_ERROR on an error </p>
+
+</div>
+</div>
+<a id="ga1bcb49de08c44ee4d071675bf0f558b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1bcb49de08c44ee4d071675bf0f558b7">&#9670;&nbsp;</a></span>cin_ctl_load_firmware_file()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cin_ctl_load_firmware_file </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcin__ctl.html">cin_ctl_t</a> *&#160;</td>
+          <td class="paramname"><em>cin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>filename</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Load the frame FPGA firmware from file</p>
+<p>cin handle to cin library  filename file containing the binary FPGA firmware</p>
+<p>CIN_OK on sucsess, CIN_ERROR on an error </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Aug 6 2017 12:49:17 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Aug 6 2017 14:46:04 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

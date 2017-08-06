@@ -71,13 +71,44 @@ Functions</h2></td></tr>
 <tr class="separator:ga9f27eb66007f765775675978cea33e3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae4aaf3a1954eeeb18f77af9e33b4f3c0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__power.html#gae4aaf3a1954eeeb18f77af9e33b4f3c0">cin_ctl_fp_pwr</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, int pwr)</td></tr>
 <tr class="separator:gae4aaf3a1954eeeb18f77af9e33b4f3c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga306beca3b918820661477130ba0b5182"><td class="memItemLeft" align="right" valign="top"><a id="ga306beca3b918820661477130ba0b5182"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_fo_test_pattern</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, int on_off)</td></tr>
+<tr class="memitem:ga306beca3b918820661477130ba0b5182"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__power.html#ga306beca3b918820661477130ba0b5182">cin_ctl_fo_test_pattern</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, int on_off)</td></tr>
 <tr class="separator:ga306beca3b918820661477130ba0b5182"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>These routine control power to the CIN for the Frame FPGA and the Front Panel </p>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ga306beca3b918820661477130ba0b5182"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga306beca3b918820661477130ba0b5182">&#9670;&nbsp;</a></span>cin_ctl_fo_test_pattern()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cin_ctl_fo_test_pattern </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcin__ctl.html">cin_ctl_t</a> *&#160;</td>
+          <td class="paramname"><em>cin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>on_off</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Control Fiber Optic Interface Test Pattern</p>
+<p>Turn on and off the fiber optic test pattern. The FO modules transmit a test pattern to indicate that communication with the data modules is correct. This routine turns on and off the modules. If on_off is 0 then the FO test pattern is turned off, and if on_off is 1 then the FO test pattern is turned on. Note: this routine manipulates the FCRIC mask, so you may need to reconfigure the fCRICs after using it.</p>
+<p>cin handle to cin library  on_off test pattern status</p>
+<p>CIN_OK on sucsess, CIN_ERROR on an error </p>
+
+</div>
+</div>
 <a id="gae4aaf3a1954eeeb18f77af9e33b4f3c0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gae4aaf3a1954eeeb18f77af9e33b4f3c0">&#9670;&nbsp;</a></span>cin_ctl_fp_pwr()</h2>
 
@@ -103,7 +134,10 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_fo_test_patter
         </tr>
       </table>
 </div><div class="memdoc">
-<p>cin  pwr</p>
+<p>Control CIN Front Panel Power</p>
+<p>Turn on and off the CIN Front Panel power. The front panel power powers either the fiber optic modules or the LVDS lines to the camera. If pwr is 0 then turn off FP power and if pwr is 1 turn on the FP power.</p>
+<p>cin handle to cin library  pwr power status</p>
+<p>CIN_OK on sucsess, CIN_ERROR on an error </p>
 
 </div>
 </div>
@@ -142,7 +176,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_fo_test_patter
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Aug 6 2017 12:49:17 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Aug 6 2017 14:46:04 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>
