@@ -645,15 +645,37 @@ int cin_ctl_pwr(cin_ctl_t *cin, int pwr);
 
 /* ----------------------------------------------------------------------------*/
 /**
- * @Breif 
+ * @Breif Control CIN Front Panel Power
  *
- * @Param cin
- * @Param pwr
+ * Turn on and off the CIN Front Panel power. The front panel power powers either 
+ * the fiber optic modules or the LVDS lines to the camera. If pwr is 0 then turn
+ * off FP power and if pwr is 1 turn on the FP power. 
  *
- * @Returns   
+ * @Param cin handle to cin library
+ * @Param pwr power status
+ *
+ * @Returns CIN_OK on sucsess, CIN_ERROR on an error 
  */
 /* ----------------------------------------------------------------------------*/
 int cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr);
+
+/* ----------------------------------------------------------------------------*/
+/**
+ * @Breif Control Fiber Optic Interface Test Pattern
+ *
+ * Turn on and off the fiber optic test pattern. The FO modules transmit a test
+ * pattern to indicate that communication with the data modules is correct. This
+ * routine turns on and off the modules. If on_off is 0 then the FO test pattern is
+ * turned off, and if on_off is 1 then the FO test pattern is turned on. Note: this 
+ * routine manipulates the FCRIC mask, so you may need to reconfigure the fCRICs 
+ * after using it. 
+ *
+ * @Param cin handle to cin library
+ * @Param on_off test pattern status
+ *
+ * @Returns CIN_OK on sucsess, CIN_ERROR on an error 
+ */
+/* ----------------------------------------------------------------------------*/
 int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off);
 
 /** @} */
@@ -665,20 +687,75 @@ int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off);
  *--------------------------------------------------------------------------------------------------------*/
 
 /** @defgroup cin_ctl_firmware CIN Firmware Upload Routines
- * Firmware upload routines
+ * These routines control the upload of firmware to the frame FPGA in the CIN. The firmware can be
+ * uploaded using either a external file or an array of unsigned char (bytes). The function
+ * cin_ctl_load_firmware() loads the pre-compiled firmware.
  * @{
  */
+/* ----------------------------------------------------------------------------*/
+/**
+ * @Breif Load the pre-compiled frame FPGA firmware
+ *
+ * @Param cin handle to cin library
+ *
+ * @Returns CIN_OK on sucsess, CIN_ERROR on an error 
+ */
+/* ----------------------------------------------------------------------------*/
 int cin_ctl_load_firmware(cin_ctl_t *cin);
+
+/* ----------------------------------------------------------------------------*/
+/**
+ * @Breif Load the frame FPGA firmware from file
+ *
+ * @Param cin handle to cin library
+ * @Param filename file containing the binary FPGA firmware
+ *
+ * @Returns CIN_OK on sucsess, CIN_ERROR on an error 
+ */
+/* ----------------------------------------------------------------------------*/
 int cin_ctl_load_firmware_file(cin_ctl_t *cin, char *filename);
+
+/* ----------------------------------------------------------------------------*/
+/**
+ * @Breif Load the frame FPGA firmware from char array
+ *
+ * @Param cin handle to cin library
+ * @Param data array of binary FPGA firmware
+ * @Param data_len length of binary data
+ *
+ * @Returns CIN_OK on sucsess, CIN_ERROR on an error 
+ */
+/* ----------------------------------------------------------------------------*/
 int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len);
 int cin_ctl_load_config(cin_ctl_t *cin,char *filename);
 /** @} */
 
 /** @defgroup cin_ctl_fclk CIN FCLK Configuration Routines
- * FCLK (Internal FPGA Clock) Routines
+ * These routines configure the Internal Frame FPGA Clock (FCLK) frequency.
  * @{
  */
+/* ----------------------------------------------------------------------------*/
+/**
+ * @Breif Get the current frame FPGA clock frequency
+ *
+ * @Param cin handle to cin library
+ * @Param clkfreq clock frequency
+ *
+ * @Returns CIN_OK on sucsess, CIN_ERROR on an error 
+ */
+/* ----------------------------------------------------------------------------*/
 int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq);
+
+/* ----------------------------------------------------------------------------*/
+/**
+ * @Breif Set the frame FPGA clock frequency
+ *
+ * @Param cin handle to cin library
+ * @Param clkfreq clock frequency to set
+ *
+ * @Returns CIN_OK on sucsess, CIN_ERROR on an error 
+ */
+/* ----------------------------------------------------------------------------*/
 int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq);
 /** @} */
 
