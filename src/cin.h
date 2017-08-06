@@ -35,7 +35,7 @@
  *  
  *  @section DESCRIPTION
  *
- *  header file for CIN communications
+ *  Header file for CIN communications
  *
  */
 
@@ -535,7 +535,16 @@ int cin_ctl_init(cin_ctl_t *cin,
  */
 int cin_ctl_destroy(cin_ctl_t *cin);
 
-void cin_ctl_message(cin_ctl_t *cin, const char *message, int severity);
+/*!
+ * Register a function to recieve status messages
+ *
+ * Close connections, free memory and exit library
+ *
+ * @param cin handle to cin library
+ * @param callback function pointer to callback function
+ * @param ptr user pointer which is passed to callback routine
+ *
+ */
 void cin_ctl_set_msg_callback(cin_ctl_t *cin, cin_ctl_msg_callback callback, void *ptr);
 
 /*!
@@ -612,16 +621,38 @@ int cin_ctl_write_with_readback(cin_ctl_t *cin, uint16_t reg, uint16_t val);
 
 /** @} */
 
-/** @defgroup cin_ctl_rw Cin Control Read/Rwite Routines
+/** @defgroup cin_ctl_power Cin Power Routines
+ *
+ * These routine  control power to the CIN for the Frame FPGA and the Front Panel
+ * 
  * @{
  */
-/*--------------------------------------------------------------------------------------------------------
- * 
- * CIN Read Write Routines
- *
- *--------------------------------------------------------------------------------------------------------*/
 
+/* ----------------------------------------------------------------------------*/
+/**
+ * @Breif Control CIN Frame FPGA Power
+ *
+ * Turn on and off the frame FPGA power. If pwr is 0 then turn off power. If
+ * pwr is 1 turn on power.
+ *
+ * @Param cin handle to cin library
+ * @Param pwr power status 
+ *
+ * @Returns CIN_OK on sucsess, CIN_ERROR on an error 
+ */
+/* ----------------------------------------------------------------------------*/
 int cin_ctl_pwr(cin_ctl_t *cin, int pwr);
+
+/* ----------------------------------------------------------------------------*/
+/**
+ * @Breif 
+ *
+ * @Param cin
+ * @Param pwr
+ *
+ * @Returns   
+ */
+/* ----------------------------------------------------------------------------*/
 int cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr);
 int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off);
 
@@ -637,10 +668,10 @@ int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off);
  * Firmware upload routines
  * @{
  */
-int cin_ctl_load_config(cin_ctl_t *cin,char *filename);
 int cin_ctl_load_firmware(cin_ctl_t *cin);
 int cin_ctl_load_firmware_file(cin_ctl_t *cin, char *filename);
 int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len);
+int cin_ctl_load_config(cin_ctl_t *cin,char *filename);
 /** @} */
 
 /** @defgroup cin_ctl_fclk CIN FCLK Configuration Routines

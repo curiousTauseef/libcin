@@ -104,4 +104,5 @@ int cin_ctl_calc_vi_status(cin_ctl_t *cin,
 
 int cin_ctl_set_fclk_regs(cin_ctl_t *cin, int clkfreq);
 int cin_ctl_freeze_dco(cin_ctl_t *cin, int freeze);
+void cin_ctl_message(cin_ctl_t *cin, const char *message, int severity);
 #endif /* ifndef __CIN_API_H__ */
