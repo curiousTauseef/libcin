@@ -516,11 +516,11 @@ int cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off){
 
 /******************* CIN Configuration/Status *************************/
 
-int cin_ctl_load_config(cin_ctl_t *cin,char *filename){
+int cin_ctl_load_config(cin_ctl_t *cin,const char *filename){
 
   int _status;
   uint32_t _regul,_valul;
-  char _regstr[12],_valstr[12],_line [1024];
+  char _regstr[12],_valstr[12],_line[1024];
 
   // We are going to check if bias and clocks are on. 
  

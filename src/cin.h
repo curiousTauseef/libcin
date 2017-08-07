@@ -1,5 +1,6 @@
 /* vim: set ts=2 sw=2 tw=0 noet : */
 
+
 /**
  * @file 
  * @author Stuart B. Wilkins <swilkins@bnl.gov> 
@@ -727,7 +728,23 @@ int cin_ctl_load_firmware_file(cin_ctl_t *cin, char *filename);
  */
 /* ----------------------------------------------------------------------------*/
 int cin_ctl_load_firmware_data(cin_ctl_t *cin, unsigned char *data, int data_len);
-int cin_ctl_load_config(cin_ctl_t *cin,char *filename);
+
+/* ----------------------------------------------------------------------------*/
+/**
+ * @Breif Load FPGA config file
+ *
+ * Upload a FPGA config file to the CIN. This file is a simple file with each line
+ * containing a 4 digit hex value for the register location and a 4 digit hex 
+ * value for the value to be written to the register. 
+ *
+ * @Param cin handle to the cin library
+ * @Param filename filename to load
+ *
+ * @Returns CIN_OK on sucsess, CIN_ERROR on an error 
+ */
+/* ----------------------------------------------------------------------------*/
+int cin_ctl_load_config(cin_ctl_t *cin,const char *filename);
+
 /** @} */
 
 /** @defgroup cin_ctl_fclk CIN FCLK Configuration Routines
