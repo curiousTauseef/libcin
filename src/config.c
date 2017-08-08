@@ -33,7 +33,6 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
-#include <bsd/string.h>
 #include <unistd.h>
 
 #include "cin.h"

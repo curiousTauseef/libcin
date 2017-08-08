@@ -137,7 +137,7 @@ lib/libcin.so: $(LIBOBJECTS)
 # Now create 
 
 LDFLAGS=-L./lib
-LDLIBS=-Wl,-Bstatic -lcin -Wl,-Bdynamic -lconfig -lpthread -lrt -lbsd
+LDLIBS=-Wl,-Bstatic -lcin -Wl,-Bdynamic -lconfig -lpthread -lrt
 
 bin/cin_test_fo: utils/cin_test_fo.o lib/libcin.a  src/cin.h
 	$(CC) $(LDFLAGS) utils/cin_test_fo.o -o $@ $(LDLIBS) 

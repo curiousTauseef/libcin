@@ -15,7 +15,6 @@ Prerequisites
 
 The library relies on the following:
 
-* `libbsd` (Used for string manipulation)
 * `libconfig` (Used for nice config files)
 * `libpthread` (Used for threading)
 * `librt` (Used for time functions)
