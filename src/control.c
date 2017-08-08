@@ -1836,6 +1836,7 @@ int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify)
   }
 
   cin_ctl_message(cin, "BIAS values uploaded OK", CIN_CTL_MSG_OK);
+  pthread_mutex_unlock(&cin->access);
   return CIN_OK;
 
 error:
