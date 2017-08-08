@@ -1180,7 +1180,7 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (60 pages, 221329 bytes).
+Output written on refman.pdf (60 pages, 221261 bytes).
 Transcript written on refman.log.
 makeindex refman.idx
 This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
@@ -1434,7 +1434,7 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (67 pages, 252013 bytes).
+Output written on refman.pdf (67 pages, 251940 bytes).
 Transcript written on refman.log.
 latex_count=8 ; \
 	while egrep -s 'Rerun (LaTeX|to get cross-references right)' refman.log && [ $latex_count -gt 0 ] ;\
@@ -1690,6 +1690,6 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (67 pages, 252256 bytes).
+Output written on refman.pdf (67 pages, 252166 bytes).
 Transcript written on refman.log.
 make[1]: Leaving directory `/home/travis/build/NSLS-II/libcin/doc/latex'
