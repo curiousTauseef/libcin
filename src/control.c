@@ -273,7 +273,7 @@ int cin_ctl_write_with_readback(cin_ctl_t *cin, uint16_t reg, uint16_t val){
 
   pthread_mutex_lock(&cin->access);
 
-  while(try){
+  while(try--){
     if(cin_ctl_write(cin, reg, val, 1) != CIN_OK)
     {
       ERROR_PRINT("Error writing register %x\n", reg);
@@ -294,7 +294,6 @@ int cin_ctl_write_with_readback(cin_ctl_t *cin, uint16_t reg, uint16_t val){
       // Value correct
       break;
     }
-    try--;
   }
 
   if(_val != val)

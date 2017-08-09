@@ -186,10 +186,12 @@ int _error_print_flag = 1;
 
 void cin_set_debug_print(int debug){
   _debug_print_flag = debug;
+  DEBUG_COMMENT("Debug output ON\n");
 }
 
 void cin_set_error_print(int error){
   _error_print_flag = error;
+  ERROR_COMMENT("Error output ON\n");
 }
 
 /* -----------------------------------------------------------------------------------------
