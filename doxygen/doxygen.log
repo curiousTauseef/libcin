@@ -303,18 +303,18 @@ Generating citations pa/home/travis/build/NSLS-II/libcin/src/cin.h:69: warning: 
 /home/travis/build/NSLS-II/libcin/src/cin.h:835: warning: Member cin_ctl_set_fabric_address(cin_ctl_t *cin, char *ip) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:837: warning: Member cin_ctl_bias_dump(cin_ctl_t *cin, FILE *fp) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:838: warning: Member cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:844: warning: Member cin_config_read_file(cin_ctl_t *cin, const char *file) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:960: warning: Member cin_data_get_next_frame(cin_data_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:961: warning: Member cin_data_release_frame(cin_data_t *cin, int free_mem) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:963: warning: Member cin_data_get_buffered_frame(void) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:964: warning: Member cin_data_release_buffered_frame(void) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:966: warning: Member cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:967: warning: Member cin_data_show_stats(FILE *fp, cin_data_stats_t stats) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:968: warning: Member cin_data_reset_stats(cin_data_t *cin) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:971: warning: Member cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:972: warning: Member cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:974: warning: Member cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, const char *mode) (function) of file cin.h is not documented.
-/home/travis/build/NSLS-II/libcin/src/cin.h:975: warning: Member cin_ctl_upload_bias(cin_ctl_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:849: warning: Member cin_config_read_file(cin_ctl_t *cin, const char *file) (function) of group cin_ctl_timing is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:980: warning: Member cin_data_get_next_frame(cin_data_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:981: warning: Member cin_data_release_frame(cin_data_t *cin, int free_mem) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:983: warning: Member cin_data_get_buffered_frame(void) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:984: warning: Member cin_data_release_buffered_frame(void) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:986: warning: Member cin_data_compute_stats(cin_data_t *cin, cin_data_stats_t *stats) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:987: warning: Member cin_data_show_stats(FILE *fp, cin_data_stats_t stats) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:988: warning: Member cin_data_reset_stats(cin_data_t *cin) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:991: warning: Member cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:992: warning: Member cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:994: warning: Member cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, const char *mode) (function) of file cin.h is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:995: warning: Member cin_ctl_upload_bias(cin_ctl_t *cin) (function) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:58: warning: Member cin_build_git_time (variable) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:59: warning: Member cin_build_git_sha (variable) of file cin.h is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:60: warning: Member cin_build_version (variable) of file cin.h is not documented.
@@ -570,6 +570,12 @@ Generating citations pa/home/travis/build/NSLS-II/libcin/src/cin.h:69: warning: 
 /home/travis/build/NSLS-II/libcin/src/cin.h:800: warning: Member cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage, uint16_t *regs) (function) of group cin_ctl_bias is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:808: warning: Member cin_ctl_set_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len) (function) of group cin_ctl_timing is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:809: warning: Member cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len) (function) of group cin_ctl_timing is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:849: warning: Member cin_config_read_file(cin_ctl_t *cin, const char *file) (function) of group cin_ctl_timing is not documented.
+/home/travis/build/NSLS-II/libcin/src/cin.h:853: warning: Found unknown command `\Breif'
+/home/travis/build/NSLS-II/libcin/src/cin.h:855: warning: Found unknown command `\Param'
+/home/travis/build/NSLS-II/libcin/src/cin.h:856: warning: Found unknown command `\Param'
+/home/travis/build/NSLS-II/libcin/src/cin.h:857: warning: Found unknown command `\Param'
+/home/travis/build/NSLS-II/libcin/src/cin.h:859: warning: Found unknown command `\Returns'
 /home/travis/build/NSLS-II/libcin/src/cin.h:314: warning: Member addr (variable) of class cin_ctl is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:315: warning: Member bind_addr (variable) of class cin_ctl is not documented.
 /home/travis/build/NSLS-II/libcin/src/cin.h:316: warning: Member port (variable) of class cin_ctl is not documented.
@@ -753,7 +759,7 @@ Generating file member index...
 Generating example index...
 finalizing index lists...
 writing tag file...
-lookup cache used 477/65536 hits=3187 misses=498
+lookup cache used 479/65536 hits=3211 misses=500
 finished...
 make -C doc/latex
 make[1]: Entering directory `/home/travis/build/NSLS-II/libcin/doc/latex'
@@ -1129,7 +1135,7 @@ Chapter 7.
 Underfull \hbox (badness 10000) in paragraph at lines 3--10
 
 [37] [38] [39] [40] [41]
-Underfull \hbox (badness 10000) detected at line 722
+Underfull \hbox (badness 10000) detected at line 723
 [][][]
 [42]) (./cin__register__map_8h.tex [43] [44] [45] [46] [47]
 Underfull \hbox (badness 10000) detected at line 727
@@ -1180,13 +1186,13 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (60 pages, 221261 bytes).
+Output written on refman.pdf (60 pages, 221833 bytes).
 Transcript written on refman.log.
 makeindex refman.idx
 This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
-Scanning input file refman.idx....done (211 entries accepted, 0 rejected).
-Sorting entries.....done (1710 comparisons).
-Generating output file refman.ind....done (390 lines written, 0 warnings).
+Scanning input file refman.idx....done (213 entries accepted, 0 rejected).
+Sorting entries.....done (1892 comparisons).
+Generating output file refman.ind....done (394 lines written, 0 warnings).
 Output written in refman.ind.
 Transcript written in refman.ilg.
 pdflatex refman
@@ -1387,7 +1393,7 @@ Chapter 7.
 Underfull \hbox (badness 10000) in paragraph at lines 3--10
 
 [37] [38] [39] [40] [41]
-Underfull \hbox (badness 10000) detected at line 722
+Underfull \hbox (badness 10000) detected at line 723
 [][][]
 [42]) (./cin__register__map_8h.tex [43] [44] [45] [46] [47]
 Underfull \hbox (badness 10000) detected at line 727
@@ -1434,7 +1440,7 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (67 pages, 251940 bytes).
+Output written on refman.pdf (67 pages, 253047 bytes).
 Transcript written on refman.log.
 latex_count=8 ; \
 	while egrep -s 'Rerun (LaTeX|to get cross-references right)' refman.log && [ $latex_count -gt 0 ] ;\
@@ -1445,9 +1451,9 @@ latex_count=8 ; \
 	    done
 makeindex refman.idx
 This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
-Scanning input file refman.idx....done (211 entries accepted, 0 rejected).
-Sorting entries.....done (1710 comparisons).
-Generating output file refman.ind....done (390 lines written, 0 warnings).
+Scanning input file refman.idx....done (213 entries accepted, 0 rejected).
+Sorting entries.....done (1892 comparisons).
+Generating output file refman.ind....done (394 lines written, 0 warnings).
 Output written in refman.ind.
 Transcript written in refman.ilg.
 pdflatex refman
@@ -1648,7 +1654,7 @@ Chapter 7.
 Underfull \hbox (badness 10000) in paragraph at lines 3--10
 
 [37] [38] [39] [40] [41]
-Underfull \hbox (badness 10000) detected at line 722
+Underfull \hbox (badness 10000) detected at line 723
 [][][]
 [42]) (./cin__register__map_8h.tex [43] [44] [45] [46] [47]
 Underfull \hbox (badness 10000) detected at line 727
@@ -1690,6 +1696,6 @@ dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/he
 lvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro
 8a.pfb>
-Output written on refman.pdf (67 pages, 252166 bytes).
+Output written on refman.pdf (67 pages, 253177 bytes).
 Transcript written on refman.log.
 make[1]: Leaving directory `/home/travis/build/NSLS-II/libcin/doc/latex'

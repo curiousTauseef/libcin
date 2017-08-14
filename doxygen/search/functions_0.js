@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['cin_5fconfig_5fget_5ftiming_5fname',['cin_config_get_timing_name',['../group__cin__ctl__timing.html#gaa1bd2a17d139f629feb50545709e04e3',1,'cin_config_get_timing_name(cin_ctl_t *cin, int num, char **name):&#160;config.c'],['../group__cin__ctl__timing.html#gaa1bd2a17d139f629feb50545709e04e3',1,'cin_config_get_timing_name(cin_ctl_t *cin, int num, char **name):&#160;config.c']]],
   ['cin_5fctl_5fdestroy',['cin_ctl_destroy',['../group__cin__ctl__init.html#ga888fd017426a3718a875f6bdb5078b81',1,'cin_ctl_destroy(cin_ctl_t *cin):&#160;control.c'],['../group__cin__ctl__init.html#ga888fd017426a3718a875f6bdb5078b81',1,'cin_ctl_destroy(cin_ctl_t *cin):&#160;control.c']]],
   ['cin_5fctl_5ffo_5ftest_5fpattern',['cin_ctl_fo_test_pattern',['../group__cin__ctl__power.html#ga306beca3b918820661477130ba0b5182',1,'cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off):&#160;control.c'],['../group__cin__ctl__power.html#ga306beca3b918820661477130ba0b5182',1,'cin_ctl_fo_test_pattern(cin_ctl_t *cin, int on_off):&#160;control.c']]],
   ['cin_5fctl_5ffp_5fpwr',['cin_ctl_fp_pwr',['../group__cin__ctl__power.html#gae4aaf3a1954eeeb18f77af9e33b4f3c0',1,'cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr):&#160;control.c'],['../group__cin__ctl__power.html#gae4aaf3a1954eeeb18f77af9e33b4f3c0',1,'cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr):&#160;control.c']]],

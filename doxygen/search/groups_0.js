@@ -7,7 +7,7 @@ var searchData=
   ['cin_20power_20routines',['Cin Power Routines',['../group__cin__ctl__power.html',1,'']]],
   ['cin_20control_20read_2frwite_20routines',['Cin Control Read/Rwite Routines',['../group__cin__ctl__rw.html',1,'']]],
   ['cin_20status_20routines',['CIN Status Routines',['../group__cin__ctl__status.html',1,'']]],
-  ['cin_20control_20timing_20routines',['CIN COntrol Timing Routines',['../group__cin__ctl__timing.html',1,'']]],
+  ['cin_20control_20timing_20routines',['CIN Control Timing Routines',['../group__cin__ctl__timing.html',1,'']]],
   ['cin_20data_20framestore_20functions',['CIN Data Framestore Functions',['../group__cin__data__framestore.html',1,'']]],
   ['cin_20data_20initialization_20routines',['CIN Data Initialization Routines',['../group__cin__data__init.html',1,'']]]
 ];

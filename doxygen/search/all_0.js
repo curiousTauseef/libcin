@@ -1,6 +1,7 @@
 var searchData=
 [
   ['cin_2eh',['cin.h',['../cin_8h.html',1,'']]],
+  ['cin_5fconfig_5fget_5ftiming_5fname',['cin_config_get_timing_name',['../group__cin__ctl__timing.html#gaa1bd2a17d139f629feb50545709e04e3',1,'cin_config_get_timing_name(cin_ctl_t *cin, int num, char **name):&#160;config.c'],['../group__cin__ctl__timing.html#gaa1bd2a17d139f629feb50545709e04e3',1,'cin_config_get_timing_name(cin_ctl_t *cin, int num, char **name):&#160;config.c']]],
   ['cin_5fconfig_5fmax_5ftiming_5fdata',['CIN_CONFIG_MAX_TIMING_DATA',['../cin_8h.html#ae20233c6ecba127f19e1e77a9b3c3b9a',1,'cin.h']]],
   ['cin_5fconfig_5fmax_5ftiming_5fmodes',['CIN_CONFIG_MAX_TIMING_MODES',['../cin_8h.html#a0b64fb98e95395acdf1e1a90498b23ce',1,'cin.h']]],
   ['cin_5fconfig_5ftiming',['cin_config_timing',['../structcin__config__timing.html',1,'']]],
@@ -30,7 +31,7 @@ var searchData=
   ['cin_5fctl_5fset_5fmsg_5fcallback',['cin_ctl_set_msg_callback',['../group__cin__ctl__init.html#ga50786d0fa1d8f8fe5f25d11958e4c38a',1,'cin_ctl_set_msg_callback(cin_ctl_t *cin, cin_ctl_msg_callback callback, void *ptr):&#160;control.c'],['../group__cin__ctl__init.html#ga50786d0fa1d8f8fe5f25d11958e4c38a',1,'cin_ctl_set_msg_callback(cin_ctl_t *cin, cin_ctl_msg_callback callback, void *ptr):&#160;control.c']]],
   ['cin_20status_20routines',['CIN Status Routines',['../group__cin__ctl__status.html',1,'']]],
   ['cin_5fctl_5fstream_5fwrite',['cin_ctl_stream_write',['../group__cin__ctl__rw.html#ga2bddf0e6425752fc7a29c531e52e9421',1,'cin_ctl_stream_write(cin_ctl_t *cin, unsigned char *val, int size):&#160;control.c'],['../group__cin__ctl__rw.html#ga2bddf0e6425752fc7a29c531e52e9421',1,'cin_ctl_stream_write(cin_ctl_t *cin, unsigned char *val, int size):&#160;control.c']]],
-  ['cin_20control_20timing_20routines',['CIN COntrol Timing Routines',['../group__cin__ctl__timing.html',1,'']]],
+  ['cin_20control_20timing_20routines',['CIN Control Timing Routines',['../group__cin__ctl__timing.html',1,'']]],
   ['cin_5fctl_5fwrite',['cin_ctl_write',['../group__cin__ctl__rw.html#gac9b282b5280a34b0abb9ea0dcc6e3308',1,'cin_ctl_write(cin_ctl_t *cin, uint16_t reg, uint16_t val, int wait):&#160;control.c'],['../group__cin__ctl__rw.html#gac9b282b5280a34b0abb9ea0dcc6e3308',1,'cin_ctl_write(cin_ctl_t *cin, uint16_t reg, uint16_t val, int wait):&#160;control.c']]],
   ['cin_5fctl_5fwrite_5fwith_5freadback',['cin_ctl_write_with_readback',['../group__cin__ctl__rw.html#ga15ae1265f7abc5a08ca4560c007a92b0',1,'cin_ctl_write_with_readback(cin_ctl_t *cin, uint16_t reg, uint16_t val):&#160;control.c'],['../group__cin__ctl__rw.html#ga15ae1265f7abc5a08ca4560c007a92b0',1,'cin_ctl_write_with_readback(cin_ctl_t *cin, uint16_t reg, uint16_t val):&#160;control.c']]],
   ['cin_5fdata',['cin_data',['../structcin__data.html',1,'']]],

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>libcin: CIN COntrol Timing Routines</title>
+<title>libcin: CIN Control Timing Routines</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -61,7 +61,7 @@ $(function() {
   <div class="summary">
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">CIN COntrol Timing Routines</div>  </div>
+<div class="title">CIN Control Timing Routines</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
@@ -73,13 +73,56 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_set_timing_reg
 <tr class="memitem:gaf557340cd305c41e976415c7744e8dd0"><td class="memItemLeft" align="right" valign="top"><a id="gaf557340cd305c41e976415c7744e8dd0"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_get_timing_regs</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, uint16_t *vals, int vals_len)</td></tr>
 <tr class="separator:gaf557340cd305c41e976415c7744e8dd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaae2885cb3a184540053bf30c0f37a697"><td class="memItemLeft" align="right" valign="top"><a id="gaae2885cb3a184540053bf30c0f37a697"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_config_read_file</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, const char *file)</td></tr>
+<tr class="separator:gaae2885cb3a184540053bf30c0f37a697"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa1bd2a17d139f629feb50545709e04e3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__timing.html#gaa1bd2a17d139f629feb50545709e04e3">cin_config_get_timing_name</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, int num, char **name)</td></tr>
+<tr class="separator:gaa1bd2a17d139f629feb50545709e04e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Timing setup group </p>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="gaa1bd2a17d139f629feb50545709e04e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa1bd2a17d139f629feb50545709e04e3">&#9670;&nbsp;</a></span>cin_config_get_timing_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cin_config_get_timing_name </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcin__ctl.html">cin_ctl_t</a> *&#160;</td>
+          <td class="paramname"><em>cin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the name of the timing config options</p>
+<p>cin handle to cin library  num number of timing option  name char array of name</p>
+<p>CIN_OK on sucsess, CIN_ERROR on an error </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Aug 9 2017 21:15:50 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Aug 14 2017 11:31:33 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>
