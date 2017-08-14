@@ -801,7 +801,7 @@ int cin_ctl_get_bias_voltages(cin_ctl_t *cin, float *voltage, uint16_t *regs);
 /** @} */
 
 
-/** @defgroup cin_ctl_timing CIN COntrol Timing Routines
+/** @defgroup cin_ctl_timing CIN Control Timing Routines
  * Timing setup group
  * @{
  */
@@ -841,7 +841,27 @@ int cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp);
  * CIN Config File
  *------------------------*/
 
+/** @defgroup cin_ctl_timing CIN Control Timing Routines
+ * Timing setup group
+ * @{
+ */
+
 int cin_config_read_file(cin_ctl_t *cin, const char *file);
+
+/* ----------------------------------------------------------------------------*/
+/**
+ * @Breif Get the name of the timing config options 
+ *
+ * @Param cin handle to cin library
+ * @Param num number of timing option
+ * @Param name char array of name
+ *
+ * @Returns CIN_OK on sucsess, CIN_ERROR on an error 
+ */
+/* ----------------------------------------------------------------------------*/
+int cin_config_get_timing_name(cin_ctl_t *cin, int num, char **name);
+
+/** @} */
 
 /* ---------------------------------------------------------------------
  *

@@ -40,6 +40,17 @@
 
 #include "timing.h"
 
+int cin_config_get_timing_name(cin_ctl_t *cin, int num, char **name)
+{
+  if((num < CIN_CONFIG_MAX_TIMING_MODES) && (num >= 0))
+  {
+    *name = cin->timing[num].name;
+    return CIN_OK;
+  }
+
+  return CIN_ERROR;
+}
+
 int cin_config_find_timing(cin_ctl_t *cin, const char *name)
 {
   int i;
