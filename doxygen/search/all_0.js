@@ -1,9 +1,11 @@
 var searchData=
 [
   ['cin_2eh',['cin.h',['../cin_8h.html',1,'']]],
+  ['cin_5fconfig_5fget_5fcurrent_5ftiming_5fname',['cin_config_get_current_timing_name',['../group__cin__ctl__timing.html#ga2567004c6b7460ad401e9a15bb068249',1,'cin_config_get_current_timing_name(cin_ctl_t *cin, char **name):&#160;config.c'],['../group__cin__ctl__timing.html#ga2567004c6b7460ad401e9a15bb068249',1,'cin_config_get_current_timing_name(cin_ctl_t *cin, char **name):&#160;config.c']]],
   ['cin_5fconfig_5fget_5ftiming_5fname',['cin_config_get_timing_name',['../group__cin__ctl__timing.html#gaa1bd2a17d139f629feb50545709e04e3',1,'cin_config_get_timing_name(cin_ctl_t *cin, int num, char **name):&#160;config.c'],['../group__cin__ctl__timing.html#gaa1bd2a17d139f629feb50545709e04e3',1,'cin_config_get_timing_name(cin_ctl_t *cin, int num, char **name):&#160;config.c']]],
   ['cin_5fconfig_5fmax_5ftiming_5fdata',['CIN_CONFIG_MAX_TIMING_DATA',['../cin_8h.html#ae20233c6ecba127f19e1e77a9b3c3b9a',1,'cin.h']]],
   ['cin_5fconfig_5fmax_5ftiming_5fmodes',['CIN_CONFIG_MAX_TIMING_MODES',['../cin_8h.html#a0b64fb98e95395acdf1e1a90498b23ce',1,'cin.h']]],
+  ['cin_5fconfig_5fmax_5ftiming_5fname',['CIN_CONFIG_MAX_TIMING_NAME',['../cin_8h.html#a6027aa98c78def6884cb429a5913b79e',1,'cin.h']]],
   ['cin_5fconfig_5ftiming',['cin_config_timing',['../structcin__config__timing.html',1,'']]],
   ['cin_5fctl',['cin_ctl',['../structcin__ctl.html',1,'']]],
   ['cin_20control_20bias_20routines',['CIN Control Bias Routines',['../group__cin__ctl__bias.html',1,'']]],

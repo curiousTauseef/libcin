@@ -2,6 +2,7 @@ var searchData=
 [
   ['cin_5fconfig_5fmax_5ftiming_5fdata',['CIN_CONFIG_MAX_TIMING_DATA',['../cin_8h.html#ae20233c6ecba127f19e1e77a9b3c3b9a',1,'cin.h']]],
   ['cin_5fconfig_5fmax_5ftiming_5fmodes',['CIN_CONFIG_MAX_TIMING_MODES',['../cin_8h.html#a0b64fb98e95395acdf1e1a90498b23ce',1,'cin.h']]],
+  ['cin_5fconfig_5fmax_5ftiming_5fname',['CIN_CONFIG_MAX_TIMING_NAME',['../cin_8h.html#a6027aa98c78def6884cb429a5913b79e',1,'cin.h']]],
   ['cin_5fctl_5fbias_5foffset',['CIN_CTL_BIAS_OFFSET',['../cin_8h.html#ad95dc4e4eea94fe47c04313732519a2e',1,'cin.h']]],
   ['cmd_5fdisable_5fclks',['CMD_DISABLE_CLKS',['../cin__register__map_8h.html#a7c5aed5b4f3eaa05711046d7cfaa65eb',1,'cin_register_map.h']]],
   ['cmd_5fenable_5fclks',['CMD_ENABLE_CLKS',['../cin__register__map_8h.html#aa3cd33f73347b243468d529e7cd5832b',1,'cin_register_map.h']]],
