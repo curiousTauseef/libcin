@@ -778,13 +778,40 @@ int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq);
 
 
 /** @defgroup cin_ctl_status CIN Status Routines
- * Status Routines
+ *
+ * Group of routines to get the status of the frame and config FPGAs in the CIN. 
+ *
  * @{
  */
+
+/* ----------------------------------------------------------------------------*/
+/**
+ * @Breif Get the serial and firmware numbers from the CIN
+ *
+ * @Param cin handle to cin library
+ * @Param id data structure containing firmware and serial numbers
+ *
+ * @Returns CIN_OK on sucsess, CIN_ERROR on an error 
+ */
+/* ----------------------------------------------------------------------------*/
+int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *val);
+
+/* ----------------------------------------------------------------------------*/
+/**
+ * @Breif 
+ *
+ * @Param cin
+ * @Param _val
+ *
+ * @Returns   
+ */
+/* ----------------------------------------------------------------------------*/
 int cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val);
-int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *_val);
+
 int cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val);
+
 int cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon_t *values);
+
 /** @} */
 
 
@@ -792,6 +819,7 @@ int cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon
  * Initialization group
  * @{
  */
+
 int cin_ctl_set_bias(cin_ctl_t *cin,int val);
 int cin_ctl_get_bias(cin_ctl_t *cin, int *val);
 int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify);

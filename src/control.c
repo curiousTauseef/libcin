@@ -392,7 +392,7 @@ int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait)
                     (buf >> 16), reg, tries);
       }
     } else {
-      ERROR_PRINT("Read timeout on try %d\n", tries);
+      ERROR_PRINT("Read timeout on try %d for register 0x%04X\n", tries, reg);
     }
 
     tries--;
