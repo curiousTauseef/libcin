@@ -296,17 +296,18 @@ typedef struct cin_port {
 } cin_port_t;
 
 #define CIN_CONFIG_MAX_TIMING_DATA       880  /**< Max = 55 per state, 16 states */
-#define CIN_CONFIG_MAX_TIMING_MODES      20  /**< 20 states max */
+#define CIN_CONFIG_MAX_TIMING_MODES      10  /**< states max */
+#define CIN_CONFIG_MAX_TIMING_NAME       40  /**< Max characters for timing name */
 
 typedef struct cin_config_timing {
-  uint16_t *data;           /**< Pointer to timing data */
-  int data_len;             /**< timing data length */
-  char name[40];            /**< String for config name */
-  int rows;                 /**< Rows for this timing setup */
-  int cols;                 /**< Cols for this timing setup */
-  int overscan;             /**< Number of overscan cols for this setup */
-  int fclk_freq;            /**< FCLK Frequency to use */
-  int framestore;           /**< Flag (not zero means framestore */
+  uint16_t *data;                           /**< Pointer to timing data */
+  int data_len;                             /**< timing data length */
+  char name[CIN_CONFIG_MAX_TIMING_NAME];    /**< String for config name */
+  int rows;                                 /**< Rows for this timing setup */
+  int cols;                                 /**< Cols for this timing setup */
+  int overscan;                             /**< Number of overscan cols for this setup */
+  int fclk_freq;                            /**< FCLK Frequency to use */
+  int framestore;                           /**< Flag (not zero means framestore */
 } cin_config_timing_t;
 
 typedef struct cin_ctl {
@@ -861,8 +862,20 @@ int cin_config_read_file(cin_ctl_t *cin, const char *file);
 /* ----------------------------------------------------------------------------*/
 int cin_config_get_timing_name(cin_ctl_t *cin, int num, char **name);
 
+/* ----------------------------------------------------------------------------*/
+/**
+ * @Breif Get the name of the current timing mode
+ *
+ * @Param cin handle to cin library
+ * @Param name char array of name 
+ *
+ * @Returns CIN_OK on sucsess, CIN_ERROR on an error 
+ */
+/* ----------------------------------------------------------------------------*/
+int cin_config_get_current_timing_name(cin_ctl_t *cin, char **name);
 /** @} */
 
+void cin_ctl_message(cin_ctl_t *cin, const char *message, int severity);
 /* ---------------------------------------------------------------------
  *
  * CIN Data Routines
@@ -992,6 +1005,7 @@ int cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan);
 void cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize);
 
 int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, const char *mode);
+int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data,  const char *name);
 int cin_ctl_upload_bias(cin_ctl_t *cin);
 #ifdef __cplusplus
 }
