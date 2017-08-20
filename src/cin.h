@@ -90,6 +90,8 @@ extern const char *cin_build_version;
 #define CIN_CTL_FCLK_SLEEP                 200000 // microseconds
 #define CIN_CTL_STREAM_CHUNK               512
 #define CIN_CTL_STREAM_SLEEP               5
+#define CIN_CTL_PACKET_WAIT                1000 // usecs
+#define CIN_CTL_PACKET_LOOPS               250
 
 #define CIN_CTL_POWER_ENABLE               0x001F
 #define CIN_CTL_POWER_DISABLE              0x0000
@@ -576,11 +578,10 @@ int cin_data_send_magic(cin_data_t *cin);
  * @param cin handle to cin library
  * @param reg register to read
  * @param val variable to read value of register to
- * @param wait if non-zero, wait a predefined time before read command (for i2c)
  *
  * @return Returns 0 on sucsess non-zero if error
  */
-int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait);
+int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val);
 /*!
  * Write register to CIN
  *

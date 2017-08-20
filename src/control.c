@@ -151,24 +151,22 @@ void cin_ctl_set_msg_callback(cin_ctl_t *cin, cin_ctl_msg_callback callback, voi
 
 uint32_t cin_ctl_get_packet(cin_ctl_t *cin, uint32_t *val){
   long int r;
-  struct timeval start, now, diff;
 
-  gettimeofday(&start, NULL);
- 
-  while(1)
+  int loop_counter = CIN_CTL_PACKET_LOOPS;
+  while(loop_counter--)
   {
     r = fifo_used_bytes(&cin->listener->ctl_fifo);
     if(r){
       *val = *((uint32_t *)fifo_get_tail(&cin->listener->ctl_fifo));
       fifo_advance_tail(&cin->listener->ctl_fifo);
       return CIN_OK;
+    } else {
+      usleep(CIN_CTL_PACKET_WAIT);
     }
     
-    gettimeofday(&now, NULL);
-    timersub(&now, &start, &diff);
-    if(diff.tv_sec > 2)
+    if(loop_counter <= 0)
     {
-      ERROR_PRINT("Read timeout after %d seconds\n", 2);
+      ERROR_PRINT("Read timeout. Looped %d times\n", loop_counter);
       break;
     }
   }
@@ -280,7 +278,7 @@ int cin_ctl_write_with_readback(cin_ctl_t *cin, uint16_t reg, uint16_t val){
       continue;
     }
 
-    if(cin_ctl_read(cin, reg, &_val, 1) != CIN_OK)
+    if(cin_ctl_read(cin, reg, &_val) != CIN_OK)
     {
       ERROR_PRINT("Unable to read register %x\n", reg);
       continue;
@@ -348,7 +346,7 @@ error:
    return CIN_ERROR;
 }                                      
 
-int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait)
+int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val)
 {
   int _status;
   uint32_t buf = 0;
@@ -367,18 +365,16 @@ int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait)
     _status = cin_ctl_write(cin, REG_READ_ADDRESS, reg, 0);
     if (_status != CIN_OK)
     {
+      ERROR_COMMENT("Write Error\n");
       goto error;
     }
 
-    if(wait)
-    {
-      usleep(CIN_CTL_READ_SLEEP);
-    }
+    usleep(CIN_CTL_READ_SLEEP);
 
     _status = cin_ctl_write(cin, REG_COMMAND, CMD_READ_REG, 0);
     if (_status != CIN_OK)
     {
-     ERROR_COMMENT("Write Error\n");
+      ERROR_COMMENT("Write Error\n");
       goto error;
     }
 
@@ -452,7 +448,7 @@ int cin_ctl_fp_pwr(cin_ctl_t *cin, int pwr){
   int _status;
   uint16_t _val;
 
-  _status = cin_ctl_read(cin, REG_PS_ENABLE, &_val, 0);
+  _status = cin_ctl_read(cin, REG_PS_ENABLE, &_val);
   if(_status != 0){
     goto error;
   }
@@ -852,7 +848,7 @@ int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq)
   uint16_t _val;
   int _status;
 
-  _status = cin_ctl_read(cin, REG_FCLK_I2C_DATA_WR, &_val, 0);
+  _status = cin_ctl_read(cin, REG_FCLK_I2C_DATA_WR, &_val);
   if(_status){
     ERROR_COMMENT("Unable to get FCLK status.\n");
     return CIN_ERROR;
@@ -872,7 +868,7 @@ int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq)
       _status |= cin_ctl_write(cin, REG_FCLK_I2C_ADDRESS, CIN_FCLK_READ[i], 0);
       _status |= cin_ctl_write(cin, REG_FRM_COMMAND, CMD_FCLK_COMMIT, 0);
       usleep(CIN_CTL_FCLK_SLEEP);
-      _status |= cin_ctl_read(cin, REG_FCLK_I2C_DATA_RD, &_reg[i], 1);
+      _status |= cin_ctl_read(cin, REG_FCLK_I2C_DATA_RD, &_reg[i]);
     }
 
     // Print Reisters to debug stream
@@ -958,7 +954,7 @@ int cin_ctl_get_fclk(cin_ctl_t *cin, int *clkfreq)
 
 int cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val){
       
-  int _status = cin_ctl_read(cin,REG_FPGA_STATUS, _val, 0);
+  int _status = cin_ctl_read(cin,REG_FPGA_STATUS, _val);
   DEBUG_PRINT("CFG FPGA Status  :  0x%04X\n", *_val);
 
   if(_status){
@@ -972,12 +968,12 @@ int cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val){
 int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *val){
   int _status = 0;
 
-  _status  = cin_ctl_read(cin, REG_BOARD_ID, &val->base_board_id, 0);
-  _status |= cin_ctl_read(cin,REG_HW_SERIAL_NUM, &val->base_serial_no, 0);
-  _status |= cin_ctl_read(cin,REG_FPGA_VERSION, &val->base_fpga_ver, 0);
-  _status |= cin_ctl_read(cin,REG_FRM_BOARD_ID, &val->fabric_board_id, 0);
-  _status |= cin_ctl_read(cin,REG_FRM_HW_SERIAL_NUM, &val->fabric_serial_no, 0);
-  _status |= cin_ctl_read(cin,REG_FRM_FPGA_VERSION, &val->fabric_fpga_ver, 0);
+  _status  = cin_ctl_read(cin, REG_BOARD_ID, &val->base_board_id);
+  _status |= cin_ctl_read(cin,REG_HW_SERIAL_NUM, &val->base_serial_no);
+  _status |= cin_ctl_read(cin,REG_FPGA_VERSION, &val->base_fpga_ver);
+  _status |= cin_ctl_read(cin,REG_FRM_BOARD_ID, &val->fabric_board_id);
+  _status |= cin_ctl_read(cin,REG_FRM_HW_SERIAL_NUM, &val->fabric_serial_no);
+  _status |= cin_ctl_read(cin,REG_FRM_FPGA_VERSION, &val->fabric_fpga_ver);
   DEBUG_PRINT("Base Board ID           :  0x%04X\n",val->base_board_id);
   DEBUG_PRINT("Base HW Serial Number   :  0x%04X\n",val->base_serial_no);
   DEBUG_PRINT("Base FPGA Version       :  0x%04X\n",val->base_fpga_ver);
@@ -997,7 +993,7 @@ int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *val){
 int cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val){
   int _status;
 
-  _status = cin_ctl_read(cin, REG_DCM_STATUS, _val, 0);
+  _status = cin_ctl_read(cin, REG_DCM_STATUS, _val);
   if(_status){
     ERROR_COMMENT("Unable to read DCM status.\n");
     return CIN_ERROR;
@@ -1026,7 +1022,7 @@ int cin_ctl_calc_vi_status(cin_ctl_t *cin,
   uint16_t _val;
   int _status;
 
-  _status = cin_ctl_read(cin, vreg, &_val, 0);
+  _status = cin_ctl_read(cin, vreg, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read voltage.\n");
     return CIN_ERROR;
@@ -1034,7 +1030,7 @@ int cin_ctl_calc_vi_status(cin_ctl_t *cin,
 
   vi->v = vfact * _val;
   
-  _status = cin_ctl_read(cin, ireg, &_val, 0);
+  _status = cin_ctl_read(cin, ireg, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read current.\n");
     return CIN_ERROR;
@@ -1052,7 +1048,7 @@ int cin_ctl_get_power_status(cin_ctl_t *cin, int full,
   uint16_t _val;
   int _status;
 
-  _status = cin_ctl_read(cin, REG_PS_ENABLE, &_val, 0);
+  _status = cin_ctl_read(cin, REG_PS_ENABLE, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read power supply status\n");
     return CIN_ERROR;
@@ -1074,9 +1070,9 @@ int cin_ctl_get_power_status(cin_ctl_t *cin, int full,
   }
 
   /* ADC == LT4151 */
-  _status  = cin_ctl_read(cin, REG_VMON_ADC1_CH1, &_val, 0);
+  _status  = cin_ctl_read(cin, REG_VMON_ADC1_CH1, &_val);
   _voltage = 0.025 * _val;
-  _status |= cin_ctl_read(cin, REG_IMON_ADC1_CH0, &_val, 0);
+  _status |= cin_ctl_read(cin, REG_IMON_ADC1_CH0, &_val);
   _current = 0.00002 * _val / 0.003;
   if(_status){
     ERROR_COMMENT("Unable to read ADC1 values.\n");
@@ -1168,7 +1164,7 @@ int cin_ctl_get_bias(cin_ctl_t *cin, int *val){
 
   int _status;
   uint16_t _val = -1;
-  _status = cin_ctl_read(cin, REG_BIASCONFIGREGISTER0_REG, &_val, 0); 
+  _status = cin_ctl_read(cin, REG_BIASCONFIGREGISTER0_REG, &_val); 
    
   if(_status){
     ERROR_COMMENT("Unable to read bias status\n");
@@ -1190,7 +1186,7 @@ int cin_ctl_set_clocks(cin_ctl_t *cin,int val){
   int _status;   
   uint16_t _val;
 
-  _status = cin_ctl_read(cin, REG_CLOCKCONFIGREGISTER0_REG, &_val, 0); 
+  _status = cin_ctl_read(cin, REG_CLOCKCONFIGREGISTER0_REG, &_val); 
   if(_status){
     ERROR_COMMENT("Unable to read clock status\n");
     return _status;
@@ -1218,7 +1214,7 @@ int cin_ctl_get_clocks(cin_ctl_t *cin, int *val){
 
   int _status;
   uint16_t _val;
-  _status = cin_ctl_read(cin, REG_CLOCKCONFIGREGISTER0_REG, &_val, 0); 
+  _status = cin_ctl_read(cin, REG_CLOCKCONFIGREGISTER0_REG, &_val); 
    
   if(_status){
     ERROR_COMMENT("Unable to read clock status\n");
@@ -1257,7 +1253,7 @@ int cin_ctl_get_trigger(cin_ctl_t *cin, int *val){
 
   int _status;
   uint16_t _val;
-  _status = cin_ctl_read(cin, REG_TRIGGERMASK_REG, &_val, 0); 
+  _status = cin_ctl_read(cin, REG_TRIGGERMASK_REG, &_val); 
    
   if(_status){
     ERROR_COMMENT("Unable to read trigger status\n");
@@ -1272,7 +1268,7 @@ int cin_ctl_get_trigger(cin_ctl_t *cin, int *val){
 int cin_ctl_get_focus(cin_ctl_t *cin, int *val){
   int _status;
   uint16_t _val;
-  _status = cin_ctl_read(cin, REG_CLOCKCONFIGREGISTER0_REG, &_val, 0);
+  _status = cin_ctl_read(cin, REG_CLOCKCONFIGREGISTER0_REG, &_val);
   if(_status){
     ERROR_COMMENT("Unable to read focus status\n");
     return _status;
@@ -1292,7 +1288,7 @@ int cin_ctl_set_focus(cin_ctl_t *cin, int val){
   uint16_t _val1;
   int _status;
    
-  _status = cin_ctl_read(cin,REG_CLOCKCONFIGREGISTER0_REG, &_val1, 0);
+  _status = cin_ctl_read(cin,REG_CLOCKCONFIGREGISTER0_REG, &_val1);
   if(_status){
     ERROR_COMMENT("Unable to read focus bit\n");
     return _status;
@@ -1552,7 +1548,7 @@ int cin_ctl_set_mux(cin_ctl_t *cin, int setting){
 
 int cin_ctl_get_mux(cin_ctl_t *cin, int *setting){
 
-  if(cin_ctl_read(cin, REG_TRIGGERSELECT_REG, (uint16_t*)setting, 0) != CIN_OK)
+  if(cin_ctl_read(cin, REG_TRIGGERSELECT_REG, (uint16_t*)setting) != CIN_OK)
   {
     ERROR_COMMENT("Failed to read MUX setting\n");
     return CIN_ERROR;
@@ -1727,7 +1723,7 @@ int cin_ctl_get_bias_regs(cin_ctl_t *cin, uint16_t *vals)
 
   for(n=0;n<CIN_CTL_NUM_BIAS;n++){
     _status |= cin_ctl_write(cin, REG_BIASANDCLOCKREGISTERADDRESS, CIN_CTL_BIAS_OFFSET + (2 * n), 1);
-    _status |= cin_ctl_read(cin, REG_BIASREGISTERDATAOUT, &vals[n], 1);
+    _status |= cin_ctl_read(cin, REG_BIASREGISTERDATAOUT, &vals[n]);
   }
 
   if(_status != CIN_OK)
@@ -1920,7 +1916,7 @@ int cin_ctl_get_timing_regs(cin_ctl_t *cin, uint16_t *vals, int vals_len)
   {
     int _status = 0;
     _status |= cin_ctl_write_with_readback(cin, REG_BIASANDCLOCKREGISTERADDRESS, (2 * i));
-    _status |= cin_ctl_read(cin, REG_CLOCKREGISTERDATAOUT, &vals[i], 0);
+    _status |= cin_ctl_read(cin, REG_CLOCKREGISTERDATAOUT, &vals[i]);
     DEBUG_PRINT("Reg 0x%04X = 0x%04X\n", 2 * i, vals[i]);
     if(_status)
     {
@@ -1953,7 +1949,7 @@ int cin_ctl_reg_dump(cin_ctl_t *cin, FILE *fp)
   while(rmap->name != NULL){
     uint16_t reg = rmap->reg;
     uint16_t val;
-    if(!(status |= cin_ctl_read(cin, reg, &val, 0)))
+    if(!(status |= cin_ctl_read(cin, reg, &val)))
     {
       fprintf(fp, "%-40s :  0x%04X  :  0x%04X\n", rmap->name, reg, val);
     } else {

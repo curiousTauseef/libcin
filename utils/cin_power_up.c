@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
   cin_data_t cin_data;
 
   cin_set_debug_print(0);
-  cin_set_error_print(0);
+  cin_set_error_print(1);
 
 
   if(argc != 2)
