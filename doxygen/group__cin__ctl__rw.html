@@ -67,8 +67,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga067c8576865a0bbf6bd82c9f9213b553"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__rw.html#ga067c8576865a0bbf6bd82c9f9213b553">cin_ctl_read</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, uint16_t reg, uint16_t *val, int wait)</td></tr>
-<tr class="separator:ga067c8576865a0bbf6bd82c9f9213b553"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0bc2500271d8f7ff30c3479993906f29"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__rw.html#ga0bc2500271d8f7ff30c3479993906f29">cin_ctl_read</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, uint16_t reg, uint16_t *val)</td></tr>
+<tr class="separator:ga0bc2500271d8f7ff30c3479993906f29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac9b282b5280a34b0abb9ea0dcc6e3308"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__rw.html#gac9b282b5280a34b0abb9ea0dcc6e3308">cin_ctl_write</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, uint16_t reg, uint16_t val, int wait)</td></tr>
 <tr class="separator:gac9b282b5280a34b0abb9ea0dcc6e3308"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2bddf0e6425752fc7a29c531e52e9421"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__rw.html#ga2bddf0e6425752fc7a29c531e52e9421">cin_ctl_stream_write</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, unsigned char *val, int size)</td></tr>
@@ -78,8 +78,8 @@ Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga067c8576865a0bbf6bd82c9f9213b553"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga067c8576865a0bbf6bd82c9f9213b553">&#9670;&nbsp;</a></span>cin_ctl_read()</h2>
+<a id="ga0bc2500271d8f7ff30c3479993906f29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0bc2500271d8f7ff30c3479993906f29">&#9670;&nbsp;</a></span>cin_ctl_read()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -100,13 +100,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">uint16_t *&#160;</td>
-          <td class="paramname"><em>val</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>wait</em>&#160;</td>
+          <td class="paramname"><em>val</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -120,8 +114,7 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">cin</td><td>handle to cin library </td></tr>
     <tr><td class="paramname">reg</td><td>register to read </td></tr>
-    <tr><td class="paramname">val</td><td>variable to read value of register to </td></tr>
-    <tr><td class="paramname">wait</td><td>if non-zero, wait a predefined time before read command (for i2c)</td></tr>
+    <tr><td class="paramname">val</td><td>variable to read value of register to</td></tr>
   </table>
   </dd>
 </dl>
@@ -274,7 +267,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 18 2017 17:41:47 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Aug 20 2017 14:44:45 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

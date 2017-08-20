@@ -67,12 +67,10 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga2b17bbbde2a539c861c781fde50ddafd"><td class="memItemLeft" align="right" valign="top"><a id="ga2b17bbbde2a539c861c781fde50ddafd"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_get_cfg_fpga_status</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, uint16_t *_val)</td></tr>
+<tr class="memitem:gac3343acd55ff0130606a4ad7b7c7000a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__status.html#gac3343acd55ff0130606a4ad7b7c7000a">cin_ctl_get_id</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, <a class="el" href="structcin__ctl__id.html">cin_ctl_id_t</a> *val)</td></tr>
+<tr class="separator:gac3343acd55ff0130606a4ad7b7c7000a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2b17bbbde2a539c861c781fde50ddafd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cin__ctl__status.html#ga2b17bbbde2a539c861c781fde50ddafd">cin_ctl_get_cfg_fpga_status</a> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, uint16_t *_val)</td></tr>
 <tr class="separator:ga2b17bbbde2a539c861c781fde50ddafd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1bcc0c57bfe499acc7b89767c94d9b93"><td class="memItemLeft" align="right" valign="top"><a id="ga1bcc0c57bfe499acc7b89767c94d9b93"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_get_id</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, <a class="el" href="structcin__ctl__id.html">cin_ctl_id_t</a> *_val)</td></tr>
-<tr class="separator:ga1bcc0c57bfe499acc7b89767c94d9b93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga762130f4d72af7725576613c5779f27d"><td class="memItemLeft" align="right" valign="top"><a id="ga762130f4d72af7725576613c5779f27d"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_get_dcm_status</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, uint16_t *_val)</td></tr>
 <tr class="separator:ga762130f4d72af7725576613c5779f27d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -81,11 +79,72 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_get_power_stat
 <tr class="separator:gac368ad91dff323f4e48c7d5741d33a36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>Status Routines </p>
+<p>Group of routines to get the status of the frame and config FPGAs in the CIN. </p>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ga2b17bbbde2a539c861c781fde50ddafd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2b17bbbde2a539c861c781fde50ddafd">&#9670;&nbsp;</a></span>cin_ctl_get_cfg_fpga_status()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cin_ctl_get_cfg_fpga_status </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcin__ctl.html">cin_ctl_t</a> *&#160;</td>
+          <td class="paramname"><em>cin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t *&#160;</td>
+          <td class="paramname"><em>_val</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>cin  _val</p>
+
+</div>
+</div>
+<a id="gac3343acd55ff0130606a4ad7b7c7000a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac3343acd55ff0130606a4ad7b7c7000a">&#9670;&nbsp;</a></span>cin_ctl_get_id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cin_ctl_get_id </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcin__ctl.html">cin_ctl_t</a> *&#160;</td>
+          <td class="paramname"><em>cin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcin__ctl__id.html">cin_ctl_id_t</a> *&#160;</td>
+          <td class="paramname"><em>val</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the serial and firmware numbers from the CIN</p>
+<p>cin handle to cin library  id data structure containing firmware and serial numbers</p>
+<p>CIN_OK on sucsess, CIN_ERROR on an error </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 18 2017 17:41:47 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Aug 20 2017 14:44:45 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>
