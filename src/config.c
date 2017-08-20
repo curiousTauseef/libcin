@@ -40,9 +40,20 @@
 
 #include "timing.h"
 
+int cin_config_get_current_timing_name(cin_ctl_t *cin, char **name)
+{
+  if(cin->current_timing != NULL)
+  {
+    *name = cin->current_timing->name;
+    return CIN_OK;
+  }
+
+  return CIN_ERROR;
+}
+
 int cin_config_get_timing_name(cin_ctl_t *cin, int num, char **name)
 {
-  if((num < CIN_CONFIG_MAX_TIMING_MODES) && (num >= 0))
+  if((num < cin->timing_num) && (num >= 0))
   {
     *name = cin->timing[num].name;
     return CIN_OK;
@@ -72,6 +83,8 @@ int cin_config_init(cin_ctl_t *cin)
 
   DEBUG_COMMENT("Configuring default timing modes\n");
   // Defualt timing
+
+  cin->current_timing = NULL;
 
   strcpy(cin->timing[0].name, "200MHz_TIMING_GOLD");
   cin->timing[0].data = cin_config_200_full_gold;
@@ -114,7 +127,11 @@ int cin_config_init(cin_ctl_t *cin)
   DEBUG_PRINT("Configured %d timing modes.\n", cin->timing_num);
   
   int i;
-  for(i=0;i<cin->timing_num;i++)
+  for(i=cin->timing_num;i<CIN_CONFIG_MAX_TIMING_MODES;i++)
+  {
+    strcpy(cin->timing[i].name, "");
+  }
+  for(i=0;i<CIN_CONFIG_MAX_TIMING_MODES;i++)
   {
     DEBUG_PRINT("Timing mode % 2d name = \"%s\"\n", i, cin->timing[i].name);
   }
