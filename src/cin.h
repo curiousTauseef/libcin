@@ -90,6 +90,8 @@ extern const char *cin_build_version;
 #define CIN_CTL_FCLK_SLEEP                 200000 // microseconds
 #define CIN_CTL_STREAM_CHUNK               512
 #define CIN_CTL_STREAM_SLEEP               5
+#define CIN_CTL_PACKET_WAIT                1000 // usecs
+#define CIN_CTL_PACKET_LOOPS               250
 
 #define CIN_CTL_POWER_ENABLE               0x001F
 #define CIN_CTL_POWER_DISABLE              0x0000
@@ -576,11 +578,10 @@ int cin_data_send_magic(cin_data_t *cin);
  * @param cin handle to cin library
  * @param reg register to read
  * @param val variable to read value of register to
- * @param wait if non-zero, wait a predefined time before read command (for i2c)
  *
  * @return Returns 0 on sucsess non-zero if error
  */
-int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val, int wait);
+int cin_ctl_read(cin_ctl_t *cin, uint16_t reg, uint16_t *val);
 /*!
  * Write register to CIN
  *
@@ -779,13 +780,40 @@ int cin_ctl_set_fclk(cin_ctl_t *cin, int clkfreq);
 
 
 /** @defgroup cin_ctl_status CIN Status Routines
- * Status Routines
+ *
+ * Group of routines to get the status of the frame and config FPGAs in the CIN. 
+ *
  * @{
  */
+
+/* ----------------------------------------------------------------------------*/
+/**
+ * @Breif Get the serial and firmware numbers from the CIN
+ *
+ * @Param cin handle to cin library
+ * @Param id data structure containing firmware and serial numbers
+ *
+ * @Returns CIN_OK on sucsess, CIN_ERROR on an error 
+ */
+/* ----------------------------------------------------------------------------*/
+int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *val);
+
+/* ----------------------------------------------------------------------------*/
+/**
+ * @Breif 
+ *
+ * @Param cin
+ * @Param _val
+ *
+ * @Returns   
+ */
+/* ----------------------------------------------------------------------------*/
 int cin_ctl_get_cfg_fpga_status(cin_ctl_t *cin, uint16_t *_val);
-int cin_ctl_get_id(cin_ctl_t *cin, cin_ctl_id_t *_val);
+
 int cin_ctl_get_dcm_status(cin_ctl_t *cin, uint16_t *_val);
+
 int cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon_t *values);
+
 /** @} */
 
 
@@ -793,6 +821,7 @@ int cin_ctl_get_power_status(cin_ctl_t *cin, int full, int *pwr, cin_ctl_pwr_mon
  * Initialization group
  * @{
  */
+
 int cin_ctl_set_bias(cin_ctl_t *cin,int val);
 int cin_ctl_get_bias(cin_ctl_t *cin, int *val);
 int cin_ctl_set_bias_regs(cin_ctl_t * cin, uint16_t *vals, int verify);
