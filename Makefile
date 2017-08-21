@@ -107,12 +107,15 @@ data/firmware.c: config/$(FIRMWARE)
 data/timing.h:  bin/convert_config \
 				config/20170526_125MHz_fCCD_Timing_xper.txt \
 				config/20170526_125MHz_fCCD_Timing_FS_xper.txt \
+				config/20170526_125MHz_fCCD_Timing_FS_2OS_xper.txt \
 				config/2014_Jan_07-07_31_CCD_23ID_FS.txt \
 				config/2013_Nov_25-200MHz_CCD_timing.txt
 	bin/convert_config -n cin_config_125_timing -t \
 		config/20170526_125MHz_fCCD_Timing_xper.txt  > data/timing.h
 	bin/convert_config -n cin_config_125_timing_fs -t \
 		config/20170526_125MHz_fCCD_Timing_FS_xper.txt  >> data/timing.h
+	bin/convert_config -n cin_config_125_timing_fs_2os -t \
+		config/20170526_125MHz_fCCD_Timing_FS_2OS_xper.txt  >> data/timing.h
 	bin/convert_config -n cin_config_200_lcls_fs -t \
 		config/2014_Jan_07-07_31_CCD_23ID_FS.txt  >> data/timing.h
 	bin/convert_config -n cin_config_200_full_gold -t \
@@ -137,7 +140,7 @@ lib/libcin.so: $(LIBOBJECTS)
 # Now create 
 
 LDFLAGS=-L./lib
-LDLIBS=-Wl,-Bstatic -lcin -Wl,-Bdynamic -lconfig -lpthread -lrt
+LDLIBS=-Wl,-Bstatic -lcin -Wl,-Bdynamic -lpthread -lrt
 
 bin/cin_test_fo: utils/cin_test_fo.o lib/libcin.a  src/cin.h
 	$(CC) $(LDFLAGS) utils/cin_test_fo.o -o $@ $(LDLIBS) 
