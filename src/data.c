@@ -730,8 +730,8 @@ void cin_data_show_stats(FILE *fp, cin_data_stats_t stats){
 }
 
 int cin_data_send_magic(cin_data_t *cin){
-  DEBUG_COMMENT("Sending \"DUMMY DATA\" to CIN to initialize fabric comms\n");
-  char* dummy = "DUMMY DATA";
+  DEBUG_COMMENT("Sending \"CPE1704TKS\" to CIN to initialize fabric comms\n");
+  char* dummy = "CPE1704TKS";
   return cin_data_write(&cin->dp, dummy, sizeof(dummy));
 }
 
