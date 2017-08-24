@@ -786,6 +786,7 @@ int cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan)
 {
   /* This routine sets the descamble parameters */
   int rtn;
+  DEBUG_PRINT("Setting descramble params with %d rows and %d overscan\n", rows, overscan);
 
   pthread_mutex_lock(&cin->descramble_mutex);
 
@@ -793,7 +794,6 @@ int cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan)
   cin->map.rows = rows;
 
   rtn = cin_data_descramble_init(&cin->map);
-  DEBUG_PRINT("Created new descramble map. Overscan = %d, rows = %d\n", overscan, rows);
 
   pthread_mutex_unlock(&cin->descramble_mutex);
 

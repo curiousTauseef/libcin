@@ -48,22 +48,22 @@
  * -----------------------------------------------------------------------------------------
  */
 
-int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data,  const char *name)
+int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data, int mode)
 {
-  int mode;
   char _msg[256];
+  const char *name;
 
   // Find the timing mode
-  mode = cin_config_find_timing(cin_ctl, name);
-  if(mode == CIN_ERROR)
+  if((mode < 0) || (mode >= cin_ctl->timing_num))
   {
-    ERROR_PRINT("No timing data for handle \"%s\"\n", name);
-    snprintf(_msg, 256, "No timing data found for \"%s\"", name);
+    ERROR_PRINT("Invalid timing mode %d\n", mode);
+    snprintf(_msg, 256, "No timing data for mode %d", mode);
     cin_ctl_message(cin_ctl, _msg, CIN_CTL_MSG_MAJOR);
     return CIN_ERROR;
   }
 
   cin_ctl->current_timing = &cin_ctl->timing[mode];
+  name = cin_ctl->timing[mode].name;
 
   // Now upload timing data to CIN
   DEBUG_PRINT("Uploading timing data from \"%s\".\n", name);
@@ -98,7 +98,7 @@ error:
   return CIN_OK;
 }
 
-int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, const char *mode)
+int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, int mode)
 {
   // Power cycle the CIN
   
@@ -147,7 +147,7 @@ int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, const char *mode)
     goto error;
   }
 
-  if(mode != NULL)
+  if(mode != -1);
   {
     if(cin_com_set_timing(cin_ctl, cin_data, mode) != CIN_OK){
       ERROR_COMMENT("Unable to set timing\n");

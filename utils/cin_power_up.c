@@ -27,7 +27,6 @@ int main(int argc, char *argv[])
   cin_set_debug_print(0);
   cin_set_error_print(1);
 
-
   if(argc != 2)
   {
     fprintf(stderr, "usage : cin_power_up [timing name]\n\n");
@@ -49,15 +48,23 @@ int main(int argc, char *argv[])
 
   cin_ctl_set_msg_callback(&cin_ctl, &msg_callback, NULL);
 
-  if(cin_com_boot(&cin_ctl, &cin_data, argv[1]) != CIN_OK)
+  // Set name
+  int mode;
+  if((mode = cin_config_find_timing(&cin_ctl, argv[1])) == CIN_ERROR)
+  {
+    fprintf(stderr, "Unable to find timing mode \"%s\"\n", argv[1]);
+    goto error;
+  }
+
+  if(cin_com_boot(&cin_ctl, &cin_data, mode) != CIN_OK)
   {
     fprintf(stderr,"Unable to boot CIN\n");
     goto error;
   }
 
   cin_ctl_set_cycle_time(&cin_ctl, 1.0);
-  cin_ctl_set_exposure_time(&cin_ctl, 0.001);
-  cin_ctl_int_trigger_start(&cin_ctl, 0);
+  cin_ctl_set_exposure_time(&cin_ctl, 0.0);
+  //cin_ctl_int_trigger_start(&cin_ctl, 0);
 
   cin_ctl_destroy(&cin_ctl);
   cin_data_destroy(&cin_data);

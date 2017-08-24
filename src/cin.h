@@ -1033,8 +1033,9 @@ void cin_data_reset_stats(cin_data_t *cin);
 int cin_data_set_descramble_params(cin_data_t *cin, int rows, int overscan);
 void cin_data_get_descramble_params(cin_data_t *cin, int *rows, int *overscan, int *xsize, int *ysize);
 
-int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, const char *mode);
-int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data,  const char *name);
+int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, int mode);
+int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data,  int mode);
+int cin_config_find_timing(cin_ctl_t *cin, const char *name);
 int cin_ctl_upload_bias(cin_ctl_t *cin);
 #ifdef __cplusplus
 }

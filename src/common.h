@@ -47,5 +47,4 @@ char *cin_com_set_string(char *val, char *def);
 int cin_com_set_int(int val, int def);
 
 int cin_com_set_fabric_comms(cin_ctl_t *cin_ctl, cin_data_t *cin_data);
-int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data,  const char *name);
 #endif
