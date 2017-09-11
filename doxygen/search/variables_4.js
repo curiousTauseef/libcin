@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['overscan',['overscan',['../structcin__config__timing.html#a14af78e16477e73131e6dbaaaa9b9603',1,'cin_config_timing']]]
+  ['initial_5fstate',['initial_state',['../structcin__timing__state.html#a4782322fa4caa5a7581f2c522a6e0000',1,'cin_timing_state']]]
 ];

@@ -58,6 +58,8 @@ var searchData=
   ['cin_5fmap_5ft',['cin_map_t',['../structcin__map__t.html',1,'']]],
   ['cin_5fport',['cin_port',['../structcin__port.html',1,'']]],
   ['cin_5fregister_5fmap_2eh',['cin_register_map.h',['../cin__register__map_8h.html',1,'']]],
+  ['cin_5ftiming_5fstate',['cin_timing_state',['../structcin__timing__state.html',1,'']]],
+  ['cin_5ftiming_5fstate_5ft',['cin_timing_state_t',['../cin_8h.html#a66442c7432f500704c690b51efe1d138',1,'cin.h']]],
   ['cmd_5fdisable_5fclks',['CMD_DISABLE_CLKS',['../cin__register__map_8h.html#a7c5aed5b4f3eaa05711046d7cfaa65eb',1,'cin_register_map.h']]],
   ['cmd_5fenable_5fclks',['CMD_ENABLE_CLKS',['../cin__register__map_8h.html#aa3cd33f73347b243468d529e7cd5832b',1,'cin_register_map.h']]],
   ['cmd_5ffclk_5f250',['CMD_FCLK_250',['../cin__register__map_8h.html#a3e8843776c643d91619c8f95b8be4e09',1,'cin_register_map.h']]],

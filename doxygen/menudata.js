@@ -14,6 +14,7 @@ var menudata={children:[
 {text:"c",url:"globals.html#index_c"},
 {text:"r",url:"globals.html#index_r"}]},
 {text:"Functions",url:"globals_func.html"},
+{text:"Typedefs",url:"globals_type.html"},
 {text:"Macros",url:"globals_defs.html",children:[
 {text:"c",url:"globals_defs.html#index_c"},
 {text:"r",url:"globals_defs.html#index_r"}]}]}]}]}

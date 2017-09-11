@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['name',['name',['../structcin__config__timing.html#ab98a9b3069cc04ea8bca7f9274871ac5',1,'cin_config_timing']]]
+  ['fclk_5ffreq',['fclk_freq',['../structcin__config__timing.html#a938f05b2efad82f7e3f3828a39651f3d',1,'cin_config_timing']]],
+  ['fclk_5ftime_5ffactor',['fclk_time_factor',['../structcin__ctl.html#a1edcf21596623077df90ba9efffd1efe',1,'cin_ctl']]],
+  ['framestore',['framestore',['../structcin__config__timing.html#a894951a52cf7b8477b4b8a798ec9fb22',1,'cin_config_timing']]]
 ];

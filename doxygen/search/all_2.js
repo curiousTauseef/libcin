@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['fclk_5ffreq',['fclk_freq',['../structcin__config__timing.html#a938f05b2efad82f7e3f3828a39651f3d',1,'cin_config_timing']]],
-  ['fclk_5ftime_5ffactor',['fclk_time_factor',['../structcin__ctl.html#a1edcf21596623077df90ba9efffd1efe',1,'cin_ctl']]],
-  ['fifo',['fifo',['../structfifo.html',1,'']]],
-  ['framestore',['framestore',['../structcin__config__timing.html#a894951a52cf7b8477b4b8a798ec9fb22',1,'cin_config_timing']]],
-  ['fastccd_20communication_20library_20_28libcin_29',['FastCCD Communication Library (libcin)',['../index.html',1,'']]]
+  ['edge1',['edge1',['../structcin__timing__state.html#ac8ec75e3f464cbdba9743717c5323cc9',1,'cin_timing_state']]],
+  ['edge2',['edge2',['../structcin__timing__state.html#a102a87076fa6963e95a1b87f901d8015',1,'cin_timing_state']]]
 ];

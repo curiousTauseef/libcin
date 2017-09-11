@@ -90,6 +90,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcin__port.html">cin_port</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcin__timing__state.html">cin_timing_state</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcin__config__timing.html">cin_config_timing</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcin__ctl.html">cin_ctl</a></td></tr>
@@ -549,6 +551,8 @@ typedef struct <a class="el" href="structcin__ctl__listener.html">cin_ctl_listen
 <tr class="memitem:a76eb7c8bb73dbd70c872c526a9fca766"><td class="memItemLeft" align="right" valign="top"><a id="a76eb7c8bb73dbd70c872c526a9fca766"></a>
 typedef struct <a class="el" href="structcin__port.html">cin_port</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cin_port_t</b></td></tr>
 <tr class="separator:a76eb7c8bb73dbd70c872c526a9fca766"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66442c7432f500704c690b51efe1d138"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structcin__timing__state.html">cin_timing_state</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cin_8h.html#a66442c7432f500704c690b51efe1d138">cin_timing_state_t</a></td></tr>
+<tr class="separator:a66442c7432f500704c690b51efe1d138"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad879baa820565f5ab1e4356b1bd87e3"><td class="memItemLeft" align="right" valign="top"><a id="aad879baa820565f5ab1e4356b1bd87e3"></a>
 typedef struct <a class="el" href="structcin__config__timing.html">cin_config_timing</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cin_config_timing_t</b></td></tr>
 <tr class="separator:aad879baa820565f5ab1e4356b1bd87e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -791,12 +795,15 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_data_set_descrambl
 <tr class="memitem:a9655cd2b343dedc951ff78f1305da188"><td class="memItemLeft" align="right" valign="top"><a id="a9655cd2b343dedc951ff78f1305da188"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>cin_data_get_descramble_params</b> (<a class="el" href="structcin__data.html">cin_data_t</a> *cin, int *rows, int *overscan, int *xsize, int *ysize)</td></tr>
 <tr class="separator:a9655cd2b343dedc951ff78f1305da188"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3831564d5d8c47a89844c78031823d70"><td class="memItemLeft" align="right" valign="top"><a id="a3831564d5d8c47a89844c78031823d70"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_com_boot</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *<a class="el" href="structcin__ctl.html">cin_ctl</a>, <a class="el" href="structcin__data.html">cin_data_t</a> *<a class="el" href="structcin__data.html">cin_data</a>, const char *mode)</td></tr>
-<tr class="separator:a3831564d5d8c47a89844c78031823d70"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b4464a4ba5c701da21ee67d3cfaa4c0"><td class="memItemLeft" align="right" valign="top"><a id="a8b4464a4ba5c701da21ee67d3cfaa4c0"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_com_set_timing</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *<a class="el" href="structcin__ctl.html">cin_ctl</a>, <a class="el" href="structcin__data.html">cin_data_t</a> *<a class="el" href="structcin__data.html">cin_data</a>, const char *name)</td></tr>
-<tr class="separator:a8b4464a4ba5c701da21ee67d3cfaa4c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea68e707a5e7c304b2c8d25e06b61fa4"><td class="memItemLeft" align="right" valign="top"><a id="aea68e707a5e7c304b2c8d25e06b61fa4"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_com_boot</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *<a class="el" href="structcin__ctl.html">cin_ctl</a>, <a class="el" href="structcin__data.html">cin_data_t</a> *<a class="el" href="structcin__data.html">cin_data</a>, int mode)</td></tr>
+<tr class="separator:aea68e707a5e7c304b2c8d25e06b61fa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d3a2d540c6bcd59179c0720dd688918"><td class="memItemLeft" align="right" valign="top"><a id="a2d3a2d540c6bcd59179c0720dd688918"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_com_set_timing</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *<a class="el" href="structcin__ctl.html">cin_ctl</a>, <a class="el" href="structcin__data.html">cin_data_t</a> *<a class="el" href="structcin__data.html">cin_data</a>, int mode)</td></tr>
+<tr class="separator:a2d3a2d540c6bcd59179c0720dd688918"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a701be9f4afff6d4b8dbeb4e00ac7028c"><td class="memItemLeft" align="right" valign="top"><a id="a701be9f4afff6d4b8dbeb4e00ac7028c"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_config_find_timing</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin, const char *name)</td></tr>
+<tr class="separator:a701be9f4afff6d4b8dbeb4e00ac7028c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb18a79a1b2af0d2bf1ffb3c084f8b18"><td class="memItemLeft" align="right" valign="top"><a id="aeb18a79a1b2af0d2bf1ffb3c084f8b18"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>cin_ctl_upload_bias</b> (<a class="el" href="structcin__ctl.html">cin_ctl_t</a> *cin)</td></tr>
 <tr class="separator:aeb18a79a1b2af0d2bf1ffb3c084f8b18"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -895,10 +902,28 @@ DESCRIPTION</h1>
 
 </div>
 </div>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="a66442c7432f500704c690b51efe1d138"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66442c7432f500704c690b51efe1d138">&#9670;&nbsp;</a></span>cin_timing_state_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct <a class="el" href="structcin__timing__state.html">cin_timing_state</a>  <a class="el" href="cin_8h.html#a66442c7432f500704c690b51efe1d138">cin_timing_state_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>CIN CCD Timing state</p>
+<p>Each timing state is made up of 52 parameters</p>
+<p>0 passes_per_state 1 next_state 3 loop_backs_for_state When not zero go to loop_state and subtract 1 4 loop_state 5 ccd_clock_cnt_end Number of clock counts for 1 pass of this state 6 -20 initial_clock_value[15] There are 8 vertical, 4 horizontal, convert, save_data and spare 21-35 clock_edge1[15] After this number of ticks the clock signal is inverted from initial_clock_value 36-50 clock_edge2[15] After this number of ticks the clock signal is reverted to </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Aug 22 2017 12:56:07 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Sep 11 2017 01:05:52 for libcin by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

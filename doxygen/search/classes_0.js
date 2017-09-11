@@ -15,5 +15,6 @@ var searchData=
   ['cin_5fdata_5fstats',['cin_data_stats',['../structcin__data__stats.html',1,'']]],
   ['cin_5fdata_5fthreads',['cin_data_threads',['../structcin__data__threads.html',1,'']]],
   ['cin_5fmap_5ft',['cin_map_t',['../structcin__map__t.html',1,'']]],
-  ['cin_5fport',['cin_port',['../structcin__port.html',1,'']]]
+  ['cin_5fport',['cin_port',['../structcin__port.html',1,'']]],
+  ['cin_5ftiming_5fstate',['cin_timing_state',['../structcin__timing__state.html',1,'']]]
 ];
