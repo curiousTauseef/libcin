@@ -297,6 +297,40 @@ typedef struct cin_port {
   socklen_t slen; /* for recvfrom() */
 } cin_port_t;
 
+/* ----------------------------------------------------------------------------*/
+/**
+ * @Breif CIN CCD Timing state
+ *
+ * Each timing state is made up of 52 parameters
+ *
+ * 0	    passes_per_state      
+ * 1	    next_state            
+ * 3      loop_backs_for_state		When not zero go to loop_state and subtract 1
+ * 4	    loop_state            
+ * 5	    ccd_clock_cnt_end     	Number of clock counts for 1 pass of this state
+ * 6 -20	initial_clock_value[15]	There are 8 vertical, 4 horizontal, convert, save_data and spare
+ * 21-35	clock_edge1[15]		  		After this number of ticks the clock signal is inverted from 
+ *                                initial_clock_value
+ * 36-50	clock_edge2[15]         After this number of ticks the clock signal is 
+ *                                reverted to 
+ * */
+/* ----------------------------------------------------------------------------*/
+typedef struct cin_timing_state {
+  uint8_t  passes_per_state;   /**< Number of times to pass through this state */
+  uint8_t  next_state;         /**< State to jump to upon completion */
+  uint32_t loop_back_counter; /**< Number of jumps to loop_state*/
+  uint8_t  loop_state;         /**< State to jump to when loop_state is non zero */
+  uint8_t  total_ticks;        /**< Total number of ticks for this state  */
+  uint8_t  initial_state[15];  /**< Initial clock values */
+  uint8_t  edge1[15];          /**< Number of ticks to wait before inverting 
+                                    clock state*/
+  uint8_t  edge2[15];          /**< Number of ticks to wait before returning to
+                                    initial_state*/
+  uint8_t  spare1;
+  uint8_t  spare2;
+
+} cin_timing_state_t;
+
 #define CIN_CONFIG_MAX_TIMING_DATA       880  /**< Max = 55 per state, 16 states */
 #define CIN_CONFIG_MAX_TIMING_MODES      10  /**< states max */
 #define CIN_CONFIG_MAX_TIMING_NAME       40  /**< Max characters for timing name */
