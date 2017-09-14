@@ -82,6 +82,19 @@ int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data, int mode)
     goto error;
   }
 
+  switch(cin_ctl->current_timing->fclk_freq)
+  {
+    case CIN_CTL_FCLK_200:
+      cin_ctl->fclk_time_factor = 1.0;
+      break;
+    case CIN_CTL_FCLK_125_C:
+      cin_ctl->fclk_time_factor = 125.0 / 200.0;
+      break;
+    default:
+      cin_ctl->fclk_time_factor = 1.0;
+      break;
+  }
+
   // Now set the descramble params
   if(cin_data_set_descramble_params(cin_data, cin_ctl->current_timing->rows,
         cin_ctl->current_timing->overscan) != CIN_OK)

@@ -131,7 +131,26 @@ int cin_config_init(cin_ctl_t *cin)
   cin->timing[4].fclk_freq = CIN_CTL_FCLK_125_C;
   cin->timing[4].framestore = 1;
 
-  cin->timing_num = 5;
+  strcpy(cin->timing[5].name, "200MHz_TIMING_FS_2OS_EXPR");
+  cin->timing[5].data = cin_config_200_timing_fs_2os;
+  cin->timing[5].data_len = cin_config_200_timing_fs_2os_len;
+  cin->timing[5].rows = 960;
+  cin->timing[5].cols = 1152;
+  cin->timing[5].overscan = 2;
+  cin->timing[5].fclk_freq = CIN_CTL_FCLK_200;
+  cin->timing[5].framestore = 1;
+
+  strcpy(cin->timing[6].name, "200MHz_TIMING_FS_EXPR");
+  cin->timing[6].data = cin_config_200_timing_fs;
+  cin->timing[6].data_len = cin_config_200_timing_fs_len;
+  cin->timing[6].rows = 960;
+  cin->timing[6].cols = 960;
+  cin->timing[6].overscan = 0;
+  cin->timing[6].fclk_freq = CIN_CTL_FCLK_200;
+  cin->timing[6].framestore = 1;
+
+  cin->timing_num = 7;
+
   DEBUG_PRINT("Configured %d timing modes.\n", cin->timing_num);
   
   int i;

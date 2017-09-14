@@ -66,8 +66,7 @@ int cin_ctl_init(cin_ctl_t *cin,
   cin_config_init(cin);
   cin->current_timing = NULL;
 
-  cin->fclk_time_factor = 125.0 / 200.0;          // 200 MHz 1us
-  //cin->fclk_time_factor = 1.0;          // 200 MHz 1us
+  cin->fclk_time_factor = 1.0;          // 200 MHz 1us
 
   cin->addr       = cin_com_set_string(addr, CIN_CTL_IP);
   cin->bind_addr  = cin_com_set_string(bind_addr, "0.0.0.0");
