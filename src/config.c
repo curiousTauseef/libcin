@@ -89,7 +89,7 @@ int cin_config_init(cin_ctl_t *cin)
   strcpy(cin->timing[0].name, "200MHz_TIMING_GOLD");
   cin->timing[0].data = cin_config_200_full_gold;
   cin->timing[0].data_len = cin_config_200_full_gold_len;
-  cin->timing[0].rows = 1920;
+  cin->timing[0].rows = 2000;
   cin->timing[0].cols = 960;
   cin->timing[0].overscan = 2;
   cin->timing[0].fclk_freq = CIN_CTL_FCLK_200;
@@ -98,7 +98,7 @@ int cin_config_init(cin_ctl_t *cin)
   strcpy(cin->timing[1].name, "125MHz_TIMING");
   cin->timing[1].data = cin_config_125_timing;
   cin->timing[1].data_len = cin_config_125_timing_len;
-  cin->timing[1].rows = 1920;
+  cin->timing[1].rows = 2000;
   cin->timing[1].cols = 960;
   cin->timing[1].overscan = 0;
   cin->timing[1].fclk_freq = CIN_CTL_FCLK_125_C;
@@ -107,7 +107,7 @@ int cin_config_init(cin_ctl_t *cin)
   strcpy(cin->timing[2].name, "125MHz_TIMING_FS");
   cin->timing[2].data = cin_config_125_timing_fs;
   cin->timing[2].data_len = cin_config_125_timing_fs_len;
-  cin->timing[2].rows = 960;
+  cin->timing[2].rows = 1000;
   cin->timing[2].cols = 960;
   cin->timing[2].overscan = 0;
   cin->timing[2].fclk_freq = CIN_CTL_FCLK_125_C;
@@ -116,7 +116,7 @@ int cin_config_init(cin_ctl_t *cin)
   strcpy(cin->timing[3].name, "200MHz_TIMING_LCLS_FS");
   cin->timing[3].data = cin_config_200_lcls_fs;
   cin->timing[3].data_len = cin_config_200_lcls_fs_len;
-  cin->timing[3].rows = 960;
+  cin->timing[3].rows = 1000;
   cin->timing[3].cols = 960;
   cin->timing[3].overscan = 0;
   cin->timing[3].fclk_freq = CIN_CTL_FCLK_200;
@@ -125,7 +125,7 @@ int cin_config_init(cin_ctl_t *cin)
   strcpy(cin->timing[4].name, "125MHz_TIMING_FS_2OS");
   cin->timing[4].data = cin_config_125_timing_fs_2os;
   cin->timing[4].data_len = cin_config_125_timing_fs_2os_len;
-  cin->timing[4].rows = 960;
+  cin->timing[4].rows = 1000;
   cin->timing[4].cols = 1152;
   cin->timing[4].overscan = 2;
   cin->timing[4].fclk_freq = CIN_CTL_FCLK_125_C;
@@ -134,7 +134,7 @@ int cin_config_init(cin_ctl_t *cin)
   strcpy(cin->timing[5].name, "200MHz_TIMING_FS_2OS_EXPR");
   cin->timing[5].data = cin_config_200_timing_fs_2os;
   cin->timing[5].data_len = cin_config_200_timing_fs_2os_len;
-  cin->timing[5].rows = 960;
+  cin->timing[5].rows = 1000;
   cin->timing[5].cols = 1152;
   cin->timing[5].overscan = 2;
   cin->timing[5].fclk_freq = CIN_CTL_FCLK_200;
@@ -143,7 +143,7 @@ int cin_config_init(cin_ctl_t *cin)
   strcpy(cin->timing[6].name, "200MHz_TIMING_FS_EXPR");
   cin->timing[6].data = cin_config_200_timing_fs;
   cin->timing[6].data_len = cin_config_200_timing_fs_len;
-  cin->timing[6].rows = 960;
+  cin->timing[6].rows = 1000;
   cin->timing[6].cols = 960;
   cin->timing[6].overscan = 0;
   cin->timing[6].fclk_freq = CIN_CTL_FCLK_200;
