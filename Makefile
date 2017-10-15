@@ -111,7 +111,8 @@ data/timing.h:  bin/convert_config \
 				config/2014_Jan_07-07_31_CCD_23ID_FS.txt \
 				config/2013_Nov_25-200MHz_CCD_timing.txt \
 				config/20170914_200MHz_fCCD_Timing_FS_2OS_xper.txt \
-				config/20170914_200MHz_fCCD_Timing_FS_xper.txt
+				config/20170914_200MHz_fCCD_Timing_FS_xper.txt \
+				config/20170526_125MHz_fCCD_Timing_2OS_xper.txt 
 	bin/convert_config -n cin_config_125_timing -t \
 		config/20170526_125MHz_fCCD_Timing_xper.txt  > data/timing.h
 	bin/convert_config -n cin_config_125_timing_fs -t \
@@ -126,6 +127,8 @@ data/timing.h:  bin/convert_config \
 		config/20170914_200MHz_fCCD_Timing_FS_2OS_xper.txt >> data/timing.h
 	bin/convert_config -n cin_config_200_timing_fs -t \
 		config/20170914_200MHz_fCCD_Timing_FS_xper.txt >> data/timing.h
+	bin/convert_config -n cin_config_125_2OS_timing -t \
+		config/20170526_125MHz_fCCD_Timing_2OS_xper.txt  >> data/timing.h
 	grep uint16_t data/timing.h
 
 data/fcric.h: bin/convert_config config/fcric_200.txt config/fcric_125.txt
