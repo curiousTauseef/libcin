@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['total_5fticks',['total_ticks',['../structcin__timing__state.html#a57e6a582f1c11de460d6caeee1035a9a',1,'cin_timing_state']]]
+  ['sensor_5frow_5foffset',['sensor_row_offset',['../structcin__config__timing.html#abbddcb2418e425d9890eea2de2ca41ee',1,'cin_config_timing']]],
+  ['sensor_5frows',['sensor_rows',['../structcin__config__timing.html#a60b4c7dff1a85dec314724fdf7b8f90d',1,'cin_config_timing']]]
 ];

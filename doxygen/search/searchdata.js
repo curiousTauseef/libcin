@@ -1,10 +1,10 @@
 var indexSectionsWithContent =
 {
-  0: "cdefilnoprt",
+  0: "cdefilnoprst",
   1: "cf",
   2: "c",
   3: "c",
-  4: "cdefilnoprt",
+  4: "cdefilnoprst",
   5: "c",
   6: "cr",
   7: "c",
