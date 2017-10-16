@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
   cin_ctl_t cin_ctl;
   cin_data_t cin_data;
 
-  cin_set_debug_print(0);
+  cin_set_debug_print(1);
   cin_set_error_print(1);
 
   if(argc != 2)
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  if(cin_data_init(&cin_data, NULL, 0, NULL, 0, 0, 0, 0, 
+  if(cin_data_init(&cin_data, "10.23.4.207", 0, "10.23.4.1", 0, 0, 0, 0, 
         NULL, NULL, NULL))
   {
     fprintf(stderr,"Unable to initialize CIN data library\n");

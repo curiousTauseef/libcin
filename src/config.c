@@ -153,8 +153,8 @@ int cin_config_init(cin_ctl_t *cin)
   cin->timing[7].data = cin_config_125_2OS_timing;
   cin->timing[7].data_len = cin_config_125_2OS_timing_len;
   cin->timing[7].rows = 2000;
-  cin->timing[7].cols = 960;
-  cin->timing[7].overscan = 0;
+  cin->timing[7].cols = 1152;
+  cin->timing[7].overscan = 2;
   cin->timing[7].fclk_freq = CIN_CTL_FCLK_125_C;
   cin->timing[7].framestore = 0;
 

@@ -41,6 +41,8 @@
 #include "config.h"
 #include "common.h"
 
+#include "cin_register_map.h"
+
 /* -----------------------------------------------------------------------------------------
  *
  * Routines for configuring the CIN
@@ -82,6 +84,65 @@ int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data, int mode)
     goto error;
   }
 
+  if(cin_ctl_write_with_readback(cin_ctl, REG_FRM_SANDBOX_REG0F, 0x5500 | (mode & 0x00FF)) != CIN_OK)
+  {
+    goto error;
+  }
+
+  int _mode;
+  if(cin_com_get_timing(cin_ctl, cin_data, &_mode) != CIN_OK)
+  {
+    goto error;
+  }
+
+  DEBUG_PRINT("Timing mode from CIN = %d\n", _mode);
+
+  if(_mode != mode)
+  {
+    ERROR_COMMENT("Setting timing mode register failed\n");
+    goto error;
+  }
+
+  snprintf(_msg, 256, "Timing set to \"%s\"", name);
+  cin_ctl_message(cin_ctl, _msg, CIN_CTL_MSG_OK);
+  return CIN_OK;
+
+error:
+  cin_ctl_message(cin_ctl, "Error Uploading Timing", CIN_CTL_MSG_MAJOR);
+  return CIN_ERROR;
+}
+
+int cin_com_get_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data, int *mode)
+{
+  uint16_t val;
+  char _msg[256];
+
+  if(cin_ctl_read(cin_ctl, REG_FRM_SANDBOX_REG0F, &val) != CIN_OK)
+  {
+    goto error;
+  }
+
+  DEBUG_PRINT("Timing mode register = 0x%x\n", val);
+
+  if((val & 0xFF00) != 0x5500)
+  {
+    goto error;
+  }
+
+  *mode = val & 0x00FF; 
+
+  DEBUG_PRINT("Timing mode = %d\n", *mode);
+
+  if((*mode < 0) || (*mode >= cin_ctl->timing_num))
+  {
+    ERROR_PRINT("Invalid timing mode %d\n", *mode);
+    snprintf(_msg, 256, "No timing data for mode %d", *mode);
+    cin_ctl_message(cin_ctl, _msg, CIN_CTL_MSG_MAJOR);
+    goto error;
+  }
+
+  cin_ctl->current_timing = &cin_ctl->timing[*mode];
+
   switch(cin_ctl->current_timing->fclk_freq)
   {
     case CIN_CTL_FCLK_200:
@@ -102,13 +163,10 @@ int cin_com_set_timing(cin_ctl_t *cin_ctl, cin_data_t *cin_data, int mode)
     goto error;
   }
 
-  snprintf(_msg, 256, "Timing set to \"%s\"", name);
-  cin_ctl_message(cin_ctl, _msg, CIN_CTL_MSG_OK);
   return CIN_OK;
 
 error:
-  cin_ctl_message(cin_ctl, "Error Uploading Timing", CIN_CTL_MSG_MAJOR);
-  return CIN_OK;
+  return CIN_ERROR;
 }
 
 int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, int mode)
@@ -160,7 +218,7 @@ int cin_com_boot(cin_ctl_t *cin_ctl, cin_data_t *cin_data, int mode)
     goto error;
   }
 
-  if(mode != -1);
+  if(mode != -1)
   {
     if(cin_com_set_timing(cin_ctl, cin_data, mode) != CIN_OK){
       ERROR_COMMENT("Unable to set timing\n");
